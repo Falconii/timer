@@ -46,7 +46,7 @@ export class AtualizacaoCadastralComponent implements OnInit {
         (data: UsuarioModel) => {
           this.usuario = data;
           this.router.navigate([
-            '/usuario',
+            'usuarios/usuario',
             this.usuario.id_empresa,
             this.usuario.id,
             this.idAcao,

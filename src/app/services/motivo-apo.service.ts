@@ -23,7 +23,7 @@ export class MotivoApoService {
 
   getMotivoApo(id_empresa: number, codigo: string) {
     return this.http.get<MotivoApoModel>(
-      `/api/motivoapo/${id_empresa}/${codigo}`
+      `${this.apiURL}motivoapo/${id_empresa}/${codigo}`
     );
   }
 
@@ -37,7 +37,7 @@ export class MotivoApoService {
 
   MotivoApoDelete(id_empresa: number, codigo: string) {
     return this.http.delete<MotivoApoModel>(
-      `/api/motivoapo/${id_empresa}/${codigo}`
+      `${this.apiURL}motivoapo/${id_empresa}/${codigo}`
     );
   }
 }

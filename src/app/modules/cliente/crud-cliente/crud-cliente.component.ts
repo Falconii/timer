@@ -212,4 +212,8 @@ export class CrudClienteComponent implements OnInit {
   onChangePage() {
     this.getClientes();
   }
+
+  onHome() {
+    this.router.navigate(['']);
+  }
 }

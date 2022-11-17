@@ -6,7 +6,10 @@ import { MotivoApoViewComponent } from './motivo-apo-view/motivo-apo-view.compon
 const routes: Routes = [
   { path: '', redirectTo: 'motivos', pathMatch: 'full' },
   { path: 'motivos', component: CrudMotivoApoComponent },
-  { path: 'motivo/:id_empresa/:id/:acao', component: MotivoApoViewComponent },
+  {
+    path: 'motivo/:id_empresa/:codigo/:acao',
+    component: MotivoApoViewComponent,
+  },
 ];
 
 @NgModule({

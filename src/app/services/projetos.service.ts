@@ -28,11 +28,11 @@ export class ProjetosService {
   }
 
   ProjetoInsert(projeto: any) {
-    return this.http.post<ProjetoModel>('${this.apiURL}projeto/', projeto);
+    return this.http.post<ProjetoModel>(`${this.apiURL}projeto/`, projeto);
   }
 
   ProjetoUpdate(projeto: ProjetoModel) {
-    return this.http.put<ProjetoModel>('${this.apiURL}projeto/', projeto);
+    return this.http.put<ProjetoModel>(`${this.apiURL}projeto/`, projeto);
   }
 
   ProjetoDelete(id_empresa: number, id: number) {

@@ -107,7 +107,7 @@ export class CrudEstruturaComponent implements OnInit {
   escolha(estrutura: EstruturaModel, opcao: number) {
     if (opcao == 99) {
       this.router.navigate([
-        '/subconta',
+        'estruturas/subconta',
         estrutura.id_empresa,
         estrutura.conta,
         estrutura.subconta,
@@ -117,7 +117,7 @@ export class CrudEstruturaComponent implements OnInit {
       ]);
     } else {
       this.router.navigate([
-        '/estrutura',
+        'estruturas/estrutura',
         estrutura.id_empresa,
         estrutura.conta,
         estrutura.subconta,
@@ -128,7 +128,7 @@ export class CrudEstruturaComponent implements OnInit {
 
   inclusao() {
     this.router.navigate([
-      '/estrutura',
+      'estruturas/estrutura',
       1,
       '00',
       '00',
@@ -142,12 +142,16 @@ export class CrudEstruturaComponent implements OnInit {
 
   tree(estrutura: EstruturaModel) {
     this.router.navigate([
-      '/treeconta',
+      'estruturas/treeconta',
       estrutura.id_empresa,
       estrutura.conta,
       estrutura.subconta,
       estrutura.descricao,
       estrutura.nivel,
     ]);
+  }
+
+  onHome() {
+    this.router.navigate(['']);
   }
 }

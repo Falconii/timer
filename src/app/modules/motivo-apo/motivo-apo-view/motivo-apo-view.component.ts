@@ -114,7 +114,7 @@ export class MotivoApoViewComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['/motapos']);
+    this.router.navigate(['/motivos']);
   }
 
   getMotivo() {
@@ -180,7 +180,7 @@ export class MotivoApoViewComponent implements OnInit {
             },
             (error: any) => {
               this.openSnackBar_Err(
-                `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+                `Erro Na Inclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
             }

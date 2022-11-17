@@ -1,0 +1,58 @@
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.Browse {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    cursor: pointer;
+}
+
+.Cabecalho {
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 30px;
+    background-color: coral;
+    text-align: center;
+}
+
+.Detalhe {
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 30px;
+    color: black;
+}
+
+.linha {
+    background-color: white;
+}
+
+.linha :hover {
+    background-color: #CCCC99
+}
+
+.labelTitleFirst {
+    font-size: large;
+    color: #0000CC;
+}
+
+.labelTitle {
+    font-size: large;
+    color: #0000CC;
+    margin-left: 5px;
+}
+
+.labelData {
+    font-size: large;
+    color: black;
+    margin-left: 5px;
+}
+
+.card-marg {
+    margin-top: 10px;
+}

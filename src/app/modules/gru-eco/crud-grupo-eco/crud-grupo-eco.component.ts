@@ -121,4 +121,8 @@ export class CrudGrupoEcoComponent implements OnInit {
   getTexto() {
     return MensagensBotoes;
   }
+
+  onHome() {
+    this.router.navigate(['']);
+  }
 }

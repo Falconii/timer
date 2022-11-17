@@ -8,9 +8,16 @@ import { MaterialModule } from 'src/app/material/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CrudEstruturaComponent } from './crud-estrutura/crud-estrutura.component';
 import { CrudViewEstruturaComponent } from './crud-view-estrutura/crud-view-estrutura.component';
+import { TreeEstruturaComponent } from './tree-estrutura/tree-estrutura.component';
+import { CrudSubestruturaComponent } from './crud-subestrutura/crud-subestrutura.component';
 
 @NgModule({
-  declarations: [CrudEstruturaComponent, CrudViewEstruturaComponent],
+  declarations: [
+    CrudEstruturaComponent,
+    CrudViewEstruturaComponent,
+    TreeEstruturaComponent,
+    CrudSubestruturaComponent,
+  ],
   imports: [
     CommonModule,
     EstruturaRoutingModule,

@@ -6,6 +6,9 @@
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="getClientesContador()">
       <mat-icon>rotate_right</mat-icon>
       </button>
+        <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno" matTooltipPosition="above" (click)="onHome()">
+        <mat-icon>home</mat-icon>
+       </button>
         <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(getAcoes()[ 'Inclusao']) " [matTooltip]="getTexto().incluir" matTooltipPosition="above">
        <mat-icon>add_circle_outline</mat-icon>
       </button>

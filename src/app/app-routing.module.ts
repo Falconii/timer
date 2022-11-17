@@ -1,8 +1,10 @@
+import { ExecucaoModule } from './modules/execucao/execucao.module';
 import { DiganaoGuard } from './guards/diganao.guard';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AtualizacaoCadastralComponent } from './modules/usuario/crud-usuario/atualizacao-cadastral/atualizacao-cadastral.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -23,6 +25,11 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
+    path: 'atualizacao/:id_empresa/:email',
+    loadChildren: () =>
+      import('./modules/usuario/usuario.module').then((m) => m.UsuarioModule),
+  },
+  {
     path: 'economicos',
     loadChildren: () =>
       import('./modules/gru-eco/gru-eco.module').then((m) => m.GruEcoModule),
@@ -40,12 +47,35 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'estruturas',
+    loadChildren: () =>
+      import('./modules/estrutura/estrutura.module').then(
+        (m) => m.EstruturaModule
+      ),
+  },
+  {
+    path: 'projetos',
+    loadChildren: () =>
+      import('./modules/projeto/projeto.module').then((m) => m.ProjetoModule),
+  },
+  {
+    path: 'execucao',
+    loadChildren: () =>
+      import('./modules/execucao/execucao.module').then(
+        (m) => m.ExecucaoModule
+      ),
+  },
+  {
+    path: 'sobre',
+    loadChildren: () =>
+      import('./modules/sobre/sobre.module').then((m) => m.SobreModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'home',
   },
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

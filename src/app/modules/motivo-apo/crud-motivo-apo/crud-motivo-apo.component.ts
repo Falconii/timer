@@ -63,14 +63,15 @@ export class CrudMotivoApoComponent implements OnInit {
 
   escolha(opcao: number, motivo?: MotivoApoModel) {
     if (typeof motivo != 'undefined') {
+      console.log(motivo);
       this.router.navigate([
-        '/motivoapo',
+        '/motivos/motivo',
         motivo.id_empresa,
         motivo.codigo,
         opcao,
       ]);
     } else {
-      this.router.navigate(['/motivoapo', 1, '', opcao]);
+      this.router.navigate(['/motivos/motivo', 1, '', opcao]);
     }
   }
 
@@ -126,5 +127,9 @@ export class CrudMotivoApoComponent implements OnInit {
 */
   getTexto() {
     return MensagensBotoes;
+  }
+
+  onHome() {
+    this.router.navigate(['']);
   }
 }
