@@ -1,3 +1,4 @@
+import { SimNao } from './../../../shared/sim-nao';
 import { EstruturasService } from 'src/app/services/estruturas.service';
 import { EstruturaModel } from 'src/app/Models/estrutura-model';
 import { Component, OnInit } from '@angular/core';
@@ -6,6 +7,8 @@ import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TipoConta } from 'src/app/shared/tipo-conta';
+import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 @Component({
   selector: 'app-crud-view-estrutura',
   templateUrl: './crud-view-estrutura.component.html',
@@ -24,6 +27,16 @@ export class CrudViewEstruturaComponent implements OnInit {
 
   readOnly: boolean = true;
 
+  tipos: TipoConta[] = [
+    { tipo: 'C', descricao: 'CONTA' },
+    { tipo: 'S', descricao: 'SUBCONTA' },
+    { tipo: 'O', descricao: 'OPERACIONAL' },
+  ];
+
+  respostas: SimNao[] = [
+    { sigla: 'S', descricao: 'SIM' },
+    { sigla: 'N', descricao: 'NÃO' },
+  ];
   inscricaoGetEstrutura!: Subscription;
   inscricaoRota!: Subscription;
   inscricaoAcao!: Subscription;
@@ -57,10 +70,14 @@ export class CrudViewEstruturaComponent implements OnInit {
         ],
       ],
       nivel: [{ value: '' }],
-      tipo: [{ value: '' }],
+      tipo: [{ value: '' }, [ValidatorStringLen(1, 2, true)]],
+      tipo_: [{ value: '' }],
+      controle: [{ value: '' }, [ValidatorStringLen(1, 2, true)]],
+      controle_: [{ value: '' }],
     });
     this.estrutura = new EstruturaModel();
     this.inscricaoRota = route.params.subscribe((params: any) => {
+      console.log('==>', params);
       this.estrutura.id_empresa = params.id_empresa;
       this.estrutura.conta = params.conta;
       this.estrutura.subconta = params.subconta;
@@ -139,6 +156,24 @@ export class CrudViewEstruturaComponent implements OnInit {
       descricao: this.estrutura.descricao,
       nivel: this.estrutura.nivel,
       tipo: this.estrutura.tipo,
+      tipo_:
+        this.idAcao == CadastroAcoes.Consulta ||
+        this.idAcao == CadastroAcoes.Exclusao
+          ? this.tipos[
+              this.tipos.findIndex((data) => data.tipo == this.estrutura.tipo)
+            ].descricao
+          : '',
+      controle: this.estrutura.controle,
+      controle_:
+        this.idAcao == CadastroAcoes.Consulta ||
+        this.idAcao == CadastroAcoes.Exclusao ||
+        this.idAcao == CadastroAcoes.Edicao
+          ? this.respostas[
+              this.respostas.findIndex(
+                (data) => data.sigla == this.estrutura.controle
+              )
+            ].descricao
+          : '',
     });
   }
 
@@ -183,6 +218,7 @@ export class CrudViewEstruturaComponent implements OnInit {
     this.estrutura.descricao = this.formulario.value.descricao;
     this.estrutura.nivel = this.formulario.value.nivel;
     this.estrutura.tipo = this.formulario.value.tipo;
+    this.estrutura.controle = this.formulario.value.controle;
     console.log('registro', this.estrutura);
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
@@ -220,11 +256,7 @@ export class CrudViewEstruturaComponent implements OnInit {
         break;
       case CadastroAcoes.Exclusao:
         this.inscricaoAcao = this.estruturaService
-          .EstruturaDelete(
-            this.estrutura.id_empresa,
-            this.estrutura.conta,
-            this.estrutura.subconta
-          )
+          .EstruturaAllDelete(this.estrutura.id_empresa, this.estrutura.conta)
           .subscribe(
             async (data: any) => {
               this.onCancel();

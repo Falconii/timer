@@ -13,7 +13,7 @@ const routes: Routes = [
     component: CrudViewEstruturaComponent,
   },
   {
-    path: 'subconta/:id_empresa/:conta/:subconta/:descricao/:nivel/:acao',
+    path: 'subconta/:id_empresa/:conta/:subconta/:descricao/:nivel/:controle/:acao',
     component: CrudSubestruturaComponent,
   },
   {

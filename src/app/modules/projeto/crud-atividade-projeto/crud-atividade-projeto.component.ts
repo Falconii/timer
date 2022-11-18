@@ -283,6 +283,26 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       );
   }
 
+  excluir(id_empresa: number, id: number) {
+    this.inscricaoAnexar = this.atividadesService
+      .atividadeDelete(id_empresa, id)
+      .subscribe(
+        (data: any) => {
+          this.atividades = [];
+          this.conta = '';
+          this.getProjeto();
+          this.openSnackBar_OK(`Atividade Excluída Com Sucesso!`, 'OK');
+        },
+        (error: any) => {
+          console.log(error);
+          this.openSnackBar_Err(
+            `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            'OK'
+          );
+        }
+      );
+  }
+
   getEstruturasOff() {
     let par = new ParametroEstrutura01();
 
@@ -500,12 +520,16 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     this.router.navigate(['/projetos']);
   }
 
-  onExcluir(atividade: AtividadeQuery_01Model) {
+  onDesanexar(atividade: AtividadeQuery_01Model) {
     this.desanexarAtividades(
       atividade.id_empresa,
       atividade.conta,
       atividade.id_projeto
     );
+  }
+
+  onExcluir(atividade: AtividadeQuery_01Model) {
+    this.excluir(atividade.id_empresa, atividade.id);
   }
 
   openSnackBar_Err(message: string, action: string) {

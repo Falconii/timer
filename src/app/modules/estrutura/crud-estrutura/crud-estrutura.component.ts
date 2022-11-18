@@ -113,6 +113,7 @@ export class CrudEstruturaComponent implements OnInit {
         estrutura.subconta,
         estrutura.descricao,
         estrutura.nivel,
+        estrutura.controle,
         opcao,
       ]);
     } else {

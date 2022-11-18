@@ -53,7 +53,9 @@ export class UsuariosService {
   }
 
   UsuarioDelete(id_empresa: number, id: number) {
-    return this.http.delete<UsuarioModel>(`/api/usuario/${id_empresa}/${id}`);
+    return this.http.delete<UsuarioModel>(
+      `${this.apiURL}usuario/${id_empresa}/${id}`
+    );
   }
 
   setarUsuario(user: UsuarioModel) {

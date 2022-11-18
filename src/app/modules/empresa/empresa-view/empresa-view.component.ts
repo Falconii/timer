@@ -96,6 +96,7 @@ export class EmpresaViewComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.formulario);
     if (this.formulario.valid) {
       this.executaAcao();
     } else {

@@ -46,6 +46,12 @@ export class EstruturasService {
     );
   }
 
+  EstruturaAllDelete(id_empresa: number, conta: string) {
+    return this.http.delete<EstruturaModel>(
+      `${this.apiURL}estrutura/${id_empresa}/${conta}`
+    );
+  }
+
   getEstruturasMem(): EstruturaModel[] {
     return this.estruturas;
   }

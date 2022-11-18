@@ -181,6 +181,7 @@ export class GruEcoViewComponent implements OnInit {
           .GrupoEcoDelete(this.grupo.id_empresa, this.grupo.id)
           .subscribe(
             async (data: any) => {
+              console.log(data);
               this.onCancel();
             },
             (error: any) => {

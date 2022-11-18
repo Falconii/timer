@@ -39,6 +39,8 @@ export class CrudSubestruturaComponent implements OnInit {
 
   nivel_pai = 1;
 
+  controle_pai = 'S';
+
   durationInSeconds = 3;
 
   historico: HistoricoSubconta[] = [];
@@ -95,6 +97,7 @@ export class CrudSubestruturaComponent implements OnInit {
       this.subconta_pai = params.subconta;
       this.descricao_pai = params.descricao;
       this.nivel_pai = parseInt(params.nivel);
+      this.controle_pai = params.controle;
       const histo: HistoricoSubconta = new HistoricoSubconta();
       histo.id_empresa = this.id_empresa_pai;
       histo.conta = this.conta_pai;
@@ -272,6 +275,7 @@ export class CrudSubestruturaComponent implements OnInit {
     this.subconta.descricao = this.formulario.value.descricao;
     this.subconta.nivel = this.formulario.value.nivel;
     this.subconta.tipo = this.formulario.value.tipo;
+    this.subconta.controle = this.controle_pai;
     console.log('registro', this.subconta);
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:

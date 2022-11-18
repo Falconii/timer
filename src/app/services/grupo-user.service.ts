@@ -36,6 +36,8 @@ export class GrupoUserService {
   }
 
   GrupoUserDelete(id_empresa: number, id: number) {
-    return this.http.delete<GruUserModel>(`/api/gruuser/${id_empresa}/${id}`);
+    return this.http.delete<GruUserModel>(
+      `${this.apiURL}gruuser/${id_empresa}/${id}`
+    );
   }
 }

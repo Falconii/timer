@@ -69,7 +69,7 @@
         </mat-form-field>
         <mat-form-field field appearance="outline" class="col-max" *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']))">
             <mat-label>Estado:</mat-label>
-            <mat-select formControlName="uf">
+            <mat-select formControlName="uff">
                 <mat-option *ngFor="let uf of ufs" [value]="uf.sigla">
                     {{uf.sigla}}-{{uf.nome}}
                 </mat-option>
@@ -98,7 +98,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-max">
             <mat-label>Telefone 2:</mat-label>
-            <input matInput formControlName="tel2" [readonly]="readOnly">
+            <input matInput formControlName="tel2" [dropSpecialCharacters]="true" mask="(00) 0 0000-0000||(00) 0000-0000" [readonly]="readOnly">
             <mat-error *ngIf="getValidfield('tel2')">{{getMensafield('tel2')}}</mat-error>
         </mat-form-field>
     </div>

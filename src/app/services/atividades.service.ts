@@ -43,7 +43,7 @@ export class AtividadesService {
 
   atividadeDelete(id_empresa: number, id: number) {
     return this.http.delete<AtividadeModel>(
-      `${this.apiURL}atividade\${id_empresa}/${id}`
+      `${this.apiURL}atividade/${id_empresa}/${id}`
     );
   }
 

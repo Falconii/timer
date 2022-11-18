@@ -6,6 +6,7 @@ export class EstruturaModel {
   public nivel: number = 0;
   public nivel_maxi: number = 7;
   public tipo: string = '';
+  public controle: string = 'S';
   public user_insert: number = 0;
   public user_update: number = 0;
 }
