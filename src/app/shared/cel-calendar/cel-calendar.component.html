@@ -1,6 +1,8 @@
-<mat-label class="{{getClasse()}}">{{Celula.dia}}</mat-label>
+<div>
+    <mat-label class="{{getClasse()}} ponteiro-seta">{{Celula.dia}}</mat-label>
+</div>
 <mat-divider *ngIf="Celula.tipo == 1"></mat-divider>
 <div div class="col-med-2" *ngIf="Celula.tipo == 1">
-    <mat-label class="col-max">900</mat-label>
-    <mat-label class="col-max">700</mat-label>
+    <mat-label class="col-max ponteiro-seta cor-planejada" matTooltip="Horas Planejadas" matTooltipPosition="above" (click)="onClickProjeto()">{{Celula.horasplanejadas}}</mat-label>
+    <mat-label class="col-max ponteiro-seta cor-executada" matTooltip="Horas Executadas" matTooltipPosition="above" (click)="onClickExecutado()">700</mat-label>
 </div>

@@ -15,6 +15,18 @@
     color: gray;
 }
 
+.ponteiro-seta {
+    cursor: pointer;
+}
+
+.cor-planejada {
+    color: green;
+}
+
+.cor-executada {
+    color: red
+}
+
 
 /*
      0 -> normal

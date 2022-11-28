@@ -22,4 +22,10 @@ export class CelCalendarComponent implements OnInit {
       return 'formata-dia-semana';
     }
   }
+
+  onClickDia() {}
+
+  onClickProjeto() {}
+
+  onClickExecutado() {}
 }

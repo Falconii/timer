@@ -4,6 +4,7 @@ export class CelulaDia {
   public semana: number = 0;
   public tipo: number = 0;
   public horasplanejadas: number = 0;
+  public horasexecutadas: number = 0;
   public descricao: string = '';
 
   /*

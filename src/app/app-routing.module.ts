@@ -74,6 +74,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'agendacoordenador',
+    loadChildren: () =>
+      import('./modules/agenda-coordenador/agenda-coordenador.module').then(
+        (m) => m.AgendaCoordenadorModule
+      ),
+  },
+  {
     path: 'sobre',
     loadChildren: () =>
       import('./modules/sobre/sobre.module').then((m) => m.SobreModule),
