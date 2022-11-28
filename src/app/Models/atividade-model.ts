@@ -6,6 +6,7 @@ export class AtividadeModel {
   public subconta: string = '';
   public nivel: number = 0;
   public tipo: string = '';
+  public controle: string = '';
   public id_resp: number = 0;
   public id_exec: number = 0;
   public id_subcliente: number = 0;

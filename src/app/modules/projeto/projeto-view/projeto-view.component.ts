@@ -305,7 +305,7 @@ export class ProjetoViewComponent implements OnInit {
 
     par.id_empresa = 1;
 
-    par.grupo = 4;
+    par.grupo = 900;
 
     par.orderby = 'Grupo';
 

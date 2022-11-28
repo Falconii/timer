@@ -54,6 +54,14 @@ body {
     background-color: #CCCC99
 }
 
+.cabec-car {
+    background-color: #CCCC99;
+}
+
+.cabec-car-dom {
+    background-color: #DE3163;
+}
+
 .labelTitleFirst {
     font-size: large;
     color: #0000CC;
@@ -181,4 +189,15 @@ body {
 .container {
     width: 80%;
     margin: auto;
+}
+
+.dia-semana {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding-top: 25px;
+    height: 50px;
+    text-align: center;
+    font-size: large;
 }

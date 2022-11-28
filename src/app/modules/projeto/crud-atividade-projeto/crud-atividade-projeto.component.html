@@ -154,7 +154,7 @@
                     <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Editar Atividade" matTooltipPosition="above" (click)="escolha(atividade,getAcoes()[ 'Edicao'])" *ngIf="atividade.tipo == 'O'">
                       <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Agenda Da Atividade" matTooltipPosition="above" (click)="escolha(atividade,98)" *ngIf="atividade.tipo == 'O'">
+                    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Agenda Da Atividade" matTooltipPosition="above" (click)="escolha(atividade,98)" *ngIf="atividade.tipo == 'O' && atividade.controle =='S'">
                       <mat-icon>assignment</mat-icon>
                     </button>
                     <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Excluir Atividade" matTooltipPosition="above" (click)="onExcluir(atividade)" *ngIf="atividade.tipo == 'O'">

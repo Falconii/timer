@@ -7,9 +7,19 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./cel-calendar.component.css'],
 })
 export class CelCalendarComponent implements OnInit {
-  @Input('celula') CelulaDia!: CelulaDia;
+  @Input('celula') Celula!: CelulaDia;
 
   constructor() {}
 
   ngOnInit() {}
+
+  getClasse(): string {
+    if (this.Celula.tipo == 3) {
+      return 'formata-dia-semana_3';
+    } else if (this.Celula.semana == 0) {
+      return 'formata-dia-semana_1';
+    } else {
+      return 'formata-dia-semana';
+    }
+  }
 }

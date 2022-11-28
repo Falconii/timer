@@ -6,6 +6,7 @@
         <span>Simionato Auditores</span>
         <button mat-button [matMenuTriggerFor]="cadastros">Cadastros</button>
         <button mat-button [matMenuTriggerFor]="projetos">Projetos</button>
+        <button mat-button [matMenuTriggerFor]="planejamento">Planejamento</button>
         <button mat-button [matMenuTriggerFor]="execucao">Execução</button>
         <button mat-button [matMenuTriggerFor]="sobre">Sobre</button>
         <span>
@@ -23,9 +24,13 @@
         <mat-menu #projetos="matMenu">
           <button mat-menu-item routerLink="projetos">Projetos Manutenção</button>
         </mat-menu>
+        <mat-menu #planejamento="matMenu">
+          <button mat-menu-item routerLink="projetos">Projetos</button>
+          <button mat-menu-item >Agenda Planejamento</button>
+        </mat-menu>
         <mat-menu #execucao="matMenu">
           <button mat-menu-item routerLink="execucao">Apontamentos</button>
-          <button mat-menu-item >Agenda Trabalhos</button>
+          <button mat-menu-item routerLink="agendatrabalhos">Agenda Trabalhos</button>
         </mat-menu>
         <mat-menu #sobre="matMenu">
           <button mat-menu-item routerLink="sobre">Parâmentos Do Sistema</button>

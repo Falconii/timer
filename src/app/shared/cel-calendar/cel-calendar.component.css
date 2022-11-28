@@ -1,0 +1,24 @@
+.format-dia-semana {
+    color: black;
+}
+
+.formata-dia-semana_1 {
+    color: black;
+    font-weight: 400;
+}
+
+.formata-dia-semana_2 {
+    color: yellow;
+}
+
+.formata-dia-semana_3 {
+    color: gray;
+}
+
+
+/*
+     0 -> normal
+     1 -> feriado ou domingo
+     2 -> férias
+     3 -> fora do mês
+  */

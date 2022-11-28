@@ -32,7 +32,7 @@ export class GruUserViewComponent implements OnInit {
 
   durationInSeconds = 2;
 
-  labelCadastro: string = '';
+  labelCadastro: string = 'Agenda Do Auditor';
 
   constructor(
     private formBuilder: FormBuilder,

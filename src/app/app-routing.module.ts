@@ -1,3 +1,4 @@
+import { AgendaAuditorModule } from './modules/agenda-auditor/agenda-auditor.module';
 import { ExecucaoModule } from './modules/execucao/execucao.module';
 import { DiganaoGuard } from './guards/diganao.guard';
 import { LoginComponent } from './login/login.component';
@@ -63,6 +64,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/execucao/execucao.module').then(
         (m) => m.ExecucaoModule
+      ),
+  },
+  {
+    path: 'agendatrabalhos',
+    loadChildren: () =>
+      import('./modules/agenda-auditor/agenda-auditor.module').then(
+        (m) => m.AgendaAuditorModule
       ),
   },
   {
