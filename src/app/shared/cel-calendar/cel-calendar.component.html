@@ -1,5 +1,5 @@
 <div>
-    <mat-label class="{{getClasse()}} ponteiro-seta">{{Celula.dia}}</mat-label>
+    <mat-label class="{{getClasse()}} ponteiro-seta" (click)="onClickDia()">{{Celula.dia}}</mat-label>
 </div>
 <mat-divider *ngIf="Celula.tipo == 1"></mat-divider>
 <div div class="col-med-2" *ngIf="Celula.tipo == 1">

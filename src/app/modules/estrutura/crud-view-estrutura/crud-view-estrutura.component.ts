@@ -66,7 +66,7 @@ export class CrudViewEstruturaComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(1),
-          Validators.maxLength(60),
+          Validators.maxLength(300),
         ],
       ],
       nivel: [{ value: '' }],

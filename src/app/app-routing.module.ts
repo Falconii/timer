@@ -60,6 +60,14 @@ const routes: Routes = [
       import('./modules/projeto/projeto.module').then((m) => m.ProjetoModule),
   },
   {
+    path: 'agendaprojeto',
+    loadChildren: () =>
+      import('./modules/agenda-diretor/agenda-diretor.module').then(
+        (m) => m.AgendaDiretorModule
+      ),
+  },
+
+  {
     path: 'execucao',
     loadChildren: () =>
       import('./modules/execucao/execucao.module').then(

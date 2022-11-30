@@ -1,3 +1,4 @@
+import { CelApontamentosComponent } from './cel-apontamentos/cel-apontamentos.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormDebugComponent } from './form-debug/form-debug.component';
@@ -28,6 +29,7 @@ import { CelCalendarComponent } from './cel-calendar/cel-calendar.component';
     SituacaoPadraoPipe,
     SharedNavegatorComponent,
     CelCalendarComponent,
+    CelApontamentosComponent,
   ],
   imports: [CommonModule, MaterialModule],
   exports: [
@@ -43,6 +45,7 @@ import { CelCalendarComponent } from './cel-calendar/cel-calendar.component';
     SituacaoPadraoPipe,
     SharedNavegatorComponent,
     CelCalendarComponent,
+    CelApontamentosComponent,
   ],
 })
 export class SharedModule {}

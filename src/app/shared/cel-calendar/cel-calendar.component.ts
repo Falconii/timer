@@ -1,5 +1,5 @@
 import { CelulaDia } from './../celula-dia';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-cel-calendar',
@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class CelCalendarComponent implements OnInit {
   @Input('celula') Celula!: CelulaDia;
+  @Output('onClickDay') changeDay = new EventEmitter();
 
   constructor() {}
 
@@ -23,9 +24,19 @@ export class CelCalendarComponent implements OnInit {
     }
   }
 
-  onClickDia() {}
+  onClickDia() {
+    this.changeDay.emit('');
+  }
 
-  onClickProjeto() {}
+  onClickProjeto() {
+    if (this.Celula.tipo == 3 || this.Celula.semana == 0) {
+      return;
+    }
+  }
 
-  onClickExecutado() {}
+  onClickExecutado() {
+    if (this.Celula.tipo == 3 || this.Celula.semana == 0) {
+      return;
+    }
+  }
 }

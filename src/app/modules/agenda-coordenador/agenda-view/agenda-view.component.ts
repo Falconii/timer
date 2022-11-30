@@ -26,6 +26,9 @@ export class AgendaViewComponent implements OnInit {
   anos: number[] = [2022, 2023, 2024];
   meses: ListaMeses = new ListaMeses();
   hoje: Date = new Date();
+  showLancamento: boolean = false;
+  celulaDia: CelulaDia = new CelulaDia();
+
   constructor(
     formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
@@ -173,5 +176,14 @@ export class AgendaViewComponent implements OnInit {
       }
       this.linhas.push(car);
     }
+  }
+  onDay(celula: CelulaDia) {
+    if (celula.tipo == 3 || celula.semana == 0) {
+      this.showLancamento = false;
+    } else {
+      this.showLancamento = true;
+    }
+
+    this.celulaDia = celula;
   }
 }
