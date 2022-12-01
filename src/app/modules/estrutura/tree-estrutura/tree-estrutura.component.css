@@ -176,6 +176,7 @@ table {
 }
 
 .coluna-codigo {
+    text-align: left;
     background-color: #878684;
     font-weight: bolder;
 }
