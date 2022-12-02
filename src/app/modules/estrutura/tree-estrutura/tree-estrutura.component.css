@@ -176,19 +176,23 @@ table {
 }
 
 .coluna-codigo {
-    text-align: left;
     background-color: #878684;
-    font-weight: bolder;
+    padding: 20px;
+    text-align: center;
 }
 
 .coluna-descricao {
     background-color: #A9AD9E;
+    text-align: justify;
+    font-weight: 400;
+    padding: 10px;
 }
 
 .coluna-tipo {
     background-color: #E1E7D3;
     text-align: center;
     font-weight: 400;
+    padding: 10%;
 }
 
 .coluna-cabec {

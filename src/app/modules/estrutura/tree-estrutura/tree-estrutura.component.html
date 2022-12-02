@@ -6,17 +6,17 @@
     </button>
     </mat-toolbar>
 </p>
+<div class="coluna-cabec col-med-6">
+    <mat-label class="col-max">CONTA</mat-label>
+    <mat-label class="column-span-4">DESCRIÇÃO</mat-label>
+    <mat-label class="col-max">TIPO:</mat-label>
+    <mat-divider [inset]="true"></mat-divider>
+</div>
 <div>
-    <table>
-        <tr class="coluna-cabec">
-            <th>CONTA</th>
-            <th>CONTA-DESCRICAO</th>
-            <th>TIPO</th>
-        </tr>
-        <tr *ngFor="let estru of estruturas">
-            <td class="coluna-codigo">{{estru.subconta | subconta}}</td>
-            <td class="coluna-descricao">{{estru.descricao}}</td>
-            <td class="coluna-tipo">{{estru.tipo | tipoConta }}</td>
-        </tr>
-    </table>
+    <div *ngFor="let estru of estruturas" class="col-med-6">
+        <mat-label class="coluna-codigo col-max">{{estru.subconta | subconta}}</mat-label>
+        <mat-label class="coluna-descricao column-span-4">{{estru.descricao}}</mat-label>
+        <mat-label class="coluna-tipo col-max">{{estru.tipo | tipoConta}}</mat-label>
+        <mat-divider></mat-divider>
+    </div>
 </div>

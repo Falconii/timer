@@ -210,6 +210,8 @@ body {
 
 .coluna-descricao {
     background-color: #A9AD9E;
+    text-align: justify;
+    padding: 10px;
 }
 
 .coluna-acao {
@@ -222,6 +224,7 @@ body {
     background-color: #E3BD11;
     font-size: large;
     text-align: center;
+    height: max-content;
 }
 
 .encerramento {

@@ -20,6 +20,7 @@ import { AtividadesService } from 'src/app/services/atividades.service';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { EstruturasService } from 'src/app/services/estruturas.service';
 import { ProjetosService } from 'src/app/services/projetos.service';
+import { FiltroOperacionalSubconta } from 'src/app/shared/filtro-operacional-subconta';
 
 @Component({
   selector: 'app-crud-atividade-projeto',
@@ -77,7 +78,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   id_atividade_conta = '';
 
-  filtro: Boolean = false;
+  filtro: FiltroOperacionalSubconta = new FiltroOperacionalSubconta();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -459,7 +460,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     if (this.parametros.value.conta?.trim() != '') {
       this.conta = this.parametros.value.conta?.trim();
       this.setParamentos();
-      this.filtro = false;
+      this.filtro = new FiltroOperacionalSubconta();
       this.anexarAtividades();
     } else {
       this.openSnackBar_OK(`Informe Uma Estrutura Primeiro`, 'OK');
@@ -470,7 +471,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     if (this.parametros.value.atividade?.trim() != '') {
       this.id_atividade_conta = this.parametros.value.atividade?.trim();
       this.setParamentos();
-      this.filtro = false;
+      this.filtro = new FiltroOperacionalSubconta();
       this.getAtividades();
     } else {
       this.openSnackBar_OK(`Informe Uma Atividade Primeiro`, 'OK');
@@ -565,19 +566,31 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     return MensagensBotoes;
   }
 
-  setFiltro() {
-    this.filtro = !this.filtro;
-  }
-
   getFiltro(atividade: AtividadeQuery_01Model): Boolean {
-    if (this.filtro) {
-      if (atividade.tipo == 'O') {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
+    var filtroOperacional: boolean = false;
+    var filtroSubConta: boolean = false;
+    if (
+      !this.filtro.operacional &&
+      !(this.filtro.subconta == atividade.subconta)
+    ) {
       return true;
+    }
+    if (this.filtro.operacional) {
+      if (atividade.tipo == 'O') {
+        filtroOperacional = true;
+      } else {
+        filtroOperacional = false;
+      }
+    }
+    if (this.filtro.subconta == atividade.subconta) {
+      filtroSubConta = true;
+    } else {
+      filtroSubConta = false;
+    }
+    if (filtroOperacional || filtroSubConta) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -602,5 +615,20 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       if (exec.id == value) retorno = exec.razao;
     });
     return retorno;
+  }
+
+  onSetFiltroOperacional() {
+    this.filtro.operacional = !this.filtro.operacional;
+  }
+
+  onSetFiltroSubConta(conta: string, nivel: number) {
+    if (this.filtro.subconta == conta) {
+      this.filtro.subconta = '';
+      this.filtro.nivel = 0;
+    } else {
+      this.filtro.subconta = conta;
+      this.filtro.nivel = nivel;
+    }
+    console.log('Filtro Conta:', this.filtro.subconta, this.filtro.nivel);
   }
 }
