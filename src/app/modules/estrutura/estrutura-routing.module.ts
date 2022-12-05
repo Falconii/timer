@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CrudEstruturaComponent } from './crud-estrutura/crud-estrutura.component';
 import { CrudSubestruturaComponent } from './crud-subestrutura/crud-subestrutura.component';
 import { CrudViewEstruturaComponent } from './crud-view-estrutura/crud-view-estrutura.component';
+import { TreeEstruturaV2Component } from './tree-estrutura-v2/tree-estrutura-v2.component';
 import { TreeEstruturaComponent } from './tree-estrutura/tree-estrutura.component';
 
 const routes: Routes = [
@@ -18,7 +19,7 @@ const routes: Routes = [
   },
   {
     path: 'treeconta/:id_empresa/:conta/:subconta/:descricao/:nivel',
-    component: TreeEstruturaComponent,
+    component: TreeEstruturaV2Component,
   },
 ];
 

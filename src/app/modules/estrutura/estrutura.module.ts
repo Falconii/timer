@@ -7,16 +7,18 @@ import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from 'src/app/material/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CrudEstruturaComponent } from './crud-estrutura/crud-estrutura.component';
-import { CrudViewEstruturaComponent } from './crud-view-estrutura/crud-view-estrutura.component';
-import { TreeEstruturaComponent } from './tree-estrutura/tree-estrutura.component';
 import { CrudSubestruturaComponent } from './crud-subestrutura/crud-subestrutura.component';
+import { TreeEstruturaV2Component } from './tree-estrutura-v2/tree-estrutura-v2.component';
+import { TreeEstruturaComponent } from './tree-estrutura/tree-estrutura.component';
+import { CrudViewEstruturaComponent } from './crud-view-estrutura/crud-view-estrutura.component';
 
 @NgModule({
   declarations: [
     CrudEstruturaComponent,
-    CrudViewEstruturaComponent,
+    TreeEstruturaV2Component,
     TreeEstruturaComponent,
     CrudSubestruturaComponent,
+    CrudViewEstruturaComponent,
   ],
   imports: [
     CommonModule,

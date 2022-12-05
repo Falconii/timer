@@ -1,6 +1,6 @@
 <p>
     <mat-toolbar>
-        <span class="example-spacer">Projeto{{atividade.id_projeto}}-Atividade:{{atividade.subconta }}</span>
+        <span class="example-spacer">Projeto: {{atividade.id_projeto}} Código Da Atividade: {{atividade.subconta }}</span>
         <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Filtro Projetos" matTooltipPosition="above" *ngIf="idAcao == 99" (click)="setFiltro()">
           <mat-icon>filter_list</mat-icon>
          </button>

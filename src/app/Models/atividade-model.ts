@@ -17,4 +17,5 @@ export class AtividadeModel {
   public obs: string = '';
   public user_insert: number = 0;
   public user_update: number = 0;
+  public descricao_estru: string = '';
 }

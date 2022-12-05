@@ -1,0 +1,31 @@
+<!--http://jsfiddle.net/danield770/sNwrs/3158/-->
+<div class="div-barra">
+    <mat-toolbar>
+        <span class="example-spacer">Estrutura </span>
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="onRetorno()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+    </mat-toolbar>
+</div>
+
+<div *ngIf="estruturas.length > 0">
+    <table>
+        <tr class="coluna-cabec">
+            <th>CONTA</th>
+            <th>DESCRIÇÃO</th>
+            <th>TIPO</th>
+        </tr>
+        <tr *ngFor="let estrutura of estruturas">
+            <td class="coluna-codigo">
+                {{estrutura.subconta | subconta}}
+            </td>
+            <td class="coluna-descricao">
+                {{estrutura.descricao}}
+            </td>
+            <td class="coluna-acao">
+                {{estrutura.tipo | tipoConta}}
+            </td>
+        </tr>
+    </table>
+</div>

@@ -92,6 +92,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {
     this.formulario = formBuilder.group({
+      descricao: [{ value: '' }],
       subconta: [{ value: '' }],
       inicial: [],
       final: [],
@@ -480,6 +481,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   setValue() {
     this.formulario.setValue({
+      descricao: this.atividade.descricao_estru,
       subconta: this.atividade.subconta,
       inicial: this.atividade.inicial,
       final: this.atividade.final,
@@ -567,31 +569,19 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   getFiltro(atividade: AtividadeQuery_01Model): Boolean {
-    var filtroOperacional: boolean = false;
     var filtroSubConta: boolean = false;
-    if (
-      !this.filtro.operacional &&
-      !(this.filtro.subconta == atividade.subconta)
-    ) {
+    if (this.filtro.subconta == '') {
       return true;
     }
-    if (this.filtro.operacional) {
-      if (atividade.tipo == 'O') {
-        filtroOperacional = true;
-      } else {
-        filtroOperacional = false;
-      }
-    }
-    if (this.filtro.subconta == atividade.subconta) {
+    if (
+      this.filtro.subconta.trim() ==
+      atividade.subconta.substring(0, this.filtro.nivel * 2)
+    ) {
       filtroSubConta = true;
     } else {
       filtroSubConta = false;
     }
-    if (filtroOperacional || filtroSubConta) {
-      return true;
-    } else {
-      return false;
-    }
+    return filtroSubConta;
   }
 
   refreshAtividade(atividade: AtividadeModel) {
@@ -615,10 +605,6 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       if (exec.id == value) retorno = exec.razao;
     });
     return retorno;
-  }
-
-  onSetFiltroOperacional() {
-    this.filtro.operacional = !this.filtro.operacional;
   }
 
   onSetFiltroSubConta(conta: string, nivel: number) {
