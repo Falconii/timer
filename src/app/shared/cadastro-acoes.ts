@@ -4,4 +4,5 @@ export enum CadastroAcoes {
   Consulta = 3,
   Exclusao = 4,
   Atualizacao = 5,
+  Gravacao = 6,
 }

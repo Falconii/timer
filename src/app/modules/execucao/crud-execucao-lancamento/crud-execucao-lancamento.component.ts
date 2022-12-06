@@ -117,7 +117,7 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
   }
 
   getUsuario() {
-    this.inscricaoUsuario = this.usuariosService.getUsuario(1, 5).subscribe(
+    this.inscricaoUsuario = this.usuariosService.getUsuario(1, 7).subscribe(
       (data: UsuarioModel) => {
         this.usuario = data;
         this.parametro.patchValue({ usuario: this.usuario.razao });
