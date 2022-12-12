@@ -5,10 +5,8 @@
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="onRetorno()">
     <mat-icon>arrow_back</mat-icon>
   </button>
-
     </mat-toolbar>
 </div>
-
 <div *ngIf="((idAcao == 99) && (estruturas.length > 0))">
     <table>
         <tr class="coluna-cabec">
@@ -19,31 +17,32 @@
             <th>AÇÃO</th>
         </tr>
         <tr *ngFor="let estrutura of estruturas ; let i=index">
-            <td class="coluna-codigo" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="(estrutura.nivel <= 3)">
+            <td class="coluna-codigo" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="showNivel(estrutura.nivel)">
                 {{estrutura.subconta | subconta}}
             </td>
-            <td class="coluna-codigo" *ngIf="(estrutura.nivel <= 3)">
-                {{getNewCount(estrutura)}}-{{estrutura.nivel}}
+            <td class="coluna-codigo" *ngIf="showNivel(estrutura.nivel)">
+                {{estrutura.subItem}}-{{estrutura.nivel}}
             </td>
-            <td class="coluna-descricao" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="(estrutura.nivel <= 3)">
+            <td class="coluna-descricao" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="showNivel(estrutura.nivel)">
                 {{estrutura.descricao}}
             </td>
-            <td class="coluna-acao" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="(estrutura.nivel <= 3)">
+            <td class="coluna-acao" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="showNivel(estrutura.nivel)">
                 {{estrutura.tipo | tipoConta}}
             </td>
-            <td class="coluna-acao" *ngIf="(estrutura.nivel <= 3)">
-                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Fixar Tópico" matTooltipPosition="above" (click)="escolha(estrutura,98,i)">
-              <mat-icon>filter_list</mat-icon>
+            <td class="coluna-acao" *ngIf="showNivel(estrutura.nivel)">
+                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Tópico" matTooltipPosition="above" (click)="novoTopico(estrutura,i)" *ngIf="estrutura.nivel > 1">
+              <mat-icon>add_circle_outline</mat-icon>
             </button>
+                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Sub-Item" matTooltipPosition="above" (click)="novoSubTopico(estrutura,i)" *ngIf="estrutura.tipo != 'O'">
+              <mat-icon>trending_down</mat-icon>
+          </button>
                 <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Excluir Item" matTooltipPosition="above" (click)="escolha(estrutura,getAcoes()[ 'Exclusao'],i)">
               <mat-icon>delete</mat-icon>
             </button>
                 <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Editar Item" matTooltipPosition="above" (click)="escolha(estrutura,getAcoes()[ 'Edicao'],i)">
                 <mat-icon>edit</mat-icon>
               </button>
-                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Item" matTooltipPosition="above">
-                  <mat-icon>add_circle_outline</mat-icon>
-              </button>
+
             </td>
         </tr>
     </table>

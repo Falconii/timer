@@ -30,6 +30,8 @@ export class TreeEstruturaV2Component implements OnInit {
 
   readOnly: boolean = true;
 
+  subOpcao: number = 0;
+
   tipos: TipoConta[] = [
     { tipo: 'C', descricao: 'CONTA' },
     { tipo: 'S', descricao: 'SUBCONTA' },
@@ -56,6 +58,10 @@ export class TreeEstruturaV2Component implements OnInit {
   nivel: number = 0;
 
   estruturas: EstruturaModel[] = [];
+
+  estru: EstruturaModel = new EstruturaModel();
+
+  index: number = 0;
 
   contadores: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -126,6 +132,10 @@ export class TreeEstruturaV2Component implements OnInit {
       .subscribe(
         (data: EstruturaModel[]) => {
           this.estruturas = data;
+          for (var x: number = 0; x < this.estruturas.length; x++) {
+            this.setSubItem(x);
+          }
+
           console.log(this.estruturas);
         },
         (error: any) => {
@@ -194,7 +204,6 @@ export class TreeEstruturaV2Component implements OnInit {
   }
 
   onSubmit() {
-    console.log('this.formulario', this.formulario);
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
@@ -216,6 +225,12 @@ export class TreeEstruturaV2Component implements OnInit {
     console.log('registro', this.estrutura);
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        if (this.subOpcao == 0) {
+          this.novoTopicoComplemento();
+        } else {
+          this.novoSubTopicoComplemento();
+        }
+        this.idAcao = 99;
         break;
       case CadastroAcoes.Edicao:
         break;
@@ -240,19 +255,25 @@ export class TreeEstruturaV2Component implements OnInit {
     }
   }
 
-  escolha(estru: EstruturaModel, opcao: number, i: number) {
+  escolha(estru: EstruturaModel, opcao: number, index: number) {
     if (opcao == 98) {
+      //Novo item mesmo nivel
+      this.idAcao = CadastroAcoes.Inclusao;
       this.estrutura = new EstruturaModel();
       this.estrutura.id_empresa = estru.id_empresa;
       this.estrutura.conta = estru.conta;
       this.estrutura.subconta = estru.subconta;
       this.estrutura.nivel = estru.nivel;
-      this.estrutura.descricao = 'TESTE DE INCLUSÃO';
-      this.estruturas.splice(i + 1, 0, this.estrutura);
+      this.estrutura.descricao = '';
+      this.estrutura.subItem = false;
+      this.estrutura.tipo = estru.tipo;
+      this.estruturas.splice(index + 1, 0, this.estrutura);
       var radical: string = estru.subconta.substring(0, (estru.nivel - 1) * 2);
+      var radicalInicial: string = estru.subconta.substring(0, estru.nivel * 2);
       var antigoRadical: string = '';
       var novoRadical: string = '';
       var ct: number = 0;
+      console.log('==>', this.estruturas);
       for (var i: number = 0; i < this.estruturas.length; i++) {
         if (
           radical ==
@@ -281,9 +302,20 @@ export class TreeEstruturaV2Component implements OnInit {
               novoRadical
             );
           }
-          this.trocaSubRadicais(antigoRadical, novoRadical, estru.nivel);
+          if (i > index + 1 && this.estruturas[i].subItem) {
+            this.trocaSubRadicais(antigoRadical, novoRadical, estru.nivel);
+          }
         }
       }
+      this.estruturas = this.estruturas.sort((a, b) => {
+        if (a.subconta < b.subconta) {
+          return -1;
+        }
+        if (a.subconta > b.subconta) {
+          return 1;
+        }
+        return 0;
+      });
       return;
     }
     if (opcao == 99) {
@@ -313,7 +345,7 @@ export class TreeEstruturaV2Component implements OnInit {
       this.setValue();
       this.setAcao(this.idAcao);
       if (this.idAcao == CadastroAcoes.Exclusao) {
-        this.estruturas.splice(i, 1);
+        this.estruturas.splice(index, 1);
       }
     }
   }
@@ -322,7 +354,11 @@ export class TreeEstruturaV2Component implements OnInit {
     switch (+op) {
       case CadastroAcoes.Inclusao:
         this.acao = 'Gravar';
-        this.labelCadastro = 'Estruturas - Inclusão.';
+        if (this.subOpcao == 0) {
+          this.labelCadastro = 'Estruturas - Inclusão Novo Tópico';
+        } else {
+          this.labelCadastro = 'Estruturas - Inclusão Novo Sub-Item';
+        }
         this.readOnly = false;
         break;
       case CadastroAcoes.Edicao:
@@ -345,30 +381,6 @@ export class TreeEstruturaV2Component implements OnInit {
     }
   }
 
-  //Controle da nova conta
-  getNewCount(estru: EstruturaModel): string {
-    //this.contadores = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    //this.contadores[0] = 1;
-    //this.contadores[1] = +this.conta;
-    var retorno: string = '';
-    var x: number = 0;
-    for (x = 1; x <= estru.nivel; x++) {
-      if (x == 1) {
-        retorno += this.addLeadingZeros(this.contadores[1], 2);
-      } else {
-        if (x < estru.nivel) {
-          this.contadores[x] = this.contadores[x - 1];
-          retorno += this.addLeadingZeros(this.contadores[x], 2);
-        }
-        if (x == estru.nivel) {
-          this.contadores[x] = this.contadores[x - 1];
-          retorno += this.addLeadingZeros(this.contadores[x], 2);
-        }
-      }
-    }
-    return retorno;
-  }
-
   addLeadingZeros(num: number, totalLength: number): string {
     return String(num).padStart(totalLength, '0');
   }
@@ -386,9 +398,296 @@ export class TreeEstruturaV2Component implements OnInit {
           novoRadical + this.estruturas[i].subconta.substring(radical.length)
         );
 
-        //this.estruturas[i].subconta =
-        //  novoRadical + this.estruturas[i].subconta.substring(radical.length);
+        this.estruturas[i].subconta =
+          novoRadical + this.estruturas[i].subconta.substring(radical.length);
+        console.log('Trocada =>', this.estruturas[i].subconta);
       }
     }
+  }
+  showNivel(nivel: number): boolean {
+    if (nivel <= 3) {
+      return true;
+    } else {
+      return true;
+    }
+  }
+
+  setSubItem(index: number) {
+    this.estruturas[index].subItem = false;
+    if (index == this.estruturas.length) {
+      return;
+    }
+    if (this.estruturas[index].tipo == 'O') {
+      this.estruturas[index].subItem = false;
+    }
+    if (index < this.estruturas.length) {
+      console.log(
+        'setSubItem ===>',
+        this.estruturas[index].subconta.trim(),
+        this.estruturas[index + 1].subconta.substring(
+          0,
+          this.estruturas[index].nivel * 2
+        )
+      );
+    }
+    if (
+      this.estruturas[index].subconta.trim() ==
+      this.estruturas[index + 1].subconta.substring(
+        0,
+        this.estruturas[index].nivel * 2
+      )
+    ) {
+      this.estruturas[index].subItem = true;
+    }
+    return;
+  }
+
+  novoTopico(estru: EstruturaModel, index: number) {
+    this.subOpcao = 0;
+    this.estru = estru;
+    this.index = index;
+    this.idAcao = CadastroAcoes.Inclusao;
+    this.setAcao(this.idAcao);
+    this.estrutura = new EstruturaModel();
+    this.estrutura.id_empresa = estru.id_empresa;
+    this.estrutura.conta = estru.conta;
+    this.estrutura.subconta = estru.subconta;
+    this.estrutura.nivel = estru.nivel;
+    this.estrutura.descricao = '';
+    this.estrutura.subItem = false;
+    this.estrutura.tipo = estru.tipo;
+    this.setValue();
+    /*
+    var radical: string = estru.subconta.substring(0, (estru.nivel - 1) * 2);
+    var radicalInicial: string = estru.subconta.substring(0, estru.nivel * 2);
+    var antigoRadical: string = '';
+    var novoRadical: string = '';
+    var ct: number = 0;
+    console.log('==>', this.estruturas);
+    for (var i: number = 0; i < this.estruturas.length; i++) {
+      if (
+        radical ==
+        this.estruturas[i].subconta.substring(
+          0,
+          (this.estruturas[i].nivel - 1) * 2
+        )
+      ) {
+        antigoRadical = this.estruturas[i].subconta.substring(
+          0,
+          estru.nivel * 2
+        );
+        this.estruturas[i].subconta = radical + this.addLeadingZeros(++ct, 2);
+        novoRadical = this.estruturas[i].subconta.substring(0, estru.nivel * 2);
+        if (estru.subconta.substring(0, 2) == '01') {
+          console.log(
+            'Principal=> ',
+            'radical => ',
+            radical,
+            'radical antigo  =>',
+            antigoRadical,
+            'radical novo =>',
+            novoRadical
+          );
+        }
+        if (i > index + 1 && this.estruturas[i].subItem) {
+          this.trocaSubRadicais(antigoRadical, novoRadical, estru.nivel);
+        }
+      }
+    }
+    this.estruturas = this.estruturas.sort((a, b) => {
+      if (a.subconta < b.subconta) {
+        return -1;
+      }
+      if (a.subconta > b.subconta) {
+        return 1;
+      }
+      return 0;
+    });
+    */
+  }
+
+  novoTopicoComplemento() {
+    this.estruturas.splice(this.index + 1, 0, this.estrutura);
+    var radical: string = this.estru.subconta.substring(
+      0,
+      (this.estru.nivel - 1) * 2
+    );
+    var radicalInicial: string = this.estru.subconta.substring(
+      0,
+      this.estru.nivel * 2
+    );
+    var antigoRadical: string = '';
+    var novoRadical: string = '';
+    var ct: number = 0;
+    console.log('==>', this.estruturas);
+    for (var i: number = 0; i < this.estruturas.length; i++) {
+      if (
+        radical ==
+        this.estruturas[i].subconta.substring(
+          0,
+          (this.estruturas[i].nivel - 1) * 2
+        )
+      ) {
+        antigoRadical = this.estruturas[i].subconta.substring(
+          0,
+          this.estru.nivel * 2
+        );
+        this.estruturas[i].subconta = radical + this.addLeadingZeros(++ct, 2);
+        novoRadical = this.estruturas[i].subconta.substring(
+          0,
+          this.estru.nivel * 2
+        );
+        if (this.estru.subconta.substring(0, 2) == '01') {
+          console.log(
+            'Principal=> ',
+            'radical => ',
+            radical,
+            'radical antigo  =>',
+            antigoRadical,
+            'radical novo =>',
+            novoRadical
+          );
+        }
+        if (i > this.index + 1 && this.estruturas[i].subItem) {
+          this.trocaSubRadicais(antigoRadical, novoRadical, this.estru.nivel);
+        }
+      }
+    }
+    this.estruturas = this.estruturas.sort((a, b) => {
+      if (a.subconta < b.subconta) {
+        return -1;
+      }
+      if (a.subconta > b.subconta) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+  novoSubTopico(estru: EstruturaModel, index: number) {
+    this.subOpcao = 0;
+    this.estru = estru;
+    this.index = index;
+    this.idAcao = CadastroAcoes.Inclusao;
+    this.setAcao(this.idAcao);
+    this.estrutura = new EstruturaModel();
+    this.estrutura.id_empresa = estru.id_empresa;
+    this.estrutura.conta = estru.conta;
+    this.estrutura.subconta =
+      estru.subconta.trim() + this.addLeadingZeros(1, 2);
+    this.estrutura.nivel = estru.nivel + 1;
+    this.estrutura.descricao = 'NOVO SUB-ITEM';
+    this.estrutura.subItem = false;
+    this.estrutura.tipo = estru.tipo;
+    this.setValue();
+    /*
+    this.estruturas.splice(index + 1, 0, this.estrutura);
+    this.estruturas[index].subItem = true;
+    var radical: string = estru.subconta.substring(0, (estru.nivel - 1) * 2);
+    var radicalInicial: string = estru.subconta.substring(0, estru.nivel * 2);
+    var antigoRadical: string = '';
+    var novoRadical: string = '';
+    var ct: number = 0;
+    console.log('==>', this.estruturas);
+    for (var i: number = 0; i < this.estruturas.length; i++) {
+      if (
+        radical ==
+        this.estruturas[i].subconta.substring(
+          0,
+          (this.estruturas[i].nivel - 1) * 2
+        )
+      ) {
+        antigoRadical = this.estruturas[i].subconta.substring(
+          0,
+          estru.nivel * 2
+        );
+        this.estruturas[i].subconta = radical + this.addLeadingZeros(++ct, 2);
+        novoRadical = this.estruturas[i].subconta.substring(0, estru.nivel * 2);
+        if (estru.subconta.substring(0, 2) == '01') {
+          console.log(
+            'Principal=> ',
+            'radical => ',
+            radical,
+            'radical antigo  =>',
+            antigoRadical,
+            'radical novo =>',
+            novoRadical
+          );
+        }
+        if (i > index + 1) {
+          this.trocaSubRadicais(antigoRadical, novoRadical, estru.nivel);
+        }
+      }
+    }
+    this.estruturas = this.estruturas.sort((a, b) => {
+      if (a.subconta < b.subconta) {
+        return -1;
+      }
+      if (a.subconta > b.subconta) {
+        return 1;
+      }
+      return 0;
+    });
+    */
+    return;
+  }
+
+  novoSubTopicoComplemento() {
+    this.estruturas[this.index].subItem = true;
+    this.estruturas.splice(this.index + 1, 0, this.estrutura);
+    this.estruturas[this.index].subItem = true;
+    var radical: string = this.estru.subconta.substring(
+      0,
+      (this.estru.nivel - 1) * 2
+    );
+    var radicalInicial: string = this.estru.subconta.substring(
+      0,
+      this.estru.nivel * 2
+    );
+    var antigoRadical: string = '';
+    var novoRadical: string = '';
+    var ct: number = 0;
+    console.log('==>', this.estruturas);
+    for (var i: number = 0; i < this.estruturas.length; i++) {
+      if (
+        radical ==
+        this.estruturas[i].subconta.substring(
+          0,
+          (this.estruturas[i].nivel - 1) * 2
+        )
+      ) {
+        antigoRadical = this.estruturas[i].subconta.substring(
+          0,
+          this.estru.nivel * 2
+        );
+        this.estruturas[i].subconta = radical + this.addLeadingZeros(++ct, 2);
+        novoRadical = this.estruturas[i].subconta.substring(
+          0,
+          this.estru.nivel * 2
+        );
+        if (this.estru.subconta.substring(0, 2) == '01') {
+          console.log(
+            'Principal=> ',
+            'radical => ',
+            radical,
+            'radical antigo  =>',
+            antigoRadical,
+            'radical novo =>',
+            novoRadical
+          );
+        }
+        if (i > this.index + 1) {
+          this.trocaSubRadicais(antigoRadical, novoRadical, this.estru.nivel);
+        }
+      }
+    }
+    this.estruturas = this.estruturas.sort((a, b) => {
+      if (a.subconta < b.subconta) {
+        return -1;
+      }
+      if (a.subconta > b.subconta) {
+        return 1;
+      }
+      return 0;
+    });
   }
 }
