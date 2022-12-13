@@ -303,7 +303,7 @@ export class TreeEstruturaV2Component implements OnInit {
             );
           }
           if (i > index + 1 && this.estruturas[i].subItem) {
-            this.trocaSubRadicais(antigoRadical, novoRadical, estru.nivel);
+            this.trocaSubRadicais(antigoRadical, novoRadical, estru.nivel, i);
           }
         }
       }
@@ -385,8 +385,13 @@ export class TreeEstruturaV2Component implements OnInit {
     return String(num).padStart(totalLength, '0');
   }
 
-  trocaSubRadicais(radical: string, novoRadical: string, nivel: number) {
-    for (var i: number = 0; i < this.estruturas.length; i++) {
+  trocaSubRadicais(
+    radical: string,
+    novoRadical: string,
+    nivel: number,
+    idx: number
+  ) {
+    for (var i: number = idx; i < this.estruturas.length; i++) {
       if (
         radical == this.estruturas[i].subconta.substring(0, radical.length) &&
         this.estruturas[i].nivel > nivel
@@ -537,7 +542,7 @@ export class TreeEstruturaV2Component implements OnInit {
           0,
           this.estru.nivel * 2
         );
-        if (this.estru.subconta.substring(0, 2) == '01') {
+        if (this.estru.subconta.substring(0, 2) == 'XX') {
           console.log(
             'Principal=> ',
             'radical => ',
@@ -549,7 +554,21 @@ export class TreeEstruturaV2Component implements OnInit {
           );
         }
         if (i > this.index + 1 && this.estruturas[i].subItem) {
-          this.trocaSubRadicais(antigoRadical, novoRadical, this.estru.nivel);
+          console.log(
+            'radical antigo',
+            antigoRadical,
+            'radical novo',
+            novoRadical,
+            this.estruturas[i].subItem,
+            this.estruturas[i].subconta,
+            i
+          );
+          this.trocaSubRadicais(
+            antigoRadical,
+            novoRadical,
+            this.estru.nivel,
+            i
+          );
         }
       }
     }
@@ -564,7 +583,8 @@ export class TreeEstruturaV2Component implements OnInit {
     });
   }
   novoSubTopico(estru: EstruturaModel, index: number) {
-    this.subOpcao = 0;
+    console.log('subitem PARTE 1');
+    this.subOpcao = 1;
     this.estru = estru;
     this.index = index;
     this.idAcao = CadastroAcoes.Inclusao;
@@ -574,10 +594,17 @@ export class TreeEstruturaV2Component implements OnInit {
     this.estrutura.conta = estru.conta;
     this.estrutura.subconta =
       estru.subconta.trim() + this.addLeadingZeros(1, 2);
+    this.estruturas[this.index].subItem = true;
     this.estrutura.nivel = estru.nivel + 1;
     this.estrutura.descricao = 'NOVO SUB-ITEM';
     this.estrutura.subItem = false;
     this.estrutura.tipo = estru.tipo;
+    if (estru.tipo == 'C') {
+      this.estrutura.tipo = 'S';
+    }
+    if (estru.tipo == 'S') {
+      this.estrutura.tipo = 'O';
+    }
     this.setValue();
     /*
     this.estruturas.splice(index + 1, 0, this.estrutura);
@@ -632,12 +659,16 @@ export class TreeEstruturaV2Component implements OnInit {
   }
 
   novoSubTopicoComplemento() {
-    this.estruturas[this.index].subItem = true;
+    console.log('Vou complementar o subitem');
     this.estruturas.splice(this.index + 1, 0, this.estrutura);
     this.estruturas[this.index].subItem = true;
+    var menos = 0;
+    if (this.estru.nivel == 1) {
+      menos = 0;
+    }
     var radical: string = this.estru.subconta.substring(
       0,
-      (this.estru.nivel - 1) * 2
+      (this.estru.nivel - menos) * 2
     );
     var radicalInicial: string = this.estru.subconta.substring(
       0,
@@ -646,8 +677,11 @@ export class TreeEstruturaV2Component implements OnInit {
     var antigoRadical: string = '';
     var novoRadical: string = '';
     var ct: number = 0;
-    console.log('==>', this.estruturas);
     for (var i: number = 0; i < this.estruturas.length; i++) {
+      if (this.estruturas[i].nivel == 1) {
+        continue;
+      }
+      console.log('radical', radical);
       if (
         radical ==
         this.estruturas[i].subconta.substring(
@@ -664,19 +698,19 @@ export class TreeEstruturaV2Component implements OnInit {
           0,
           this.estru.nivel * 2
         );
-        if (this.estru.subconta.substring(0, 2) == '01') {
-          console.log(
-            'Principal=> ',
-            'radical => ',
-            radical,
-            'radical antigo  =>',
-            antigoRadical,
-            'radical novo =>',
-            novoRadical
-          );
-        }
+        console.log(
+          'radical antigo  =>',
+          antigoRadical,
+          'radical novo =>',
+          novoRadical
+        );
         if (i > this.index + 1) {
-          this.trocaSubRadicais(antigoRadical, novoRadical, this.estru.nivel);
+          this.trocaSubRadicais(
+            antigoRadical,
+            novoRadical,
+            this.estru.nivel,
+            i
+          );
         }
       }
     }
