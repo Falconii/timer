@@ -30,7 +30,7 @@
                 {{estrutura.tipo | tipoConta}}
             </td>
             <td class="coluna-acao" *ngIf="showNivel(estrutura.nivel)">
-                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Tópico" matTooltipPosition="above" (click)="novoTopico(estrutura,i)" *ngIf="estrutura.nivel > 1">
+                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Tópico" matTooltipPosition="above" (click)="onIncluirConta(estrutura,i)" *ngIf="estrutura.nivel > 1">
               <mat-icon>add_circle_outline</mat-icon>
             </button>
                 <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Sub-Item" matTooltipPosition="above" (click)="novoSubTopico(estrutura,i)" *ngIf="estrutura.tipo != 'O'">

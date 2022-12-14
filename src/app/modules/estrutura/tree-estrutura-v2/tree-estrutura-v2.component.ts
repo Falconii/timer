@@ -226,7 +226,7 @@ export class TreeEstruturaV2Component implements OnInit {
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         if (this.subOpcao == 0) {
-          this.novoTopicoComplemento();
+          this.IncluirConta();
         } else {
           this.novoSubTopicoComplemento();
         }
@@ -391,12 +391,15 @@ export class TreeEstruturaV2Component implements OnInit {
     nivel: number,
     idx: number
   ) {
+    console.log('----------------');
     for (var i: number = idx; i < this.estruturas.length; i++) {
       if (
         radical == this.estruturas[i].subconta.substring(0, radical.length) &&
         this.estruturas[i].nivel > nivel
       ) {
         console.log(
+          'Radical',
+          radical,
           'Troquei-sub',
           this.estruturas[i].subconta,
           'por =>',
@@ -405,12 +408,12 @@ export class TreeEstruturaV2Component implements OnInit {
 
         this.estruturas[i].subconta =
           novoRadical + this.estruturas[i].subconta.substring(radical.length);
-        console.log('Trocada =>', this.estruturas[i].subconta);
       }
+      console.log('----------------');
     }
   }
   showNivel(nivel: number): boolean {
-    if (nivel <= 3) {
+    if (nivel <= 7) {
       return true;
     } else {
       return true;
@@ -419,7 +422,7 @@ export class TreeEstruturaV2Component implements OnInit {
 
   setSubItem(index: number) {
     this.estruturas[index].subItem = false;
-    if (index == this.estruturas.length) {
+    if (index == this.estruturas.length - 1) {
       return;
     }
     if (this.estruturas[index].tipo == 'O') {
@@ -681,7 +684,6 @@ export class TreeEstruturaV2Component implements OnInit {
       if (this.estruturas[i].nivel == 1) {
         continue;
       }
-      console.log('radical', radical);
       if (
         radical ==
         this.estruturas[i].subconta.substring(
@@ -693,17 +695,21 @@ export class TreeEstruturaV2Component implements OnInit {
           0,
           this.estru.nivel * 2
         );
+        console.log('Conta Antiga', this.estruturas[i].subconta);
         this.estruturas[i].subconta = radical + this.addLeadingZeros(++ct, 2);
+        console.log('Conta Nova', this.estruturas[i].subconta);
         novoRadical = this.estruturas[i].subconta.substring(
           0,
           this.estru.nivel * 2
         );
         console.log(
+          'Nivel',
           'radical antigo  =>',
           antigoRadical,
           'radical novo =>',
           novoRadical
         );
+        console.log('I  =>', i, 'Index + 1 =>', this.index + 1);
         if (i > this.index + 1) {
           this.trocaSubRadicais(
             antigoRadical,
@@ -723,5 +729,89 @@ export class TreeEstruturaV2Component implements OnInit {
       }
       return 0;
     });
+  }
+
+  getSpace(nivel: number): string {
+    var retorno: string = '';
+    for (var x = 0; x < nivel; x++) {
+      retorno += '&#160';
+    }
+    return retorno;
+  }
+
+  onIncluirConta(estru: EstruturaModel, index: number) {
+    this.subOpcao = 0;
+    this.estru = estru;
+    this.index = index;
+    this.idAcao = CadastroAcoes.Inclusao;
+    this.setAcao(this.idAcao);
+    this.estrutura = new EstruturaModel();
+    this.estrutura.id_empresa = estru.id_empresa;
+    this.estrutura.conta = estru.conta;
+    this.estrutura.subconta = estru.subconta;
+    this.estrutura.nivel = estru.nivel;
+    this.estrutura.descricao = '';
+    this.estrutura.subItem = false;
+    this.estrutura.tipo = estru.tipo;
+    this.setValue();
+  }
+
+  IncluirConta() {
+    var idx: number = 0;
+    var radical: string = this.estru.subconta.substring(
+      0,
+      (this.estru.nivel - 1) * 2
+    );
+    //this.estruturas.splice(this.index + 1, 0, this.estrutura);
+    console.log(this.subContas(radical, 1));
+    this.estruturas = this.estruturas.sort((a, b) => {
+      if (a.subconta < b.subconta) {
+        return -1;
+      }
+      if (a.subconta > b.subconta) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+  subContas(radical: string, passagem: number) {
+    var ct: number = 0;
+    var oldRadical: string = '';
+    var menos: number = 0;
+    console.log('Passei ', radical, passagem);
+    if (passagem == 1) {
+      menos = 1;
+    } else {
+      menos = 1;
+      console.log('Passagem 2', radical);
+    }
+    for (var i: number = 0; i < this.estruturas.length; i++) {
+      if (this.estruturas[i].nivel == 1) {
+        continue;
+      }
+      if (
+        radical ==
+        this.estruturas[i].subconta.substring(
+          0,
+          (this.estruturas[i].nivel - menos) * 2
+        )
+      ) {
+        console.log(
+          'Estrutura',
+          this.estruturas[i].subconta,
+          this.estruturas[i].descricao
+        );
+        if (passagem == 2) {
+          oldRadical = this.estruturas[i].subconta.substring(
+            0,
+            this.estruturas[i].nivel * 2
+          );
+        }
+        if (this.estruturas[i].subItem) {
+          console.log('Passagem 2 oldRadical e radical', oldRadical, radical);
+          this.subContas(oldRadical, 2);
+        }
+      }
+    }
   }
 }
