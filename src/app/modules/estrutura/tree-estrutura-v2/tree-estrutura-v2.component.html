@@ -8,6 +8,18 @@
     </mat-toolbar>
 </div>
 <div *ngIf="((idAcao == 99) && (estruturas.length > 0))">
+    <div class="parametros">
+        <form [formGroup]="parametros" autocomplete="off" class="col-med-4">
+            <mat-form-field field appearance="outline" class="col-max">
+                <mat-label>Nivel</mat-label>
+                <mat-select formControlName="nivel" (selectionChange)="onFiltrar()">
+                    <mat-option *ngFor="let nivel of niveis" [value]="nivel.nivel">
+                        {{nivel.descricao}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+    </div>
     <table>
         <tr class="coluna-cabec">
             <th>CONTA</th>
@@ -45,6 +57,7 @@
 
             </td>
         </tr>
+
     </table>
 </div>
 <div *ngIf="(!(idAcao == 99) )">

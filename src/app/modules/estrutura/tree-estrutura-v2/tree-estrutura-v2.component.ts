@@ -1,4 +1,4 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { NivelEstrutura } from './../../../shared/nivel-estrutura';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -57,6 +57,8 @@ export class TreeEstruturaV2Component implements OnInit {
   descricao: string = '';
   nivel: number = 0;
 
+  maxNivel: number = 7;
+
   estruturas: EstruturaModel[] = [];
 
   estru: EstruturaModel = new EstruturaModel();
@@ -64,6 +66,18 @@ export class TreeEstruturaV2Component implements OnInit {
   index: number = 0;
 
   contadores: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  niveis: NivelEstrutura[] = [
+    { nivel: 1, descricao: 'NIvel 01' },
+    { nivel: 2, descricao: 'NIvel 02' },
+    { nivel: 3, descricao: 'NIvel 03' },
+    { nivel: 4, descricao: 'NIvel 04' },
+    { nivel: 5, descricao: 'NIvel 05' },
+    { nivel: 6, descricao: 'NIvel 06' },
+    { nivel: 7, descricao: 'NIvel 07' },
+  ];
+
+  parametros: FormGroup;
 
   constructor(
     private estruturaService: EstruturasService,
@@ -103,9 +117,13 @@ export class TreeEstruturaV2Component implements OnInit {
       controle: [{ value: '' }, [ValidatorStringLen(1, 2, true)]],
       controle_: [{ value: '' }],
     });
+    this.parametros = formBuilder.group({
+      nivel: [null],
+    });
     this.estrutura = new EstruturaModel();
     this.contadores[0] = 1;
     this.contadores[1] = +this.conta;
+    this.setParametros();
   }
 
   ngOnInit(): void {
@@ -190,6 +208,13 @@ export class TreeEstruturaV2Component implements OnInit {
           : '',
     });
   }
+
+  setParametros() {
+    this.parametros.setValue({
+      nivel: this.maxNivel,
+    });
+  }
+
   getAcoes() {
     return CadastroAcoes;
   }
@@ -243,6 +268,9 @@ export class TreeEstruturaV2Component implements OnInit {
     }
   }
 
+  onFiltrar() {
+    this.maxNivel = this.parametros.value.nivel;
+  }
   delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -413,11 +441,13 @@ export class TreeEstruturaV2Component implements OnInit {
     }
   }
   showNivel(nivel: number): boolean {
-    if (nivel <= 7) {
-      return true;
+    var retorno: boolean = false;
+    if (nivel <= this.maxNivel) {
+      retorno = true;
     } else {
-      return true;
+      retorno = false;
     }
+    return retorno;
   }
 
   setSubItem(index: number) {
@@ -758,12 +788,24 @@ export class TreeEstruturaV2Component implements OnInit {
 
   IncluirConta() {
     var idx: number = 0;
-    var radical: string = this.estru.subconta.substring(
+    var ct: number = 0;
+    var subNivel: string = this.estru.subconta.substring(
       0,
       (this.estru.nivel - 1) * 2
     );
-    //this.estruturas.splice(this.index + 1, 0, this.estrutura);
-    console.log(this.subContas(radical, 1));
+    var masterNivel = this.estru.nivel;
+    this.estruturas.splice(this.index + 1, 0, this.estrutura);
+    console.log('Sub-Nivel Master', subNivel);
+    for (idx = 1; idx < this.estruturas.length; idx++) {
+      if (
+        subNivel ==
+          this.estruturas[idx].subconta.substring(0, subNivel.length) &&
+        masterNivel == this.estruturas[idx].nivel
+      ) {
+        this.raiz(this.estruturas[idx].subconta.trim(), subNivel, ++ct, idx);
+        console.log('Voltei');
+      }
+    }
     this.estruturas = this.estruturas.sort((a, b) => {
       if (a.subconta < b.subconta) {
         return -1;
@@ -774,6 +816,81 @@ export class TreeEstruturaV2Component implements OnInit {
       return 0;
     });
   }
+
+  raiz(conta: string, subNivel: string, ct: number, idx: number) {
+    var velho: string = conta;
+    var novo: string = '';
+    velho = conta;
+    novo =
+      this.estruturas[idx].subconta.substring(0, subNivel.length) +
+      this.addLeadingZeros(ct, 2);
+    this.estruturas[idx].subconta = novo;
+    console.log(
+      'Sub-Nivel:',
+      subNivel,
+      'velho ou a conta:',
+      velho,
+      'novo ou a nova conta',
+      novo,
+      this.estruturas[idx].descricao,
+      idx
+    );
+    if (this.estruturas[i].subItem) {
+      this.subItem(velho, novo, idx, subNivel);
+    }
+  }
+
+  subItem(velho: string, novo: string, idx: number, subNivel: string) {
+    var ct: number = 0;
+    for (var i: number = idx + 1; i < this.estruturas.length; i++) {
+      if (velho == this.estruturas[i].subconta.substring(0, subNivel.length)) {
+        this.estruturas[i].subconta = novo + this.addLeadingZeros(++ct, 2);
+        console.log('velho', 'novo', this.estruturas[i].subconta);
+        if (this.estruturas[i].subItem) {
+          /*-----------------
+          var ct2: number = 0;
+          var master: string = this.estruturas[i].subconta.substring(
+            0,
+            this.estruturas[i].nivel * 2
+          );
+          var masterNivel = this.estruturas[i].nivel + 1;
+          console.log('Raiz Master - 2', master);
+          for (var x: number = i; x < this.estruturas.length; x++) {
+            console.log(
+              'if',
+              'Master ',
+              master,
+              '==',
+              this.estruturas[x].subconta.substring(
+                0,
+                this.estruturas[x].nivel * 2
+              )
+            );
+            if (
+              master ==
+                this.estruturas[x].subconta.substring(
+                  0,
+                  (this.estruturas[x].nivel - 1) * 2
+                ) &&
+              masterNivel == this.estruturas[x].nivel
+            ) {
+              console.log(
+                'Indo para o raiz',
+                this.estruturas[x].subconta,
+                this.estruturas[x].descricao
+              );
+              //this.raiz(this.estruturas[x].subconta.trim(), ++ct2, i);
+              console.log('Voltei');
+            }
+          }
+          --------------------*/
+        }
+      } else {
+        break;
+      }
+    }
+  }
+
   subContas(radical: string, passagem: number) {
     var ct: number = 0;
     var oldRadical: string = '';
@@ -801,12 +918,10 @@ export class TreeEstruturaV2Component implements OnInit {
           this.estruturas[i].subconta,
           this.estruturas[i].descricao
         );
-        if (passagem == 2) {
-          oldRadical = this.estruturas[i].subconta.substring(
-            0,
-            this.estruturas[i].nivel * 2
-          );
-        }
+        oldRadical = this.estruturas[i].subconta.substring(
+          0,
+          this.estru.nivel * 2
+        );
         if (this.estruturas[i].subItem) {
           console.log('Passagem 2 oldRadical e radical', oldRadical, radical);
           this.subContas(oldRadical, 2);
