@@ -1,6 +1,6 @@
 <div class="div-barra">
     <mat-toolbar>
-        <span class="example-spacer">Estruturas: </span>
+        <span class="example-spacer">Tela 01 Estruturas: </span>
         <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno" matTooltipPosition="above" (click)="onHome()">
           <mat-icon>home</mat-icon>
          </button>
@@ -78,6 +78,7 @@
             <mat-card-content>
                 <mat-label class="labelTitleFirst">Conta:</mat-label>
                 <mat-label class="labelData">{{estru.subconta}}</mat-label>
+                <mat-label class="labelData">Ação: {{estru.acao}}</mat-label>
                 <mat-label class="labelTitle">Descrição:</mat-label>
                 <mat-label class="labelData">{{estru.descricao}}</mat-label>
             </mat-card-content>

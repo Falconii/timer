@@ -1,5 +1,4 @@
 import { ParametroEstrutura01 } from './../parametros/parametro-estrutura01';
-import { EstadoModel } from './../Models/estado-model';
 import { EstruturaModel } from './../Models/estrutura-model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';

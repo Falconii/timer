@@ -33,7 +33,7 @@
                 {{estrutura.subconta | subconta}}
             </td>
             <td class="coluna-codigo" *ngIf="showNivel(estrutura.nivel)">
-                {{estrutura.subItem}}-{{estrutura.nivel}}
+                {{estrutura.subItem}}-{{estrutura.nivel}} ação: {{estrutura.acao}}
             </td>
             <td class="coluna-descricao" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="showNivel(estrutura.nivel)">
                 {{estrutura.descricao}}

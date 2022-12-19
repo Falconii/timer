@@ -4,7 +4,7 @@
         <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Cadastro De Contas" matTooltipPosition="above" (click)="onHome()" *ngIf="idAcao == 99">
           <mat-icon>home</mat-icon>
          </button>
-        <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Cadastrar Novas SubContas" matTooltipPosition="above" (click)="escolha(subconta,getAcoes()[ 'Inclusao'])" *ngIf="idAcao == 99">
+        <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Cadastrar Novas SubContas" matTooltipPosition="above" (click)="escolha(subconta,getAcoes()[ 'Inclusao'],'1')" *ngIf="idAcao == 99">
           <mat-icon>add_circle_outline</mat-icon>
          </button>
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="onRetorno()" *ngIf="idAcao == 99">
@@ -61,17 +61,17 @@
             </mat-card-subtitle>
             <mat-card-actions>
                 <span class="button-container-right ">
-          <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(sub,99) " *ngIf="sub.descricao != '' && sub.tipo != 'O' "
+          <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(sub,99,'C') " *ngIf="sub.descricao != '' && sub.tipo != 'O' "
              matTooltip = "Subniveis"
              matTooltipPosition="above">
              <mat-icon>trending_down</mat-icon>
           </button>
-          <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(sub,getAcoes()[ 'Edicao']) " *ngIf="sub.descricao != ''"
+          <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(sub,getAcoes()[ 'Edicao'],'') " *ngIf="sub.descricao != ''"
             [matTooltip] = "getTexto().alterar"
             matTooltipPosition="above">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(sub,getAcoes()[ 'Exclusao']) " *ngIf="sub.descricao != ''"
+          <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(sub,getAcoes()[ 'Exclusao'],'') " *ngIf="sub.descricao != ''"
             [matTooltip] = "getTexto().excluir"
             matTooltipPosition="above">
             <mat-icon>delete</mat-icon>
@@ -81,6 +81,7 @@
             <mat-card-content>
                 <mat-label class="labelTitleFirst">SubConta:</mat-label>
                 <mat-label class="labelData">{{sub.subconta | subconta}}</mat-label>
+                <mat-label class="labelData">Ação: {{sub.acao}}</mat-label>
                 <mat-label class="labelTitle">Descrição:</mat-label>
                 <mat-label class="labelData">{{sub.descricao}}</mat-label>
             </mat-card-content>

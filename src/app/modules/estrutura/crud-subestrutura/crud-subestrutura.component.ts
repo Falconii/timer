@@ -281,6 +281,7 @@ export class CrudSubestruturaComponent implements OnInit {
       case CadastroAcoes.Inclusao:
         this.subconta.conta = this.conta_pai;
         this.subconta.subconta = this.subconta_pai;
+
         this.inscricaoAcao = this.subContasService
           .EstruturaInsert(this.subconta)
           .subscribe(
@@ -338,7 +339,7 @@ export class CrudSubestruturaComponent implements OnInit {
     }
   }
 
-  escolha(subconta: EstruturaModel, opcao: number) {
+  escolha(subconta: EstruturaModel, opcao: number, tipo_Acao: string) {
     if (opcao == 99) {
       this.id_empresa_pai = subconta.id_empresa;
       this.conta_pai = subconta.conta;
@@ -367,6 +368,16 @@ export class CrudSubestruturaComponent implements OnInit {
         this.subconta.tipo = 'S';
         this.subconta.user_insert = 1;
         this.subconta.user_update = 0;
+        if (this.subconta.nivel == 1) {
+          this.subconta.acao = '1';
+        } else {
+          if (this.nivel_pai == this.subconta.nivel) {
+            this.subconta.acao = 'C';
+          } else {
+            this.subconta.acao = 'S';
+          }
+        }
+        alert(this.subconta.acao);
       } else {
         console.log('subconta', subconta);
         this.subconta = subconta;
