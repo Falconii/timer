@@ -11,6 +11,7 @@ import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
 import { SimNao } from 'src/app/shared/sim-nao';
 import { TipoConta } from 'src/app/shared/tipo-conta';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
+import { TabelaNivel } from 'src/app/shared/tabela-nivel';
 
 @Component({
   selector: 'app-tree-estrutura-v2',
@@ -84,6 +85,8 @@ export class TreeEstruturaV2Component implements OnInit {
   log2: boolean = true;
 
   lsEstruturas: EstruturaModel[] = [];
+
+  lsNIveis: TabelaNivel[] = [];
 
   constructor(
     private estruturaService: EstruturasService,
@@ -786,7 +789,7 @@ export class TreeEstruturaV2Component implements OnInit {
     this.estrutura = new EstruturaModel();
     this.estrutura.id_empresa = estru.id_empresa;
     this.estrutura.conta = estru.conta;
-    this.estrutura.subconta = estru.subconta;
+    this.estrutura.subconta = '02XX'; //estru.subconta;
     this.estrutura.nivel = estru.nivel;
     this.estrutura.descricao = '';
     this.estrutura.subItem = false;
@@ -796,45 +799,33 @@ export class TreeEstruturaV2Component implements OnInit {
   }
 
   IncluirConta() {
-    this.lsEstruturas = [];
+    console.log('inclusao de conta');
+    var tabelaNivel: TabelaNivel = new TabelaNivel();
+    var nivel: number = 1;
     this.estruturas.splice(this.index + 1, 0, this.estrutura);
-    this.estruturas.forEach((obj) => {
-      var novo: EstruturaModel = new EstruturaModel();
-      novo.id_empresa = obj.id_empresa;
-      novo.conta = obj.conta;
-      novo.pai = obj.subconta;
-      novo.novo = obj.subconta;
-      novo.subconta = obj.subconta;
-      novo.acao = obj.acao;
-      novo.descricao = obj.descricao;
-      novo.nivel = obj.nivel;
-      this.lsEstruturas.push(novo);
+    //Monta a tabela de chaves novas
+    for (nivel = 1; nivel <= 7; nivel++)
+      this.estruturas.forEach((obj) => {
+        if (obj.nivel == nivel) {
+          this.addNivel(obj.subconta, obj.nivel);
+        }
+      });
+    this.lsNIveis.forEach((n) => {
+      console.log('==>', n);
     });
-    this.lsEstruturas.forEach((obj) => {
-      console.log(obj.pai, obj.novo, obj.acao, obj.subconta, obj.nivel);
-    });
-    /*
-    var idx: number = 0;
-    var ct: number = 0;
-    var subNivel: string = this.estru.subconta.substring(
-      0,
-      (this.estru.nivel - 1) * 2
-    );
-    //if (subNivel == '0202') this.log = true;
-    var masterNivel = this.estru.nivel;
-    this.estruturas.splice(this.index + 1, 0, this.estrutura);
-    if (this.log) console.log('Sub-Nivel Master', subNivel);
-    for (idx = 1; idx < this.estruturas.length; idx++) {
-      //if (this.estruturas[idx].subconta.substring(0, 6) != '020202') {
-      //  continue;
-      //}
-      if (
-        subNivel ==
-          this.estruturas[idx].subconta.substring(0, subNivel.length) &&
-        masterNivel == this.estruturas[idx].nivel
-      ) {
-        this.raiz(this.estruturas[idx].subconta.trim(), subNivel, ++ct, idx);
-        if (this.log) console.log('Voltei Principal');
+    for (var i = 0; i < this.estruturas.length; i++) {
+      tabelaNivel = this.searchNivel(
+        this.estruturas[i].subconta.trim(),
+        this.estruturas[i].nivel
+      );
+      if (tabelaNivel.ct == -1) {
+        console.log('Nao achei..', this.estruturas[i].subconta);
+      } else {
+        console.log(
+          this.estruturas[i].subconta,
+          tabelaNivel.subNivelOld,
+          tabelaNivel.subNivelNew
+        );
       }
     }
     this.estruturas = this.estruturas.sort((a, b) => {
@@ -846,7 +837,114 @@ export class TreeEstruturaV2Component implements OnInit {
       }
       return 0;
     });
-    */
+    return;
+  }
+
+  searchNivelmm(subconta: string, nivel: number): TabelaNivel {
+    var tabelaNivel = new TabelaNivel();
+    tabelaNivel.ct = -1;
+    if (nivel > 1) {
+      nivel--;
+    }
+    subconta = subconta.substring(0, nivel * 2);
+    this.lsNIveis.forEach((data) => {
+      if (data.nivel == nivel && data.subNivelOld == subconta) {
+        tabelaNivel = data;
+      }
+    });
+    return tabelaNivel;
+  }
+
+  addNivel(subconta: string, nivel: number): TabelaNivel {
+    var tabelaNivel = new TabelaNivel();
+    var old: string = '';
+    var menos: number = 0;
+    var anterior: TabelaNivel = new TabelaNivel();
+    tabelaNivel.ct = -1;
+    if (nivel > 1) {
+      menos = 1;
+    }
+    old = subconta.trim();
+    subconta = subconta.substring(0, (nivel - menos) * 2);
+    this.lsNIveis.forEach((data) => {
+      if (data.nivel == nivel && data.subNivelOld == subconta) {
+        tabelaNivel = data;
+      }
+    });
+    if (tabelaNivel.ct == -1) {
+      if (nivel == 1) {
+        tabelaNivel.ct = 0;
+        tabelaNivel.nivel = nivel;
+        tabelaNivel.subNivelOld = subconta.trim();
+        tabelaNivel.subNivelNew = subconta.trim();
+        this.lsNIveis.push(tabelaNivel);
+      } else {
+        tabelaNivel.ct = 0;
+        tabelaNivel.nivel = nivel;
+        tabelaNivel.subNivelOld = old;
+        tabelaNivel.subNivelNew = subconta;
+        this.lsNIveis.push(tabelaNivel);
+        tabelaNivel = this.searchNivel(old, nivel);
+        if (tabelaNivel.ct == -1) this.lsNIveis.push(tabelaNivel);
+        anterior = this.searchContador(old, nivel);
+        this.lsNIveis.forEach((data) => {
+          if (data.subNivelOld.trim() == old.trim() && data.nivel == nivel) {
+            data.subNivelNew =
+              anterior.subNivelNew + this.addLeadingZeros(anterior.ct, 2);
+          }
+        });
+      }
+    }
+    return tabelaNivel;
+  }
+
+  searchNivel(subnivel: string, nivel: number): TabelaNivel {
+    var tabelaNivel: TabelaNivel = new TabelaNivel();
+    tabelaNivel.ct = -1;
+    this.lsNIveis.forEach((o) => {
+      if (o.nivel == nivel && o.subNivelOld.trim == subnivel.trim) {
+        tabelaNivel = o;
+        console.log('achei', subnivel, o.subNivelOld, o.subNivelNew);
+        stop;
+      }
+    });
+    return tabelaNivel;
+  }
+
+  searchContador(old: string, nivel: number): TabelaNivel {
+    var tabelaNivel: TabelaNivel = new TabelaNivel();
+    var nivelNew: string = '';
+    nivel--;
+    this.lsNIveis.forEach((data) => {
+      if (
+        old.substring(0, (nivel - 1) * 2) ==
+          data.subNivelOld.substring(0, (nivel - 1) * 2) &&
+        data.nivel == nivel
+      ) {
+        data.ct = ++data.ct;
+        tabelaNivel = data;
+      }
+    });
+    return tabelaNivel;
+  }
+  searchNivelNew(subnivel: string, nivel: number): TabelaNivel {
+    var tabelaNivel: TabelaNivel = new TabelaNivel();
+    tabelaNivel.ct = -1;
+    this.lsNIveis.forEach((o) => {
+      if (o.nivel == nivel && o.subNivelOld.trim() == subnivel.trim()) {
+        tabelaNivel.ct = 0;
+        tabelaNivel.nivel = nivel;
+        tabelaNivel.subNivelOld = subnivel.trim();
+        tabelaNivel.subNivelNew = o.subNivelNew.trim();
+      }
+    });
+    if (tabelaNivel.ct == -1) {
+      tabelaNivel.ct = 0;
+      tabelaNivel.nivel = nivel;
+      tabelaNivel.subNivelOld = subnivel;
+      tabelaNivel.subNivelNew = '????';
+    }
+    return tabelaNivel;
   }
 
   raiz(conta: string, subNivel: string, ct: number, idx: number) {
