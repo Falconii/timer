@@ -75,7 +75,7 @@ export class TreeEstruturaV2Component implements OnInit {
     { nivel: 4, descricao: 'NIvel 04' },
     { nivel: 5, descricao: 'NIvel 05' },
     { nivel: 6, descricao: 'NIvel 06' },
-    { nivel: 7, descricao: 'NIvel 07' },
+    { nivel: 7, descricao: 'Todos Os Níveis' },
   ];
 
   parametros: FormGroup;
@@ -87,6 +87,8 @@ export class TreeEstruturaV2Component implements OnInit {
   lsEstruturas: EstruturaModel[] = [];
 
   lsNIveis: TabelaNivel[] = [];
+
+  indexEstrutura: number = 0;
 
   constructor(
     private estruturaService: EstruturasService,
@@ -256,7 +258,6 @@ export class TreeEstruturaV2Component implements OnInit {
     this.estrutura.nivel = this.formulario.value.nivel;
     this.estrutura.tipo = this.formulario.value.tipo;
     this.estrutura.controle = this.formulario.value.controle;
-    console.log('registro', this.estrutura);
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         if (this.subOpcao == 0) {
@@ -267,8 +268,12 @@ export class TreeEstruturaV2Component implements OnInit {
         this.idAcao = 99;
         break;
       case CadastroAcoes.Edicao:
+        this.estruturas[this.indexEstrutura] = this.estrutura;
+        this.idAcao = 99;
         break;
       case CadastroAcoes.Exclusao:
+        this.deleteEstrutura(this.estrutura.subconta);
+        this.idAcao = 99;
         break;
       case CadastroAcoes.Gravacao:
         break;
@@ -293,8 +298,10 @@ export class TreeEstruturaV2Component implements OnInit {
   }
 
   escolha(estru: EstruturaModel, opcao: number, index: number) {
+    /*
     if (opcao == 98) {
-      //Novo item mesmo nivel
+      //Novo item
+      console.log('Estou na escolha 98');
       this.idAcao = CadastroAcoes.Inclusao;
       this.estrutura = new EstruturaModel();
       this.estrutura.id_empresa = estru.id_empresa;
@@ -355,19 +362,9 @@ export class TreeEstruturaV2Component implements OnInit {
       });
       return;
     }
+    */
     if (opcao == 99) {
       this.idAcao = opcao;
-      /*
-      this.router.navigate([
-        'estruturas/subconta',
-        estrutura.id_empresa,
-        estrutura.conta,
-        estrutura.subconta,
-        estrutura.descricao,
-        estrutura.nivel,
-        estrutura.controle,
-        opcao,
-      ]);*/
     } else {
       this.estrutura.id_empresa = estru.id_empresa;
       this.estrutura.conta = estru.conta;
@@ -379,11 +376,9 @@ export class TreeEstruturaV2Component implements OnInit {
       this.estrutura.user_insert = estru.user_insert;
       this.estrutura.user_update = estru.user_update;
       this.idAcao = opcao;
+      this.indexEstrutura = index;
       this.setValue();
       this.setAcao(this.idAcao);
-      if (this.idAcao == CadastroAcoes.Exclusao) {
-        this.estruturas.splice(index, 1);
-      }
     }
   }
 
@@ -780,6 +775,23 @@ export class TreeEstruturaV2Component implements OnInit {
     return retorno;
   }
 
+  onIncluirSubConta(estru: EstruturaModel, index: number) {
+    this.subOpcao = 0;
+    this.estru = estru;
+    this.index = index;
+    this.idAcao = CadastroAcoes.Inclusao;
+    this.setAcao(this.idAcao);
+    this.estrutura = new EstruturaModel();
+    this.estrutura.id_empresa = estru.id_empresa;
+    this.estrutura.conta = estru.conta;
+    this.estrutura.subconta = estru.subconta.trim() + 'XX';
+    this.estrutura.nivel = estru.nivel + 1;
+    this.estrutura.descricao = '';
+    this.estrutura.subItem = false;
+    this.estrutura.tipo = estru.tipo;
+    this.estrutura.acao = 'S';
+    this.setValue();
+  }
   onIncluirConta(estru: EstruturaModel, index: number) {
     this.subOpcao = 0;
     this.estru = estru;
@@ -789,7 +801,8 @@ export class TreeEstruturaV2Component implements OnInit {
     this.estrutura = new EstruturaModel();
     this.estrutura.id_empresa = estru.id_empresa;
     this.estrutura.conta = estru.conta;
-    this.estrutura.subconta = '02XX'; //estru.subconta;
+    this.estrutura.subconta =
+      estru.subconta.substring(0, (estru.nivel - 1) * 2) + 'XX';
     this.estrutura.nivel = estru.nivel;
     this.estrutura.descricao = '';
     this.estrutura.subItem = false;
@@ -803,6 +816,7 @@ export class TreeEstruturaV2Component implements OnInit {
     var tabelaNivel: TabelaNivel = new TabelaNivel();
     var nivel: number = 1;
     this.estruturas.splice(this.index + 1, 0, this.estrutura);
+    this.lsNIveis = [];
     //Monta a tabela de chaves novas
     for (nivel = 1; nivel <= 7; nivel++)
       this.estruturas.forEach((obj) => {
@@ -810,6 +824,16 @@ export class TreeEstruturaV2Component implements OnInit {
           this.addNivel(obj.subconta, obj.nivel);
         }
       });
+    this.lsNIveis = this.lsNIveis.sort((a, b) => {
+      if (a.subNivelOld < b.subNivelOld) {
+        return -1;
+      }
+      if (a.subNivelOld > b.subNivelOld) {
+        return 1;
+      }
+      return 0;
+    });
+    console.log('Tabela De Niveis Montada:');
     this.lsNIveis.forEach((n) => {
       console.log('==>', n);
     });
@@ -823,9 +847,12 @@ export class TreeEstruturaV2Component implements OnInit {
       } else {
         console.log(
           this.estruturas[i].subconta,
+          'Old',
           tabelaNivel.subNivelOld,
+          'New',
           tabelaNivel.subNivelNew
         );
+        this.estruturas[i].subconta = tabelaNivel.subNivelNew;
       }
     }
     this.estruturas = this.estruturas.sort((a, b) => {
@@ -840,6 +867,7 @@ export class TreeEstruturaV2Component implements OnInit {
     return;
   }
 
+  /*
   searchNivelmm(subconta: string, nivel: number): TabelaNivel {
     var tabelaNivel = new TabelaNivel();
     tabelaNivel.ct = -1;
@@ -854,23 +882,16 @@ export class TreeEstruturaV2Component implements OnInit {
     });
     return tabelaNivel;
   }
-
+*/
   addNivel(subconta: string, nivel: number): TabelaNivel {
     var tabelaNivel = new TabelaNivel();
-    var old: string = '';
     var menos: number = 0;
     var anterior: TabelaNivel = new TabelaNivel();
+    var old: string = subconta;
     tabelaNivel.ct = -1;
     if (nivel > 1) {
       menos = 1;
     }
-    old = subconta.trim();
-    subconta = subconta.substring(0, (nivel - menos) * 2);
-    this.lsNIveis.forEach((data) => {
-      if (data.nivel == nivel && data.subNivelOld == subconta) {
-        tabelaNivel = data;
-      }
-    });
     if (tabelaNivel.ct == -1) {
       if (nivel == 1) {
         tabelaNivel.ct = 0;
@@ -882,17 +903,17 @@ export class TreeEstruturaV2Component implements OnInit {
         tabelaNivel.ct = 0;
         tabelaNivel.nivel = nivel;
         tabelaNivel.subNivelOld = old;
-        tabelaNivel.subNivelNew = subconta;
+        anterior = this.searchContador(
+          tabelaNivel.subNivelOld,
+          tabelaNivel.nivel
+        );
+        //if (anterior.ct != -1) tabelaNivel.ct = anterior.ct;
+        tabelaNivel.ct = 0;
+        console.log('Existe..:', old, anterior);
+        tabelaNivel.subNivelNew =
+          anterior.subNivelNew + this.addLeadingZeros(anterior.ct, 2);
         this.lsNIveis.push(tabelaNivel);
-        tabelaNivel = this.searchNivel(old, nivel);
-        if (tabelaNivel.ct == -1) this.lsNIveis.push(tabelaNivel);
-        anterior = this.searchContador(old, nivel);
-        this.lsNIveis.forEach((data) => {
-          if (data.subNivelOld.trim() == old.trim() && data.nivel == nivel) {
-            data.subNivelNew =
-              anterior.subNivelNew + this.addLeadingZeros(anterior.ct, 2);
-          }
-        });
+        console.log('Existe..:', old, anterior);
       }
     }
     return tabelaNivel;
@@ -902,23 +923,26 @@ export class TreeEstruturaV2Component implements OnInit {
     var tabelaNivel: TabelaNivel = new TabelaNivel();
     tabelaNivel.ct = -1;
     this.lsNIveis.forEach((o) => {
-      if (o.nivel == nivel && o.subNivelOld.trim == subnivel.trim) {
-        tabelaNivel = o;
-        console.log('achei', subnivel, o.subNivelOld, o.subNivelNew);
+      if (o.nivel == nivel && o.subNivelOld.trim() == subnivel.trim()) {
+        tabelaNivel.nivel = o.nivel;
+        tabelaNivel.subNivelOld = o.subNivelOld;
+        tabelaNivel.subNivelNew = o.subNivelNew;
+        tabelaNivel.ct = o.ct;
         stop;
       }
     });
     return tabelaNivel;
   }
 
-  searchContador(old: string, nivel: number): TabelaNivel {
+  searchContador(atual: string, nivel: number): TabelaNivel {
     var tabelaNivel: TabelaNivel = new TabelaNivel();
+    tabelaNivel.ct = -1;
     var nivelNew: string = '';
     nivel--;
     this.lsNIveis.forEach((data) => {
       if (
-        old.substring(0, (nivel - 1) * 2) ==
-          data.subNivelOld.substring(0, (nivel - 1) * 2) &&
+        atual.substring(0, nivel * 2) ==
+          data.subNivelOld.substring(0, nivel * 2) &&
         data.nivel == nivel
       ) {
         data.ct = ++data.ct;
@@ -927,6 +951,7 @@ export class TreeEstruturaV2Component implements OnInit {
     });
     return tabelaNivel;
   }
+
   searchNivelNew(subnivel: string, nivel: number): TabelaNivel {
     var tabelaNivel: TabelaNivel = new TabelaNivel();
     tabelaNivel.ct = -1;
@@ -1113,5 +1138,49 @@ export class TreeEstruturaV2Component implements OnInit {
         }
       }
     }
+  }
+
+  deleteEstrutura(subconta: string) {
+    this.estruturas = this.estruturas.filter(
+      (data) =>
+        data.subconta.trim().substring(0, subconta.trim().length) !==
+        subconta.trim()
+    );
+    var tabelaNivel: TabelaNivel = new TabelaNivel();
+    var nivel: number = 1;
+    this.lsNIveis = [];
+    //Monta a tabela de chaves novas
+    for (nivel = 1; nivel <= 7; nivel++)
+      this.estruturas.forEach((obj) => {
+        if (obj.nivel == nivel) {
+          this.addNivel(obj.subconta, obj.nivel);
+        }
+      });
+    this.lsNIveis = this.lsNIveis.sort((a, b) => {
+      if (a.subNivelOld < b.subNivelOld) {
+        return -1;
+      }
+      if (a.subNivelOld > b.subNivelOld) {
+        return 1;
+      }
+      return 0;
+    });
+    for (var i = 0; i < this.estruturas.length; i++) {
+      tabelaNivel = this.searchNivel(
+        this.estruturas[i].subconta.trim(),
+        this.estruturas[i].nivel
+      );
+      this.estruturas[i].subconta = tabelaNivel.subNivelNew;
+    }
+    this.estruturas = this.estruturas.sort((a, b) => {
+      if (a.subconta < b.subconta) {
+        return -1;
+      }
+      if (a.subconta > b.subconta) {
+        return 1;
+      }
+      return 0;
+    });
+    return;
   }
 }

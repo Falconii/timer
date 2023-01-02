@@ -42,10 +42,10 @@
                 {{estrutura.tipo | tipoConta}}
             </td>
             <td class="coluna-acao" *ngIf="showNivel(estrutura.nivel)">
-                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Tópico" matTooltipPosition="above" (click)="onIncluirConta(estrutura,i)" *ngIf="estrutura.nivel > 1">
+                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Tópico" matTooltipPosition="above" (click)="onIncluirConta(estrutura,i)">
               <mat-icon>add_circle_outline</mat-icon>
             </button>
-                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Sub-Item" matTooltipPosition="above" (click)="novoSubTopico(estrutura,i)" *ngIf="estrutura.tipo != 'O'">
+                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Sub-Item" matTooltipPosition="above" (click)="onIncluirSubConta(estrutura,i)" *ngIf="estrutura.tipo != 'O' && estrutura.nivel >= 1 && estrutura.nivel <= 6">
               <mat-icon>trending_down</mat-icon>
           </button>
                 <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Excluir Item" matTooltipPosition="above" (click)="escolha(estrutura,getAcoes()[ 'Exclusao'],i)">
@@ -106,6 +106,11 @@
                 <input matInput formControlName="descricao" [readonly]="readOnly">
                 <mat-error *ngIf="formulario.get('descricao')?.status == 'INVALID' && touchedOrDirty('descricao')">Descrição máximo 300 letras</mat-error>
             </mat-form-field>
+        </div>
+        <div *ngIf="( (idAcao == getAcoes()[ 'Exclusao']))">
+            <mat-label class="atencao">Atenção!!</mat-label>
+            <br/><br>
+            <mat-label class="atencao_mensagem">Todos Os SubNíveis Serão Excluidos Também.</mat-label>
         </div>
         <div class="button-container-right">
             <button mat-raised-button color="primary" *ngIf="idAcao != 3" (click)=onSubmit()>{{acao}}</button>

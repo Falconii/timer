@@ -230,3 +230,19 @@ body {
 .encerramento {
     margin-top: 20px;
 }
+
+.atencao {
+    color: red;
+    font-size: large;
+    text-align: center;
+    height: 30px;
+    padding: 5px;
+}
+
+.atencao_mensagem {
+    color: blue;
+    font-size: large;
+    text-align: center;
+    height: 30px;
+    padding: 5px;
+}
