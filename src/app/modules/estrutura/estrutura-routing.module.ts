@@ -10,15 +10,15 @@ const routes: Routes = [
   { path: '', redirectTo: 'estruturas', pathMatch: 'full' },
   { path: 'estruturas', component: CrudEstruturaComponent },
   {
-    path: 'estrutura/:id_empresa/:conta/:subconta/:acao',
+    path: 'estrutura/:id_empresa/:conta/:versao/:subconta',
     component: CrudViewEstruturaComponent,
   },
   {
-    path: 'subconta/:id_empresa/:conta/:subconta/:descricao/:nivel/:controle/:acao',
+    path: 'subconta/:id_empresa/:conta/:versao/:subconta/:descricao/:nivel/:controle',
     component: CrudSubestruturaComponent,
   },
   {
-    path: 'treeconta/:id_empresa/:conta/:subconta/:descricao/:nivel',
+    path: 'treeconta/:id_empresa/:versao/:conta/:subconta/:descricao/:nivel',
     component: TreeEstruturaV2Component,
   },
 ];

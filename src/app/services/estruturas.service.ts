@@ -25,7 +25,7 @@ export class EstruturasService {
     );
   }
 
-  getConta(id_empresa: number, conta: string) {
+  getConta(id_empresa: number, conta: string, versao: string) {
     return this.http.get<EstruturaModel>(
       `${this.apiURL}conta/${id_empresa}/${conta}`
     );

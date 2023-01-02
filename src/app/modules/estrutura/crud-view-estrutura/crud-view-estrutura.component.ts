@@ -53,6 +53,7 @@ export class CrudViewEstruturaComponent implements OnInit {
   ) {
     this.formulario = formBuilder.group({
       conta: [{ value: '' }],
+      versao: [{ value: '' }],
       subconta: [
         { value: '' },
         [
@@ -80,6 +81,7 @@ export class CrudViewEstruturaComponent implements OnInit {
       console.log('==>', params);
       this.estrutura.id_empresa = params.id_empresa;
       this.estrutura.conta = params.conta;
+      this.estrutura.versao = params.versao;
       this.estrutura.subconta = params.subconta;
       this.idAcao = params.acao;
       this.setAcao(params.acao);
@@ -102,12 +104,12 @@ export class CrudViewEstruturaComponent implements OnInit {
       this.estrutura = new EstruturaModel();
       this.estrutura.id_empresa = 1;
       this.estrutura.conta = 'NOVA';
+      this.estrutura.versao = '0101';
       this.estrutura.subconta = 'NOVA';
       this.estrutura.nivel = 1;
       this.estrutura.nivel_maxi = 7;
       this.estrutura.tipo = 'C';
       this.estrutura.user_insert = 1;
-      this.estrutura.acao = '1';
       this.setValue();
     } else {
       this.getEstrutura();
@@ -135,7 +137,11 @@ export class CrudViewEstruturaComponent implements OnInit {
 
   getEstrutura() {
     this.inscricaoGetEstrutura = this.estruturaService
-      .getConta(this.estrutura.id_empresa, this.estrutura.conta)
+      .getConta(
+        this.estrutura.id_empresa,
+        this.estrutura.conta,
+        this.estrutura.versao
+      )
       .subscribe(
         (data: EstruturaModel) => {
           this.estrutura = data;
@@ -153,6 +159,7 @@ export class CrudViewEstruturaComponent implements OnInit {
   setValue() {
     this.formulario.setValue({
       conta: this.estrutura.conta,
+      versao: this.estrutura.versao,
       subconta: this.estrutura.subconta,
       descricao: this.estrutura.descricao,
       nivel: this.estrutura.nivel,

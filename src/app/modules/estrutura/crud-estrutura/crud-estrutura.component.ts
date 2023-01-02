@@ -110,6 +110,7 @@ export class CrudEstruturaComponent implements OnInit {
         'estruturas/subconta',
         estrutura.id_empresa,
         estrutura.conta,
+        estrutura.versao,
         estrutura.subconta,
         estrutura.descricao,
         estrutura.nivel,
@@ -121,6 +122,7 @@ export class CrudEstruturaComponent implements OnInit {
         'estruturas/estrutura',
         estrutura.id_empresa,
         estrutura.conta,
+        estrutura.versao,
         estrutura.subconta,
         opcao,
       ]);
@@ -146,6 +148,7 @@ export class CrudEstruturaComponent implements OnInit {
       'estruturas/treeconta',
       estrutura.id_empresa,
       estrutura.conta,
+      estrutura.versao,
       estrutura.subconta,
       estrutura.descricao,
       estrutura.nivel,

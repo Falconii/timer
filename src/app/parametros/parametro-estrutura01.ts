@@ -1,6 +1,7 @@
 export class ParametroEstrutura01 {
   public id_empresa: number = 0;
   public conta: string = '';
+  public versao: string = '';
   public subconta: string = '';
   public descricao: string = '';
   public nivel: number = 0;

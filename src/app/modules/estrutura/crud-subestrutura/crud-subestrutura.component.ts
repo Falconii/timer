@@ -368,16 +368,6 @@ export class CrudSubestruturaComponent implements OnInit {
         this.subconta.tipo = 'S';
         this.subconta.user_insert = 1;
         this.subconta.user_update = 0;
-        if (this.subconta.nivel == 1) {
-          this.subconta.acao = '1';
-        } else {
-          if (this.nivel_pai == this.subconta.nivel) {
-            this.subconta.acao = 'C';
-          } else {
-            this.subconta.acao = 'S';
-          }
-        }
-        alert(this.subconta.acao);
       } else {
         console.log('subconta', subconta);
         this.subconta = subconta;
