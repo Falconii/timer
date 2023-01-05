@@ -19,15 +19,20 @@ export class EstruturasService {
     return this.http.post<EstruturaModel[]>(`${this.apiURL}estruturas`, params);
   }
 
-  getEstrutura(id_empresa: number, conta: string, subconta: string) {
+  getEstrutura(
+    id_empresa: number,
+    conta: string,
+    subconta: string,
+    versao: string
+  ) {
     return this.http.get<EstruturaModel>(
-      `${this.apiURL}estrutura/${id_empresa}/${conta}/${subconta}`
+      `${this.apiURL}estrutura/${id_empresa}/${conta}/${subconta}/${versao}`
     );
   }
 
   getConta(id_empresa: number, conta: string, versao: string) {
     return this.http.get<EstruturaModel>(
-      `${this.apiURL}conta/${id_empresa}/${conta}`
+      `${this.apiURL}conta/${id_empresa}/${conta}/${versao}`
     );
   }
 
@@ -39,15 +44,20 @@ export class EstruturasService {
     return this.http.put<EstruturaModel>(`${this.apiURL}estrutura`, estrutura);
   }
 
-  EstruturaDelete(id_empresa: number, conta: string, subconta: string) {
+  EstruturaDelete(
+    id_empresa: number,
+    conta: string,
+    versao: string,
+    subconta: string
+  ) {
     return this.http.delete<EstruturaModel>(
-      `${this.apiURL}estrutura/${id_empresa}/${conta}/${subconta}`
+      `${this.apiURL}estrutura/${id_empresa}/${conta}/${versao}${subconta}`
     );
   }
 
-  EstruturaAllDelete(id_empresa: number, conta: string) {
+  EstruturaAllDelete(id_empresa: number, conta: string, versao: string) {
     return this.http.delete<EstruturaModel>(
-      `${this.apiURL}estrutura/${id_empresa}/${conta}`
+      `${this.apiURL}estrutura/${id_empresa}/${conta}/${versao}`
     );
   }
 

@@ -9,6 +9,8 @@ import { MensagensBotoes } from 'src/app/shared/util';
 import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
 import { HistoricoSubconta } from 'src/app/shared/historico-subconta';
 import { EstruturasService } from 'src/app/services/estruturas.service';
+import { SimNao } from 'src/app/shared/sim-nao';
+import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 
 @Component({
   selector: 'app-crud-subestrutura',
@@ -32,6 +34,8 @@ export class CrudSubestruturaComponent implements OnInit {
   id_empresa_pai = 0;
 
   conta_pai = '';
+
+  versao_pai = '';
 
   subconta_pai = '';
 
@@ -61,6 +65,11 @@ export class CrudSubestruturaComponent implements OnInit {
 
   labelCadastro: string = '';
 
+  respostas: SimNao[] = [
+    { sigla: 'S', descricao: 'SIM' },
+    { sigla: 'N', descricao: 'NÃO' },
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     private subContasService: EstruturasService,
@@ -70,6 +79,7 @@ export class CrudSubestruturaComponent implements OnInit {
   ) {
     this.formulario = this.formBuilder.group({
       conta: [{ value: '' }],
+      versao: [{ value: '' }],
       subconta: [
         { value: '' },
         [
@@ -89,11 +99,14 @@ export class CrudSubestruturaComponent implements OnInit {
       nivel: [{ value: '' }],
       tipo: [{ value: '' }],
       tipo_: [{ value: '' }],
+      controle: [{ value: '' }, [ValidatorStringLen(1, 2, true)]],
+      controle_: [{ value: '' }],
     });
     this.subconta = new EstruturaModel();
     this.inscricaoRota = this.route.params.subscribe((params: any) => {
       this.id_empresa_pai = params.id_empresa;
       this.conta_pai = params.conta;
+      this.versao_pai = params.versao;
       this.subconta_pai = params.subconta;
       this.descricao_pai = params.descricao;
       this.nivel_pai = parseInt(params.nivel);
@@ -101,6 +114,7 @@ export class CrudSubestruturaComponent implements OnInit {
       const histo: HistoricoSubconta = new HistoricoSubconta();
       histo.id_empresa = this.id_empresa_pai;
       histo.conta = this.conta_pai;
+      histo.versao = this.versao_pai;
       histo.subconta = this.subconta_pai;
       histo.nivel = this.nivel_pai;
       histo.descricao = this.descricao_pai;
@@ -127,6 +141,8 @@ export class CrudSubestruturaComponent implements OnInit {
     par.id_empresa = this.id_empresa_pai;
 
     par.conta = this.conta_pai;
+
+    par.versao = this.versao_pai;
 
     par.subconta = this.subconta_pai;
 
@@ -158,12 +174,24 @@ export class CrudSubestruturaComponent implements OnInit {
     this.formulario.setValue({
       conta:
         this.idAcao == CadastroAcoes.Inclusao ? 'NOVA' : this.subconta.conta,
+      versao: this.subconta.versao,
       subconta:
         this.idAcao == CadastroAcoes.Inclusao ? 'NOVA' : this.subconta.subconta,
       descricao: this.subconta.descricao,
       nivel: this.subconta.nivel,
       tipo: this.subconta.tipo,
       tipo_: this.getTipo(this.subconta.tipo),
+      controle: this.subconta.controle,
+      controle_:
+        this.idAcao == CadastroAcoes.Consulta ||
+        this.idAcao == CadastroAcoes.Exclusao ||
+        this.idAcao == CadastroAcoes.Edicao
+          ? this.respostas[
+              this.respostas.findIndex(
+                (data) => data.sigla == this.subconta.controle
+              )
+            ].descricao
+          : '',
     });
   }
 
@@ -199,6 +227,7 @@ export class CrudSubestruturaComponent implements OnInit {
 
       this.id_empresa_pai = estru.id_empresa;
       this.conta_pai = estru.conta;
+      this.versao_pai = estru.versao;
       this.subconta_pai = estru.subconta;
       this.descricao_pai = estru.descricao;
       this.nivel_pai = estru.nivel;
@@ -271,6 +300,7 @@ export class CrudSubestruturaComponent implements OnInit {
 
   executaAcao() {
     this.subconta.conta = this.formulario.value.conta;
+    this.subconta.versao = this.formulario.value.versao;
     this.subconta.subconta = this.formulario.value.subconta;
     this.subconta.descricao = this.formulario.value.descricao;
     this.subconta.nivel = this.formulario.value.nivel;
@@ -319,6 +349,7 @@ export class CrudSubestruturaComponent implements OnInit {
           .EstruturaDelete(
             this.subconta.id_empresa,
             this.subconta.conta,
+            this.subconta.versao,
             this.subconta.subconta
           )
           .subscribe(
@@ -343,6 +374,7 @@ export class CrudSubestruturaComponent implements OnInit {
     if (opcao == 99) {
       this.id_empresa_pai = subconta.id_empresa;
       this.conta_pai = subconta.conta;
+      this.versao_pai = subconta.versao;
       this.subconta_pai = subconta.subconta;
       this.descricao_pai = subconta.descricao;
       this.nivel_pai = subconta.nivel;
@@ -350,6 +382,7 @@ export class CrudSubestruturaComponent implements OnInit {
       const histo: HistoricoSubconta = new HistoricoSubconta();
       histo.id_empresa = this.id_empresa_pai;
       histo.conta = this.conta_pai;
+      histo.versao = this.versao_pai;
       histo.subconta = this.subconta_pai;
       histo.nivel = this.nivel_pai;
       histo.descricao = this.descricao_pai;
@@ -363,6 +396,7 @@ export class CrudSubestruturaComponent implements OnInit {
         this.subconta = new EstruturaModel();
         this.subconta.id_empresa = this.id_empresa_pai;
         this.subconta.conta = this.conta_pai;
+        this.subconta.versao = this.versao_pai;
         this.subconta.subconta = this.subconta_pai;
         this.subconta.nivel = this.nivel_pai + 1;
         this.subconta.tipo = 'S';

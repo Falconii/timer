@@ -264,7 +264,11 @@ export class CrudViewEstruturaComponent implements OnInit {
         break;
       case CadastroAcoes.Exclusao:
         this.inscricaoAcao = this.estruturaService
-          .EstruturaAllDelete(this.estrutura.id_empresa, this.estrutura.conta)
+          .EstruturaAllDelete(
+            this.estrutura.id_empresa,
+            this.estrutura.conta,
+            this.estrutura.versao
+          )
           .subscribe(
             async (data: any) => {
               this.onCancel();

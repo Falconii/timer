@@ -134,6 +134,7 @@ export class CrudEstruturaComponent implements OnInit {
       'estruturas/estrutura',
       1,
       '00',
+      '0101',
       '00',
       this.getAcoes().Inclusao,
     ]);

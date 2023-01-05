@@ -14,10 +14,14 @@
     </mat-toolbar>
 </div>
 <form [formGroup]="formulario" autocomplete="off" *ngIf="idAcao != 99">
-    <div class="col-med-4">
+    <div class="col-med-6">
         <mat-form-field appearance="outline" class="col-max">
             <mat-label>Conta</mat-label>
             <input matInput formControlName="conta" readonly=true>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Versão</mat-label>
+            <input matInput formControlName="versao" readonly=true>
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-max">
             <mat-label>SubConta</mat-label>
@@ -38,6 +42,19 @@
         <mat-form-field field appearance="outline" class="col-max" *ngIf="( (idAcao == getAcoes()[ 'Consulta']) || (idAcao == getAcoes()[ 'Exclusao']) )">
             <mat-label>Tipo</mat-label>
             <input matInput formControlName="tipo_" [readonly]="readOnly">
+        </mat-form-field>
+
+        <mat-form-field field appearance="outline" class="col-max" *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao'])  && (idAcao != getAcoes()[ 'Edicao']) )">
+            <mat-label>Controle:</mat-label>
+            <mat-select formControlName="controle">
+                <mat-option *ngFor="let resp of respostas" [value]="resp.sigla">
+                    {{resp.descricao}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field field appearance="outline" class="col-max" *ngIf="( (idAcao == getAcoes()[ 'Consulta']) || (idAcao == getAcoes()[ 'Exclusao']) || (idAcao == getAcoes()[ 'Edicao']) )">
+            <mat-label>Controle:</mat-label>
+            <input matInput formControlName="controle_" [readonly]="true">
         </mat-form-field>
     </div>
     <div class="col-med-1">

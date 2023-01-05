@@ -17,6 +17,12 @@ table {
     text-align: left;
 }
 
+.coluna-versao {
+    background-color: #878684;
+    font-weight: bolder;
+    text-align: center;
+}
+
 .coluna-descricao {
     background-color: #A9AD9E;
     text-align: justify;

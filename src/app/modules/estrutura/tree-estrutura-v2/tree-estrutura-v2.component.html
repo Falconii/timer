@@ -1,7 +1,7 @@
 <!--http://jsfiddle.net/danield770/sNwrs/3158/-->
 <div class="div-barra">
     <mat-toolbar>
-        <span class="example-spacer">Estrutura {{labelCadastro}}</span>
+        <span class="example-spacer">{{labelCadastro}}</span>
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="onRetorno()">
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -22,18 +22,18 @@
     </div>
     <table>
         <tr class="coluna-cabec">
-            <th>CONTA</th>
-            <th>NOVO</th>
-            <th>DESCRIÇÃO</th>
-            <th>TIPO</th>
-            <th>AÇÃO</th>
+            <th>Conta</th>
+            <th>Versão</th>
+            <th>Descrição</th>
+            <th>Tipo</th>
+            <th>Ação</th>
         </tr>
         <tr *ngFor="let estrutura of estruturas ; let i=index">
             <td class="coluna-codigo" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="showNivel(estrutura.nivel)">
                 {{estrutura.subconta | subconta}}
             </td>
-            <td class="coluna-codigo" *ngIf="showNivel(estrutura.nivel)">
-                {{estrutura.nivel}}
+            <td class="coluna-versao" *ngIf="showNivel(estrutura.nivel)">
+                {{estrutura.versao | versaopipe}}
             </td>
             <td class="coluna-descricao" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="showNivel(estrutura.nivel)">
                 {{estrutura.descricao}}
@@ -62,10 +62,14 @@
 </div>
 <div *ngIf="(!(idAcao == 99) )">
     <form [formGroup]="formulario" autocomplete="off">
-        <div class="col-med-5">
+        <div class="col-med-6">
             <mat-form-field appearance="outline" class="col-max">
                 <mat-label>Conta</mat-label>
                 <input matInput formControlName="conta" readonly=true>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col-max">
+                <mat-label>Versão</mat-label>
+                <input matInput formControlName="versao" readonly=true>
             </mat-form-field>
             <mat-form-field appearance="outline" class="col-max">
                 <mat-label>SubConta</mat-label>

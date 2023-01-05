@@ -99,12 +99,14 @@ export class TreeEstruturaV2Component implements OnInit {
     this.inscricaoRota = this.route.params.subscribe((params: any) => {
       this.id_empresa = params.id_empresa;
       this.conta = params.conta;
+      this.versao = params.versao;
       this.subconta = params.subconta;
       this.descricao = params.descricao;
       this.nivel = params.nivel;
     });
     this.formulario = formBuilder.group({
       conta: [{ value: '' }],
+      versao: [{ value: '' }],
       subconta: [
         { value: '' },
         [
@@ -138,6 +140,7 @@ export class TreeEstruturaV2Component implements OnInit {
 
   ngOnInit(): void {
     this.idAcao = 99;
+    this.setAcao(this.idAcao);
     this.getEstruturas();
   }
 
@@ -191,6 +194,7 @@ export class TreeEstruturaV2Component implements OnInit {
   setValue() {
     this.formulario.setValue({
       conta: this.estrutura.conta,
+      versao: this.estrutura.versao,
       subconta: this.estrutura.subconta,
       descricao: this.estrutura.descricao,
       nivel: this.estrutura.nivel,
@@ -249,6 +253,7 @@ export class TreeEstruturaV2Component implements OnInit {
 
   executaAcao() {
     this.estrutura.conta = this.formulario.value.conta;
+    this.estrutura.versao = this.formulario.value.versao;
     this.estrutura.subconta = this.formulario.value.subconta;
     this.estrutura.descricao = this.formulario.value.descricao;
     this.estrutura.nivel = this.formulario.value.nivel;
@@ -258,15 +263,17 @@ export class TreeEstruturaV2Component implements OnInit {
       case CadastroAcoes.Inclusao:
         this.IncluirConta();
         this.idAcao = 99;
+        this.setAcao(this.idAcao);
         break;
       case CadastroAcoes.Edicao:
         this.estruturas[this.indexEstrutura] = this.estrutura;
         this.idAcao = 99;
+        this.setAcao(this.idAcao);
         break;
       case CadastroAcoes.Exclusao:
-        console.log('Estrtura Antes', this.estruturas);
         this.deleteEstrutura(this.estrutura.subconta);
         this.idAcao = 99;
+        this.setAcao(this.idAcao);
         break;
       case CadastroAcoes.Gravacao:
         break;
@@ -297,6 +304,7 @@ export class TreeEstruturaV2Component implements OnInit {
       this.estrutura = new EstruturaModel();
       this.estrutura.id_empresa = estru.id_empresa;
       this.estrutura.conta = estru.conta;
+      this.estrutura.versao = estru.versao;
       this.estrutura.subconta = estru.subconta;
       this.estrutura.nivel = estru.nivel;
       this.estrutura.nivel_maxi = estru.nivel_maxi;
@@ -312,29 +320,39 @@ export class TreeEstruturaV2Component implements OnInit {
   }
 
   setAcao(op: number) {
-    switch (+op) {
-      case CadastroAcoes.Inclusao:
-        this.acao = 'Gravar';
-        this.labelCadastro = 'Estruturas - Inclusão Novo Tópico';
-        this.readOnly = false;
-        break;
-      case CadastroAcoes.Edicao:
-        this.acao = 'Gravar';
-        this.labelCadastro = 'Estruturas - Alteração.';
-        this.readOnly = false;
-        break;
-      case CadastroAcoes.Consulta:
-        this.acao = 'Voltar';
-        this.labelCadastro = 'Estruturas - Consulta.';
-        this.readOnly = true;
-        break;
-      case CadastroAcoes.Exclusao:
-        this.acao = 'Excluir';
-        this.labelCadastro = 'Estruturas - Exclusão.';
-        this.readOnly = true;
-        break;
-      default:
-        break;
+    if (op == 99) {
+      this.labelCadastro =
+        'Estruturas: ' +
+        this.descricao +
+        ' Versão: ' +
+        this.versao.substring(0, 2) +
+        '.' +
+        this.versao.substring(2, 4);
+    } else {
+      switch (+op) {
+        case CadastroAcoes.Inclusao:
+          this.acao = 'Gravar';
+          this.labelCadastro = 'Estruturas - Inclusão Novo Tópico';
+          this.readOnly = false;
+          break;
+        case CadastroAcoes.Edicao:
+          this.acao = 'Gravar';
+          this.labelCadastro = 'Estruturas - Alteração.';
+          this.readOnly = false;
+          break;
+        case CadastroAcoes.Consulta:
+          this.acao = 'Voltar';
+          this.labelCadastro = 'Estruturas - Consulta.';
+          this.readOnly = true;
+          break;
+        case CadastroAcoes.Exclusao:
+          this.acao = 'Excluir';
+          this.labelCadastro = 'Estruturas - Exclusão.';
+          this.readOnly = true;
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -352,6 +370,8 @@ export class TreeEstruturaV2Component implements OnInit {
     return retorno;
   }
 
+  /*
+
   novoTopico(estru: EstruturaModel, index: number) {
     this.estru = estru;
     this.index = index;
@@ -367,6 +387,7 @@ export class TreeEstruturaV2Component implements OnInit {
     this.setValue();
   }
 
+  */
   /*
   novoTopicoComplemento() {
     this.estruturas.splice(this.index + 1, 0, this.estrutura);

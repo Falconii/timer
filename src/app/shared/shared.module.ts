@@ -1,3 +1,4 @@
+import { VersaoPipe } from './versao-pipe';
 import { CelApontamentosComponent } from './cel-apontamentos/cel-apontamentos.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -26,6 +27,7 @@ import { CelCalendarComponent } from './cel-calendar/cel-calendar.component';
     SubcontaPipe,
     TipoContaPipe,
     SoHorasPipe,
+    VersaoPipe,
     SituacaoPadraoPipe,
     SharedNavegatorComponent,
     CelCalendarComponent,
@@ -41,6 +43,7 @@ import { CelCalendarComponent } from './cel-calendar/cel-calendar.component';
     SituacaoProjetoPipe,
     SubcontaPipe,
     TipoContaPipe,
+    VersaoPipe,
     SoHorasPipe,
     SituacaoPadraoPipe,
     SharedNavegatorComponent,
