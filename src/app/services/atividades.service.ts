@@ -47,15 +47,25 @@ export class AtividadesService {
     );
   }
 
-  anexaatividade(id_empresa: number, conta: string, id_projeto: number) {
+  anexaatividade(
+    id_empresa: number,
+    conta: string,
+    versao: string,
+    id_projeto: number
+  ) {
     return this.http.get<any>(
-      `${this.apiURL}anexaatividade/${id_empresa}/${conta}/${id_projeto}`
+      `${this.apiURL}anexaatividade/${id_empresa}/${conta}/${versao}/${id_projeto}`
     );
   }
 
-  desanexaatividade(id_empresa: number, conta: string, id_projeto: number) {
+  desanexaatividade(
+    id_empresa: number,
+    conta: string,
+    versao: string,
+    id_projeto: number
+  ) {
     return this.http.get<any>(
-      `${this.apiURL}desanexaatividade/${id_empresa}/${conta}/${id_projeto}`
+      `${this.apiURL}desanexaatividade/${id_empresa}/${conta}/${versao}/${id_projeto}`
     );
   }
 }

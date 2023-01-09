@@ -246,3 +246,15 @@ body {
     height: 30px;
     padding: 5px;
 }
+
+.green-icon {
+    color: green;
+}
+
+.red-icon {
+    color: red
+}
+
+.yellow-icon {
+    color: #E3BD11;
+}

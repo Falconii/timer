@@ -3,6 +3,7 @@ export class AtividadeQuery_01Model {
   public id: number = 0;
   public id_projeto: number = 0;
   public conta: string = '';
+  public versao: string = '';
   public subconta: string = '';
   public nivel: number = 0;
   public tipo: string = '';

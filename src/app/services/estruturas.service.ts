@@ -44,6 +44,13 @@ export class EstruturasService {
     return this.http.put<EstruturaModel>(`${this.apiURL}estrutura`, estrutura);
   }
 
+  EstruturaSaveAll(estruturas: EstruturaModel[]) {
+    return this.http.post<EstruturaModel[]>(
+      `${this.apiURL}saveAllEstrutura`,
+      estruturas
+    );
+  }
+
   EstruturaDelete(
     id_empresa: number,
     conta: string,

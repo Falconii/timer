@@ -43,6 +43,7 @@ export class TreeEstruturaV2Component implements OnInit {
   ];
   inscricaoGetEstrutura!: Subscription;
   inscricaoAcao!: Subscription;
+  inscricaoSaveAll!: Subscription;
   durationInSeconds = 2;
 
   labelCadastro: string = '';
@@ -147,6 +148,7 @@ export class TreeEstruturaV2Component implements OnInit {
   ngOnDestroy(): void {
     this.inscricaoRota?.unsubscribe();
     this.inscricaoGetFiltro?.unsubscribe();
+    this.inscricaoSaveAll?.unsubscribe();
   }
 
   getEstruturas() {
@@ -925,6 +927,9 @@ export class TreeEstruturaV2Component implements OnInit {
         data.subconta.trim().substring(0, subconta.trim().length) !==
         subconta.trim()
     );
+
+    this.onOrdenar();
+    /*
     //Monta a tabela de chaves novas
     for (nivel = 1; nivel <= 7; nivel++)
       this.estruturas.forEach((obj) => {
@@ -957,6 +962,88 @@ export class TreeEstruturaV2Component implements OnInit {
       }
       return 0;
     });
+    */
     return;
+  }
+
+  novoVersao(): string {
+    var versao: string = this.versao;
+
+    var p1 = this.versao.substring(0, 2);
+
+    var p2 = this.versao.substring(2, 4);
+
+    if (!isNaN(Number(p2))) {
+      var newVersion = Number(p2);
+      versao = `${p1}${this.addLeadingZeros(++newVersion, 2)}`;
+    } else {
+      this.openSnackBar_Err('Erro Na Versão', 'OK');
+    }
+
+    return versao;
+  }
+  onOrdenar() {
+    var tabelaNivel: TabelaNivel = new TabelaNivel();
+    var nivel: number = 1;
+    this.lsNIveis = [];
+    //Monta a tabela de chaves novas
+    for (nivel = 1; nivel <= 7; nivel++)
+      this.estruturas.forEach((obj) => {
+        if (obj.nivel == nivel) {
+          this.addNivel(obj.subconta, obj.nivel);
+        }
+      });
+    this.lsNIveis = this.lsNIveis.sort((a, b) => {
+      if (a.subNivelOld < b.subNivelOld) {
+        return -1;
+      }
+      if (a.subNivelOld > b.subNivelOld) {
+        return 1;
+      }
+      return 0;
+    });
+    for (var i = 0; i < this.estruturas.length; i++) {
+      tabelaNivel = this.searchNivel(
+        this.estruturas[i].subconta.trim(),
+        this.estruturas[i].nivel
+      );
+      this.estruturas[i].subconta = tabelaNivel.subNivelNew;
+    }
+    this.estruturas = this.estruturas.sort((a, b) => {
+      if (a.subconta < b.subconta) {
+        return -1;
+      }
+      if (a.subconta > b.subconta) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  onSaveAll() {
+    var newVersion = this.novoVersao();
+    this.estruturas.forEach((estrutura) => {
+      estrutura.versao = newVersion;
+    });
+    this.inscricaoSaveAll = this.estruturaService
+      .EstruturaSaveAll(this.estruturas)
+      .subscribe(
+        (data: EstruturaModel[]) => {
+          this.estruturas = data;
+          this.versao = this.estruturas[0].versao;
+          this.setAcao(this.idAcao);
+          this.openSnackBar_OK(
+            `Estrutura Gravada Na Versão ${this.versao}`,
+            'OK'
+          );
+        },
+        (error: any) => {
+          this.estruturas = [];
+          this.openSnackBar_Err(
+            `Falha Na Estrutura  ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            'OK'
+          );
+        }
+      );
   }
 }

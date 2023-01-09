@@ -76,6 +76,8 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   conta: string = '';
 
+  versao: string = '';
+
   id_atividade_conta = '';
 
   filtro: FiltroOperacionalSubconta = new FiltroOperacionalSubconta();
@@ -201,6 +203,8 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
     par.conta = this.id_atividade_conta;
 
+    par.versao = this.versao;
+
     par.id_projeto = this.id_projeto;
 
     par.orderby = 'projeto';
@@ -247,7 +251,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   anexarAtividades() {
     this.inscricaoAnexar = this.atividadesService
-      .anexaatividade(this.id_empresa, this.conta, this.id_projeto)
+      .anexaatividade(this.id_empresa, this.conta, this.versao, this.id_projeto)
       .subscribe(
         (data: any) => {
           this.atividades = [];
@@ -265,9 +269,14 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       );
   }
 
-  desanexarAtividades(id_empresa: number, conta: string, id_projeto: number) {
+  desanexarAtividades(
+    id_empresa: number,
+    conta: string,
+    versao: string,
+    id_projeto: number
+  ) {
     this.inscricaoAnexar = this.atividadesService
-      .desanexaatividade(id_empresa, conta, id_projeto)
+      .desanexaatividade(id_empresa, conta, versao, id_projeto)
       .subscribe(
         (data: any) => {
           this.atividades = [];
@@ -363,7 +372,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
           this.estruturasIn = [];
           this.getSubClientes();
           this.getEstruturasOff();
-          console.log('erro', error);
+          console.log('erro in', error);
         }
       );
   }
@@ -460,7 +469,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   onAnexar() {
     if (this.parametros.value.conta?.trim() != '') {
       this.conta = this.parametros.value.conta?.trim();
-      this.setParamentos();
+      this.versao = '0101';
       this.filtro = new FiltroOperacionalSubconta();
       this.anexarAtividades();
     } else {
@@ -527,6 +536,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     this.desanexarAtividades(
       atividade.id_empresa,
       atividade.conta,
+      atividade.versao,
       atividade.id_projeto
     );
   }
