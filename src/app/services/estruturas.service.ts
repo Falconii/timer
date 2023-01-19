@@ -37,6 +37,7 @@ export class EstruturasService {
   }
 
   EstruturaInsert(estrutura: EstruturaModel) {
+    console.log('Indo para gravar', estrutura);
     return this.http.post<EstruturaModel>(`${this.apiURL}estrutura`, estrutura);
   }
 
@@ -48,6 +49,15 @@ export class EstruturasService {
     return this.http.post<EstruturaModel[]>(
       `${this.apiURL}saveAllEstrutura`,
       estruturas
+    );
+  }
+
+  EstruturaUpdateAll(estruturas: EstruturaModel[]) {
+    return this.http.post<EstruturaModel[]>(
+      `${this.apiURL}updateAllEstrutura`,
+      {
+        estruturas,
+      }
     );
   }
 

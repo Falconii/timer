@@ -110,6 +110,7 @@ export class CrudViewEstruturaComponent implements OnInit {
       this.estrutura.nivel_maxi = 7;
       this.estrutura.tipo = 'C';
       this.estrutura.user_insert = 1;
+      this.estrutura.status = 1;
       this.setValue();
     } else {
       this.getEstrutura();

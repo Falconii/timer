@@ -15,6 +15,7 @@ import { SituacaoPadraoPipe } from './situacao-padrao.pipe';
 import { SharedNavegatorComponent } from './shared-navegator/shared-navegator.component';
 import { MaterialModule } from '../material/material.module';
 import { CelCalendarComponent } from './cel-calendar/cel-calendar.component';
+import { AtivoPipe } from './ativo.pipe';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { CelCalendarComponent } from './cel-calendar/cel-calendar.component';
     SharedNavegatorComponent,
     CelCalendarComponent,
     CelApontamentosComponent,
+    AtivoPipe,
   ],
   imports: [CommonModule, MaterialModule],
   exports: [
@@ -45,6 +47,7 @@ import { CelCalendarComponent } from './cel-calendar/cel-calendar.component';
     TipoContaPipe,
     VersaoPipe,
     SoHorasPipe,
+    AtivoPipe,
     SituacaoPadraoPipe,
     SharedNavegatorComponent,
     CelCalendarComponent,

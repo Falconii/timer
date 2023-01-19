@@ -402,6 +402,7 @@ export class CrudSubestruturaComponent implements OnInit {
         this.subconta.tipo = 'S';
         this.subconta.user_insert = 1;
         this.subconta.user_update = 0;
+        this.subconta.status = 1;
       } else {
         console.log('subconta', subconta);
         this.subconta = subconta;

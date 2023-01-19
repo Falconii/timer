@@ -159,4 +159,12 @@ export class CrudEstruturaComponent implements OnInit {
   onHome() {
     this.router.navigate(['']);
   }
+
+  getClassAtiva(status: number): string {
+    if (status == 1) {
+      return 'conta-ativa';
+    } else {
+      return 'conta-inativa';
+    }
+  }
 }

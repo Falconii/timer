@@ -160,7 +160,7 @@ export class TreeEstruturaV2Component implements OnInit {
 
     par.versao = this.versao;
 
-    par.orderby = 'Conta';
+    par.orderby = 'SubConta';
 
     this.inscricaoGetFiltro = this.estruturaService
       .getEstruturas(par)
@@ -372,195 +372,6 @@ export class TreeEstruturaV2Component implements OnInit {
     return retorno;
   }
 
-  /*
-
-  novoTopico(estru: EstruturaModel, index: number) {
-    this.estru = estru;
-    this.index = index;
-    this.idAcao = CadastroAcoes.Inclusao;
-    this.setAcao(this.idAcao);
-    this.estrutura = new EstruturaModel();
-    this.estrutura.id_empresa = estru.id_empresa;
-    this.estrutura.conta = estru.conta;
-    this.estrutura.subconta = estru.subconta;
-    this.estrutura.nivel = estru.nivel;
-    this.estrutura.descricao = '';
-    this.estrutura.tipo = estru.tipo;
-    this.setValue();
-  }
-
-  */
-  /*
-  novoTopicoComplemento() {
-    this.estruturas.splice(this.index + 1, 0, this.estrutura);
-    var radical: string = this.estru.subconta.substring(
-      0,
-      (this.estru.nivel - 1) * 2
-    );
-    var radicalInicial: string = this.estru.subconta.substring(
-      0,
-      this.estru.nivel * 2
-    );
-    var antigoRadical: string = '';
-    var novoRadical: string = '';
-    var ct: number = 0;
-    console.log('==>', this.estruturas);
-    for (var i: number = 0; i < this.estruturas.length; i++) {
-      if (
-        radical ==
-        this.estruturas[i].subconta.substring(
-          0,
-          (this.estruturas[i].nivel - 1) * 2
-        )
-      ) {
-        antigoRadical = this.estruturas[i].subconta.substring(
-          0,
-          this.estru.nivel * 2
-        );
-        this.estruturas[i].subconta = radical + this.addLeadingZeros(++ct, 2);
-        novoRadical = this.estruturas[i].subconta.substring(
-          0,
-          this.estru.nivel * 2
-        );
-        if (this.estru.subconta.substring(0, 2) == 'XX') {
-          console.log(
-            'Principal=> ',
-            'radical => ',
-            radical,
-            'radical antigo  =>',
-            antigoRadical,
-            'radical novo =>',
-            novoRadical
-          );
-        }
-        if (i > this.index + 1 && this.estruturas[i].subItem) {
-          console.log(
-            'radical antigo',
-            antigoRadical,
-            'radical novo',
-            novoRadical,
-            this.estruturas[i].subItem,
-            this.estruturas[i].subconta,
-            i
-          );
-          this.trocaSubRadicais(
-            antigoRadical,
-            novoRadical,
-            this.estru.nivel,
-            i
-          );
-        }
-      }
-    }
-    this.estruturas = this.estruturas.sort((a, b) => {
-      if (a.subconta < b.subconta) {
-        return -1;
-      }
-      if (a.subconta > b.subconta) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-*/
-  /*
-  novoSubTopico(estru: EstruturaModel, index: number) {
-    console.log('subitem PARTE 1');
-    this.estru = estru;
-    this.index = index;
-    this.idAcao = CadastroAcoes.Inclusao;
-    this.setAcao(this.idAcao);
-    this.estrutura = new EstruturaModel();
-    this.estrutura.id_empresa = estru.id_empresa;
-    this.estrutura.conta = estru.conta;
-    this.estrutura.subconta =
-      estru.subconta.trim() + this.addLeadingZeros(1, 2);
-    this.estruturas[this.index].subItem = true;
-    this.estrutura.nivel = estru.nivel + 1;
-    this.estrutura.descricao = 'NOVO SUB-ITEM';
-    this.estrutura.subItem = false;
-    this.estrutura.tipo = estru.tipo;
-    if (estru.tipo == 'C') {
-      this.estrutura.tipo = 'S';
-    }
-    if (estru.tipo == 'S') {
-      this.estrutura.tipo = 'O';
-    }
-    this.setValue();
-    return;
-  }
-*/
-  /*
-  novoSubTopicoComplemento() {
-    console.log('Vou complementar o subitem');
-    this.estruturas.splice(this.index + 1, 0, this.estrutura);
-    this.estruturas[this.index].subItem = true;
-    var menos = 0;
-    if (this.estru.nivel == 1) {
-      menos = 0;
-    }
-    var radical: string = this.estru.subconta.substring(
-      0,
-      (this.estru.nivel - menos) * 2
-    );
-    var radicalInicial: string = this.estru.subconta.substring(
-      0,
-      this.estru.nivel * 2
-    );
-    var antigoRadical: string = '';
-    var novoRadical: string = '';
-    var ct: number = 0;
-    for (var i: number = 0; i < this.estruturas.length; i++) {
-      if (this.estruturas[i].nivel == 1) {
-        continue;
-      }
-      if (
-        radical ==
-        this.estruturas[i].subconta.substring(
-          0,
-          (this.estruturas[i].nivel - 1) * 2
-        )
-      ) {
-        antigoRadical = this.estruturas[i].subconta.substring(
-          0,
-          this.estru.nivel * 2
-        );
-        console.log('Conta Antiga', this.estruturas[i].subconta);
-        this.estruturas[i].subconta = radical + this.addLeadingZeros(++ct, 2);
-        console.log('Conta Nova', this.estruturas[i].subconta);
-        novoRadical = this.estruturas[i].subconta.substring(
-          0,
-          this.estru.nivel * 2
-        );
-        console.log(
-          'Nivel',
-          'radical antigo  =>',
-          antigoRadical,
-          'radical novo =>',
-          novoRadical
-        );
-        console.log('I  =>', i, 'Index + 1 =>', this.index + 1);
-        if (i > this.index + 1) {
-          this.trocaSubRadicais(
-            antigoRadical,
-            novoRadical,
-            this.estru.nivel,
-            i
-          );
-        }
-      }
-    }
-    this.estruturas = this.estruturas.sort((a, b) => {
-      if (a.subconta < b.subconta) {
-        return -1;
-      }
-      if (a.subconta > b.subconta) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-*/
   getSpace(nivel: number): string {
     var retorno: string = '';
     for (var x = 0; x < nivel; x++) {
@@ -598,11 +409,11 @@ export class TreeEstruturaV2Component implements OnInit {
     this.estrutura.nivel = estru.nivel;
     this.estrutura.descricao = '';
     this.estrutura.tipo = estru.tipo;
+    this.estrutura.status = 1;
     this.setValue();
   }
 
   IncluirConta() {
-    console.log('inclusao de conta');
     var tabelaNivel: TabelaNivel = new TabelaNivel();
     var nivel: number = 1;
     this.estruturas.splice(this.index + 1, 0, this.estrutura);
@@ -657,22 +468,6 @@ export class TreeEstruturaV2Component implements OnInit {
     return;
   }
 
-  /*
-  searchNivelmm(subconta: string, nivel: number): TabelaNivel {
-    var tabelaNivel = new TabelaNivel();
-    tabelaNivel.ct = -1;
-    if (nivel > 1) {
-      nivel--;
-    }
-    subconta = subconta.substring(0, nivel * 2);
-    this.lsNIveis.forEach((data) => {
-      if (data.nivel == nivel && data.subNivelOld == subconta) {
-        tabelaNivel = data;
-      }
-    });
-    return tabelaNivel;
-  }
-*/
   addNivel(subconta: string, nivel: number): TabelaNivel {
     var tabelaNivel = new TabelaNivel();
     var menos: number = 0;
@@ -762,126 +557,6 @@ export class TreeEstruturaV2Component implements OnInit {
     return tabelaNivel;
   }
 
-  /*
-  raiz(conta: string, subNivel: string, ct: number, idx: number) {
-    var velho: string = conta;
-    var novo: string = '';
-    velho = conta;
-    novo =
-      this.estruturas[idx].subconta.substring(0, subNivel.length) +
-      this.addLeadingZeros(ct, 2);
-    this.estruturas[idx].subconta = novo;
-    if (this.log2)
-      console.log(
-        'Estou no raiz =>',
-        'Sub-Nivel:',
-        subNivel,
-        'velho ou a conta:',
-        velho,
-        'novo ou a nova conta',
-        novo,
-        this.estruturas[idx].descricao,
-        idx
-      );
-    if (this.estruturas[idx].subItem) {
-      var soma = 0;
-      if (this.estruturas[idx + 1].subconta.trim() == velho) soma = 1;
-      if (this.log)
-        console.log(
-          'Raiz Com SubItem',
-          'SubItem ',
-          'velho',
-          velho,
-          'novo',
-          this.estruturas[idx].subconta,
-          this.estruturas[idx].descricao,
-          'PROXIMA CONTA',
-          this.estruturas[idx + soma].descricao
-        );
-      this.subItem(velho, novo, idx + soma, velho);
-    }
-  }
-*/
-
-  /*
-  subItem(velho: string, novo: string, idx: number, subNivel: string) {
-    var ct: number = 0;
-    for (var i: number = idx + 1; i < this.estruturas.length; i++) {
-      if (velho == this.estruturas[i].subconta.substring(0, subNivel.length)) {
-        this.estruturas[i].subconta = novo + this.addLeadingZeros(++ct, 2);
-        if (this.log2)
-          console.log(
-            'SubItem ',
-            'velho',
-            velho,
-            'novo',
-            this.estruturas[i].subconta,
-            this.estruturas[i].descricao
-          );
-          var ct2: number = 0;
-          var master: string = this.estruturas[i].subconta.substring(
-            0,
-            this.estruturas[i].nivel * 2
-          );
-          var masterNivel = this.estruturas[i].nivel + 1;
-          if (this.log) console.log('Raiz Master - 2', master);
-          for (var x: number = i; x < this.estruturas.length; x++) {
-            if (this.log2)
-              console.log(
-                'IF Raiz SubItem',
-                'Master ',
-                master,
-                '==',
-                this.estruturas[x].subconta.substring(
-                  0,
-                  this.estruturas[x].nivel * 2
-                ),
-                this.estruturas[x].descricao,
-                'Resultado Da Expressão:',
-                master ==
-                  this.estruturas[x].subconta.substring(
-                    0,
-                    (this.estruturas[x].nivel - 1) * 2
-                  ) && masterNivel == this.estruturas[x].nivel
-              );
-            if (this.log)
-              console.log(
-                '------------------INICIO---------------------------'
-              );
-            if (
-              master ==
-                this.estruturas[x].subconta.substring(
-                  0,
-                  (this.estruturas[x].nivel - 1) * 2
-                ) &&
-              masterNivel == this.estruturas[x].nivel
-            ) {
-              if (this.log)
-                console.log(
-                  'Indo para o raiz no subitem: SEM FUNCIONAR!!',
-                  this.estruturas[x].subconta,
-                  this.estruturas[x].descricao
-                );
-              //this.raiz(
-              //  this.estruturas[x].subconta.trim(),
-              //  this.estruturas[x].subconta,
-              //  ++ct2,
-              //  i
-              //);
-              if (this.log)
-                console.log(
-                  '------------------INICIO---------------------------'
-                );
-              if (this.log) console.log('Voltei 2');
-            }
-          }
-        }
-      } else {
-        break;
-      }
-    }
-  }
-*/
   subContas(radical: string, passagem: number) {
     var ct: number = 0;
     var oldRadical: string = '';
@@ -927,42 +602,7 @@ export class TreeEstruturaV2Component implements OnInit {
         data.subconta.trim().substring(0, subconta.trim().length) !==
         subconta.trim()
     );
-
     this.onOrdenar();
-    /*
-    //Monta a tabela de chaves novas
-    for (nivel = 1; nivel <= 7; nivel++)
-      this.estruturas.forEach((obj) => {
-        if (obj.nivel == nivel) {
-          this.addNivel(obj.subconta, obj.nivel);
-        }
-      });
-    this.lsNIveis = this.lsNIveis.sort((a, b) => {
-      if (a.subNivelOld < b.subNivelOld) {
-        return -1;
-      }
-      if (a.subNivelOld > b.subNivelOld) {
-        return 1;
-      }
-      return 0;
-    });
-    for (var i = 0; i < this.estruturas.length; i++) {
-      tabelaNivel = this.searchNivel(
-        this.estruturas[i].subconta.trim(),
-        this.estruturas[i].nivel
-      );
-      this.estruturas[i].subconta = tabelaNivel.subNivelNew;
-    }
-    this.estruturas = this.estruturas.sort((a, b) => {
-      if (a.subconta < b.subconta) {
-        return -1;
-      }
-      if (a.subconta > b.subconta) {
-        return 1;
-      }
-      return 0;
-    });
-    */
     return;
   }
 
@@ -1036,6 +676,26 @@ export class TreeEstruturaV2Component implements OnInit {
             `Estrutura Gravada Na Versão ${this.versao}`,
             'OK'
           );
+        },
+        (error: any) => {
+          this.estruturas = [];
+          this.openSnackBar_Err(
+            `Falha Na Estrutura  ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            'OK'
+          );
+        }
+      );
+  }
+
+  onUpdateAll() {
+    this.inscricaoSaveAll = this.estruturaService
+      .EstruturaUpdateAll(this.estruturas)
+      .subscribe(
+        (data: EstruturaModel[]) => {
+          this.estruturas = data;
+          this.versao = this.estruturas[0].versao;
+          this.setAcao(this.idAcao);
+          this.openSnackBar_OK(`Estrutura Atualizada!`, 'OK');
         },
         (error: any) => {
           this.estruturas = [];

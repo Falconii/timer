@@ -10,4 +10,5 @@ export class EstruturaModel {
   public controle: string = 'S';
   public user_insert: number = 0;
   public user_update: number = 0;
+  public status: number = -1;
 }

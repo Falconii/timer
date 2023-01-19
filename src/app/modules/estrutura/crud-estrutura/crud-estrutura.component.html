@@ -78,6 +78,9 @@
             <mat-card-content>
                 <mat-label class="labelTitleFirst">Conta:</mat-label>
                 <mat-label class="labelData">{{estru.subconta}}</mat-label>
+                <mat-label class="labelData">>{{estru.subconta}}</mat-label>
+                <mat-label class="labelTitle">Ativa:</mat-label>
+                <mat-label ngClass="{getClassAtiva(estru.status)}">{{estru.status | ativo}}</mat-label>
                 <mat-label class="labelTitle">Versão:</mat-label>
                 <mat-label class="labelData">{{estru.versao}}</mat-label>
                 <mat-label class="labelTitle">Descrição:</mat-label>

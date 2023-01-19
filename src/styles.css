@@ -258,3 +258,13 @@ body {
 .yellow-icon {
     color: #E3BD11;
 }
+
+.conta-ativa {
+    font-size: large;
+    color: #0000CC;
+}
+
+.conta-inativa {
+    font-size: large;
+    color: red
+}
