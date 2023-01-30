@@ -447,4 +447,50 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
 
     return retorno;
   }
+
+  onManha() {
+    this.apontamento.inicial =
+      this.apontamento.inicial.substring(
+        0,
+        this.apontamento.final.indexOf(' ') + 1
+      ) + '07:45';
+    this.apontamento.final =
+      this.apontamento.final.substring(
+        0,
+        this.apontamento.final.indexOf(' ') + 1
+      ) + '12:00';
+    this.formulario.patchValue({
+      entrada: this.apontamento.inicial.substring(
+        this.apontamento.inicial.indexOf(' ') + 1,
+        16
+      ),
+      saida: this.apontamento.final.substring(
+        this.apontamento.final.indexOf(' ') + 1,
+        16
+      ),
+    });
+  }
+
+  onTarde() {
+    this.apontamento.inicial =
+      this.apontamento.inicial.substring(
+        0,
+        this.apontamento.inicial.indexOf(' ') + 1
+      ) + '13:00';
+    this.apontamento.final =
+      this.apontamento.final.substring(
+        0,
+        this.apontamento.final.indexOf(' ') + 1
+      ) + '17:45';
+    this.formulario.patchValue({
+      entrada: this.apontamento.inicial.substring(
+        this.apontamento.inicial.indexOf(' ') + 1,
+        16
+      ),
+      saida: this.apontamento.final.substring(
+        this.apontamento.final.indexOf(' ') + 1,
+        16
+      ),
+    });
+  }
 }

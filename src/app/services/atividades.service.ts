@@ -51,10 +51,12 @@ export class AtividadesService {
     id_empresa: number,
     conta: string,
     versao: string,
-    id_projeto: number
+    id_projeto: number,
+    id_exec: number,
+    id_resp: number
   ) {
     return this.http.get<any>(
-      `${this.apiURL}anexaatividade/${id_empresa}/${conta}/${versao}/${id_projeto}`
+      `${this.apiURL}anexaatividade/${id_empresa}/${conta}/${versao}/${id_projeto}/${id_exec}/${id_resp}`
     );
   }
 

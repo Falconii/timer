@@ -5,7 +5,10 @@
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Ordenar" matTooltipPosition="above" (click)="onOrdenar()" *ngIf="estruturas.length > 0">
           <mat-icon class="yellow-icon">sort</mat-icon>
         </button>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Gravar" matTooltipPosition="above" (click)="onUpdateAll()" *ngIf="estruturas.length > 0">
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Regravar" matTooltipPosition="above" (click)="onUpdateAll()" *ngIf="estruturas.length > 0">
+          <mat-icon class="red-icon">check_box</mat-icon>
+        </button>
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Gravar Nova Versão" matTooltipPosition="above" (click)="onSaveAll()" *ngIf="estruturas.length > 0">
           <mat-icon class="green-icon">check</mat-icon>
         </button>
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Cancelar" matTooltipPosition="above" (click)="onRetorno()">

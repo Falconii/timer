@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
 import { DataYYYYMMDD, MensagensBotoes } from 'src/app/shared/util';
 import { UsuariosService } from 'src/app/services/usuarios.service';
-import { ActivatedRoute, PreloadAllModules, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  Event,
+  PreloadAllModules,
+  Router,
+} from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario-01';
 import { AtividadeModel } from 'src/app/Models/atividade-model';
@@ -21,6 +26,17 @@ import { ClientesService } from 'src/app/services/clientes.service';
 import { EstruturasService } from 'src/app/services/estruturas.service';
 import { ProjetosService } from 'src/app/services/projetos.service';
 import { FiltroOperacionalSubconta } from 'src/app/shared/filtro-operacional-subconta';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material/dialog';
+
+export interface DialogData {
+  executores: UsuarioQuery01Model[];
+  id_resp: number;
+  id_exec: number;
+}
 
 @Component({
   selector: 'app-crud-atividade-projeto',
@@ -82,7 +98,12 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   filtro: FiltroOperacionalSubconta = new FiltroOperacionalSubconta();
 
+  id_exec: number = 0;
+
+  id_resp: number = 0;
+
   constructor(
+    public dialog: MatDialog,
     private formBuilder: FormBuilder,
     private estruturasService: EstruturasService,
     private atividadesService: AtividadesService,
@@ -136,6 +157,28 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     this.inscricaoGetSubCliente?.unsubscribe();
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      data: {
+        executores: this.executores,
+        id_exec: -1,
+        id_resp: -1,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: DialogData) => {
+      console.log(result);
+      this.id_resp = result.id_resp;
+      this.id_exec = result.id_exec;
+      if (this.id_exec > -1) {
+        this.conta = this.parametros.value.conta?.trim();
+        this.versao = '0101';
+        this.filtro = new FiltroOperacionalSubconta();
+        this.anexarAtividades();
+      }
+    });
+  }
+
   getProjeto() {
     this.inscricaoGetProjeto = this.projetosService
       .getProjeto(this.id_empresa, this.id_projeto)
@@ -152,6 +195,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         }
       );
   }
+
   getSubClientes() {
     console.log('Olha o projeto', this.projeto);
 
@@ -251,7 +295,14 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   anexarAtividades() {
     this.inscricaoAnexar = this.atividadesService
-      .anexaatividade(this.id_empresa, this.conta, this.versao, this.id_projeto)
+      .anexaatividade(
+        this.id_empresa,
+        this.conta,
+        this.versao,
+        this.id_projeto,
+        this.id_exec,
+        this.id_resp
+      )
       .subscribe(
         (data: any) => {
           this.atividades = [];
@@ -468,10 +519,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   onAnexar() {
     if (this.parametros.value.conta?.trim() != '') {
-      this.conta = this.parametros.value.conta?.trim();
-      this.versao = '0101';
-      this.filtro = new FiltroOperacionalSubconta();
-      this.anexarAtividades();
+      this.openDialog();
     } else {
       this.openSnackBar_OK(`Informe Uma Estrutura Primeiro`, 'OK');
     }
@@ -626,5 +674,47 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       this.filtro.nivel = nivel;
     }
     console.log('Filtro Conta:', this.filtro.subconta, this.filtro.nivel);
+  }
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'dialog-overview-example-dialog.html',
+})
+export class DialogOverviewExampleDialog {
+  formulario: FormGroup;
+  constructor(
+    private formBuilder: FormBuilder,
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {
+    this.formulario = formBuilder.group({
+      id_exec: [{ value: '' }, [Validators.required, Validators.min(0)]],
+      id_resp: [{ value: '' }, [Validators.required, Validators.min(0)]],
+    });
+  }
+
+  setValue() {
+    this.formulario.setValue({
+      id_resp: 0,
+      id_exec: 0,
+    });
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  onChangeExecutor(evento: any) {
+    this.data.id_exec = evento.value;
+  }
+
+  onChangeResponsavel(evento: any) {
+    this.data.id_resp = evento.value;
+  }
+
+  itsOK(): Boolean {
+    if (this.data.id_exec > -1 && this.data.id_resp > -1) return true;
+    return false;
   }
 }

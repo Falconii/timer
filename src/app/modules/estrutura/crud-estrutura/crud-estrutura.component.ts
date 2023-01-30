@@ -28,6 +28,12 @@ export class CrudEstruturaComponent implements OnInit {
 
   opcoesCampo = ['Conta', 'SubConta', 'Descrição'];
 
+  statusEstruturas = ['ATIVA', 'INATIVA', 'TODAS'];
+
+  status: number = 1;
+
+  status_descricao: string = 'Ativas';
+
   constructor(
     private formBuilder: FormBuilder,
     private estruturaService: EstruturasService,
@@ -76,6 +82,8 @@ export class CrudEstruturaComponent implements OnInit {
     par.nivel = 1;
 
     par.tipo = '';
+
+    par.status = this.status;
 
     par.orderby = this.parametros.value.ordenacao;
 
@@ -166,5 +174,11 @@ export class CrudEstruturaComponent implements OnInit {
     } else {
       return 'conta-inativa';
     }
+  }
+
+  onSetStatus(status: number, descricao: string) {
+    this.status = status;
+    this.status_descricao = descricao;
+    return;
   }
 }

@@ -8,7 +8,10 @@ import { MaterialModule } from 'src/app/material/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ProjetoViewComponent } from './projeto-view/projeto-view.component';
 import { CrudProjetoComponent } from './crud-projeto/crud-projeto.component';
-import { CrudAtividadeProjetoComponent } from './crud-atividade-projeto/crud-atividade-projeto.component';
+import {
+  CrudAtividadeProjetoComponent,
+  DialogOverviewExampleDialog,
+} from './crud-atividade-projeto/crud-atividade-projeto.component';
 import { CrudPlanejamentoLancamentoComponent } from './crud-planejamento-lancamento/crud-planejamento-lancamento.component';
 
 @NgModule({
@@ -17,6 +20,7 @@ import { CrudPlanejamentoLancamentoComponent } from './crud-planejamento-lancame
     ProjetoViewComponent,
     CrudAtividadeProjetoComponent,
     CrudPlanejamentoLancamentoComponent,
+    DialogOverviewExampleDialog,
   ],
   imports: [
     CommonModule,

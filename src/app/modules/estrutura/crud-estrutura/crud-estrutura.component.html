@@ -1,6 +1,18 @@
 <div class="div-barra">
     <mat-toolbar>
         <span class="example-spacer">Tela 01 Estruturas: </span>
+        <span class="example-spacer">
+        <mat-menu #appMenu="matMenu">
+            <ng-template matMenuContent>
+                <button mat-menu-item (click)="onSetStatus(1,'Ativas')">Ativas</button>
+                <button mat-menu-item (click)="onSetStatus(2,'Inativas')">Inativas</button>
+                <button mat-menu-item (click)="onSetStatus(0,'Todas')">Todas</button>
+            </ng-template>
+        </mat-menu>
+        <button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="Example icon-button with share icon ">
+          Status:{{status_descricao}}
+        </button>
+        </span>
         <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno" matTooltipPosition="above" (click)="onHome()">
           <mat-icon>home</mat-icon>
          </button>
