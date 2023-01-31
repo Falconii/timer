@@ -65,6 +65,11 @@
             </mat-card-subtitle>
             <mat-card-actions>
                 <span class="button-container-right ">
+                  <button mat-icon-button aria-label="Example icon-button with share icon " (click)="onCopia(estru)"
+                   matTooltip = "Copiar A Estrutura"
+                   matTooltipPosition="above">
+                   <mat-icon>file_copy</mat-icon>
+                </button>
                   <button mat-icon-button aria-label="Example icon-button with share icon " (click)="tree(estru)"
                    matTooltip = "Visualizar Estrtutura"
                    matTooltipPosition="above">
@@ -90,7 +95,6 @@
             <mat-card-content>
                 <mat-label class="labelTitleFirst">Conta:</mat-label>
                 <mat-label class="labelData">{{estru.subconta}}</mat-label>
-                <mat-label class="labelData">>{{estru.subconta}}</mat-label>
                 <mat-label class="labelTitle">Ativa:</mat-label>
                 <mat-label ngClass="{getClassAtiva(estru.status)}">{{estru.status | ativo}}</mat-label>
                 <mat-label class="labelTitle">Versão:</mat-label>

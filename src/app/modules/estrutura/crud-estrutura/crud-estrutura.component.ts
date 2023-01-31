@@ -17,6 +17,7 @@ import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
 export class CrudEstruturaComponent implements OnInit {
   inscricaoGetAll!: Subscription;
   inscricaoGetFiltro!: Subscription;
+  inscricaoCopiaEstrutura!: Subscription;
 
   estruturas: EstruturaModel[] = [];
 
@@ -63,6 +64,7 @@ export class CrudEstruturaComponent implements OnInit {
   ngOnDestroy() {
     this.inscricaoGetAll?.unsubscribe();
     this.inscricaoGetFiltro?.unsubscribe();
+    this.inscricaoCopiaEstrutura?.unsubscribe();
   }
 
   getEstruturas() {
@@ -162,6 +164,24 @@ export class CrudEstruturaComponent implements OnInit {
       estrutura.descricao,
       estrutura.nivel,
     ]);
+  }
+
+  onCopia(estrutura: EstruturaModel) {
+    this.inscricaoGetFiltro = this.estruturaService
+      .copiaEstrutura(estrutura)
+      .subscribe(
+        (data: EstruturaModel[]) => {
+          console.log(data);
+          alert('Deu Certo !!!!');
+        },
+        (error: any) => {
+          this.estruturas = [];
+          this.openSnackBar_Err(
+            `Copia Das Estruturas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            'OK'
+          );
+        }
+      );
   }
 
   onHome() {

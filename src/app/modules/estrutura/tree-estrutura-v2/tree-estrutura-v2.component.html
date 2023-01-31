@@ -45,7 +45,7 @@
                 {{estrutura.subconta | subconta}}
             </td>
             <td class="coluna-versao" *ngIf="showNivel(estrutura.nivel)">
-                {{estrutura.versao | versaopipe}}
+                {{estrutura.versao | versaopipe}} {{estrutura.status}}
             </td>
             <td class="coluna-descricao" (click)="escolha(estrutura,getAcoes()[ 'Consulta'],i)" *ngIf="showNivel(estrutura.nivel)">
                 {{estrutura.descricao}}

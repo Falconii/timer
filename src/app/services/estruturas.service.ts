@@ -45,11 +45,11 @@ export class EstruturasService {
     return this.http.put<EstruturaModel>(`${this.apiURL}estrutura`, estrutura);
   }
 
-  EstruturaSaveAll(estruturas: EstruturaModel[]) {
-    return this.http.post<EstruturaModel[]>(
-      `${this.apiURL}saveAllEstrutura`,
-      estruturas
-    );
+  EstruturaSaveAll(estruturas: EstruturaModel[], oldVersion: string) {
+    return this.http.post<EstruturaModel[]>(`${this.apiURL}saveAllEstrutura`, {
+      estruturas,
+      oldVersion,
+    });
   }
 
   EstruturaUpdateAll(estruturas: EstruturaModel[]) {
@@ -76,6 +76,16 @@ export class EstruturasService {
     return this.http.delete<EstruturaModel>(
       `${this.apiURL}estrutura/${id_empresa}/${conta}/${versao}`
     );
+  }
+
+  copiaEstrutura(estru: EstruturaModel) {
+    return this.http.post<EstruturaModel[]>(`${this.apiURL}copiaEstrutura`, {
+      id_empresa: estru.id_empresa,
+      conta: estru.conta,
+      versao: estru.versao,
+      controle: estru.controle,
+      descricao: estru.descricao,
+    });
   }
 
   getEstruturasMem(): EstruturaModel[] {

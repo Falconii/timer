@@ -314,6 +314,7 @@ export class TreeEstruturaV2Component implements OnInit {
       this.estrutura.descricao = estru.descricao;
       this.estrutura.user_insert = estru.user_insert;
       this.estrutura.user_update = estru.user_update;
+      this.estrutura.status = estru.status;
       this.idAcao = opcao;
       this.indexEstrutura = index;
       this.setValue();
@@ -393,6 +394,7 @@ export class TreeEstruturaV2Component implements OnInit {
     this.estrutura.nivel = estru.nivel + 1;
     this.estrutura.descricao = '';
     this.estrutura.tipo = estru.tipo;
+    this.estrutura.status = estru.status;
     this.setValue();
   }
   onIncluirConta(estru: EstruturaModel, index: number) {
@@ -666,7 +668,7 @@ export class TreeEstruturaV2Component implements OnInit {
       estrutura.versao = newVersion;
     });
     this.inscricaoSaveAll = this.estruturaService
-      .EstruturaSaveAll(this.estruturas)
+      .EstruturaSaveAll(this.estruturas, this.versao)
       .subscribe(
         (data: EstruturaModel[]) => {
           this.estruturas = data;
