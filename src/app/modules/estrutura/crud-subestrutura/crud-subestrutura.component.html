@@ -64,6 +64,12 @@
             <mat-error *ngIf="formulario.get('descricao')?.status == 'INVALID' && touchedOrDirty('descricao')">Descrição máximo 60 letras</mat-error>
         </mat-form-field>
     </div>
+    <div class="col-med-1">
+        <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Descrições</mat-label>
+            <textarea matInput placeholder="Coloque aqui a descrição das tarefas" formControlName="linhas"></textarea>
+        </mat-form-field>
+    </div>
     <div class="button-container-right">
         <button mat-raised-button color="primary" *ngIf="idAcao != 3" (click)=onSubmit()>{{acao}}</button>
         <button mat-raised-button color="accent" (click)="onCancel()">{{getLabelCancel()}}</button>

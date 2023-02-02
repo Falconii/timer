@@ -70,6 +70,8 @@ export class CrudSubestruturaComponent implements OnInit {
     { sigla: 'N', descricao: 'NÃO' },
   ];
 
+  linhas: string = '';
+
   constructor(
     private formBuilder: FormBuilder,
     private subContasService: EstruturasService,
@@ -101,6 +103,7 @@ export class CrudSubestruturaComponent implements OnInit {
       tipo_: [{ value: '' }],
       controle: [{ value: '' }, [ValidatorStringLen(1, 2, true)]],
       controle_: [{ value: '' }],
+      linhas: [{ value: '' }],
     });
     this.subconta = new EstruturaModel();
     this.inscricaoRota = this.route.params.subscribe((params: any) => {
@@ -192,6 +195,7 @@ export class CrudSubestruturaComponent implements OnInit {
               )
             ].descricao
           : '',
+      linhas: this.linhas,
     });
   }
 
@@ -311,21 +315,61 @@ export class CrudSubestruturaComponent implements OnInit {
       case CadastroAcoes.Inclusao:
         this.subconta.conta = this.conta_pai;
         this.subconta.subconta = this.subconta_pai;
-
-        this.inscricaoAcao = this.subContasService
-          .EstruturaInsert(this.subconta)
-          .subscribe(
-            async (data: EstruturaModel) => {
-              this.getSubContas();
-              this.onCancel();
-            },
-            (error: any) => {
-              this.openSnackBar_Err(
-                `Erro Na Inclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
-                'OK'
-              );
+        var lines: string[] = this.formulario.value.linhas.split(/\r|\r\n|\n/);
+        if (lines.length == 0) {
+          this.inscricaoAcao = this.subContasService
+            .EstruturaInsert(this.subconta)
+            .subscribe(
+              async (data: EstruturaModel) => {
+                this.getSubContas();
+                this.onCancel();
+              },
+              (error: any) => {
+                this.openSnackBar_Err(
+                  `Erro Na Inclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+                  'OK'
+                );
+              }
+            );
+        } else {
+          console.log('Tô indo gravar Vários', this.subconta, lines);
+          var estru: EstruturaModel[] = [];
+          for (let id = 0; id < lines.length; id++) {
+            if (lines[id].trim() != '') {
+              let obj: EstruturaModel = new EstruturaModel();
+              obj.conta = this.subconta.conta;
+              obj.controle = this.subconta.controle;
+              obj.descricao = lines[id];
+              obj.id_empresa = this.subconta.id_empresa;
+              obj.nivel = this.subconta.nivel;
+              obj.nivel_maxi = this.subconta.nivel_maxi;
+              obj.status = this.subconta.status;
+              obj.subconta = this.subconta.subconta;
+              obj.tipo = this.subconta.tipo;
+              obj.user_insert = this.subconta.user_insert;
+              obj.user_update = id;
+              obj.versao = this.subconta.versao;
+              estru.push(obj);
             }
-          );
+          }
+
+          this.inscricaoAcao = this.subContasService
+            .multiEstrutura(estru)
+            .subscribe(
+              async (data: EstruturaModel[]) => {
+                console.log(data);
+                this.getSubContas();
+                this.onCancel();
+              },
+              (error: any) => {
+                this.openSnackBar_Err(
+                  `Erro Na Inclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+                  'OK'
+                );
+              }
+            );
+        }
+
         break;
       case CadastroAcoes.Edicao:
         this.inscricaoAcao = this.subContasService

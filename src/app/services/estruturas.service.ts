@@ -88,6 +88,12 @@ export class EstruturasService {
     });
   }
 
+  multiEstrutura(estru: EstruturaModel[]) {
+    return this.http.post<EstruturaModel[]>(`${this.apiURL}multiEstrutura`, {
+      estruturas: estru,
+    });
+  }
+
   getEstruturasMem(): EstruturaModel[] {
     return this.estruturas;
   }

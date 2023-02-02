@@ -171,8 +171,7 @@ export class CrudEstruturaComponent implements OnInit {
       .copiaEstrutura(estrutura)
       .subscribe(
         (data: EstruturaModel[]) => {
-          console.log(data);
-          alert('Deu Certo !!!!');
+          console.log('resultado da copia', data);
         },
         (error: any) => {
           this.estruturas = [];
