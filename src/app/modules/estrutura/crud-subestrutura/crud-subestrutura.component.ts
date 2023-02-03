@@ -70,6 +70,10 @@ export class CrudSubestruturaComponent implements OnInit {
     { sigla: 'N', descricao: 'NÃO' },
   ];
 
+  labelDescricao: 'one' | 'many' = 'one';
+
+  descricoes: string = 'one';
+
   linhas: string = '';
 
   constructor(
@@ -90,19 +94,16 @@ export class CrudSubestruturaComponent implements OnInit {
           Validators.maxLength(14),
         ],
       ],
-      descricao: [
-        { value: '' },
-        [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(300),
-        ],
-      ],
       nivel: [{ value: '' }],
       tipo: [{ value: '' }],
       tipo_: [{ value: '' }],
       controle: [{ value: '' }, [ValidatorStringLen(1, 2, true)]],
       controle_: [{ value: '' }],
+      nLinhas: [{ value: 'one' }],
+      descricao: [
+        { value: '' },
+        [Validators.minLength(0), Validators.maxLength(300)],
+      ],
       linhas: [{ value: '' }],
     });
     this.subconta = new EstruturaModel();
@@ -180,6 +181,7 @@ export class CrudSubestruturaComponent implements OnInit {
       versao: this.subconta.versao,
       subconta:
         this.idAcao == CadastroAcoes.Inclusao ? 'NOVA' : this.subconta.subconta,
+      nLinhas: this.descricoes,
       descricao: this.subconta.descricao,
       nivel: this.subconta.nivel,
       tipo: this.subconta.tipo,
@@ -315,7 +317,13 @@ export class CrudSubestruturaComponent implements OnInit {
       case CadastroAcoes.Inclusao:
         this.subconta.conta = this.conta_pai;
         this.subconta.subconta = this.subconta_pai;
-        var lines: string[] = this.formulario.value.linhas.split(/\r|\r\n|\n/);
+        var lines: string[] = [];
+        //excluir linhas em branco
+        if (this.formulario.value.linhas.trim() == '') {
+          var lines: string[] = [];
+        } else {
+          lines = this.formulario.value.linhas.split(/\r|\r\n|\n/);
+        }
         if (lines.length == 0) {
           this.inscricaoAcao = this.subContasService
             .EstruturaInsert(this.subconta)
@@ -332,7 +340,6 @@ export class CrudSubestruturaComponent implements OnInit {
               }
             );
         } else {
-          console.log('Tô indo gravar Vários', this.subconta, lines);
           var estru: EstruturaModel[] = [];
           for (let id = 0; id < lines.length; id++) {
             if (lines[id].trim() != '') {
@@ -357,7 +364,6 @@ export class CrudSubestruturaComponent implements OnInit {
             .multiEstrutura(estru)
             .subscribe(
               async (data: EstruturaModel[]) => {
-                console.log(data);
                 this.getSubContas();
                 this.onCancel();
               },
@@ -400,6 +406,7 @@ export class CrudSubestruturaComponent implements OnInit {
             async (data: any) => {
               this.getSubContas();
               this.onCancel();
+              this.openSnackBar_OK('Item Excluído Com Sucesso!', 'OK');
             },
             (error: any) => {
               this.openSnackBar_Err(
@@ -496,5 +503,15 @@ export class CrudSubestruturaComponent implements OnInit {
       this.historico.push(value);
       console.log('historico', this.historico);
     }
+  }
+
+  itsMany(): boolean {
+    console.log('==>', this.formulario.value.nLinhas);
+    if (this.formulario.value.nLinhas == 'one') return false;
+    return true;
+  }
+
+  onChangeLinhas() {
+    this.descricoes = this.formulario.value.nLinhas;
   }
 }

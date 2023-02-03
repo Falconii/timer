@@ -3,4 +3,5 @@ export class UsuarioQuery01Model {
   public 'id': number = 0;
   public 'razao': string = '';
   public 'grupo': string = '';
+  public 'email': string = '';
 }

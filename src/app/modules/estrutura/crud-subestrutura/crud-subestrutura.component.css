@@ -174,3 +174,14 @@ table {
     border: #0000CC solid 1px;
     padding-top: 10px;
 }
+
+.example-margin {
+    margin: 0 10px;
+}
+
+.example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+}

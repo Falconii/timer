@@ -68,7 +68,7 @@ export class EstruturasService {
     subconta: string
   ) {
     return this.http.delete<EstruturaModel>(
-      `${this.apiURL}estrutura/${id_empresa}/${conta}/${versao}${subconta}`
+      `${this.apiURL}estrutura/${id_empresa}/${conta}/${versao}/${subconta}`
     );
   }
 
