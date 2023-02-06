@@ -53,7 +53,7 @@ export class SobreComponent implements OnInit {
     let par = new ParametroUsuario01();
 
     par.id_empresa = 1;
-    par.id = 7;
+    par.id = 17;
     par.orderby = 'Codigo';
 
     this.incricaoGetUsuario = this.usuariosService
