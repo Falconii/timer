@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-gru-eco-view',
@@ -37,6 +38,7 @@ export class GruEcoViewComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private grupoEconomicoService: GrupoEconomicoService,
+    private globalService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar
@@ -146,6 +148,7 @@ export class GruEcoViewComponent implements OnInit {
     this.grupo.razao = this.formulario.value.razao;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.grupo.user_insert = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.grupoEconomicoService
           .GrupoEcoInsert(this.grupo)
           .subscribe(
@@ -161,6 +164,7 @@ export class GruEcoViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.grupo.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.grupoEconomicoService
           .GrupoEcoUpdate(this.grupo)
           .subscribe(

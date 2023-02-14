@@ -44,7 +44,7 @@ export class UsuariosService {
     );
   }
 
-  UsuarioInsert(usuario: any) {
+  UsuarioInsert(usuario: UsuarioModel) {
     return this.http.post<UsuarioModel>(`${this.apiURL}usuario/`, usuario);
   }
 
@@ -58,7 +58,73 @@ export class UsuariosService {
     );
   }
 
-  setarUsuario(user: UsuarioModel) {
-    UsuariosService.login = user;
+  getGruposDiretoria(): number[] {
+    return [900];
+  }
+
+  getGruposCoordenador(): number[] {
+    return [901];
+  }
+
+  getGruposAuditor(): number[] {
+    return [902];
+  }
+
+  getGruposTrainee(): number[] {
+    return [903];
+  }
+
+  getGruposAdm(): number[] {
+    return [904];
+  }
+
+  getGruposFinanceiro(): number[] {
+    return [905];
+  }
+
+  getGruposTi(): number[] {
+    return [906];
+  }
+
+  isDiretoria(value: number): boolean {
+    if (value == 900) return true;
+
+    return false;
+  }
+
+  isCoordenador(value: number): boolean {
+    if (value == 901) return true;
+
+    return false;
+  }
+
+  isAuditor(value: number): boolean {
+    if (value == 902) return true;
+
+    return false;
+  }
+
+  isTrainee(value: number): boolean {
+    if (value == 903) return true;
+
+    return false;
+  }
+
+  isAdm(value: number): boolean {
+    if (value == 904) return true;
+
+    return false;
+  }
+
+  isFinanceiro(value: number): boolean {
+    if (value == 905) return true;
+
+    return false;
+  }
+
+  isTi(value: number): boolean {
+    if (value == 906) return true;
+
+    return false;
   }
 }

@@ -1,3 +1,4 @@
+import { GlobalService } from 'src/app/services/global.service';
 import { MensagensBotoes } from 'src/app/shared/util';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { Component, OnInit } from '@angular/core';
@@ -10,6 +11,7 @@ import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { GruUserModel } from 'src/app/Models/gru-user-model';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario-01';
+import { UsuarioModel } from 'src/app/Models/usuario-model';
 
 @Component({
   selector: 'app-crud-usuario',
@@ -37,6 +39,7 @@ export class CrudUsuarioComponent implements OnInit {
     private formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
     private grupoUserService: GrupoUserService,
+    private globalService: GlobalService,
     private router: Router,
     private _snackBar: MatSnackBar
   ) {
@@ -74,7 +77,7 @@ export class CrudUsuarioComponent implements OnInit {
   }
 
   onHome() {
-    this.router.navigate(['']);
+    this.router.navigate(['/']);
   }
 
   getAcoes() {

@@ -1,3 +1,4 @@
+import { GlobalService } from 'src/app/services/global.service';
 import { MotivoApoService } from './../../../services/motivo-apo.service';
 import { MotivoApoModel } from './../../../Models/motivo-apo-model';
 import { Component, OnInit } from '@angular/core';
@@ -44,6 +45,7 @@ export class MotivoApoViewComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private motivoApoService: MotivoApoService,
+    private globslService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar
@@ -172,6 +174,7 @@ export class MotivoApoViewComponent implements OnInit {
     this.motivo.produtivo = this.formulario.value.produtivo;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.motivo.user_insert = this.globslService.getUsuario().id;
         this.inscricaoAcao = this.motivoApoService
           .MotivoApoInsert(this.motivo)
           .subscribe(
@@ -187,6 +190,7 @@ export class MotivoApoViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.motivo.user_update = this.globslService.getUsuario().id;
         this.inscricaoAcao = this.motivoApoService
           .MotivoApoUpdate(this.motivo)
           .subscribe(

@@ -40,7 +40,7 @@
 <div class="Browse">
     <div class="linha" *ngFor="let grupo of grupos ; index as id">
         <mat-card class="example-card" (click)="escolha(getAcoes()['Consulta'],grupo)">
-            <mat-card-actions>
+            <mat-card-actions *ngIf="grupo.id < 900">
                 <span class="button-container-right ">
             <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(getAcoes()[ 'Edicao'],grupo) "
                 [matTooltip] = "getTexto().alterar"

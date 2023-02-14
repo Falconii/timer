@@ -1,3 +1,4 @@
+import { GlobalService } from './../../../services/global.service';
 import { MensagensBotoes } from 'src/app/shared/util';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -30,6 +31,7 @@ export class CrudGrupoUserComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private globalService: GlobalService,
     private grupoUserService: GrupoUserService,
     private router: Router,
     private _snackBar: MatSnackBar

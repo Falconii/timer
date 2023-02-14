@@ -12,14 +12,18 @@ export function ValidatorStringLen(
 
     const value = control.value;
 
+    if (!required && value == null) {
+      return null;
+    }
+
+    if (required && value == null) {
+      return { ValidatorStringLen: true, message: 'Dado Obrigatório' };
+    }
+
     if (required && value.length == 0) {
       return { ValidatorStringLen: true, message: 'Dado Obrigatório' };
     }
     if (!required && value.length == 0) {
-      return null;
-    }
-
-    if (!required && value == null) {
       return null;
     }
 

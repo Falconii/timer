@@ -3,7 +3,7 @@ export class ParametroUsuario01 {
   public id: number = 0;
   public razao: string = '';
   public cnpj_cpf: string = '';
-  public grupo: number = 0;
+  public grupo: number[] = [];
   public orderby: string = '';
   public sharp: Boolean = false;
 }

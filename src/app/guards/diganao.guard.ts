@@ -1,10 +1,11 @@
+import { GlobalService } from './../services/global.service';
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
   CanActivateChild,
+  Router,
   RouterStateSnapshot,
-  UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -12,11 +13,12 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class DiganaoGuard implements CanActivate, CanActivateChild {
+  constructor(private globalService: GlobalService, private router: Router) {}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    console.log('Estou aqui');
+    if (!this.globalService.getLogado()) return false;
     return true;
   }
   canActivateChild(

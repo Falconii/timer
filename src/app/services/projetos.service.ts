@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProjetoModel } from '../Models/projeto-model';
 import { environment } from 'src/environments/environment';
+import { AgeHoras } from '../Models/age-horas';
+import { ParametroAgeHoras01 } from '../parametros/parametro-age-horas-01';
 
 @Injectable({
   providedIn: 'root',
@@ -39,5 +41,9 @@ export class ProjetosService {
     return this.http.delete<ProjetoModel>(
       `${this.apiURL}projeto/${id_empresa}/${id}`
     );
+  }
+
+  getParametroAgeHorasAgeHoras01(par: ParametroAgeHoras01) {
+    return this.http.post<any[]>(`${this.apiURL}agehoras/`, par);
   }
 }

@@ -1,3 +1,4 @@
+import { GlobalService } from 'src/app/services/global.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -38,6 +39,7 @@ import { MotivoApoService } from 'src/app/services/motivo-apo.service';
 import { ParametroAgendaPlanejamento01 } from 'src/app/parametros/parametro-agenda-planejamento01';
 import { ParametroAponExecucao01 } from 'src/app/parametros/parametro-apon-execucao01';
 import { ParametroMotivoApo01 } from 'src/app/parametros/parametro-motivo-apo01';
+import { RetornoPesquisa } from 'src/app/shared/retorno-pesquisa';
 
 @Component({
   selector: 'app-crud-execucao-lancamento',
@@ -71,6 +73,8 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
   parametro: FormGroup;
   intervalos: Intervalo[] = [];
   readOnly: boolean = true;
+  showAtividades: boolean = false;
+  retornoAtividades: RetornoPesquisa = new RetornoPesquisa(0, 0, new Date());
 
   constructor(
     formBuilder: FormBuilder,
@@ -79,6 +83,7 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
     private aponExecucaoService: AponExecucaoService,
     private atividadesService: AtividadesService,
     private motivoApoService: MotivoApoService,
+    private globalService: GlobalService,
     private router: Router,
     private _snackBar: MatSnackBar
   ) {
@@ -117,22 +122,27 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
   }
 
   getUsuario() {
-    this.inscricaoUsuario = this.usuariosService.getUsuario(1, 7).subscribe(
-      (data: UsuarioModel) => {
-        this.usuario = data;
-        this.parametro.patchValue({ usuario: this.usuario.razao });
-        this.getAtividades();
-        this.getMotivos();
-      },
-      (error: any) => {
-        this.usuario = new UsuarioModel();
-        console.log(error);
-        this.openSnackBar_Err(
-          `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
-          'OK'
-        );
-      }
-    );
+    this.inscricaoUsuario = this.usuariosService
+      .getUsuario(
+        this.globalService.getIdEmpresa(),
+        this.globalService.getUsuario().id
+      )
+      .subscribe(
+        (data: UsuarioModel) => {
+          this.usuario = data;
+          this.parametro.patchValue({ usuario: this.usuario.razao });
+          this.getAtividades();
+          this.getMotivos();
+        },
+        (error: any) => {
+          this.usuario = new UsuarioModel();
+          console.log(error);
+          this.openSnackBar_Err(
+            `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            'OK'
+          );
+        }
+      );
   }
 
   getApontamentosPlanejamento() {
@@ -412,6 +422,7 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
     this.apontamento.encerramento = this.formulario.value.encerra ? 'S' : 'N';
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.apontamento.user_insert = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.aponExecucaoService
           .ApoExecucaoInsert(this.apontamento)
           .subscribe(
@@ -429,6 +440,7 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.apontamento.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.aponExecucaoService
           .ApoExecucaoUpdate(this.apontamento)
           .subscribe(
@@ -523,5 +535,25 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
     retorno = `Projeto: ${lanca.id_projeto} Descricao: ${lanca.proj_descricao} Resp.: ${lanca.resp_razao}`;
 
     return retorno;
+  }
+
+  onShowAtividades() {
+    this.showAtividades = !this.showAtividades;
+  }
+
+  onCancelarAtividades() {
+    console.log(
+      'Cancelada consulta',
+      this.retornoAtividades?.getId_Atividade()
+    );
+    this.onShowAtividades();
+  }
+
+  onOkAtividades() {
+    console.log(
+      'Confirmada Consulta',
+      this.retornoAtividades?.getId_Atividade()
+    );
+    this.onShowAtividades();
   }
 }

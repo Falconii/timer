@@ -1,3 +1,4 @@
+import { GlobalService } from './../../../services/global.service';
 import {
   DataDDMMYYYY,
   DataYYYYMMDD,
@@ -33,6 +34,7 @@ export class CrudEmpresaComponent implements OnInit {
   opcoesCampo = ['Código', 'Razão'];
 
   constructor(
+    private globalService: GlobalService,
     private formBuilder: FormBuilder,
     private empresaService: EmpresasService,
     private router: Router,

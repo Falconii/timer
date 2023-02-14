@@ -1,3 +1,4 @@
+import { GlobalService } from './../../../services/global.service';
 import { EmpresaModel } from './../../../Models/empresa-model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -46,6 +47,7 @@ export class EmpresaViewComponent implements OnInit {
     private formBuilder: FormBuilder,
     private empresasServices: EmpresasService,
     private estadosSrv: DropdownService,
+    private globalService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar
@@ -220,6 +222,7 @@ export class EmpresaViewComponent implements OnInit {
     this.empresa.obs = this.formulario.value.obs;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.empresa.user_insert = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.empresasServices
           .EmpresaInsert(this.empresa)
           .subscribe(
@@ -235,6 +238,7 @@ export class EmpresaViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.empresa.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.empresasServices
           .EmpresaUpdate(this.empresa)
           .subscribe(

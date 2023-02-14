@@ -2,13 +2,15 @@
     <mat-toolbar color="primary">
         <button routerLink="" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
           <mat-icon>menu</mat-icon>
-      </button>
+        </button>
         <span>Simionato Auditores</span>
+        <span *ngIf="showMenu">
         <button mat-button [matMenuTriggerFor]="cadastros">Cadastros</button>
-        <button mat-button [matMenuTriggerFor]="projetos">Projetos</button>
-        <button mat-button [matMenuTriggerFor]="planejamento">Planejamento</button>
-        <button mat-button [matMenuTriggerFor]="execucao">Execução</button>
+        <button mat-button [matMenuTriggerFor]="projetos" *ngIf="okProjetos()">Projetos</button>
+        <button mat-button [matMenuTriggerFor]="planejamento" *ngIf="okPlanejamento()">Planejamento</button>
+        <button mat-button [matMenuTriggerFor]="execucao" *ngIf="okExecucao()">Execução</button>
         <button mat-button [matMenuTriggerFor]="sobre">Sobre</button>
+        </span>
         <span>
         <!-- #docregion sub-menu -->
         <mat-menu #cadastros="matMenu">
@@ -38,7 +40,8 @@
         </mat-menu>
       </span>
         <span class="example-spacer"></span>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="LOGIN" matTooltipPosition="above">
+        <label>{{getUsuario()}}</label>
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="LOGIN" matTooltipPosition="above" (click)="onLogin()">
       <mat-icon>person</mat-icon>
   </button>
     </mat-toolbar>

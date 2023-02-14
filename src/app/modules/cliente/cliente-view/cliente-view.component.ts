@@ -1,3 +1,4 @@
+import { GlobalService } from './../../../services/global.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -54,7 +55,8 @@ export class ClienteViewComponent implements OnInit {
     private estadosSrv: DropdownService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private globaService: GlobalService
   ) {
     this.formulario = formBuilder.group({
       id: [{ value: '', disabled: true }],
@@ -65,15 +67,15 @@ export class ClienteViewComponent implements OnInit {
       inscri: [{ value: '' }, [ValidatorStringLen(0, 20)]],
       gru_econo: [{ value: '' }],
       gru_econo_: [{ value: '' }],
-      ruaf: [{ value: '' }, [ValidatorStringLen(3, 80, true)]],
-      nrof: [{ value: '' }, [ValidatorStringLen(1, 10, true)]],
+      ruaf: [{ value: '' }, [ValidatorStringLen(3, 80, false)]],
+      nrof: [{ value: '' }, [ValidatorStringLen(1, 10, false)]],
       complementof: [{ value: '' }, [ValidatorStringLen(0, 30)]],
-      bairrof: [{ value: '' }, [ValidatorStringLen(3, 40, true)]],
-      cidadef: [{ value: '' }, [ValidatorStringLen(3, 40, true)]],
-      uff: [{ value: '' }, [ValidatorStringLen(2, 2, true)]],
+      bairrof: [{ value: '' }, [ValidatorStringLen(3, 40, false)]],
+      cidadef: [{ value: '' }, [ValidatorStringLen(3, 40, false)]],
+      uff: [{ value: '' }, [ValidatorStringLen(2, 2, false)]],
       uff_: [{ value: '' }],
-      cepf: [{ value: '' }, [ValidatorCep(true)]],
-      tel1: [{ value: '' }, [ValidatorStringLen(0, 23, true)]],
+      cepf: [{ value: '' }, [ValidatorCep(false)]],
+      tel1: [{ value: '' }, [ValidatorStringLen(0, 23, false)]],
       tel2: [{ value: '' }, [ValidatorStringLen(0, 23)]],
       emailf: [{ value: '' }, [Validators.email]],
       obs: [{ value: '' }, [ValidatorStringLen(0, 200)]],
@@ -215,6 +217,7 @@ export class ClienteViewComponent implements OnInit {
   }
 
   setValue() {
+    console.log('gru_descricao', this.cliente.gru_descricao);
     this.formulario.setValue({
       id: this.cliente.id,
       razao: this.cliente.razao,
@@ -226,8 +229,8 @@ export class ClienteViewComponent implements OnInit {
       gru_econo_:
         this.idAcao == CadastroAcoes.Consulta ||
         this.idAcao == CadastroAcoes.Exclusao
-          ? this.cliente.grupo
-          : '',
+          ? this.cliente.gru_descricao
+          : 'aaaaa',
       ruaf: this.cliente.ruaf,
       nrof: this.cliente.nrof,
       complementof: this.cliente.complementof,
@@ -300,9 +303,10 @@ export class ClienteViewComponent implements OnInit {
     this.cliente.emailf = this.formulario.value.emailf;
     this.cliente.obs = this.formulario.value.obs;
     this.cliente.gru_econo = this.formulario.value.gru_econo;
-    this.cliente.grupo = this.formulario.value.grupo;
+    this.cliente.gru_descricao = this.formulario.value.gru_econo_;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.cliente.user_insert = this.globaService.getUsuario().id;
         this.inscricaoAcao = this.clientesServices
           .clienteInsert(this.cliente)
           .subscribe(
@@ -318,6 +322,7 @@ export class ClienteViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.cliente.user_update = this.globaService.getUsuario().id;
         this.inscricaoAcao = this.clientesServices
           .clienteUpdate(this.cliente)
           .subscribe(

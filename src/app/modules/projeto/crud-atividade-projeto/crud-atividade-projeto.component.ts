@@ -275,7 +275,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
     par.id_empresa = this.id_empresa;
 
-    par.orderby = 'Código';
+    par.orderby = 'Razão';
 
     this.inscricaoGetFiltro = this.usuariosService
       .getusuarios_01(par)
@@ -706,6 +706,7 @@ export class DialogOverviewExampleDialog {
   }
 
   onChangeExecutor(evento: any) {
+    alert(evento.value);
     this.data.id_exec = evento.value;
   }
 

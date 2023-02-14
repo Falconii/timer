@@ -28,6 +28,7 @@ import { AtividadeModel } from 'src/app/Models/atividade-model';
 import { Movimento } from 'src/app/Models/movimento';
 import { AponPlanejamentoService } from 'src/app/services/apon-planejamento.service';
 import { Intervalo } from 'src/app/shared/intervalo';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-crud-planejamento-lancamento',
@@ -64,6 +65,7 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
     private atividadesService: AtividadesService,
     private aponPlanejamentoService: AponPlanejamentoService,
     private route: ActivatedRoute,
+    private globalService: GlobalService,
     private router: Router,
     private _snackBar: MatSnackBar
   ) {
@@ -178,6 +180,7 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
     this.apontamento.obs = this.formulario.value.obs;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.apontamento.user_insert = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.aponPlanejamentoService
           .ApoPlanejamentoInsert(this.apontamento)
           .subscribe(
@@ -194,6 +197,7 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.apontamento.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.aponPlanejamentoService
           .ApoPlanejamentoUpdate(this.apontamento)
           .subscribe(

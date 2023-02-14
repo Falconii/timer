@@ -1,3 +1,4 @@
+import { GlobalService } from './../../../services/global.service';
 import { GrupoUserService } from 'src/app/services/grupo-user.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { UsuarioModel } from 'src/app/Models/usuario-model';
@@ -51,6 +52,7 @@ export class UsuarioViewComponent implements OnInit {
     private formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
     private grupoUserService: GrupoUserService,
+    private globalService: GlobalService,
     private estadosSrv: DropdownService,
     private route: ActivatedRoute,
     private router: Router,
@@ -71,15 +73,15 @@ export class UsuarioViewComponent implements OnInit {
       ],
       grupo: [{ value: '' }],
       grupo_: [{ value: '' }],
-      rua: [{ value: '' }, [ValidatorStringLen(3, 80, true)]],
-      nro: [{ value: '' }, [ValidatorStringLen(1, 10, true)]],
+      rua: [{ value: '' }, [ValidatorStringLen(3, 80, false)]],
+      nro: [{ value: '' }, [ValidatorStringLen(1, 10, false)]],
       complemento: [{ value: '' }, [ValidatorStringLen(0, 30)]],
-      bairro: [{ value: '' }, [ValidatorStringLen(3, 40, true)]],
-      cidade: [{ value: '' }, [ValidatorStringLen(3, 40, true)]],
-      uf: [{ value: '' }, [ValidatorStringLen(2, 2, true)]],
+      bairro: [{ value: '' }, [ValidatorStringLen(3, 40, false)]],
+      cidade: [{ value: '' }, [ValidatorStringLen(3, 40, false)]],
+      uf: [{ value: '' }, [ValidatorStringLen(2, 2, false)]],
       uf_: [{ value: '' }],
-      cep: [{ value: '' }, [ValidatorCep(true)]],
-      tel1: [{ value: '' }, [ValidatorStringLen(0, 23, true)]],
+      cep: [{ value: '' }, [ValidatorCep(false)]],
+      tel1: [{ value: '' }, [ValidatorStringLen(0, 23, false)]],
       tel2: [{ value: '' }, [ValidatorStringLen(0, 23)]],
       email: [{ value: '' }, [Validators.required, Validators.email]],
     });
@@ -129,7 +131,6 @@ export class UsuarioViewComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('this.formulario', this.formulario);
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
@@ -221,7 +222,6 @@ export class UsuarioViewComponent implements OnInit {
   }
 
   setValue() {
-    console.log('usuario', this.usuario);
     this.formulario.setValue({
       id: this.usuario.id,
       razao: this.usuario.razao,
@@ -314,7 +314,7 @@ export class UsuarioViewComponent implements OnInit {
         this.inscricaoAcao = this.usuariosService
           .UsuarioInsert(this.usuario)
           .subscribe(
-            async (data: UsuarioModel) => {
+            async (data: any) => {
               this.onCancel();
             },
             (error: any) => {
@@ -330,10 +330,14 @@ export class UsuarioViewComponent implements OnInit {
           .UsuarioUpdate(this.usuario)
           .subscribe(
             async (data: any) => {
-              this.onCancel();
+              if (this.usuario.id == this.globalService.getUsuario().id) {
+                this.globalService.setUsuario(new UsuarioModel());
+                this.globalService.setLogado(false);
+              } else {
+                this.onCancel();
+              }
             },
             (error: any) => {
-              console.log('Error', error.error);
               this.openSnackBar_Err(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -346,7 +350,8 @@ export class UsuarioViewComponent implements OnInit {
           .UsuarioUpdate(this.usuario)
           .subscribe(
             async (data: any) => {
-              this.onCancel();
+              this.globalService.setUsuario(new UsuarioModel());
+              this.globalService.setLogado(false);
             },
             (error: any) => {
               console.log('Error', error.error);

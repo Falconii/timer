@@ -1,3 +1,4 @@
+import { GlobalService } from 'src/app/services/global.service';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { ParametroCliente01 } from './../../../parametros/parametro-cliente-01';
 import { ParametroUsuario01 } from './../../../parametros/parametro-usuario-01';
@@ -52,6 +53,7 @@ export class ProjetoViewComponent implements OnInit {
     private projetosService: ProjetosService,
     private usuariosService: UsuariosService,
     private clientesService: ClientesService,
+    private globalService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar
@@ -232,6 +234,7 @@ export class ProjetoViewComponent implements OnInit {
     this.projeto.user_update = 0;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.projeto.user_insert = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.projetosService
           .ProjetoInsert(this.projeto)
           .subscribe(
@@ -247,6 +250,7 @@ export class ProjetoViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.projeto.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.projetosService
           .ProjetoUpdate(this.projeto)
           .subscribe(
@@ -305,7 +309,7 @@ export class ProjetoViewComponent implements OnInit {
 
     par.id_empresa = 1;
 
-    par.grupo = 900;
+    par.grupo = this.usuariosService.getGruposDiretoria();
 
     par.orderby = 'Grupo';
 

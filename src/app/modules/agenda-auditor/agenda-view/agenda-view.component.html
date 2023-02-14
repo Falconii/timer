@@ -12,9 +12,13 @@
 <div>
     <form [formGroup]="parametro" autocomplete="off">
         <div class="col-med-5">
-            <mat-form-field appearance="outline" class="col-max">
-                <mat-label>Usuário:</mat-label>
-                <input matInput formControlName="usuario" readonly="true">
+            <mat-form-field field appearance="outline" class="col-max">
+                <mat-label>Auditores</mat-label>
+                <mat-select formControlName="auditores">
+                    <mat-option *ngFor="let auditor of auditores" [value]="auditor.id">
+                        {{auditor.razao}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
             <mat-form-field field appearance="outline" class="col-max">
                 <mat-label>Ano</mat-label>
@@ -32,11 +36,6 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <div class="col-max">
-                <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Atualizar" matTooltipPosition="above" (click)="onSubmit()" class="button">
-              <mat-icon>rotate_right</mat-icon>
-            </button>
-            </div>
         </div>
     </form>
 </div>

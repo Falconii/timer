@@ -20,7 +20,7 @@ export class ClientesModel {
   public emailf: string = '';
   public obs: string = '';
   public gru_econo: number = 0;
-  public grupo: string = '';
+  public gru_descricao: string = '';
   public user_insert: number = 0;
   public user_update: number = 0;
 }

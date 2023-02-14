@@ -1,9 +1,12 @@
+import { GlobalService } from './../../../services/global.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/Models/usuario-model';
+import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
+import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario-01';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { CalendarLine } from 'src/app/shared/calendar-line';
 import { CelulaDia } from 'src/app/shared/celula-dia';
@@ -16,11 +19,16 @@ import { ListaMeses } from 'src/app/shared/lista-meses';
 })
 export class AgendaViewComponent implements OnInit {
   parametro: FormGroup;
-  inscricaoUsuario!: Subscription;
+
+  inscricaoCoordenador!: Subscription;
   inscricaoAuditor!: Subscription;
-  usuario: UsuarioModel = new UsuarioModel();
-  auditor: UsuarioModel = new UsuarioModel();
-  auditores: UsuarioModel[] = [];
+
+  coordenador: UsuarioQuery01Model = new UsuarioQuery01Model();
+  coordenadores: UsuarioQuery01Model[] = [];
+
+  auditor: UsuarioQuery01Model = new UsuarioQuery01Model();
+  auditores: UsuarioQuery01Model[] = [];
+
   calendario: CelulaDia[] = [];
   linhas: CalendarLine[] = [];
   anos: number[] = [2022, 2023, 2024];
@@ -32,16 +40,17 @@ export class AgendaViewComponent implements OnInit {
   constructor(
     formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
+    private globalService: GlobalService,
     private router: Router,
     private _snackBar: MatSnackBar
   ) {
     this.parametro = formBuilder.group({
-      usuario: [{ value: '' }],
+      coordenadores: [{ value: '' }],
       auditores: [{ value: '' }],
       ano: [{ value: '' }],
       mes: [{ value: '' }],
     });
-    this.getUsuario();
+    this.getCoordenadores();
     this.getAuditores();
     this.setParametro();
   }
@@ -49,47 +58,78 @@ export class AgendaViewComponent implements OnInit {
   ngOnInit(): void {}
 
   ngOnDestroy(): void {
-    this.inscricaoUsuario?.unsubscribe();
     this.inscricaoAuditor?.unsubscribe();
+    this.inscricaoCoordenador?.unsubscribe();
   }
 
   onSubmit() {
     this.loadCalendario();
   }
+
   setParametro() {
     this.parametro.setValue({
-      usuario: this.usuario.razao,
+      coordenadores: this.coordenador.id,
       auditores: this.auditor.id,
       ano: this.hoje.getFullYear(),
       mes: this.hoje.getMonth(),
     });
   }
 
-  getUsuario() {
-    this.inscricaoUsuario = this.usuariosService.getUsuario(1, 6).subscribe(
-      (data: UsuarioModel) => {
-        this.usuario = data;
-        this.parametro.patchValue({ usuario: this.usuario.razao });
-      },
-      (error: any) => {
-        this.usuario = new UsuarioModel();
-        this.openSnackBar_Err(
-          `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
-          'OK'
-        );
-      }
-    );
+  getCoordenadores() {
+    const par = new ParametroUsuario01();
+
+    par.id_empresa = this.globalService.id_empresa;
+
+    par.grupo = this.usuariosService.getGruposCoordenador();
+
+    this.inscricaoCoordenador = this.usuariosService
+      .getusuarios_01(par)
+      .subscribe(
+        (data: UsuarioQuery01Model[]) => {
+          console.log('Coordenadores: ', data);
+          this.coordenador = data[0];
+          data.forEach((coordenador) => {
+            this.coordenadores.push(coordenador);
+          });
+          if (
+            this.usuariosService.isCoordenador(
+              this.globalService.getUsuario().grupo
+            )
+          ) {
+            this.parametro.patchValue({
+              coordenadores: this.globalService.getUsuario().id,
+            });
+          } else {
+            this.parametro.patchValue({ coordenadores: this.coordenador.id });
+          }
+        },
+        (error: any) => {
+          this.coordenador = new UsuarioQuery01Model();
+          this.openSnackBar_Err(
+            `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            'OK'
+          );
+        }
+      );
   }
 
   getAuditores() {
-    this.inscricaoAuditor = this.usuariosService.getUsuario(1, 5).subscribe(
-      (data: UsuarioModel) => {
-        this.auditor = data;
-        this.auditores.push(data);
+    const par = new ParametroUsuario01();
+
+    par.id_empresa = this.globalService.id_empresa;
+
+    par.grupo = this.usuariosService.getGruposAuditor();
+
+    this.inscricaoAuditor = this.usuariosService.getusuarios_01(par).subscribe(
+      (data: UsuarioQuery01Model[]) => {
+        this.auditor = data[0];
+        data.forEach((auditor) => {
+          this.auditores.push(auditor);
+        });
         this.parametro.patchValue({ auditores: this.auditor.id });
       },
       (error: any) => {
-        this.usuario = new UsuarioModel();
+        this.auditor = new UsuarioQuery01Model();
         this.openSnackBar_Err(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
@@ -97,7 +137,6 @@ export class AgendaViewComponent implements OnInit {
       }
     );
   }
-
   onRetorno() {
     this.router.navigate(['/']);
   }

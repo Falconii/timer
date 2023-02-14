@@ -1,3 +1,4 @@
+import { GlobalService } from './../../../services/global.service';
 import { GrupoUserService } from 'src/app/services/grupo-user.service';
 import { GruUserModel } from './../../../Models/gru-user-model';
 import { Component, OnInit } from '@angular/core';
@@ -37,6 +38,7 @@ export class GruUserViewComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private grupoEconomicoService: GrupoUserService,
+    private globalService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar
@@ -47,7 +49,6 @@ export class GruUserViewComponent implements OnInit {
     });
     this.grupo = new GruUserModel();
     this.inscricaoRota = route.params.subscribe((params: any) => {
-      console.log('Olha o parametro:', params);
       this.grupo.id_empresa = params.id_empresa;
       this.grupo.id = params.id;
       this.idAcao = params.acao;
@@ -148,6 +149,7 @@ export class GruUserViewComponent implements OnInit {
     this.grupo.grupo = this.formulario.value.grupo;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.grupo.user_insert = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.grupoEconomicoService
           .GrupoUserInsert(this.grupo)
           .subscribe(
@@ -163,6 +165,7 @@ export class GruUserViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.grupo.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.grupoEconomicoService
           .GrupoUserUpdate(this.grupo)
           .subscribe(

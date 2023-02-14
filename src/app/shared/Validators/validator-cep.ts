@@ -4,6 +4,14 @@ export function ValidatorCep(required: boolean = false): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
 
+    if (!required && value == null) {
+      return null;
+    }
+
+    if (required && value == null) {
+      return { ValidatorCep: true, message: 'Dado Obrigatório' };
+    }
+
     if (required && value.length == 0) {
       return { ValidatorCep: true, message: 'Dado Obrigatório' };
     }

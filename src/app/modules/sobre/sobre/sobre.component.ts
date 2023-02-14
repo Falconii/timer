@@ -41,8 +41,8 @@ export class SobreComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.incricaoGetUsuario!.unsubscribe();
-    this.incricaoSendEmail!.unsubscribe();
+    this.incricaoGetUsuario?.unsubscribe();
+    this.incricaoSendEmail?.unsubscribe();
   }
 
   onRetorno() {

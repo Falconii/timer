@@ -1,7 +1,8 @@
 <!--
   https://assisrafael.github.io/angular-input-masks/
 -->
-<div *ngIf="(idAcao == 99)">
+<app-show-atividades-data (Cancelar)="onCancelarAtividades()" (Ok)="onOkAtividades()" [retorno]="retornoAtividades" *ngIf="showAtividades"></app-show-atividades-data>
+<div *ngIf="(idAcao == 99) && !showAtividades">
     <div class="div-barra">
         <mat-toolbar>
             <span class="example-spacer">{{getTitulo()}}</span>
@@ -34,10 +35,8 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <div class="col-max">
-                    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Atualizar" matTooltipPosition="above" (click)="onRefresh()" class="button">
-                    <mat-icon>rotate_right</mat-icon>
-                  </button>
+                <div class="button-container-right">
+                    <button mat-raised-button color="primary" (click)="onShowAtividades()">Ver Atividades</button>
                 </div>
             </div>
         </form>
@@ -93,7 +92,7 @@
         <button class="buttons" mat-raised-button color="accent" (click)="onCancel()">{{getLabelCancel()}}</button>
     </div>
 </form>
-<div *ngIf="idAcao == 99">
+<div *ngIf="idAcao == 99 && !showAtividades">
     <table>
         <tr class="coluna-cabec">
             <th>PLANEJADO</th>
