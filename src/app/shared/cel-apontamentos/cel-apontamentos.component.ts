@@ -1,3 +1,4 @@
+import { AponExecucaoService } from './../../services/apon-execucao.service';
 import { CelulaDia } from 'src/app/shared/celula-dia';
 import { Component, Input, OnInit } from '@angular/core';
 import { ApoExecucaoModel } from 'src/app/Models/apo-execucao-model';
@@ -14,9 +15,11 @@ export class CelApontamentosComponent implements OnInit {
   apontamentos: ApoExecucaoModel01[] = [];
   agendamentos: ApoPlanejamentoQuery_01Model[] = [];
 
-  constructor() {}
+  constructor(aponExecucaoService: AponExecucaoService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getPlanejados();
+  }
 
   showDadosProjetoAgendamento(lanca: ApoPlanejamentoQuery_01Model): string {
     let retorno = '';
@@ -32,5 +35,9 @@ export class CelApontamentosComponent implements OnInit {
     retorno = `Projeto: ${lanca.id_projeto} Descricao: ${lanca.proj_descricao} Resp.: ${lanca.resp_razao}`;
 
     return retorno;
+  }
+
+  getPlanejadas() {
+    const par = new Para();
   }
 }
