@@ -6,7 +6,6 @@ import { UsuariosService } from 'src/app/services/usuarios.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { UsuarioModel } from 'src/app/Models/usuario-model';
 import { CalendarLine } from 'src/app/shared/calendar-line';
 import { CelulaDia } from 'src/app/shared/celula-dia';
 import { ListaMeses } from 'src/app/shared/lista-meses';
@@ -28,13 +27,13 @@ export class AgendaViewComponent implements OnInit {
   inscricaoAuditor!: Subscription;
   inscricaoAgenda!: Subscription;
 
-  diretor: UsuarioQuery01Model = new UsuarioQuery01Model();
+  diretor: number = 0;
   diretores: UsuarioQuery01Model[] = [];
 
-  coordenador: UsuarioQuery01Model = new UsuarioQuery01Model();
+  coordenador: number = 0;
   coordenadores: UsuarioQuery01Model[] = [];
 
-  auditor: UsuarioQuery01Model = new UsuarioQuery01Model();
+  auditor: number = 0;
   auditores: UsuarioQuery01Model[] = [];
 
   agendas: AgeHoras[] = [];
@@ -78,15 +77,19 @@ export class AgendaViewComponent implements OnInit {
   }
 
   onSubmit() {
-    this.coordenador.id = this.parametro.value.coordenadores;
-    this.auditor.id = this.parametro.value.auditores;
+    this.coordenador = this.parametro.value.coordenadores;
+    this.auditor = this.parametro.value.auditores;
+    console.log('Aditor:', this.auditor, 'Coordenador:', this.coordenador);
+    this.celulaDia = new CelulaDia();
+    this.showLancamento = true;
+    this.globalService.setRefreshLançamentos(this.celulaDia);
     this.getAgenda();
   }
   setParametro() {
     this.parametro.setValue({
-      diretores: this.diretor.id,
-      coordenadores: this.coordenador.id,
-      auditores: this.auditor.id,
+      diretores: this.diretor,
+      coordenadores: this.coordenador,
+      auditores: this.auditor,
       ano: this.hoje.getFullYear(),
       mes: this.hoje.getMonth(),
     });
@@ -101,7 +104,11 @@ export class AgendaViewComponent implements OnInit {
 
     this.inscricaoDiretor = this.usuariosService.getusuarios_01(par).subscribe(
       (data: UsuarioQuery01Model[]) => {
-        this.diretor = data[0];
+        this.diretor = 0;
+        const dir = new UsuarioQuery01Model();
+        dir.id = 0;
+        dir.razao = 'TODOAS';
+        this.diretores.push(dir);
         data.forEach((diretor) => {
           this.diretores.push(diretor);
         });
@@ -114,11 +121,11 @@ export class AgendaViewComponent implements OnInit {
             diretores: this.globalService.getUsuario().id,
           });
         } else {
-          this.parametro.patchValue({ diretores: this.diretor.id });
+          this.parametro.patchValue({ diretores: this.diretor });
         }
       },
       (error: any) => {
-        this.diretor = new UsuarioQuery01Model();
+        this.diretor = 0;
         this.openSnackBar_Err(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
@@ -138,16 +145,18 @@ export class AgendaViewComponent implements OnInit {
       .getusuarios_01(par)
       .subscribe(
         (data: UsuarioQuery01Model[]) => {
-          this.coordenador = new UsuarioQuery01Model();
-          this.coordenador.razao = 'TODOS';
-          this.coordenadores.push(this.coordenador);
+          this.coordenador = 0;
+          const coord = new UsuarioQuery01Model();
+          coord.id = 0;
+          coord.razao = 'TODOS';
+          this.coordenadores.push(coord);
           data.forEach((coordenador) => {
             this.coordenadores.push(coordenador);
           });
-          this.parametro.patchValue({ coordenadores: this.coordenador.id });
+          this.parametro.patchValue({ coordenadores: this.coordenador });
         },
         (error: any) => {
-          this.coordenador = new UsuarioQuery01Model();
+          this.coordenador = 0;
           this.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
@@ -165,16 +174,18 @@ export class AgendaViewComponent implements OnInit {
 
     this.inscricaoAuditor = this.usuariosService.getusuarios_01(par).subscribe(
       (data: UsuarioQuery01Model[]) => {
-        this.auditor = new UsuarioQuery01Model();
-        this.auditor.razao = 'TODOS';
-        this.auditores.push(this.auditor);
+        this.auditor = 0;
+        const audi = new UsuarioQuery01Model();
+        audi.id = 0;
+        audi.razao = 'TODOS';
+        this.auditores.push(audi);
         data.forEach((auditor) => {
           this.auditores.push(auditor);
         });
-        this.parametro.patchValue({ auditores: this.auditor.id });
+        this.parametro.patchValue({ auditores: this.auditor });
       },
       (error: any) => {
-        this.auditor = new UsuarioQuery01Model();
+        this.auditor = 0;
         this.openSnackBar_Err(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
@@ -188,13 +199,13 @@ export class AgendaViewComponent implements OnInit {
 
     par.id_empresa = this.globalService.id_empresa;
 
-    par.id_exec = this.auditor.id;
+    par.id_exec = this.auditor;
 
-    par.id_resp = this.coordenador.id;
+    par.id_resp = this.coordenador;
 
     par.ano = this.parametro.value.ano;
 
-    par.mes = this.adicionaZero(this.parametro.value.mes);
+    par.mes = this.adicionaZero(this.parametro.value.mes + 1);
 
     console.log('Mes ==>', par.mes);
 
@@ -252,6 +263,9 @@ export class AgendaViewComponent implements OnInit {
       dia.horasplanejadas = 60;
       dia.horasexecutadas = 70;
       dia.descricao = 'Antes';
+      dia.id_resp = this.coordenador;
+      dia.id_exec = this.auditor;
+      dia.id_projeto = 0;
       this.calendario.push(dia);
       inicio.setDate(inicio.getDate() + 1);
     }
@@ -272,6 +286,9 @@ export class AgendaViewComponent implements OnInit {
         dia.horasexecutadas = agenda.horas_exec;
       }
       dia.descricao = 'Dias do mês';
+      dia.id_resp = this.coordenador;
+      dia.id_exec = this.auditor;
+      dia.id_projeto = 0;
       this.calendario.push(dia);
       inicio.setDate(inicio.getDate() + 1);
     }
@@ -301,6 +318,9 @@ export class AgendaViewComponent implements OnInit {
         dia.horasplanejadas = 90;
         dia.horasexecutadas = 70;
         dia.descricao = 'Depois';
+        dia.id_resp = this.coordenador;
+        dia.id_exec = this.auditor;
+        dia.id_projeto = 0;
         this.calendario.push(dia);
         inicio.setDate(inicio.getDate() + 1);
         car.line.push(dia);
@@ -308,16 +328,19 @@ export class AgendaViewComponent implements OnInit {
       }
       this.linhas.push(car);
     }
+
+    console.log('Linha:', this.linhas);
   }
 
-  onDay(celula: CelulaDia) {
-    if (celula.tipo == 3 || celula.semana == 0) {
+  onDay(evento: CelulaDia) {
+    console.log('onDay', evento);
+    this.celulaDia = evento;
+    this.globalService.setRefreshLançamentos(this.celulaDia);
+    if (this.celulaDia.tipo == 3 || this.celulaDia.semana == 0) {
       this.showLancamento = false;
     } else {
       this.showLancamento = true;
     }
-
-    this.celulaDia = celula;
   }
 
   adicionaZero(numero: any): string {

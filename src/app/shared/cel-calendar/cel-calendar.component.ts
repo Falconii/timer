@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class CelCalendarComponent implements OnInit {
   @Input('celula') Celula!: CelulaDia;
-  @Output('onClickDay') changeDay = new EventEmitter();
+  @Output('onClickDay') changeDay = new EventEmitter<CelulaDia>();
 
   constructor() {}
 
@@ -25,10 +25,10 @@ export class CelCalendarComponent implements OnInit {
   }
 
   onClickDia() {
-    this.changeDay.emit('');
+    this.changeDay.emit(this.Celula);
   }
 
-  onClickProjeto() {
+  onClickPlanejado() {
     if (this.Celula.tipo == 3 || this.Celula.semana == 0) {
       return;
     }

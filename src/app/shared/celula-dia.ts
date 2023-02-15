@@ -6,7 +6,9 @@ export class CelulaDia {
   public horasplanejadas: number = 0;
   public horasexecutadas: number = 0;
   public descricao: string = '';
-
+  public id_projeto: number = 0;
+  public id_exec: number = 0;
+  public id_resp: number = 0;
   /*
      0 -> normal
      1 -> feriado ou domingo

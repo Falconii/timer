@@ -22,6 +22,7 @@ export class ApoPlanejamentoQuery_01Model {
   public projeto_descricao: string = '';
   public diretor_razao: string = '';
   public resp_razao: string = '';
+  public exec_razao: string = '';
   public cli_razao: string = '';
   public estru_descricao: string = '';
 }

@@ -53,28 +53,28 @@
 <div *ngIf="calendario.length > 0">
     <div class="col-med-7" *ngFor="let linha of linhas">
         <div class="col-max dia-semana cabec-car-dom">
-            <app-cel-calendar [celula]="linha.line[0]" (onClickDay)="onDay(linha.line[0])"></app-cel-calendar>
+            <app-cel-calendar [celula]="linha.line[0]" (onClickDay)="onDay($event)"></app-cel-calendar>
         </div>
         <div class="col-max dia-semana">
-            <app-cel-calendar [celula]="linha.line[1]" (onClickDay)="onDay(linha.line[1])"></app-cel-calendar>
+            <app-cel-calendar [celula]="linha.line[1]" (onClickDay)="onDay($event)"></app-cel-calendar>
         </div>
         <div class="col-max dia-semana">
-            <app-cel-calendar [celula]="linha.line[2]" (onClickDay)="onDay(linha.line[2])"></app-cel-calendar>
+            <app-cel-calendar [celula]="linha.line[2]" (onClickDay)="onDay($event)"></app-cel-calendar>
         </div>
         <div class="col-max dia-semana">
-            <app-cel-calendar [celula]="linha.line[3]" (onClickDay)="onDay(linha.line[3])"></app-cel-calendar>
+            <app-cel-calendar [celula]="linha.line[3]" (onClickDay)="onDay($event)"></app-cel-calendar>
         </div>
         <div class="col-max dia-semana">
-            <app-cel-calendar [celula]="linha.line[4]" (onClickDay)="onDay(linha.line[4])"></app-cel-calendar>
+            <app-cel-calendar [celula]="linha.line[4]" (onClickDay)="onDay($event)"></app-cel-calendar>
         </div>
         <div class="col-max dia-semana">
-            <app-cel-calendar [celula]="linha.line[5]" (onClickDay)="onDay(linha.line[5])"></app-cel-calendar>
+            <app-cel-calendar [celula]="linha.line[5]" (onClickDay)="onDay($event)"></app-cel-calendar>
         </div>
         <div class="col-max dia-semana">
-            <app-cel-calendar [celula]="linha.line[6]" (onClickDay)="onDay(linha.line[6])"></app-cel-calendar>
+            <app-cel-calendar [celula]="linha.line[6]" (onClickDay)="onDay($event)"></app-cel-calendar>
         </div>
     </div>
 </div>
 <div>
-    <app-cel-apontamentos [Celula]="celulaDia" *ngIf="showLancamento"></app-cel-apontamentos>
+    <app-cel-apontamentos *ngIf="showLancamento"></app-cel-apontamentos>
 </div>

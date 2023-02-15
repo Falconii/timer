@@ -1,3 +1,4 @@
+import { CelulaDia } from './../shared/celula-dia';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { Injectable, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
@@ -12,6 +13,7 @@ export class GlobalService {
   id_empresa: number = 1;
 
   shomeMenuEmitter = new EventEmitter<boolean>();
+  refreshLançamentos = new EventEmitter<CelulaDia>();
 
   constructor(private usuarioService: UsuariosService, private router: Router) {
     this.usuario = new UsuarioModel();
@@ -30,6 +32,10 @@ export class GlobalService {
     this.shomeMenuEmitter.emit(value);
     this.logado = value;
     this.router.navigate(['/']);
+  }
+
+  setRefreshLançamentos(value: CelulaDia) {
+    this.refreshLançamentos.emit(value);
   }
 
   getLogado(): boolean {
