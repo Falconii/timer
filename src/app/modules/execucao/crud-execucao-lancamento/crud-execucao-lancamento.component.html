@@ -16,28 +16,27 @@
     </div>
     <div>
         <form [formGroup]="parametro" autocomplete="off">
-            <div class="col-med-4">
+            <div class="col-med-2">
                 <mat-form-field appearance="outline" class="col-max">
                     <mat-label>Usuário:</mat-label>
                     <input matInput formControlName="usuario" readonly="true">
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-max">
                     <mat-label>Data:</mat-label>
-                    <input matInput [matDatepicker]="dataDatePicker" formControlName="data">
+                    <input matInput [matDatepicker]="dataDatePicker" formControlName="data" (dateChange)="onParametrosChange()">
                     <mat-datepicker-toggle matSuffix [for]="dataDatePicker"></mat-datepicker-toggle>
                     <mat-datepicker #dataDatePicker></mat-datepicker>
                 </mat-form-field>
+            </div>
+            <div class="col-med-1">
                 <mat-form-field field appearance="outline" class="col-max">
                     <mat-label>Atividades</mat-label>
-                    <mat-select formControlName="id_atividade" (selectionChange)="onAtividadeChange()">
+                    <mat-select formControlName="id_atividade" (selectionChange)="onParametrosChange()">
                         <mat-option *ngFor="let atividade of atividades" [value]="atividade.id">
                             {{atividade.id_projeto}}-{{atividade.estru_descri}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <div class="button-container-right">
-                    <button mat-raised-button color="primary" (click)="onShowAtividades()">Ver Atividades</button>
-                </div>
             </div>
         </form>
     </div>
@@ -101,21 +100,21 @@
         <tr>
             <td class="coluna-descricao">
                 <div *ngFor="let lanca of agendamentos">
-                    <div *ngIf="true">
-                        <mat-label class="labelTitle">Hora Inicial:</mat-label>
+                    <div class="coluna-descricao cor-blue">
+                        <mat-label class="labelTitle">Horário:</mat-label>
                         <mat-label class="labelData">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}</mat-label>
                         <mat-label class="labelTitle">Hora Apontadas:</mat-label>
                         <mat-label class="labelData">{{lanca.horasapon | horaSexagenal}}</mat-label>
                     </div>
-                    <div *ngIf="true">
+                    <div class="coluna-descricao cor-blue">
                         <mat-label class="labelTitle" [matTooltip]="showDadosProjetoAgendamento(lanca)" matTooltipPosition="above">Projeto:</mat-label>
                         <mat-label class="labelData">{{lanca.id_projeto}}-{{lanca.projeto_descricao}}</mat-label>
                     </div>
-                    <div *ngIf="true">
+                    <div class="coluna-descricao cor-blue">
                         <mat-label class="labelTitle">Atividade:</mat-label>
                         <mat-label class="labelData">{{lanca.estru_descricao}}</mat-label>
                     </div>
-                    <div *ngIf="true">
+                    <div class="coluna-descricao cor-blue">
                         <mat-label class="labelTitle">Obs.::</mat-label>
                         <mat-label class="labelData">{{lanca.obs}}</mat-label>
                     </div>
@@ -127,8 +126,10 @@
             <td class="coluna-descricao">
                 <div *ngFor="let lanca of apontamentos">
                     <div class="coluna-descricao cor-blue">
-                        <mat-label class="labelTitle">Encerrou Atividade ?:</mat-label>
-                        <mat-label class="labelData">{{lanca.encerramento | simNao }}</mat-label>
+                        <mat-label class="labelTitle">Horário:</mat-label>
+                        <mat-label class="labelData">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}</mat-label>
+                        <mat-label class="labelTitle">Hora Apontadas:</mat-label>
+                        <mat-label class="labelData">{{lanca.horasapon | horaSexagenal}}</mat-label>
                         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Alterar Apontamento" matTooltipPosition="above" (click)="outras(getAcoes()['Edicao'],lanca)">
                           <mat-icon>edit</mat-icon>
                        </button>
@@ -137,19 +138,16 @@
                        </button>
                     </div>
                     <div class="coluna-descricao cor-blue">
-                        <mat-label class="labelTitle">Horário:</mat-label>
-                        <mat-label class="labelData">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}</mat-label>
-                        <mat-label class="labelTitle">Hora Apontadas:</mat-label>
-                        <mat-label class="labelData">{{lanca.horasapon | horaSexagenal}}</mat-label>
-                    </div>
-
-                    <div class="coluna-descricao cor-blue">
                         <mat-label class="labelTitle" [matTooltip]="showDadosProjetoApontamento(lanca)" matTooltipPosition="above">Projeto:</mat-label>
                         <mat-label class="labelData">{{lanca.id_projeto}}-{{lanca.proj_descricao}}</mat-label>
                     </div>
                     <div class="coluna-descricao cor-blue">
                         <mat-label class="labelTitle">Atividade:</mat-label>
                         <mat-label class="labelData">{{lanca.estru_descricao}}</mat-label>
+                    </div>
+                    <div class="coluna-descricao cor-blue">
+                        <mat-label class="labelTitle">Encerrou Atividade ?:</mat-label>
+                        <mat-label class="labelData">{{lanca.encerramento | simNao }}</mat-label>
                     </div>
                     <div class="coluna-descricao cor-blue">
                         <mat-label class="labelTitle">Motivo:</mat-label>

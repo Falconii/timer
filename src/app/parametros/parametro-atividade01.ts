@@ -5,6 +5,7 @@ export class ParametroAtividade01 {
   public conta: string = '';
   public versao: string = '';
   public subconta: string = '';
+  public tipo: string = '';
   public nivel: number = 0;
   public id_resp: number = 0;
   public id_exec: number = 0;

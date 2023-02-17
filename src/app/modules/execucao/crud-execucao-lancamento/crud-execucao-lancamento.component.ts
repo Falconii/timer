@@ -187,8 +187,9 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
     para.id_empresa = 1;
     para.id_exec = this.usuario.id;
     para.so_abertas_ex = 'S';
-    para.orderby = 'descricao';
-    this.inscricaoAponExecucao = this.atividadesService
+    para.tipo = 'O';
+    para.orderby = 'projeto';
+    this.inscricaoAtividades = this.atividadesService
       .getAtividades_01(para)
       .subscribe(
         (data: AtividadeQuery_01Model[]) => {
@@ -509,7 +510,7 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
     return MensagensBotoes;
   }
 
-  onAtividadeChange() {
+  onParametrosChange() {
     this.onRefresh();
   }
 

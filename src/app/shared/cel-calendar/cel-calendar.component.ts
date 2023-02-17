@@ -20,7 +20,7 @@ export class CelCalendarComponent implements OnInit {
     } else if (this.Celula.semana == 0) {
       return 'formata-dia-semana_1';
     } else {
-      return 'formata-dia-semana';
+      return 'formata-dia-semana_1';
     }
   }
 
@@ -37,6 +37,18 @@ export class CelCalendarComponent implements OnInit {
   onClickExecutado() {
     if (this.Celula.tipo == 3 || this.Celula.semana == 0) {
       return;
+    }
+  }
+
+  show(): boolean {
+    if (this.Celula.tipo == 1) {
+      if (this.Celula.horasexecutadas + this.Celula.horasplanejadas > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
     }
   }
 }

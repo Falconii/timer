@@ -46,6 +46,8 @@ export class AgendaViewComponent implements OnInit {
   showLancamento: boolean = false;
   celulaDia: CelulaDia = new CelulaDia();
 
+  durationInSeconds = 2;
+
   constructor(
     formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
@@ -79,7 +81,6 @@ export class AgendaViewComponent implements OnInit {
   onSubmit() {
     this.coordenador = this.parametro.value.coordenadores;
     this.auditor = this.parametro.value.auditores;
-    console.log('Aditor:', this.auditor, 'Coordenador:', this.coordenador);
     this.celulaDia = new CelulaDia();
     this.showLancamento = true;
     this.globalService.setRefreshLançamentos(this.celulaDia);
@@ -102,12 +103,14 @@ export class AgendaViewComponent implements OnInit {
 
     par.grupo = this.usuariosService.getGruposDiretoria();
 
+    par.orderby = 'Razão';
+
     this.inscricaoDiretor = this.usuariosService.getusuarios_01(par).subscribe(
       (data: UsuarioQuery01Model[]) => {
         this.diretor = 0;
         const dir = new UsuarioQuery01Model();
         dir.id = 0;
-        dir.razao = 'TODOAS';
+        dir.razao = 'TODOS';
         this.diretores.push(dir);
         data.forEach((diretor) => {
           this.diretores.push(diretor);
@@ -141,6 +144,8 @@ export class AgendaViewComponent implements OnInit {
 
     par.grupo = this.usuariosService.getGruposCoordenador();
 
+    par.orderby = 'Razão';
+
     this.inscricaoCoordenador = this.usuariosService
       .getusuarios_01(par)
       .subscribe(
@@ -168,10 +173,23 @@ export class AgendaViewComponent implements OnInit {
   getAuditores() {
     const par = new ParametroUsuario01();
 
+    const coorde = this.usuariosService.getGruposCoordenador();
+
+    const audi = this.usuariosService.getGruposAuditor();
+
     par.id_empresa = this.globalService.id_empresa;
 
-    par.grupo = this.usuariosService.getGruposAuditor();
+    coorde.forEach((value) => {
+      par.grupo.push(value);
+    });
 
+    audi.forEach((value) => {
+      par.grupo.push(value);
+    });
+
+    par.orderby = 'Razão';
+
+    console.log('Coordenadores:', par);
     this.inscricaoAuditor = this.usuariosService.getusuarios_01(par).subscribe(
       (data: UsuarioQuery01Model[]) => {
         this.auditor = 0;
@@ -222,6 +240,12 @@ export class AgendaViewComponent implements OnInit {
             this.agendas.push(age);
           });
           this.loadCalendario();
+          if (this.agendas.length == 0) {
+            this.openSnackBar_OK(
+              'Nenhuma Informação Para Esta Consulta!',
+              'OK'
+            );
+          }
         },
         (error: any) => {
           this.agendas = [];
@@ -232,6 +256,17 @@ export class AgendaViewComponent implements OnInit {
           );
         }
       );
+  }
+
+  async openSnackBar_OK(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: this.durationInSeconds * 1000,
+    });
+    await this.delay(this.durationInSeconds * 1000);
+  }
+
+  delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   onRetorno() {
@@ -336,11 +371,7 @@ export class AgendaViewComponent implements OnInit {
     console.log('onDay', evento);
     this.celulaDia = evento;
     this.globalService.setRefreshLançamentos(this.celulaDia);
-    if (this.celulaDia.tipo == 3 || this.celulaDia.semana == 0) {
-      this.showLancamento = false;
-    } else {
-      this.showLancamento = true;
-    }
+    this.showLancamento = true;
   }
 
   adicionaZero(numero: any): string {

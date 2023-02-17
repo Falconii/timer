@@ -91,7 +91,6 @@ export class CrudUsuarioComponent implements OnInit {
 
     if (this.parametros.value.campo == 'Código') {
       let key = parseInt(this.parametros.value.filtro, 10);
-
       if (isNaN(key)) {
         par.id = 0;
       } else {
@@ -101,7 +100,7 @@ export class CrudUsuarioComponent implements OnInit {
     if (this.parametros.value.campo == 'Razão')
       par.razao = this.parametros.value.filtro.toUpperCase();
     if (this.parametros.value.campo == 'Grupo')
-      par.grupo = this.parametros.value.grupo;
+      par.grupo.push(this.parametros.value.grupo);
 
     par.orderby = this.parametros.value.ordenacao;
 

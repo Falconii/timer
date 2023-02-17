@@ -1,4 +1,4 @@
-<div class="div-barra">
+<div class="div-barra" *ngIf="cel.dia > 0">
     <mat-toolbar>
         <span><mat-label>APONTAMENTOS - {{cel.data | date : 'dd/MM/yyyy'}}</mat-label></span>
     </mat-toolbar>
@@ -62,10 +62,6 @@
                     <div class="coluna-descricao cor-blue">
                         <mat-label class="labelTitle">Executor:</mat-label>
                         <mat-label class="labelData">{{lanca.exec_razao}}</mat-label>
-                    </div>
-                    <div class="coluna-descricao cor-blue">
-                        <mat-label class="labelTitle">Projeto:</mat-label>
-                        <mat-label class="labelData">{{lanca.proj_descricao}}</mat-label>
                     </div>
                     <div class="coluna-descricao cor-blue">
                         <mat-label class="labelTitle">Encerrou Atividade ?:</mat-label>

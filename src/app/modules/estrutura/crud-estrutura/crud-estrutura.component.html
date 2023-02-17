@@ -59,10 +59,6 @@
     <div class="linha" *ngFor="let estru of estruturas ; index as id">
 
         <mat-card class="example-card">
-            <mat-card-subtitle>
-                <mat-label class="labelTitleFirst">Tipo:</mat-label>
-                <mat-label class="labelData">{{estru.tipo | tipoConta}}</mat-label>
-            </mat-card-subtitle>
             <mat-card-actions>
                 <span class="button-container-right ">
                   <button mat-icon-button aria-label="Example icon-button with share icon " (click)="onCopia(estru)"
@@ -92,6 +88,10 @@
             </button>
           </span>
             </mat-card-actions>
+            <mat-card-content>
+                <mat-label class="labelTitleFirst">Tipo:</mat-label>
+                <mat-label class="labelData">{{estru.tipo | tipoConta}}</mat-label>
+            </mat-card-content>
             <mat-card-content>
                 <mat-label class="labelTitleFirst">Conta:</mat-label>
                 <mat-label class="labelData">{{estru.subconta}}</mat-label>
