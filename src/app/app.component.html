@@ -1,15 +1,15 @@
 <p>
     <mat-toolbar color="primary">
-        <button routerLink="" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <button routerLink="" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="setOpcao('')">
           <mat-icon>menu</mat-icon>
         </button>
         <span>Simionato Auditores</span>
         <span *ngIf="showMenu">
-        <button mat-button [matMenuTriggerFor]="cadastros">Cadastros</button>
-        <button mat-button [matMenuTriggerFor]="projetos" *ngIf="okProjetos()">Projetos</button>
-        <button mat-button [matMenuTriggerFor]="planejamento" *ngIf="okPlanejamento()">Planejamento</button>
-        <button mat-button [matMenuTriggerFor]="execucao" *ngIf="okExecucao()">Execução</button>
-        <button mat-button [matMenuTriggerFor]="sobre">Sobre</button>
+        <button mat-button [matMenuTriggerFor]="cadastros"    (click)="setOpcao('Cadastros')" [ngStyle]="{'color' : opcao==='Cadastros' ? 'red' : 'white' }">Cadastros</button>
+        <button mat-button [matMenuTriggerFor]="projetos"     (click)="setOpcao('Projetos')" [ngStyle]="{'color' : opcao==='Projetos' ? 'red' : 'white' }" *ngIf="okProjetos()">Projetos</button>
+        <button mat-button [matMenuTriggerFor]="planejamento" (click)="setOpcao('Planejamento')" [ngStyle]="{'color' : opcao==='Planejamento' ? 'red' : 'white' }" *ngIf="okPlanejamento()">Planejamento</button>
+        <button mat-button [matMenuTriggerFor]="execucao"     (click)="setOpcao('Execução')" [ngStyle]="{'color' : opcao==='Execução' ? 'red' : 'white' }" *ngIf="okExecucao()">Execução</button>
+        <button mat-button [matMenuTriggerFor]="sobre" (click)="setOpcao('Sobre')" [ngStyle]="{'color' : opcao==='Sobre' ? 'red' : 'white' }">Sobre</button>
         </span>
         <span>
         <!-- #docregion sub-menu -->
@@ -21,7 +21,6 @@
           <button mat-menu-item routerLink="economicos">Grupos Econômicos</button>
           <button mat-menu-item routerLink="motivos">Motivos De Apontamento</button>
           <button mat-menu-item routerLink="estruturas">Estruturas</button>
-          <button mat-menu-item routerLink="condicoes">Condições Pagto</button>
         </mat-menu>
         <mat-menu #projetos="matMenu">
           <button mat-menu-item routerLink="projetos">Projetos Manutenção</button>
@@ -46,6 +45,9 @@
   </button>
     </mat-toolbar>
 </p>
+<div class="spin">
+    <app-spins></app-spins>
+</div>
 <!--<div>
   <p>Hora Centesimal {{hora | number}}. Hora Convertida Sexagenal {{hora | horaSexagenal}}</p>
   <p>Hora Centesimal {{1.50 | number}}. Hora Convertida Sexagenal {{1.50 | horaSexagenal}}</p>

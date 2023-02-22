@@ -11,9 +11,11 @@ export class GlobalService {
   usuario: UsuarioModel;
   logado: boolean = false;
   id_empresa: number = 1;
+  showSpin: boolean = false;
 
-  shomeMenuEmitter = new EventEmitter<boolean>();
+  shomMenuEmitter = new EventEmitter<boolean>();
   refreshLançamentos = new EventEmitter<CelulaDia>();
+  showSpinEmitter = new EventEmitter<boolean>();
 
   constructor(private usuarioService: UsuariosService, private router: Router) {
     this.usuario = new UsuarioModel();
@@ -29,7 +31,7 @@ export class GlobalService {
   }
 
   setLogado(value: boolean) {
-    this.shomeMenuEmitter.emit(value);
+    this.shomMenuEmitter.emit(value);
     this.logado = value;
     this.router.navigate(['/']);
   }
@@ -93,5 +95,14 @@ export class GlobalService {
       return true;
 
     return false;
+  }
+
+  setSpin(value: boolean) {
+    this.showSpin = value;
+    this.showSpinEmitter.emit(this.showSpin);
+  }
+
+  getSpin(): boolean {
+    return this.showSpin;
   }
 }

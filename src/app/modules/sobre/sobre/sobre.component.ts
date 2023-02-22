@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { UsuariosService } from 'src/app/services/usuarios.service';
-import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario-01';
+import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ParametroEmailOla } from 'src/app/parametros/parametro-email-ola';

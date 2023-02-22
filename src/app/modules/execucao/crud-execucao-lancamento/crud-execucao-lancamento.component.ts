@@ -56,6 +56,7 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
   inscricaoAponExecucao!: Subscription;
   inscricaoAtividades!: Subscription;
   inscricaoMotivos!: Subscription;
+  inscricaoCoordenador!: Subscription;
   idAcao: number = 0;
   acao: string = '';
   labelCadastro: string = '';
@@ -119,6 +120,7 @@ export class CrudExecucaoLancamentoComponent implements OnInit {
     this.inscricaoAponExecucao?.unsubscribe();
     this.inscricaoAtividades?.unsubscribe();
     this.inscricaoMotivos?.unsubscribe();
+    this.inscricaoCoordenador?.unsubscribe();
   }
 
   getUsuario() {

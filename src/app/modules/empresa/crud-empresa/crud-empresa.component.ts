@@ -84,9 +84,6 @@ export class CrudEmpresaComponent implements OnInit {
 
     if (this.parametros.value.campo == 'Código') {
       let key = parseInt(this.parametros.value.filtro, 10);
-
-      console.log('key', key);
-
       if (isNaN(key)) {
         par.id = 0;
       } else {
@@ -97,10 +94,11 @@ export class CrudEmpresaComponent implements OnInit {
       par.razao = this.parametros.value.filtro.toUpperCase();
 
     par.orderby = this.parametros.value.ordenacao;
-
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.empresaService.getEmpresas_01(par).subscribe(
       (data: EmpresaQuery01Model[]) => {
         this.empresas = data;
+        this.globalService.setSpin(false);
       },
       (error: any) => {
         this.empresas = [];
@@ -108,6 +106,7 @@ export class CrudEmpresaComponent implements OnInit {
           `Pesquisa Nas Empresas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
+        this.globalService.setSpin(false);
       }
     );
   }

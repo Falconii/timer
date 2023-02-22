@@ -101,15 +101,17 @@ export class GruUserViewComponent implements OnInit {
   }
 
   getGrupo() {
-    console.log('Grupo', this.grupo);
+    this.globalService.setSpin(true);
     this.inscricaoGetGrupo = this.grupoEconomicoService
       .getGrupoUser(this.grupo.id_empresa, this.grupo.id)
       .subscribe(
         (data: GruUserModel) => {
+          this.globalService.setSpin(false);
           this.grupo = data;
           this.setValue();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.openSnackBar_Err(
             `Pesquisa Nos Grupos De Usuários ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
@@ -149,14 +151,17 @@ export class GruUserViewComponent implements OnInit {
     this.grupo.grupo = this.formulario.value.grupo;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.globalService.setSpin(false);
         this.grupo.user_insert = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.grupoEconomicoService
           .GrupoUserInsert(this.grupo)
           .subscribe(
             async (data: GruUserModel) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -165,15 +170,17 @@ export class GruUserViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.globalService.setSpin(true);
         this.grupo.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.grupoEconomicoService
           .GrupoUserUpdate(this.grupo)
           .subscribe(
             async (data: any) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
-              console.log('Error', error.error);
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -182,13 +189,16 @@ export class GruUserViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Exclusao:
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.grupoEconomicoService
           .GrupoUserDelete(this.grupo.id_empresa, this.grupo.id)
           .subscribe(
             async (data: any) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'

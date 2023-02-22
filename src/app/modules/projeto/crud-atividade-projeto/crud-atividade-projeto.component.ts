@@ -1,3 +1,5 @@
+import { GlobalService } from './../../../services/global.service';
+import { RespAudiData } from './resp-audi-dialog/resp-audi-data';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -12,7 +14,7 @@ import {
   Router,
 } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario-01';
+import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { AtividadeModel } from 'src/app/Models/atividade-model';
 import { AtividadeQuery_01Model } from 'src/app/Models/atividade-query_01-model';
 import { ClientesQuery01Model } from 'src/app/Models/cliente-query_01-model';
@@ -30,7 +32,9 @@ import {
   MatDialog,
   MAT_DIALOG_DATA,
   MatDialogRef,
+  MatDialogConfig,
 } from '@angular/material/dialog';
+import { RespAudiDialogComponent } from './resp-audi-dialog/resp-audi-dialog.component';
 
 export interface DialogData {
   executores: UsuarioQuery01Model[];
@@ -104,6 +108,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
+    public respAudiDialog: MatDialog,
     private formBuilder: FormBuilder,
     private estruturasService: EstruturasService,
     private atividadesService: AtividadesService,
@@ -112,7 +117,8 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     private clientesService: ClientesService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private globalService: GlobalService
   ) {
     this.formulario = formBuilder.group({
       descricao: [{ value: '' }],
@@ -157,37 +163,44 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     this.inscricaoGetSubCliente?.unsubscribe();
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      data: {
-        executores: this.executores,
-        id_exec: -1,
-        id_resp: -1,
-      },
-    });
+  openDialogRespAudi(): void {
+    const data: RespAudiData = new RespAudiData();
+    data.executores = this.executores;
+    const dialogConfig = new MatDialogConfig();
 
-    dialogRef.afterClosed().subscribe((result: DialogData) => {
-      console.log(result);
-      this.id_resp = result.id_resp;
-      this.id_exec = result.id_exec;
-      if (this.id_exec > -1) {
-        this.conta = this.parametros.value.conta?.trim();
-        this.versao = '0101';
-        this.filtro = new FiltroOperacionalSubconta();
-        this.anexarAtividades();
-      }
-    });
+    // The user can't close the dialog by clicking outside its body
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'modal-component';
+    dialogConfig.height = '430px';
+    dialogConfig.width = '600px';
+    dialogConfig.data = data;
+    const modalDialog = this.respAudiDialog
+      .open(RespAudiDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: RespAudiData) => {
+        console.log('data', data);
+        this.id_resp = data.id_resp;
+        this.id_exec = data.id_exec;
+        if (data.processar) {
+          this.conta = this.parametros.value.conta?.trim();
+          this.versao = '0101';
+          this.filtro = new FiltroOperacionalSubconta();
+          this.anexarAtividades();
+        }
+      });
   }
-
   getProjeto() {
+    this.globalService.setSpin(true);
     this.inscricaoGetProjeto = this.projetosService
       .getProjeto(this.id_empresa, this.id_projeto)
       .subscribe(
         (data: ProjetoModel) => {
+          this.globalService.setSpin(false);
           this.projeto = data;
           this.getEstruturasIn();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.openSnackBar_Err(
             `Pesquisa  Projeto ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
@@ -206,13 +219,18 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     par.grupo = this.projeto.cliente_gru_econo;
 
     par.orderby = 'Razão';
+
+    this.globalService.setSpin(true);
+
     this.inscricaoGetSubCliente = this.clientesService
       .getClientes_01(par)
       .subscribe(
         (data: ClientesQuery01Model[]) => {
+          this.globalService.setSpin(false);
           this.subclientes = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.atividades = [];
           this.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -223,14 +241,17 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   getAtividade(id_empresa: number, id_atividade: number) {
+    this.globalService.setSpin(true);
     this.inscricaoGetAtividade = this.atividadesService
       .getAtividade(id_empresa, id_atividade)
       .subscribe(
         (data: AtividadeModel) => {
+          this.globalService.setSpin(false);
           this.atividade = data;
           this.setValue();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.atividade = new AtividadeModel();
           this.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -253,14 +274,17 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
     par.orderby = 'projeto';
 
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.atividadesService
       .getAtividades_01(par)
       .subscribe(
         (data: AtividadeQuery_01Model[]) => {
+          this.globalService.setSpin(false);
           this.atividades = data;
           console.log('atividades', this.atividades);
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.atividades = [];
           this.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -277,13 +301,16 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
     par.orderby = 'Razão';
 
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.usuariosService
       .getusuarios_01(par)
       .subscribe(
         (data: UsuarioQuery01Model[]) => {
+          this.globalService.setSpin(false);
           this.executores = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.executores = [];
           this.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -294,6 +321,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   anexarAtividades() {
+    this.globalService.setSpin(true);
     this.inscricaoAnexar = this.atividadesService
       .anexaatividade(
         this.id_empresa,
@@ -305,6 +333,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       )
       .subscribe(
         (data: any) => {
+          this.globalService.setSpin(false);
           this.atividades = [];
           this.conta = '';
           this.getProjeto();
@@ -312,6 +341,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
           this.openSnackBar_OK(`Estrutura Anexada Com Sucesso!`, 'OK');
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
@@ -326,17 +356,19 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     versao: string,
     id_projeto: number
   ) {
+    this.globalService.setSpin(false);
     this.inscricaoAnexar = this.atividadesService
       .desanexaatividade(id_empresa, conta, versao, id_projeto)
       .subscribe(
         (data: any) => {
+          this.globalService.setSpin(false);
           this.atividades = [];
           this.conta = '';
           this.getProjeto();
           this.openSnackBar_OK(`Estrutura Excluída Com Sucesso!`, 'OK');
         },
         (error: any) => {
-          console.log(error);
+          this.globalService.setSpin(false);
           this.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
@@ -378,13 +410,16 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
     par.orderby = 'Conta';
 
+    this.globalService.setSpin(true);
     this.inscricaoGetEstruturasOff = this.estruturasService
       .getEstruturas(par)
       .subscribe(
         (data: EstruturaModel[]) => {
+          this.globalService.setSpin(false);
           this.estruturasOff = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.estruturasOff = [];
         }
       );
@@ -403,10 +438,12 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
     par.orderby = 'Conta';
 
+    this.globalService.setSpin(true);
     this.inscricaoGetEstruturasIn = this.estruturasService
       .getEstruturas(par)
       .subscribe(
         (data: EstruturaModel[]) => {
+          this.globalService.setSpin(false);
           this.estruturasIn = data;
           if (
             this.id_atividade_conta != 'NULL' &&
@@ -420,6 +457,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
           this.getEstruturasOff();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.estruturasIn = [];
           this.getSubClientes();
           this.getEstruturasOff();
@@ -519,7 +557,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   onAnexar() {
     if (this.parametros.value.conta?.trim() != '') {
-      this.openDialog();
+      this.openDialogRespAudi();
     } else {
       this.openSnackBar_OK(`Informe Uma Estrutura Primeiro`, 'OK');
     }
@@ -674,48 +712,5 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       this.filtro.nivel = nivel;
     }
     console.log('Filtro Conta:', this.filtro.subconta, this.filtro.nivel);
-  }
-}
-
-@Component({
-  selector: 'dialog-overview-example-dialog',
-  templateUrl: 'dialog-overview-example-dialog.html',
-})
-export class DialogOverviewExampleDialog {
-  formulario: FormGroup;
-  constructor(
-    private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {
-    this.formulario = formBuilder.group({
-      id_exec: [{ value: '' }, [Validators.required, Validators.min(0)]],
-      id_resp: [{ value: '' }, [Validators.required, Validators.min(0)]],
-    });
-  }
-
-  setValue() {
-    this.formulario.setValue({
-      id_resp: 0,
-      id_exec: 0,
-    });
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  onChangeExecutor(evento: any) {
-    alert(evento.value);
-    this.data.id_exec = evento.value;
-  }
-
-  onChangeResponsavel(evento: any) {
-    this.data.id_resp = evento.value;
-  }
-
-  itsOK(): Boolean {
-    if (this.data.id_exec > -1 && this.data.id_resp > -1) return true;
-    return false;
   }
 }

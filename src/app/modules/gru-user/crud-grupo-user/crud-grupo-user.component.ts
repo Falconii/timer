@@ -86,14 +86,16 @@ export class CrudGrupoUserComponent implements OnInit {
       par.grupo = this.parametros.value.filtro.toUpperCase();
 
     par.orderby = this.parametros.value.ordenacao;
-
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.grupoUserService
       .getGrupoUsers_01(par)
       .subscribe(
         (data: GruUserModel[]) => {
+          this.globalService.setSpin(false);
           this.grupos = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.grupos = [];
           this.openSnackBar_Err(
             `Pesquisa Nos Grupos de Usuários ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,

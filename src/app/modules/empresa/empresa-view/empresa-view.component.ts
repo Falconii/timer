@@ -146,14 +146,17 @@ export class EmpresaViewComponent implements OnInit {
   }
 
   getEmpresa() {
+    this.globalService.setSpin(true);
     this.inscricaoGetEmpresa = this.empresasServices
       .getEmpresa(this.empresa.id)
       .subscribe(
         (data: EmpresaModel) => {
+          this.globalService.setSpin(false);
           this.empresa = data;
           this.setValue();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.openSnackBar_Err(
             `Pesquisa Nas Empresas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
@@ -163,11 +166,14 @@ export class EmpresaViewComponent implements OnInit {
   }
 
   getUfs() {
+    this.globalService.setSpin(true);
     this.inscricaoUf = this.estadosSrv.getEstados().subscribe(
       (data: EstadoModel[]) => {
+        this.globalService.setSpin(false);
         this.ufs = data;
       },
       (error: any) => {
+        this.globalService.setSpin(false);
         this.openSnackBar_Err(
           `Pesquisa Cadastrado De Estados ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
@@ -223,13 +229,16 @@ export class EmpresaViewComponent implements OnInit {
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         this.empresa.user_insert = this.globalService.getUsuario().id;
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.empresasServices
           .EmpresaInsert(this.empresa)
           .subscribe(
             async (data: EmpresaModel) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -238,14 +247,17 @@ export class EmpresaViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.globalService.setSpin(true);
         this.empresa.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.empresasServices
           .EmpresaUpdate(this.empresa)
           .subscribe(
             async (data: any) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -254,13 +266,16 @@ export class EmpresaViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Exclusao:
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.empresasServices
           .EmpresaDelete(this.empresa.id)
           .subscribe(
             async (data: any) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'

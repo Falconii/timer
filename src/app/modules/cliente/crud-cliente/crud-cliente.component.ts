@@ -1,3 +1,4 @@
+import { GlobalService } from './../../../services/global.service';
 import { ControlePaginas } from '../../../shared/controle-paginas';
 import { MensagensBotoes } from 'src/app/shared/util';
 import { GrupoEconomicoService } from '../../../services/grupo-economico.service';
@@ -41,6 +42,7 @@ export class CrudClienteComponent implements OnInit {
     private formBuilder: FormBuilder,
     private clientesServices: ClientesService,
     private grupoEconomicoService: GrupoEconomicoService,
+    private globalService: GlobalService,
     private router: Router,
     private _snackBar: MatSnackBar
   ) {
@@ -108,13 +110,16 @@ export class CrudClienteComponent implements OnInit {
 
     par.pagina = this.controlePaginas.getPaginalAtual();
 
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.clientesServices
       .getClientes_01(par)
       .subscribe(
         (data: ClientesQuery01Model[]) => {
+          this.globalService.setSpin(false);
           this.clientes = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.clientes = [];
           this.openSnackBar_Err(
             `Pesquisa Nos Clientes ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -149,10 +154,12 @@ export class CrudClienteComponent implements OnInit {
 
     par.contador = 'S';
 
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.clientesServices
       .getClientes_01_C(par)
       .subscribe(
         (data: any) => {
+          this.globalService.setSpin(false);
           this.controlePaginas = new ControlePaginas(
             this.tamPagina,
             data.total
@@ -160,6 +167,7 @@ export class CrudClienteComponent implements OnInit {
           this.getClientes();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.controlePaginas = new ControlePaginas(this.tamPagina, 0);
           this.openSnackBar_Err(
             `Pesquisa Nos Clientes ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -174,13 +182,16 @@ export class CrudClienteComponent implements OnInit {
   }
 
   getGrupos() {
+    this.globalService.setSpin(true);
     this.inscricaoGetGrupo = this.grupoEconomicoService
       .getGrupoEcos()
       .subscribe(
         (data: GrupoEcoModel[]) => {
+          this.globalService.setSpin(false);
           this.grupos = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.erro = error;
           this.grupos = [];
           console.log('this.erro', this.erro);

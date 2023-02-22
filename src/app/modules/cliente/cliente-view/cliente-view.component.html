@@ -1,6 +1,16 @@
 <p>
     <mat-toolbar>
-        <span><mat-label>{{labelCadastro}}</mat-label></span>
+        <span class="example-spacer"><mat-label>{{labelCadastro}}</mat-label></span>
+        <div class="button-container-right">
+            <button mat-raised-button color="primary" (click)="onSubmit()" *ngIf="idAcao != 3">
+            <mat-icon>check</mat-icon>
+            {{acao}}
+          </button>
+            <button mat-raised-button color="accent" (click)="onCancel()">
+            <mat-icon>cancel</mat-icon>
+            {{getLabelCancel()}}
+          </button>
+        </div>
     </mat-toolbar>
 </p>
 <form [formGroup]="formulario" autocomplete="off">
@@ -122,9 +132,5 @@
             <input matInput formControlName="obs" oninput="this.value = this.value.toUpperCase()" [readonly]="readOnly">
             <mat-error *ngIf="getValidfield('obs')">{{getMensafield('obs')}}</mat-error>
         </mat-form-field>
-    </div>
-    <div class="button-container-right">
-        <button mat-raised-button color="primary" *ngIf="idAcao != 3" (click)=onSubmit()>{{acao}}</button>
-        <button mat-raised-button color="accent" (click)="onCancel()">{{getLabelCancel()}}</button>
     </div>
 </form>

@@ -12,11 +12,20 @@ export const environment = {
 };
 
 */
-
+/*
 export const environment = {
   versao: 'V 01.00 - Beta',
   data: '11/05/2022',
   production: false,
   ambiente: 'Desenvolvimento',
   apiURL: 'http://localhost:3000/api/',
+};
+*/
+
+export const environment = {
+  versao: 'V 01.00 - Beta',
+  data: '11/05/2022',
+  production: false,
+  ambiente: 'Desenvolvimento',
+  apiURL: 'http://192.168.0.161:3000/api/',
 };

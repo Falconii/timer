@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProjetoModel } from '../Models/projeto-model';
 import { environment } from 'src/environments/environment';
-import { AgeHoras } from '../Models/age-horas';
+import { AgeHorasModel } from '../Models/age-horas-model';
 import { ParametroAgeHoras01 } from '../parametros/parametro-age-horas-01';
 
 @Injectable({

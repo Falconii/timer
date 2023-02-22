@@ -1,3 +1,5 @@
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { SpinsComponent } from './spins/spins.component';
 import { VersaoPipe } from './versao-pipe';
 import { CelApontamentosComponent } from './cel-apontamentos/cel-apontamentos.component';
 import { NgModule } from '@angular/core';
@@ -34,6 +36,8 @@ import { AtivoPipe } from './ativo.pipe';
     CelCalendarComponent,
     CelApontamentosComponent,
     AtivoPipe,
+    SpinsComponent,
+    ProgressBarComponent,
   ],
   imports: [CommonModule, MaterialModule],
   exports: [
@@ -52,6 +56,8 @@ import { AtivoPipe } from './ativo.pipe';
     SharedNavegatorComponent,
     CelCalendarComponent,
     CelApontamentosComponent,
+    SpinsComponent,
+    ProgressBarComponent,
   ],
 })
 export class SharedModule {}

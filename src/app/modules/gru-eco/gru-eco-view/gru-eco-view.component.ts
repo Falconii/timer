@@ -101,14 +101,17 @@ export class GruEcoViewComponent implements OnInit {
   }
 
   getGrupo() {
+    this.globalService.setSpin(true);
     this.inscricaoGetEmpresa = this.grupoEconomicoService
       .getGrupoEco(this.grupo.id_empresa, this.grupo.id)
       .subscribe(
         (data: GrupoEcoModel) => {
+          this.globalService.setSpin(false);
           this.grupo = data;
           this.setValue();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.openSnackBar_Err(
             `Pesquisa Nas Empresas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
@@ -149,13 +152,16 @@ export class GruEcoViewComponent implements OnInit {
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         this.grupo.user_insert = this.globalService.getUsuario().id;
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.grupoEconomicoService
           .GrupoEcoInsert(this.grupo)
           .subscribe(
             async (data: GrupoEcoModel) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -169,10 +175,11 @@ export class GruEcoViewComponent implements OnInit {
           .GrupoEcoUpdate(this.grupo)
           .subscribe(
             async (data: any) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
-              console.log('Error', error.error);
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -181,14 +188,16 @@ export class GruEcoViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Exclusao:
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.grupoEconomicoService
           .GrupoEcoDelete(this.grupo.id_empresa, this.grupo.id)
           .subscribe(
             async (data: any) => {
-              console.log(data);
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'

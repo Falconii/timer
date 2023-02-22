@@ -13,16 +13,18 @@ export class AppComponent {
 
   showMenu: boolean = false;
 
+  opcao: string = '';
+
   constructor(private globalService: GlobalService, private router: Router) {}
 
   ngOnInit(): void {
-    this.globalService.shomeMenuEmitter.subscribe((show) => {
+    this.globalService.shomMenuEmitter.subscribe((show) => {
       this.showMenu = show;
     });
   }
 
   ngOnDestroy(): void {
-    this.globalService.shomeMenuEmitter.unsubscribe();
+    this.globalService.shomMenuEmitter.unsubscribe();
   }
 
   onLogin() {
@@ -43,5 +45,15 @@ export class AppComponent {
 
   okExecucao(): boolean {
     return this.globalService.okExecucao();
+  }
+
+  getClassMenu(): string {
+    if (this.opcao == 'Cadastros') return 'menu-ativo';
+    return 'menu-standyby';
+  }
+
+  setOpcao(value: string): void {
+    console.log('SetOpcao', value);
+    this.opcao = value;
   }
 }

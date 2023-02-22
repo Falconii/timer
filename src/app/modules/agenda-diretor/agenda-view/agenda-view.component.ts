@@ -1,4 +1,4 @@
-import { AgeHoras } from './../../../Models/age-horas';
+import { AgeHorasModel } from '../../../Models/age-horas-model';
 import { AuditorModel } from './../../../Models/auditor-model';
 import { GlobalService } from 'src/app/services/global.service';
 import { UsuarioQuery01Model } from './../../../Models/usuario-query_01-model';
@@ -11,7 +11,7 @@ import { CelulaDia } from 'src/app/shared/celula-dia';
 import { ListaMeses } from 'src/app/shared/lista-meses';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario-01';
+import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { ProjetosService } from 'src/app/services/projetos.service';
 import { ParametroAgeHoras01 } from 'src/app/parametros/parametro-age-horas-01';
 
@@ -36,7 +36,7 @@ export class AgendaViewComponent implements OnInit {
   auditor: number = 0;
   auditores: UsuarioQuery01Model[] = [];
 
-  agendas: AgeHoras[] = [];
+  agendas: AgeHorasModel[] = [];
 
   calendario: CelulaDia[] = [];
   linhas: CalendarLine[] = [];
@@ -233,7 +233,7 @@ export class AgendaViewComponent implements OnInit {
         (data: any[]) => {
           this.agendas = [];
           data.forEach((dt) => {
-            const age = new AgeHoras();
+            const age = new AgeHorasModel();
             age.dia = parseInt(dt.dia);
             age.horas_plan = Number(dt.horas_plan);
             age.horas_exec = Number(dt.horas_exec);

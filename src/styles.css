@@ -268,3 +268,26 @@ body {
     font-size: large;
     color: red
 }
+
+.spin {
+    margin-top: -10px;
+    height: 50px;
+}
+
+.quadro-spin {
+    margin-top: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    height: 200px;
+    border: 2px solid black;
+    box-shadow: 10px 10px 5px 6px gray;
+}
+
+.menu-standyby {
+    color: white
+}
+
+.menu-ativo {
+    color: red;
+}

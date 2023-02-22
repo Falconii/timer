@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MensagensBotoes } from 'src/app/shared/util';
 import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
 import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-crud-estrutura',
@@ -39,7 +40,8 @@ export class CrudEstruturaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private estruturaService: EstruturasService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private globalService: GlobalService
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -88,15 +90,17 @@ export class CrudEstruturaComponent implements OnInit {
     par.status = this.status;
 
     par.orderby = this.parametros.value.ordenacao;
-
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.estruturaService
       .getEstruturas(par)
       .subscribe(
         (data: EstruturaModel[]) => {
+          this.globalService.setSpin(false);
           this.estruturas = data;
           console.log(this.estruturas);
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.estruturas = [];
           this.openSnackBar_Err(
             `Pesquisa Nas Estruturas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -167,13 +171,15 @@ export class CrudEstruturaComponent implements OnInit {
   }
 
   onCopia(estrutura: EstruturaModel) {
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.estruturaService
       .copiaEstrutura(estrutura)
       .subscribe(
         (data: EstruturaModel[]) => {
-          console.log('resultado da copia', data);
+          this.globalService.setSpin(false);
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.estruturas = [];
           this.openSnackBar_Err(
             `Copia Das Estruturas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,

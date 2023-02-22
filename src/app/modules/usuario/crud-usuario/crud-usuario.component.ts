@@ -10,7 +10,7 @@ import { GrupoUserService } from 'src/app/services/grupo-user.service';
 import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { GruUserModel } from 'src/app/Models/gru-user-model';
-import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario-01';
+import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { UsuarioModel } from 'src/app/Models/usuario-model';
 
 @Component({
@@ -104,13 +104,16 @@ export class CrudUsuarioComponent implements OnInit {
 
     par.orderby = this.parametros.value.ordenacao;
 
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.usuariosService
       .getusuarios_01(par)
       .subscribe(
         (data: UsuarioQuery01Model[]) => {
+          this.globalService.setSpin(false);
           this.usuarios = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.usuarios = [];
           this.openSnackBar_Err(
             `Pesquisa Nos Usuários ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -120,21 +123,24 @@ export class CrudUsuarioComponent implements OnInit {
       );
   }
 
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
   getGrupos() {
+    this.globalService.setSpin(true);
     this.inscricaoGetGrupo = this.grupoUserService.getGrupoUsers().subscribe(
       (data: GruUserModel[]) => {
+        this.globalService.setSpin(false);
         this.grupos = data;
       },
       (error: any) => {
+        this.globalService.setSpin(false);
         this.erro = error;
         this.grupos = [];
         console.log('this.erro', this.erro);
       }
     );
+  }
+
+  openSnackBar_Err(message: string, action: string) {
+    this._snackBar.open(message, action);
   }
 
   isGrupo(): Boolean {

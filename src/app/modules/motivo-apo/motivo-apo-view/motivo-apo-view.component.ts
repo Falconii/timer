@@ -48,7 +48,8 @@ export class MotivoApoViewComponent implements OnInit {
     private globslService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private globalService: GlobalService
   ) {
     this.formulario = formBuilder.group({
       codigo: ['', [Validators.required]],
@@ -120,14 +121,17 @@ export class MotivoApoViewComponent implements OnInit {
   }
 
   getMotivo() {
+    this.globalService.setSpin(true);
     this.inscricaoGet = this.motivoApoService
       .getMotivoApo(this.motivo.id_empresa, this.motivo.codigo)
       .subscribe(
         (data: MotivoApoModel) => {
+          this.globalService.setSpin(false);
           this.motivo = data;
           this.setValue();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.openSnackBar_Err(
             `Pesquisa Nos Motivos De Apontamento ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
@@ -175,13 +179,16 @@ export class MotivoApoViewComponent implements OnInit {
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         this.motivo.user_insert = this.globslService.getUsuario().id;
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.motivoApoService
           .MotivoApoInsert(this.motivo)
           .subscribe(
             async (data: MotivoApoModel) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Inclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -191,14 +198,16 @@ export class MotivoApoViewComponent implements OnInit {
         break;
       case CadastroAcoes.Edicao:
         this.motivo.user_update = this.globslService.getUsuario().id;
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.motivoApoService
           .MotivoApoUpdate(this.motivo)
           .subscribe(
             async (data: any) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
-              console.log('Error', error.error);
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -207,13 +216,16 @@ export class MotivoApoViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Exclusao:
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.motivoApoService
           .MotivoApoDelete(this.motivo.id_empresa, this.motivo.codigo)
           .subscribe(
             async (data: any) => {
+              this.globalService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'

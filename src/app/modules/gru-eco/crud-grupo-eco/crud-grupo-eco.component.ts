@@ -1,3 +1,4 @@
+import { GlobalService } from './../../../services/global.service';
 import { MensagensBotoes } from 'src/app/shared/util';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -32,7 +33,8 @@ export class CrudGrupoEcoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private grupoEconomicoService: GrupoEconomicoService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private globalService: GlobalService
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -89,14 +91,16 @@ export class CrudGrupoEcoComponent implements OnInit {
       par.razao = this.parametros.value.filtro.toUpperCase();
 
     par.orderby = this.parametros.value.ordenacao;
-
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.grupoEconomicoService
       .getGrupoEcos_01(par)
       .subscribe(
         (data: GrupoEcoModel[]) => {
+          this.globalService.setSpin(false);
           this.grupos = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.grupos = [];
           this.openSnackBar_Err(
             `Pesquisa Nos Grupos Econômicos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,

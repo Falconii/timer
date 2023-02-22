@@ -1,3 +1,4 @@
+import { GlobalService } from 'src/app/services/global.service';
 import { NivelEstrutura } from './../../../shared/nivel-estrutura';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -95,7 +96,8 @@ export class TreeEstruturaV2Component implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private globalService: GlobalService
   ) {
     this.inscricaoRota = this.route.params.subscribe((params: any) => {
       this.id_empresa = params.id_empresa;
@@ -669,10 +671,12 @@ export class TreeEstruturaV2Component implements OnInit {
     this.estruturas.forEach((estrutura) => {
       estrutura.versao = newVersion;
     });
+    this.globalService.setSpin(true);
     this.inscricaoSaveAll = this.estruturaService
       .EstruturaSaveAll(this.estruturas, this.versao)
       .subscribe(
         (data: EstruturaModel[]) => {
+          this.globalService.setSpin(false);
           this.estruturas = data;
           this.versao = this.estruturas[0].versao;
           this.setAcao(this.idAcao);
@@ -682,6 +686,7 @@ export class TreeEstruturaV2Component implements OnInit {
           );
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.estruturas = [];
           this.openSnackBar_Err(
             `Falha Na Estrutura  ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -692,16 +697,19 @@ export class TreeEstruturaV2Component implements OnInit {
   }
 
   onUpdateAll() {
+    this.globalService.setSpin(true);
     this.inscricaoSaveAll = this.estruturaService
       .EstruturaUpdateAll(this.estruturas)
       .subscribe(
         (data: EstruturaModel[]) => {
+          this.globalService.setSpin(false);
           this.estruturas = data;
           this.versao = this.estruturas[0].versao;
           this.setAcao(this.idAcao);
           this.openSnackBar_OK(`Estrutura Atualizada!`, 'OK');
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.estruturas = [];
           this.openSnackBar_Err(
             `Falha Na Estrutura  ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,

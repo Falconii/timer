@@ -1,6 +1,16 @@
 <div class="div-barra">
     <mat-toolbar>
         <span class="example-spacer"><mat-label>{{labelCadastro}}</mat-label></span>
+        <div class="button-container-right">
+            <button mat-raised-button color="primary" (click)="onSubmit()" *ngIf="idAcao != 3">
+      <mat-icon>check</mat-icon>
+      {{acao}}
+    </button>
+            <button mat-raised-button color="accent" (click)="onCancel()">
+      <mat-icon>cancel</mat-icon>
+      {{getLabelCancel()}}
+    </button>
+        </div>
     </mat-toolbar>
 </div>
 <form [formGroup]="formulario" autocomplete="off">
@@ -14,9 +24,5 @@
             <input matInput formControlName="grupo" oninput="this.value = this.value.toUpperCase()" autofocus [readonly]="readOnly">
             <mat-error *ngIf="formulario.get('grupo')?.errors?.ValidatorStringLen && touchedOrDirty('grupo')">{{formulario.get('grupo')?.errors?.message}}</mat-error>
         </mat-form-field>
-    </div>
-    <div class="button-container-right">
-        <button mat-raised-button color="primary" *ngIf="idAcao != 3" (click)=onSubmit()>{{acao}}</button>
-        <button mat-raised-button color="accent" (click)="onCancel()">{{getLabelCancel()}}</button>
     </div>
 </form>

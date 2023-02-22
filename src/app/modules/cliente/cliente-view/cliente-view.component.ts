@@ -170,22 +170,11 @@ export class ClienteViewComponent implements OnInit {
       );
   }
 
-  setReadOnly(value: Boolean) {
-    /*
-  Posso fazer na criação tb
-  this.formGroupName = this.fb.group({
-    xyz: [{ value: '', disabled: true }, Validators.required]
-});
-*/
-    //this.formulario.get('grupo')?.disable({ onlySelf: true });
-  }
-
   getGrupos() {
     if (
       this.idAcao == CadastroAcoes.Consulta ||
       this.idAcao == CadastroAcoes.Exclusao
     ) {
-      console.log('Pesquisa Grupo - Cliente', this.cliente);
       this.inscricaoGetGrupo = this.grupoEconomicoService
         .getGrupoEco(this.cliente.id_empresa, this.cliente.gru_econo)
         .subscribe(
@@ -214,6 +203,16 @@ export class ClienteViewComponent implements OnInit {
           }
         );
     }
+  }
+
+  setReadOnly(value: Boolean) {
+    /*
+  Posso fazer na criação tb
+  this.formGroupName = this.fb.group({
+    xyz: [{ value: '', disabled: true }, Validators.required]
+});
+*/
+    //this.formulario.get('grupo')?.disable({ onlySelf: true });
   }
 
   setValue() {
@@ -307,13 +306,16 @@ export class ClienteViewComponent implements OnInit {
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         this.cliente.user_insert = this.globaService.getUsuario().id;
+        this.globaService.setSpin(true);
         this.inscricaoAcao = this.clientesServices
           .clienteInsert(this.cliente)
           .subscribe(
             async (data: ClientesModel) => {
+              this.globaService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globaService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -322,15 +324,17 @@ export class ClienteViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.globaService.setSpin(true);
         this.cliente.user_update = this.globaService.getUsuario().id;
         this.inscricaoAcao = this.clientesServices
           .clienteUpdate(this.cliente)
           .subscribe(
             async (data: any) => {
+              this.globaService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
-              console.log('Error', error.error);
+              this.globaService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -339,13 +343,16 @@ export class ClienteViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Exclusao:
+        this.globaService.setSpin(true);
         this.inscricaoAcao = this.clientesServices
           .clienteDelete(this.cliente.id_empresa, this.cliente.id)
           .subscribe(
             async (data: any) => {
+              this.globaService.setSpin(false);
               this.onCancel();
             },
             (error: any) => {
+              this.globaService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'

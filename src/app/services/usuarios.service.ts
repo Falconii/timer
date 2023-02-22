@@ -3,7 +3,7 @@ import { UsuarioQuery01Model } from './../Models/usuario-query_01-model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ParametroUsuario01 } from '../parametros/parametro-usuario-01';
+import { ParametroUsuario01 } from '../parametros/parametro-usuario01';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

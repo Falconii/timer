@@ -1,3 +1,9 @@
+import { ProgressBarClass } from './../../../shared/progress-bar/ProgressBar-class';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { UsuariosService } from './../../../services/usuarios.service';
 import { UsuarioModel } from 'src/app/Models/usuario-model';
 import { GlobalService } from './../../../services/global.service';
@@ -6,6 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { ProgressBarComponent } from 'src/app/shared/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +30,8 @@ export class LoginComponent implements OnInit {
     private globalService: GlobalService,
     private usuariosService: UsuariosService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private matDialog: MatDialog
   ) {
     this.formulario = this.formulario = formBuilder.group({
       id: [{ value: '' }],
@@ -48,6 +56,7 @@ export class LoginComponent implements OnInit {
   }
 
   getUsuario(id: number, password: string) {
+    this.globalService.setSpin(true);
     this.inscricaoUsuario = this.usuariosService
       .getUsuario(this.globalService.getIdEmpresa(), id)
       .subscribe(
@@ -59,10 +68,13 @@ export class LoginComponent implements OnInit {
           } else {
             this.openSnackBar_OK(`Usuário Ou Senha Incorretos`, 'OK');
           }
+          this.globalService.setSpin(false);
         },
         (error: any) => {
+          console.log('error', error);
           this.usuario = new UsuarioModel();
           this.openSnackBar_OK(`Usuário Ou Senha Incorretos`, 'OK');
+          this.globalService.setSpin(false);
         }
       );
   }
@@ -91,5 +103,28 @@ export class LoginComponent implements OnInit {
   onSair() {
     this.globalService.setLogado(false);
     this.globalService.setUsuario(new UsuarioModel());
+  }
+
+  onEsqueceu(): void {
+    this.showDialog('Ola....');
+  }
+
+  showDialog(value: string): void {
+    const mensa: ProgressBarClass = new ProgressBarClass();
+    mensa.labelOk = 'Continua...';
+    mensa.labelCancel = 'Cancelar';
+    const dialogConfig = new MatDialogConfig();
+    // The user can't close the dialog by clicking outside its body
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'modal-component';
+    dialogConfig.height = '350px';
+    dialogConfig.width = '600px';
+    dialogConfig.data = mensa;
+    const modalDialog = this.matDialog
+      .open(ProgressBarComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((result) => {
+        console.log('result', result);
+      });
   }
 }

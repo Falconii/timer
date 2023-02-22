@@ -1,7 +1,7 @@
 import { GlobalService } from 'src/app/services/global.service';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { ParametroCliente01 } from './../../../parametros/parametro-cliente-01';
-import { ParametroUsuario01 } from './../../../parametros/parametro-usuario-01';
+import { ParametroUsuario01 } from '../../../parametros/parametro-usuario01';
 import { UsuariosService } from './../../../services/usuarios.service';
 import { ClientesQuery01Model } from './../../../Models/cliente-query_01-model';
 import { UsuarioQuery01Model } from './../../../Models/usuario-query_01-model';

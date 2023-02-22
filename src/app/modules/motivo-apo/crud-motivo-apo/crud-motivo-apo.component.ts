@@ -1,3 +1,4 @@
+import { GlobalService } from 'src/app/services/global.service';
 import { ParametroMotivoApo01 } from '../../../parametros/parametro-motivo-apo01';
 import { MotivoApoService } from '../../../services/motivo-apo.service';
 import { MotivoApoModel } from '../../../Models/motivo-apo-model';
@@ -34,7 +35,8 @@ export class CrudMotivoApoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private motivoApoService: MotivoApoService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private globalService: GlobalService
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -91,14 +93,16 @@ export class CrudMotivoApoComponent implements OnInit {
       par.motivo = this.parametros.value.filtro.toUpperCase();
 
     par.orderby = this.parametros.value.ordenacao;
-
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.motivoApoService
       .getMotivoApos_01(par)
       .subscribe(
         (data: MotivoApoModel[]) => {
+          this.globalService.setSpin(false);
           this.motivos = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.motivos = [];
           this.openSnackBar_Err(
             `Pesquisa Nas motivos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,

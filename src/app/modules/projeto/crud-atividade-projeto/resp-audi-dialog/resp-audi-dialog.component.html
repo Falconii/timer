@@ -2,6 +2,9 @@
 <div mat-dialog-content>
     <form [formGroup]="formulario">
         <div class="col-med-1">
+            <mat-checkbox formControlName="desconsiderar_resp" (change)="onChangeResp($event)">Desconsiderar</mat-checkbox>
+        </div>
+        <div class="col-med-1">
             <mat-form-field field appearance="outline" class="col-max">
                 <mat-label>Responável</mat-label>
                 <mat-select formControlName="id_resp" (selectionChange)="onChangeResponsavel($event)">
@@ -10,6 +13,9 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+        </div>
+        <div class="col-med-1">
+            <mat-checkbox formControlName="desconsiderar_exec" (change)="onChangeExec($event)">Desconsiderar</mat-checkbox>
         </div>
         <div class="col-med-1">
             <mat-form-field field appearance="outline" class="col-max">
@@ -24,6 +30,6 @@
     </form>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button *ngIf="itsOK()" [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+    <button mat-button (click)="closeModal()">Cancelar</button>
+    <button mat-button *ngIf="itsOK()" [mat-dialog-close]="data" cdkFocusInitial (click)="actionFunction()">Confirmar</button>
 </div>
