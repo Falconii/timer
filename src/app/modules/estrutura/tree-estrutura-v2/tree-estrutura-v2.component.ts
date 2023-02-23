@@ -163,14 +163,16 @@ export class TreeEstruturaV2Component implements OnInit {
     par.versao = this.versao;
 
     par.orderby = 'SubConta';
-
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.estruturaService
       .getEstruturas(par)
       .subscribe(
         (data: EstruturaModel[]) => {
+          this.globalService.setSpin(false);
           this.estruturas = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.estruturas = [];
           this.openSnackBar_Err(
             `Pesquisa Nas Estruturas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,

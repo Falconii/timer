@@ -1,3 +1,5 @@
+import { QuestionDialogComponent } from './../../../shared/question-dialog/question-dialog.component';
+import { QuestionDialogData } from './../../../shared/question-dialog/Question-Dialog-Data';
 import { EstruturaModel } from 'src/app/Models/estrutura-model';
 import { EstruturasService } from 'src/app/services/estruturas.service';
 import { Component, OnInit } from '@angular/core';
@@ -9,6 +11,12 @@ import { MensagensBotoes } from 'src/app/shared/util';
 import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
 import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
 import { GlobalService } from 'src/app/services/global.service';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogConfig,
+} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-crud-estrutura',
@@ -36,8 +44,11 @@ export class CrudEstruturaComponent implements OnInit {
 
   status_descricao: string = 'Ativas';
 
+  durationInSeconds = 2;
+
   constructor(
     private formBuilder: FormBuilder,
+    public questionDialog: MatDialog,
     private estruturaService: EstruturasService,
     private router: Router,
     private _snackBar: MatSnackBar,
@@ -154,6 +165,17 @@ export class CrudEstruturaComponent implements OnInit {
     ]);
   }
 
+  inclusaSemControle() {
+    this.router.navigate([
+      'estruturas/estruturasemcontrole',
+      1,
+      '00',
+      '0101',
+      '00',
+      this.getAcoes().Inclusao,
+    ]);
+  }
+
   getAcoes() {
     return CadastroAcoes;
   }
@@ -171,12 +193,35 @@ export class CrudEstruturaComponent implements OnInit {
   }
 
   onCopia(estrutura: EstruturaModel) {
+    const data: QuestionDialogData = new QuestionDialogData();
+    data.mensagem01 = 'Confirma Cópia Da Estrutura:';
+    data.mensagem02 = estrutura.descricao;
+    const dialogConfig = new MatDialogConfig();
+
+    // The user can't close the dialog by clicking outside its body
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'question-dialog';
+    dialogConfig.width = '600px';
+    dialogConfig.data = data;
+    const modalDialog = this.questionDialog
+      .open(QuestionDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: QuestionDialogData) => {
+        if (data.resposta === 'S') {
+          this.Copia(estrutura);
+        }
+      });
+  }
+
+  Copia(estrutura: EstruturaModel) {
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.estruturaService
       .copiaEstrutura(estrutura)
       .subscribe(
         (data: EstruturaModel[]) => {
           this.globalService.setSpin(false);
+          this.openSnackBar_OK(`Estrutura Copiada!`, 'OK');
+          this.getEstruturas();
         },
         (error: any) => {
           this.globalService.setSpin(false);
@@ -187,6 +232,17 @@ export class CrudEstruturaComponent implements OnInit {
           );
         }
       );
+  }
+
+  async openSnackBar_OK(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: this.durationInSeconds * 1000,
+    });
+    await this.delay(this.durationInSeconds * 1000);
+  }
+
+  delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   onHome() {
@@ -205,5 +261,13 @@ export class CrudEstruturaComponent implements OnInit {
     this.status = status;
     this.status_descricao = descricao;
     return;
+  }
+
+  addControlControle(): void {
+    this.inclusao();
+  }
+
+  addControlSemControle(): void {
+    this.inclusaSemControle();
   }
 }

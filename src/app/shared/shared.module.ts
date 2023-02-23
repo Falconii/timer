@@ -18,6 +18,7 @@ import { SharedNavegatorComponent } from './shared-navegator/shared-navegator.co
 import { MaterialModule } from '../material/material.module';
 import { CelCalendarComponent } from './cel-calendar/cel-calendar.component';
 import { AtivoPipe } from './ativo.pipe';
+import { QuestionDialogComponent } from './question-dialog/question-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AtivoPipe } from './ativo.pipe';
     AtivoPipe,
     SpinsComponent,
     ProgressBarComponent,
+    QuestionDialogComponent,
   ],
   imports: [CommonModule, MaterialModule],
   exports: [
@@ -58,6 +60,7 @@ import { AtivoPipe } from './ativo.pipe';
     CelApontamentosComponent,
     SpinsComponent,
     ProgressBarComponent,
+    QuestionDialogComponent,
   ],
 })
 export class SharedModule {}

@@ -11,6 +11,7 @@ import { CrudSubestruturaComponent } from './crud-subestrutura/crud-subestrutura
 import { TreeEstruturaV2Component } from './tree-estrutura-v2/tree-estrutura-v2.component';
 import { TreeEstruturaComponent } from './tree-estrutura/tree-estrutura.component';
 import { CrudViewEstruturaComponent } from './crud-view-estrutura/crud-view-estrutura.component';
+import { CrudEstruturaSemControleComponent } from './crud-estrutura-sem-controle/crud-estrutura-sem-controle.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { CrudViewEstruturaComponent } from './crud-view-estrutura/crud-view-estr
     TreeEstruturaComponent,
     CrudSubestruturaComponent,
     CrudViewEstruturaComponent,
+    CrudEstruturaSemControleComponent,
   ],
   imports: [
     CommonModule,

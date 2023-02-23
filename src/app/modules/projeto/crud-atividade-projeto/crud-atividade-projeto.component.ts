@@ -36,12 +36,6 @@ import {
 } from '@angular/material/dialog';
 import { RespAudiDialogComponent } from './resp-audi-dialog/resp-audi-dialog.component';
 
-export interface DialogData {
-  executores: UsuarioQuery01Model[];
-  id_resp: number;
-  id_exec: number;
-}
-
 @Component({
   selector: 'app-crud-atividade-projeto',
   templateUrl: './crud-atividade-projeto.component.html',

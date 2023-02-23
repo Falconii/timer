@@ -2,16 +2,16 @@
     <mat-toolbar>
         <span class="example-spacer">Estruturas: </span>
         <span class="example-spacer">
-        <mat-menu #appMenu="matMenu">
-            <ng-template matMenuContent>
-                <button mat-menu-item (click)="onSetStatus(1,'Ativas')">Ativas</button>
-                <button mat-menu-item (click)="onSetStatus(2,'Inativas')">Inativas</button>
-                <button mat-menu-item (click)="onSetStatus(0,'Todas')">Todas</button>
-            </ng-template>
-        </mat-menu>
-        <button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="Example icon-button with share icon ">
-          Status:{{status_descricao}}
-        </button>
+            <mat-menu #appMenu="matMenu">
+                <ng-template matMenuContent>
+                    <button mat-menu-item (click)="onSetStatus(1,'Ativas')">Ativas</button>
+                    <button mat-menu-item (click)="onSetStatus(2,'Inativas')">Inativas</button>
+                    <button mat-menu-item (click)="onSetStatus(0,'Todas')">Todas</button>
+                </ng-template>
+            </mat-menu>
+            <button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="Example icon-button with share icon ">
+              Status:{{status_descricao}}
+            </button>
         </span>
         <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno" matTooltipPosition="above" (click)="onHome()">
           <mat-icon>home</mat-icon>
@@ -19,9 +19,19 @@
         <button mat-icon-button aria-label="Example icon-button with share icon" (click)="getEstruturas()">
           <mat-icon>rotate_right</mat-icon>
         </button>
-        <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Cadastrar Novas Estruturas" matTooltipPosition="above" (click)="inclusao()">
-         <mat-icon>add_circle_outline</mat-icon>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>add_circle_outline</mat-icon>
         </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="addControlControle()">
+            <mat-icon>assignment</mat-icon>
+            <span>Com Controle</span>
+          </button>
+            <button mat-menu-item (click)="addControlSemControle()">
+            <mat-icon>assignment_ind</mat-icon>
+            <span>Sem Controle</span>
+          </button>
+        </mat-menu>
     </mat-toolbar>
 </div>
 <div class="parametros">

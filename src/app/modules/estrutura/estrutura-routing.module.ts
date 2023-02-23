@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CrudEstruturaSemControleComponent } from './crud-estrutura-sem-controle/crud-estrutura-sem-controle.component';
 import { CrudEstruturaComponent } from './crud-estrutura/crud-estrutura.component';
 import { CrudSubestruturaComponent } from './crud-subestrutura/crud-subestrutura.component';
 import { CrudViewEstruturaComponent } from './crud-view-estrutura/crud-view-estrutura.component';
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'estrutura/:id_empresa/:conta/:versao/:subconta/:acao',
     component: CrudViewEstruturaComponent,
+  },
+  {
+    path: 'estruturasemcontrole/:id_empresa/:conta/:versao/:subconta/:acao',
+    component: CrudEstruturaSemControleComponent,
   },
   {
     path: 'subconta/:id_empresa/:conta/:versao/:subconta/:descricao/:nivel/:controle/:acao',

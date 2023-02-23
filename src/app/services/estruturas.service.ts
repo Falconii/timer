@@ -36,9 +36,12 @@ export class EstruturasService {
     );
   }
 
-  EstruturaInsert(estrutura: EstruturaModel) {
-    console.log('Indo para gravar', estrutura);
-    return this.http.post<EstruturaModel>(`${this.apiURL}estrutura`, estrutura);
+  EstruturaInsert(estrutura: EstruturaModel, lsUsuarios?: any) {
+    console.log('Indo para gravar', estrutura, lsUsuarios);
+    return this.http.post<EstruturaModel>(`${this.apiURL}estrutura`, {
+      estrutura: estrutura,
+      usuarios: lsUsuarios,
+    });
   }
 
   EstruturaUpdate(estrutura: EstruturaModel) {
