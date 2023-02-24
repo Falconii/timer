@@ -1,3 +1,5 @@
+import { QuestionDialogComponent } from './../../../shared/question-dialog/question-dialog.component';
+import { QuestionDialogData } from './../../../shared/question-dialog/Question-Dialog-Data';
 import { GlobalService } from './../../../services/global.service';
 import { RespAudiData } from './resp-audi-dialog/resp-audi-data';
 import { Component, Inject, OnInit } from '@angular/core';
@@ -101,7 +103,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   id_resp: number = 0;
 
   constructor(
-    public dialog: MatDialog,
+    public questionDialog: MatDialog,
     public respAudiDialog: MatDialog,
     private formBuilder: FormBuilder,
     private estruturasService: EstruturasService,
@@ -155,6 +157,27 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     this.inscricaoGetEstruturasOff?.unsubscribe();
     this.inscricaoGetAtividade?.unsubscribe();
     this.inscricaoGetSubCliente?.unsubscribe();
+  }
+
+  openQuestionDialog(atividade: AtividadeQuery_01Model): void {
+    const data: QuestionDialogData = new QuestionDialogData();
+    data.mensagem01 = 'Deseja Excluir A Atividade ?';
+    data.mensagem02 = atividade.estru_descri;
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'question';
+    dialogConfig.width = '600px';
+    dialogConfig.data = data;
+    const modalDialog = this.questionDialog
+      .open(QuestionDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: QuestionDialogData) => {
+        console.log('data', data);
+        if (data.resposta == 'S') {
+          this.excluir(atividade.id_empresa, atividade.id);
+        }
+      });
   }
 
   openDialogRespAudi(): void {
@@ -613,6 +636,10 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   onDesanexar(atividade: AtividadeQuery_01Model) {
+    this.openQuestionDialog(atividade);
+  }
+
+  Desanexar(atividade: AtividadeQuery_01Model): void {
     this.desanexarAtividades(
       atividade.id_empresa,
       atividade.conta,
@@ -622,7 +649,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   onExcluir(atividade: AtividadeQuery_01Model) {
-    this.excluir(atividade.id_empresa, atividade.id);
+    this.openQuestionDialog(atividade);
   }
 
   openSnackBar_Err(message: string, action: string) {
@@ -707,4 +734,15 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     }
     console.log('Filtro Conta:', this.filtro.subconta, this.filtro.nivel);
   }
+
+  onHorasDiretoria(): void {
+    this.router.navigate([
+      '/projetos/manuemlote',
+      this.atividade.id_empresa,
+      this.atividade.id_projeto,
+      this.atividade.id,
+    ]);
+  }
+
+  onManutencaoLote(): void {}
 }

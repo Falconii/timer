@@ -9,7 +9,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { CrudEstruturaComponent } from './crud-estrutura/crud-estrutura.component';
 import { CrudSubestruturaComponent } from './crud-subestrutura/crud-subestrutura.component';
 import { TreeEstruturaV2Component } from './tree-estrutura-v2/tree-estrutura-v2.component';
-import { TreeEstruturaComponent } from './tree-estrutura/tree-estrutura.component';
 import { CrudViewEstruturaComponent } from './crud-view-estrutura/crud-view-estrutura.component';
 import { CrudEstruturaSemControleComponent } from './crud-estrutura-sem-controle/crud-estrutura-sem-controle.component';
 
@@ -17,7 +16,6 @@ import { CrudEstruturaSemControleComponent } from './crud-estrutura-sem-controle
   declarations: [
     CrudEstruturaComponent,
     TreeEstruturaV2Component,
-    TreeEstruturaComponent,
     CrudSubestruturaComponent,
     CrudViewEstruturaComponent,
     CrudEstruturaSemControleComponent,

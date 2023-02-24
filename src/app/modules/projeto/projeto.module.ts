@@ -10,6 +10,11 @@ import { CrudProjetoComponent } from './crud-projeto/crud-projeto.component';
 import { CrudAtividadeProjetoComponent } from './crud-atividade-projeto/crud-atividade-projeto.component';
 import { CrudPlanejamentoLancamentoComponent } from './crud-planejamento-lancamento/crud-planejamento-lancamento.component';
 import { RespAudiDialogComponent } from './crud-atividade-projeto/resp-audi-dialog/resp-audi-dialog.component';
+import { ManutAtividadeLoteComponent } from './manut-atividade-lote/manut-atividade-lote.component';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CdkTreeModule } from '@angular/cdk/tree';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -18,8 +23,10 @@ import { RespAudiDialogComponent } from './crud-atividade-projeto/resp-audi-dial
     CrudAtividadeProjetoComponent,
     CrudPlanejamentoLancamentoComponent,
     RespAudiDialogComponent,
+    ManutAtividadeLoteComponent,
   ],
   imports: [
+    ScrollingModule,
     CommonModule,
     ProjetoRoutingModule,
     MaterialModule,

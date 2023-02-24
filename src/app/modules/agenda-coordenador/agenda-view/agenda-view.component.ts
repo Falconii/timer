@@ -93,7 +93,25 @@ export class AgendaViewComponent implements OnInit {
 
     par.id_empresa = this.globalService.id_empresa;
 
-    par.grupo = this.usuariosService.getGruposCoordenador();
+    const dire = this.usuariosService.getGruposDiretoria();
+
+    const coorde = this.usuariosService.getGruposCoordenador();
+
+    const audi = this.usuariosService.getGruposAuditor();
+
+    par.id_empresa = this.globalService.id_empresa;
+
+    dire.forEach((value) => {
+      par.grupo.push(value);
+    });
+
+    coorde.forEach((value) => {
+      par.grupo.push(value);
+    });
+
+    audi.forEach((value) => {
+      par.grupo.push(value);
+    });
 
     par.orderby = 'Razão';
 
@@ -124,11 +142,17 @@ export class AgendaViewComponent implements OnInit {
   getAuditores() {
     const par = new ParametroUsuario01();
 
+    const dire = this.usuariosService.getGruposDiretoria();
+
     const coorde = this.usuariosService.getGruposCoordenador();
 
     const audi = this.usuariosService.getGruposAuditor();
 
     par.id_empresa = this.globalService.id_empresa;
+
+    dire.forEach((value) => {
+      par.grupo.push(value);
+    });
 
     coorde.forEach((value) => {
       par.grupo.push(value);

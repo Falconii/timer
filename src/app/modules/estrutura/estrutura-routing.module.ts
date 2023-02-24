@@ -5,7 +5,6 @@ import { CrudEstruturaComponent } from './crud-estrutura/crud-estrutura.componen
 import { CrudSubestruturaComponent } from './crud-subestrutura/crud-subestrutura.component';
 import { CrudViewEstruturaComponent } from './crud-view-estrutura/crud-view-estrutura.component';
 import { TreeEstruturaV2Component } from './tree-estrutura-v2/tree-estrutura-v2.component';
-import { TreeEstruturaComponent } from './tree-estrutura/tree-estrutura.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'estruturas', pathMatch: 'full' },

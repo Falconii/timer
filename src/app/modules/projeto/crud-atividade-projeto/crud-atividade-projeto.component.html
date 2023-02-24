@@ -2,14 +2,25 @@
 <div class="div-barra">
     <mat-toolbar>
         <span class="example-spacer">Projeto:{{projeto.id}}  {{projeto.descricao}} - Manutenção das Atividades </span>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" matTooltip="Manutenção Auxliar" matTooltipPosition="above" *ngIf="atividades.length > 0">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onHorasDiretoria()">
+            <mat-icon>assignment</mat-icon>
+            <span>Horas Diretoria</span>
+          </button>
+            <button mat-menu-item (click)="onManutencaoLote()">
+            <mat-icon>assignment_ind</mat-icon>
+            <span>Manutenção Em Lote</span>
+          </button>
+        </mat-menu>
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="onRetorno()" *ngIf="idAcao == 99">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-
+          <mat-icon>arrow_back</mat-icon>
+        </button>
     </mat-toolbar>
 </div>
 <form [formGroup]="formulario" autocomplete="off" *ngIf="idAcao != 99">
-
     <div class="col-med-1">
         <mat-form-field appearance="outline" class="MidleWidth">
             <mat-label>Descricao Da Atividade:</mat-label>
@@ -35,6 +46,7 @@
             <mat-datepicker-toggle matSuffix [for]="finalDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #finalDatePicker></mat-datepicker>
         </mat-form-field>
+
         <mat-form-field appearance="outline" class="MidleWidth">
             <mat-label>Situação</mat-label>
             <input matInput formControlName="status" [readonly]="true">
