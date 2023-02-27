@@ -79,7 +79,7 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
             <mat-error *ngIf="formulario.get('descricao')?.status == 'INVALID' && touchedOrDirty('descricao')">Razão - No mínimo 03 letras e no máximo 50 letras</mat-error>
         </mat-form-field>
     </div>
-    <div class="col-med-2">
+    <div class="col-med-3">
         <mat-form-field appearance="outline" class="col-max">
             <mat-label>Horas Planejadas</mat-label>
             <input matInput formControlName="horasplan" [readonly]="true">
@@ -87,6 +87,10 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
         <mat-form-field appearance="outline" class="col-max">
             <mat-label>Horas Executadas</mat-label>
             <input matInput formControlName="horasexec" [readonly]="true">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Horas Diretoria</mat-label>
+            <input matInput formControlName="horasdir" [readonly]="true">
         </mat-form-field>
     </div>
     <div class="button-container-right">

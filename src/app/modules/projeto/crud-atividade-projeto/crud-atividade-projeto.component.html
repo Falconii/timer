@@ -2,7 +2,7 @@
 <div class="div-barra">
     <mat-toolbar>
         <span class="example-spacer">Projeto:{{projeto.id}}  {{projeto.descricao}} - Manutenção das Atividades </span>
-        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" matTooltip="Manutenção Auxliar" matTooltipPosition="above" *ngIf="atividades.length > 0">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" matTooltip="Manutenção Auxliar" matTooltipPosition="above">
           <mat-icon>edit</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
@@ -135,6 +135,8 @@
                         <mat-label class="labelData">{{atividade.horasplan}}</mat-label>
                         <mat-label class="labelTitle">Horas Ex.:</mat-label>
                         <mat-label class="labelData">{{atividade.horasexec}}</mat-label>
+                        <mat-label class="labelTitle">Horas Diretoria.:</mat-label>
+                        <mat-label class="labelData">{{atividade.horasdir}}</mat-label>
                     </div>
                     <div class="coluna-descricao cor-blue" *ngIf="atividade.tipo=='O'">
                         <mat-label class="labelTitle">Horas Pl.:</mat-label>

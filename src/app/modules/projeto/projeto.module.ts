@@ -1,3 +1,4 @@
+import { HorasDiretoriaComponent } from './horas-diretoria/horas-diretoria.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjetoRoutingModule } from './projeto-routing.module';
@@ -11,10 +12,8 @@ import { CrudAtividadeProjetoComponent } from './crud-atividade-projeto/crud-ati
 import { CrudPlanejamentoLancamentoComponent } from './crud-planejamento-lancamento/crud-planejamento-lancamento.component';
 import { RespAudiDialogComponent } from './crud-atividade-projeto/resp-audi-dialog/resp-audi-dialog.component';
 import { ManutAtividadeLoteComponent } from './manut-atividade-lote/manut-atividade-lote.component';
-import { CdkStepperModule } from '@angular/cdk/stepper';
-import { CdkTableModule } from '@angular/cdk/table';
-import { CdkTreeModule } from '@angular/cdk/tree';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { HorasDiretoriaDialogComponent } from './horas-diretoria/horas-diretoria-dialog/horas-diretoria-dialog.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +23,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     CrudPlanejamentoLancamentoComponent,
     RespAudiDialogComponent,
     ManutAtividadeLoteComponent,
+    HorasDiretoriaComponent,
+    HorasDiretoriaDialogComponent,
   ],
   imports: [
     ScrollingModule,

@@ -737,12 +737,19 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   onHorasDiretoria(): void {
     this.router.navigate([
-      '/projetos/manuemlote',
-      this.atividade.id_empresa,
-      this.atividade.id_projeto,
-      this.atividade.id,
+      '/projetos/horasdiretoria',
+      this.id_empresa,
+      this.id_projeto,
     ]);
   }
 
-  onManutencaoLote(): void {}
+  onManutencaoLote(): void {
+    this.router.navigate([
+      '/projetos/manuemlote',
+      this.atividade.id_empresa,
+      this.atividade.conta,
+      this.atividade.versao,
+      this.atividade.id_projeto,
+    ]);
+  }
 }

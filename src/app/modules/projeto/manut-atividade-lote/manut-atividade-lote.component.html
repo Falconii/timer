@@ -1,5 +1,9 @@
-<div class="cdk-virtual-scroll-data-source-example">
-    <cdk-virtual-scroll-viewport orientation="vertical" itemSize="50" class="example-viewport">
-        <div *cdkVirtualFor="let item of items" class="example-item">{{item}}</div>
-    </cdk-virtual-scroll-viewport>
+<div class="div-barra">
+    <mat-toolbar>
+        <span class="example-spacer">Projeto:{{projeto.id}}  {{projeto.descricao}} - Manutenção das Atividades </span>
+
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="onRetorno()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    </mat-toolbar>
 </div>

@@ -15,6 +15,7 @@ export class AtividadeModel {
   public final: Date = new Date();
   public horasplan: number = 0;
   public horasexec: number = 0;
+  public horasdir: number = 0;
   public obs: string = '';
   public user_insert: number = 0;
   public user_update: number = 0;

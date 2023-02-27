@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AtividadeHorasDirModel } from '../Models/atividade-horas-dir-model';
 import { AtividadeModel } from '../Models/atividade-model';
 import { AtividadeQuery_01Model } from '../Models/atividade-query_01-model';
 import { ParametroAtividade01 } from '../parametros/parametro-atividade01';
@@ -39,6 +40,13 @@ export class AtividadesService {
 
   atividadeUpdate(atividade: AtividadeModel) {
     return this.http.put<AtividadeModel>(`${this.apiURL}atividade`, atividade);
+  }
+
+  atividadeUpdateHoraDir(atividadeHorasDir: AtividadeHorasDirModel) {
+    return this.http.put<AtividadeHorasDirModel>(
+      `${this.apiURL}updateAtividadehorasdir`,
+      atividadeHorasDir
+    );
   }
 
   atividadeDelete(id_empresa: number, id: number) {

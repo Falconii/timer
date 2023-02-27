@@ -78,6 +78,7 @@ export class ProjetoViewComponent implements OnInit {
       horasve: [],
       horasplan: [],
       horasexec: [],
+      horasdir: [],
       status: [],
     });
     this.projeto = new ProjetoModel();
@@ -183,6 +184,7 @@ export class ProjetoViewComponent implements OnInit {
       horasve: this.projeto.horasve,
       horasplan: horahexa(this.projeto.horasplan),
       horasexec: horahexa(this.projeto.horasexec),
+      horasdir: horahexa(this.projeto.horasdir),
       status: this.projeto.status,
     });
   }

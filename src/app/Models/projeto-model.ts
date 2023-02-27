@@ -10,6 +10,7 @@ export class ProjetoModel {
   public horasve: number = 0;
   public horasplan: number = 0;
   public horasexec: number = 0;
+  public horasdir: number = 0;
   public status: string = '';
   public status_pl: string = '';
   public status_ex: string = '';

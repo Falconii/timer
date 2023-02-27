@@ -1,3 +1,4 @@
+import { ProjetoModel } from 'src/app/Models/projeto-model';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,13 +10,13 @@ import {
   selector: 'app-manut-atividade-lote',
   templateUrl: './manut-atividade-lote.component.html',
   styleUrls: ['./manut-atividade-lote.component.css'],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManutAtividadeLoteComponent implements OnInit {
-  items = Array.from({ length: 100000 }).map((_, i) => `Item #${i}`);
+  projeto: ProjetoModel = new ProjetoModel();
 
   constructor() {}
 
   ngOnInit() {}
+
+  onRetorno(): void {}
 }

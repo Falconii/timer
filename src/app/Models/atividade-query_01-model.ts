@@ -15,6 +15,7 @@ export class AtividadeQuery_01Model {
   public final: string = '';
   public horasplan: number = 0;
   public horasexec: number = 0;
+  public horasdir: number = 0;
   public obs: string = '';
   public status: string = '';
   public status_pl: string = '';
