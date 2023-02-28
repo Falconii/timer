@@ -20,7 +20,7 @@ const routes: Routes = [
     component: CrudPlanejamentoLancamentoComponent,
   },
   {
-    path: 'manuemlote/:id_empresa/:id_projeto/:id_atividade',
+    path: 'manuemlote/:id_empresa/:conta/:id_projeto',
     component: ManutAtividadeLoteComponent,
   },
   {

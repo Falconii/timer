@@ -746,10 +746,9 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   onManutencaoLote(): void {
     this.router.navigate([
       '/projetos/manuemlote',
-      this.atividade.id_empresa,
-      this.atividade.conta,
-      this.atividade.versao,
-      this.atividade.id_projeto,
+      this.id_empresa,
+      this.id_atividade_conta,
+      this.id_projeto,
     ]);
   }
 }

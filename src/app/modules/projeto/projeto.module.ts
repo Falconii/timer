@@ -1,3 +1,4 @@
+import { PeriodoDialogComponent } from './manut-atividade-lote/periodo-dialog/periodo-dialog.component';
 import { HorasDiretoriaComponent } from './horas-diretoria/horas-diretoria.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,6 +15,7 @@ import { RespAudiDialogComponent } from './crud-atividade-projeto/resp-audi-dial
 import { ManutAtividadeLoteComponent } from './manut-atividade-lote/manut-atividade-lote.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HorasDiretoriaDialogComponent } from './horas-diretoria/horas-diretoria-dialog/horas-diretoria-dialog.component';
+import { RespExecDialogComponent } from './manut-atividade-lote/resp-exec-dialog/resp-exec-dialog.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,9 @@ import { HorasDiretoriaDialogComponent } from './horas-diretoria/horas-diretoria
     ManutAtividadeLoteComponent,
     HorasDiretoriaComponent,
     HorasDiretoriaDialogComponent,
+    RespAudiDialogComponent,
+    PeriodoDialogComponent,
+    RespExecDialogComponent,
   ],
   imports: [
     ScrollingModule,
