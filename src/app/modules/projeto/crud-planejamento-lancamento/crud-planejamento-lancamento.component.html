@@ -1,7 +1,7 @@
 <p>
     <mat-toolbar>
-        <span class="example-spacer">Projeto: {{atividade.id_projeto}} Código Da Atividade: {{atividade.subconta }}</span>
-        <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Filtro Projetos" matTooltipPosition="above" *ngIf="idAcao == 99" (click)="setFiltro()">
+        <span class="example-spacer">Contrato: {{atividade.id_projeto}} Código Da Atividade: {{atividade.subconta }}</span>
+        <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Filtro Contratos" matTooltipPosition="above" *ngIf="idAcao == 99" (click)="setFiltro()">
           <mat-icon>filter_list</mat-icon>
          </button>
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="onRetorno()">
@@ -62,7 +62,7 @@
                       </button>
                     </div>
                     <div *ngIf="exibir(lanca)">
-                        <mat-label class="labelTitle" [matTooltip]="showDadosProjeto(lanca)" matTooltipPosition="above">Projeto:</mat-label>
+                        <mat-label class="labelTitle" [matTooltip]="showDadosProjeto(lanca)" matTooltipPosition="above">Contrato:</mat-label>
                         <mat-label class="labelData">{{lanca.id_projeto}}-{{lanca.proj_descricao}}</mat-label>
                     </div>
                     <div *ngIf="exibir(lanca)">

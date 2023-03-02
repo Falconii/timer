@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormDebugComponent } from './form-debug/form-debug.component';
 import { HoraSexagenalPipe } from './hora-sexagenal.pipe';
 import { SimNaoPipe } from './sim-nao.pipe';
-import { SituacaoTarefaTrabalhoPipe } from './situacao-tarefa-trabalho.pipe';
+import { SituacaoTarefaTrabalhoPipe } from './situacao-Atividade-Projeto.pipe';
 import { SituacaoTrabalhoProjetoPipe } from './situacao-trabalho-projeto.pipe';
 import { SituacaoProjetoPipe } from './situacao-projeto.pipe';
 import { SubcontaPipe } from './subconta.pipe';
@@ -19,6 +19,11 @@ import { MaterialModule } from '../material/material.module';
 import { CelCalendarComponent } from './cel-calendar/cel-calendar.component';
 import { AtivoPipe } from './ativo.pipe';
 import { QuestionDialogComponent } from './question-dialog/question-dialog.component';
+import { JustificativaPeriodoDialogComponent } from './justificativa-periodo-dialog/justificativa-periodo-dialog.component';
+import { JustificativaRespexecDialogComponent } from './justificativa-respexec-dialog/justificativa-respexec-dialog.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PeriodoDialogComponent } from './components/periodo-dialog/periodo-dialog.component';
+import { RespExecDialogComponent } from './components/resp-exec-dialog/resp-exec-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,8 +45,12 @@ import { QuestionDialogComponent } from './question-dialog/question-dialog.compo
     SpinsComponent,
     ProgressBarComponent,
     QuestionDialogComponent,
+    JustificativaRespexecDialogComponent,
+    JustificativaPeriodoDialogComponent,
+    PeriodoDialogComponent,
+    RespExecDialogComponent,
   ],
-  imports: [CommonModule, MaterialModule],
+  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
     FormDebugComponent,
     HoraSexagenalPipe,
@@ -61,6 +70,10 @@ import { QuestionDialogComponent } from './question-dialog/question-dialog.compo
     SpinsComponent,
     ProgressBarComponent,
     QuestionDialogComponent,
+    JustificativaRespexecDialogComponent,
+    JustificativaPeriodoDialogComponent,
+    PeriodoDialogComponent,
+    RespExecDialogComponent,
   ],
 })
 export class SharedModule {}

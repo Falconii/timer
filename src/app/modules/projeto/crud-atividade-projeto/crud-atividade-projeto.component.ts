@@ -744,11 +744,19 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   onManutencaoLote(): void {
-    this.router.navigate([
-      '/projetos/manuemlote',
-      this.id_empresa,
-      this.id_atividade_conta,
-      this.id_projeto,
-    ]);
+    console.log('this.id_atividade_conta)', this.id_atividade_conta);
+    if (
+      this.id_atividade_conta == 'NULL' ||
+      this.id_atividade_conta.trim() == ''
+    ) {
+      this.openSnackBar_OK('Selecione A Atividade Primeiro!', 'OK');
+    } else {
+      this.router.navigate([
+        '/projetos/manuemlote',
+        this.id_empresa,
+        this.id_atividade_conta,
+        this.id_projeto,
+      ]);
+    }
   }
 }

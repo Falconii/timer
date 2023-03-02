@@ -3,7 +3,7 @@
     <form [formGroup]="parametro" autocomplete="off">
         <div class="col-med-2">
             <mat-form-field field appearance="outline" class="col-max">
-                <mat-label>Projetos</mat-label>
+                <mat-label>Contratos</mat-label>
                 <mat-select formControlName="projeto">
                     <mat-option *ngFor="let projeto of projetos" [value]="projeto.id">
                         {{projeto.descricao}}

@@ -79,7 +79,14 @@ const routes: Routes = [
       ),
     canActivate: [DiganaoGuard],
   },
-
+  {
+    path: 'dashboard',
+    loadChildren: () =>
+      import('./modules/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule
+      ),
+    canActivate: [DiganaoGuard],
+  },
   {
     path: 'execucao',
     loadChildren: () =>

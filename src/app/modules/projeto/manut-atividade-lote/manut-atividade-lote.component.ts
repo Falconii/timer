@@ -1,4 +1,3 @@
-import { PeriodoData } from './periodo-dialog/periodo-data';
 import { UsuariosService } from './../../../services/usuarios.service';
 import { ProjetoModel } from 'src/app/Models/projeto-model';
 import {
@@ -19,9 +18,9 @@ import { FiltroOperacionalSubconta } from 'src/app/shared/filtro-operacional-sub
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
-import { RespExecData } from './resp-exec-dialog/resp-exec-data';
-import { RespExecDialogComponent } from './resp-exec-dialog/resp-exec-dialog.component';
-import { PeriodoDialogComponent } from './periodo-dialog/periodo-dialog.component';
+import { RespExecData } from 'src/app/shared/components/resp-exec-dialog/resp-exec-data';
+import { RespExecDialogComponent } from 'src/app/shared/components/resp-exec-dialog/resp-exec-dialog.component';
+import { PeriodoDialogComponent } from 'src/app/shared/components/periodo-dialog/periodo-dialog.component';
 
 export class DisplayAtividade {
   public checked: boolean = false;
@@ -274,6 +273,7 @@ export class ManutAtividadeLoteComponent implements OnInit {
   }
 
   openPeriodoDialog() {
+    /*
     const data: PeriodoData = new PeriodoData();
     data.texto = 'Defino Novo Periodo';
 
@@ -292,5 +292,6 @@ export class ManutAtividadeLoteComponent implements OnInit {
           alert('Pode Processar');
         }
       });
+      */
   }
 }

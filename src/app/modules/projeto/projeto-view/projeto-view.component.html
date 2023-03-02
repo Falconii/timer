@@ -8,6 +8,15 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
 <div class="div-barra">
     <mat-toolbar>
         <span class="example-spacer"><mat-label>{{labelCadastro}}</mat-label></span>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" matTooltip="Manutenção Datas" matTooltipPosition="above" *ngIf="( (idAcao == getAcoes()[ 'Edicao']) )">
+          <mat-icon>calendar_today</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onDataPeriodo()">
+            <mat-icon>calendar_view_day</mat-icon>
+            <span>Perído Do Contrato</span>
+          </button>
+        </mat-menu>
     </mat-toolbar>
 </div>
 <form [formGroup]="formulario" autocomplete="off">
@@ -29,7 +38,7 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
             <mat-datepicker #propostaDatePicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-max">
-            <mat-label>Data Projeto</mat-label>
+            <mat-label>Data Contrato</mat-label>
             <input matInput [matDatepicker]="projetoDatePicker" formControlName="dataproj" [readonly]="readOnly">
             <mat-datepicker-toggle matSuffix [for]="projetoDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #projetoDatePicker></mat-datepicker>

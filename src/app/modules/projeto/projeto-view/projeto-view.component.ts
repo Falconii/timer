@@ -1,3 +1,4 @@
+import { JustificativaPeriodoDialogComponent } from './../../../shared/justificativa-periodo-dialog/justificativa-periodo-dialog.component';
 import { GlobalService } from 'src/app/services/global.service';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { ParametroCliente01 } from './../../../parametros/parametro-cliente-01';
@@ -14,6 +15,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { horahexa } from 'src/app/shared/util';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogConfig,
+} from '@angular/material/dialog';
+import { PeriodoDialogData } from 'src/app/shared/components/periodo-dialog/periodo-dialog-data';
+import { PeriodoDialogComponent } from 'src/app/shared/components/periodo-dialog/periodo-dialog.component';
 
 @Component({
   selector: 'app-projeto-view',
@@ -56,7 +65,8 @@ export class ProjetoViewComponent implements OnInit {
     private globalService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public justificaticaPeriodoDialog: MatDialog
   ) {
     this.formulario = formBuilder.group({
       id: [{ value: '', disabled: true }],
@@ -349,5 +359,41 @@ export class ProjetoViewComponent implements OnInit {
           );
         }
       );
+  }
+
+  openJustficativaPeriodoDialog(): void {
+    const data: PeriodoDialogData = new PeriodoDialogData();
+    data.titulo = `ALTERAÇÃO DO PERÍDO`;
+    data.titulo_data1 = 'Data Do Contrato';
+    data.dataInicial = this.projeto.dataproj;
+    data.titulo_data2 = 'Data Do Encerramento';
+    data.dataFinal = this.projeto.dataenc;
+    data.justificativa = '';
+    data.dataHota = new Date();
+    data.usuarioNome = this.globalService.getNomeusuarioLogado();
+    data.temJustificativa = false;
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'question';
+    dialogConfig.width = '600px';
+    dialogConfig.data = data;
+    const modalDialog = this.justificaticaPeriodoDialog
+      .open(PeriodoDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: PeriodoDialogData) => {
+        console.log('Retorno data', data);
+        if (typeof data !== 'undefined' && data.processar) {
+          this.formulario.patchValue({ dataproj: data.dataInicial });
+          this.formulario.patchValue({ dataenc: data.dataFinal });
+          console.log('Fui....', this.formulario);
+          this.onSubmit();
+        }
+      });
+  }
+
+  onDataPeriodo() {
+    this.openJustficativaPeriodoDialog();
   }
 }

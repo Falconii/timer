@@ -38,6 +38,18 @@ body {
     margin-left: 10px;
 }
 
+.button-container-left {
+    display: flex;
+    justify-content: left;
+    height: min-content;
+    width: 100%;
+}
+
+.button-container-left mat-label {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
 .Browse {
     margin-left: auto;
     margin-right: auto;

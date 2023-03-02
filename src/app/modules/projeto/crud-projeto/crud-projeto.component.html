@@ -1,11 +1,11 @@
 <div class="div-barra">
     <mat-toolbar>
-        <span class="example-spacer">Projetos: </span>
+        <span class="example-spacer">Contratos: </span>
         <app-navegator [controle]="controlePaginas" (changePage)="onChangePage()"></app-navegator>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="getProjetos()" matTooltip="Novo Projeto" matTooltipPosition="above">
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="getProjetos()" matTooltip="Novo Contrato" matTooltipPosition="above">
         <mat-icon>rotate_right</mat-icon>
         </button>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon " (click)="escolha(inclusao,getAcoes()[ 'Inclusao'])" matTooltip="Novo Projeto" matTooltipPosition="above">
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon " (click)="escolha(inclusao,getAcoes()[ 'Inclusao'])" matTooltip="Novo Contrato" matTooltipPosition="above">
               <mat-icon>add_circle_outline</mat-icon>
         </button>
     </mat-toolbar>
@@ -63,7 +63,7 @@
             </mat-card-actions>
             <div *ngIf="projeto.id != 0">
                 <mat-card-content>
-                    <mat-label class="labelTitleFirst">Código:</mat-label>
+                    <mat-label class="labelTitleFirst">Contrato:</mat-label>
                     <mat-label class="labelData">{{projeto.id}}</mat-label>
                     <mat-label class="labelTitle">Descrição:</mat-label>
                     <mat-label class="labelData">{{projeto.descricao}}</mat-label>
@@ -77,7 +77,7 @@
                 <mat-card-content>
                     <mat-label class="labelTitleFirst">Data Proposta:</mat-label>
                     <mat-label class="labelData">{{projeto.dataprop | date : 'dd/MM/yyyy'}}</mat-label>
-                    <mat-label class="labelTitle">Data Projeto:</mat-label>
+                    <mat-label class="labelTitle">Data Contrato:</mat-label>
                     <mat-label class="labelData">{{projeto.dataproj | date : 'dd/MM/yyyy' }}</mat-label>
                     <mat-label class="labelTitle">Data Encerramento:</mat-label>
                     <mat-label class="labelData">{{projeto.dataenc | date : 'dd/MM/yyyy' }}</mat-label>
