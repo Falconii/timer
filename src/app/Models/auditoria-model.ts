@@ -1,4 +1,4 @@
-import { DataYYYYMMDDTHHMMSSZ } from '../shared/util';
+import { DataYYYYMMDDTHHMMSSZ } from '../shared/classes/util';
 
 export class AuditoriaModel {
   public id_empresa: number = 0;

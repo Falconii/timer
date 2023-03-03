@@ -1,4 +1,4 @@
-import { Dias_Planejados } from '../shared/dias-planejados';
+import { Dias_Planejados } from '../shared/classes/dias-planejados';
 export class ParametroAgendaPlanejamento02 {
   public id_empresa: number = 0;
   public id_projeto: number = 0;

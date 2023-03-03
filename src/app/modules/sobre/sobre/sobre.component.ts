@@ -8,7 +8,7 @@ import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ParametroEmailOla } from 'src/app/parametros/parametro-email-ola';
-import { UserEmail } from 'src/app/shared/User-Email';
+import { UserEmail } from 'src/app/shared/classes/User-Email';
 
 @Component({
   selector: 'app-sobre',

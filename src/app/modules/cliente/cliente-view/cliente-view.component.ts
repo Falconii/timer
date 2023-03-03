@@ -12,7 +12,7 @@ import { DropdownService } from 'src/app/shared/services/dropdown.service';
 import { EstadoModel } from 'src/app/Models/estado-model';
 import { ClientesModel } from 'src/app/Models/cliente-model';
 import { GrupoEcoModel } from 'src/app/Models/gru-eco-models';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { GrupoEconomicoService } from 'src/app/services/grupo-economico.service';
 

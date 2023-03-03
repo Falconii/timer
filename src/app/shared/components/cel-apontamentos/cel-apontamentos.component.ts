@@ -1,7 +1,7 @@
-import { GlobalService } from './../../services/global.service';
-import { ParametroAponExecucao01 } from './../../parametros/parametro-apon-execucao01';
-import { AponExecucaoService } from './../../services/apon-execucao.service';
-import { CelulaDia } from 'src/app/shared/celula-dia';
+import { GlobalService } from '../../../services/global.service';
+import { ParametroAponExecucao01 } from '../../../parametros/parametro-apon-execucao01';
+import { AponExecucaoService } from '../../../services/apon-execucao.service';
+import { CelulaDia } from 'src/app/shared/classes/celula-dia';
 import { Component, Input, OnInit } from '@angular/core';
 import { ApoExecucaoModel } from 'src/app/Models/apo-execucao-model';
 import { ApoExecucaoModel01 } from 'src/app/Models/apo-execucao-model01';

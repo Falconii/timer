@@ -2,7 +2,7 @@ import { GlobalService } from 'src/app/services/global.service';
 import { MotivoApoService } from './../../../services/motivo-apo.service';
 import { MotivoApoModel } from './../../../Models/motivo-apo-model';
 import { Component, OnInit } from '@angular/core';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';

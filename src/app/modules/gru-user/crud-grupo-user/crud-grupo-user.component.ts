@@ -1,12 +1,12 @@
 import { GlobalService } from './../../../services/global.service';
-import { MensagensBotoes } from 'src/app/shared/util';
+import { MensagensBotoes } from 'src/app/shared/classes/util';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GruUserModel } from 'src/app/Models/gru-user-model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ParametroGruuser01 } from 'src/app/parametros/parametro-gruuser-01';
 import { GrupoUserService } from 'src/app/services/grupo-user.service';
 

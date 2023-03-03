@@ -1,4 +1,4 @@
-import { DataDDMMYYYY } from '../shared/util';
+import { DataDDMMYYYY } from '../shared/classes/util';
 
 export class EmpresaModel {
   public id: number = 0;

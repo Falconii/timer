@@ -1,16 +1,16 @@
 import { EstruturaModel } from 'src/app/Models/estrutura-model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MensagensBotoes } from 'src/app/shared/util';
+import { MensagensBotoes } from 'src/app/shared/classes/util';
 import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
-import { HistoricoSubconta } from 'src/app/shared/historico-subconta';
 import { EstruturasService } from 'src/app/services/estruturas.service';
-import { SimNao } from 'src/app/shared/sim-nao';
+import { SimNao } from 'src/app/shared/classes/sim-nao';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
+import { HistoricoSubconta } from 'src/app/shared/classes/historico-subconta';
 
 @Component({
   selector: 'app-crud-subestrutura',

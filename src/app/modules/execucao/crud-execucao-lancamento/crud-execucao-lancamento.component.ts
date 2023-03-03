@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { ApoExecucaoModel } from 'src/app/Models/apo-execucao-model';
 import { MoviData } from 'src/app/Models/movi-data';
 import { AponPlanejamentoService } from 'src/app/services/apon-planejamento.service';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import {
   aaaammddddmmaaaa,
   DataYYYYMMDD,
@@ -22,13 +22,13 @@ import {
   setDBtoAngularGMT,
   setHorario,
   validaIntervalo,
-} from 'src/app/shared/util';
+} from 'src/app/shared/classes/util';
 import { EstruturaModel } from 'src/app/Models/estrutura-model';
 import { ParametroAtividade01 } from 'src/app/parametros/parametro-atividade01';
 import { AtividadesService } from 'src/app/services/atividades.service';
 import { MotivoApoModel } from 'src/app/Models/motivo-apo-model';
-import { Intervalo } from 'src/app/shared/intervalo';
-import { ErrorIntervalo } from 'src/app/shared/error-intervalo';
+import { Intervalo } from 'src/app/shared/classes/intervalo';
+import { ErrorIntervalo } from 'src/app/shared/classes/error-intervalo';
 import { ApoExecucaoModel01 } from 'src/app/Models/apo-execucao-model01';
 import { ApoPlanejamentoQuery_01Model } from 'src/app/Models/apo-planejamento-query_01-model';
 import { AtividadeQuery_01Model } from 'src/app/Models/atividade-query_01-model';
@@ -39,7 +39,7 @@ import { MotivoApoService } from 'src/app/services/motivo-apo.service';
 import { ParametroAgendaPlanejamento01 } from 'src/app/parametros/parametro-agenda-planejamento01';
 import { ParametroAponExecucao01 } from 'src/app/parametros/parametro-apon-execucao01';
 import { ParametroMotivoApo01 } from 'src/app/parametros/parametro-motivo-apo01';
-import { RetornoPesquisa } from 'src/app/shared/retorno-pesquisa';
+import { RetornoPesquisa } from 'src/app/shared/classes/retorno-pesquisa';
 
 @Component({
   selector: 'app-crud-execucao-lancamento',

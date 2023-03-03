@@ -4,3 +4,7 @@ h1 {
     font-size: x-large;
     color: blue;
 }
+
+.full-width {
+    width: 100%;
+}

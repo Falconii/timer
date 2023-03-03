@@ -1,4 +1,4 @@
-import { ProgressBarClass } from './../../../shared/progress-bar/ProgressBar-class';
+import { ProgressBarClass } from '../../../shared/components/progress-bar/ProgressBar-class';
 import {
   MatDialog,
   MatDialogConfig,
@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { ProgressBarComponent } from 'src/app/shared/progress-bar/progress-bar.component';
+import { ProgressBarComponent } from 'src/app/shared/components/progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-login',

@@ -1,13 +1,16 @@
-import { QuestionDialogComponent } from './../../../shared/question-dialog/question-dialog.component';
-import { QuestionDialogData } from './../../../shared/question-dialog/Question-Dialog-Data';
+import { RespExecDialogComponent } from 'src/app/shared/components/resp-exec-dialog/resp-exec-dialog.component';
+import { JustificativaRespexecDialogComponent } from '../../../shared/components/justificativa-respexec-dialog/justificativa-respexec-dialog.component';
+import { JustificativaDialogData } from '../../../shared/components/justificativa-periodo-dialog/justificativa-dialog-data';
+import { QuestionDialogComponent } from '../../../shared/components/question-dialog/question-dialog.component';
+import { QuestionDialogData } from '../../../shared/components/question-dialog/Question-Dialog-Data';
 import { GlobalService } from './../../../services/global.service';
 import { RespAudiData } from './resp-audi-dialog/resp-audi-data';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
-import { DataYYYYMMDD, MensagensBotoes } from 'src/app/shared/util';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
+import { DataYYYYMMDD, MensagensBotoes } from 'src/app/shared/classes/util';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import {
   ActivatedRoute,
@@ -29,7 +32,6 @@ import { AtividadesService } from 'src/app/services/atividades.service';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { EstruturasService } from 'src/app/services/estruturas.service';
 import { ProjetosService } from 'src/app/services/projetos.service';
-import { FiltroOperacionalSubconta } from 'src/app/shared/filtro-operacional-subconta';
 import {
   MatDialog,
   MAT_DIALOG_DATA,
@@ -37,6 +39,10 @@ import {
   MatDialogConfig,
 } from '@angular/material/dialog';
 import { RespAudiDialogComponent } from './resp-audi-dialog/resp-audi-dialog.component';
+import { PeriodoDialogData } from 'src/app/shared/components/periodo-dialog/periodo-dialog-data';
+import { PeriodoDialogComponent } from 'src/app/shared/components/periodo-dialog/periodo-dialog.component';
+import { RespExecDialogData } from 'src/app/shared/components/resp-exec-dialog/resp-exec-dialog-data';
+import { FiltroOperacionalSubconta } from 'src/app/shared/classes/filtro-operacional-subconta';
 
 @Component({
   selector: 'app-crud-atividade-projeto',
@@ -105,6 +111,8 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   constructor(
     public questionDialog: MatDialog,
     public respAudiDialog: MatDialog,
+    public jusPeriodoDialog: MatDialog,
+    public jusRespExecDialog: MatDialog,
     private formBuilder: FormBuilder,
     private estruturasService: EstruturasService,
     private atividadesService: AtividadesService,
@@ -314,7 +322,27 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   getExecutores() {
     let par = new ParametroUsuario01();
 
-    par.id_empresa = this.id_empresa;
+    par.id_empresa = this.globalService.id_empresa;
+
+    const dire = this.usuariosService.getGruposDiretoria();
+
+    const coorde = this.usuariosService.getGruposCoordenador();
+
+    const audi = this.usuariosService.getGruposAuditor();
+
+    par.id_empresa = this.globalService.id_empresa;
+
+    dire.forEach((value) => {
+      par.grupo.push(value);
+    });
+
+    coorde.forEach((value) => {
+      par.grupo.push(value);
+    });
+
+    audi.forEach((value) => {
+      par.grupo.push(value);
+    });
 
     par.orderby = 'Razão';
 
@@ -395,16 +423,19 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   excluir(id_empresa: number, id: number) {
+    this.globalService.setSpin(true);
     this.inscricaoAnexar = this.atividadesService
       .atividadeDelete(id_empresa, id)
       .subscribe(
         (data: any) => {
+          this.globalService.setSpin(false);
           this.atividades = [];
           this.conta = '';
           this.getProjeto();
           this.openSnackBar_OK(`Atividade Excluída Com Sucesso!`, 'OK');
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           console.log(error);
           this.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -543,15 +574,17 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     this.atividade.obs = this.formulario.value.obs;
     switch (+this.idAcao) {
       case CadastroAcoes.Edicao:
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.atividadesService
           .atividadeUpdate(this.atividade)
           .subscribe(
             async (data: any) => {
+              this.globalService.setSpin(false);
               this.onCancel();
               this.refreshAtividade(this.atividade);
             },
             (error: any) => {
-              console.log('Error', error.error);
+              this.globalService.setSpin(false);
               this.openSnackBar_Err(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -758,5 +791,82 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         this.id_projeto,
       ]);
     }
+  }
+
+  onPeriodo() {
+    this.openJusPeriodoDialog();
+  }
+
+  onResponsavel() {
+    this.openJusRespExecDialog('R');
+  }
+
+  onExecutor() {
+    this.openJusRespExecDialog('E');
+  }
+
+  openJusPeriodoDialog(): void {
+    const data: PeriodoDialogData = new PeriodoDialogData();
+    data.titulo = `ALTERAÇÃO DO PERÍODO`;
+    data.titulo_data1 = 'Data Inicial';
+    data.dataInicial = this.atividade.inicial;
+    data.titulo_data2 = 'Data Final';
+    data.dataFinal = this.atividade.final;
+    data.justificativa = '';
+    data.dataHota = new Date();
+    data.usuarioNome = this.globalService.getNomeusuarioLogado();
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'jus-Periodo';
+    dialogConfig.width = '600px';
+    dialogConfig.data = data;
+    const modalDialog = this.jusPeriodoDialog
+      .open(PeriodoDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: PeriodoDialogData) => {
+        console.log('Retorno data', data);
+        if (typeof data !== 'undefined' && data.processar) {
+          this.formulario.patchValue({ inicial: data.dataInicial });
+          this.formulario.patchValue({ final: data.dataFinal });
+          console.log('Fui....', this.formulario);
+          this.onSubmit();
+        }
+      });
+  }
+
+  openJusRespExecDialog(tipo: string) {
+    const data: RespExecDialogData = new RespExecDialogData();
+    data.titulo = `${tipo == 'R' ? 'Responsável' : 'Executor'}`;
+    data.texto = `ALTERAÇÃO DO ${tipo == 'R' ? 'RESPONSÁVEL' : 'EXECUTOR'}`;
+    data.usuarios = this.executores;
+    data.id_usuario =
+      tipo == 'R' ? this.atividade.id_resp : this.atividade.id_exec;
+    data.justificativa = '';
+    data.dataHota = new Date();
+    data.usuarioNome = this.globalService.getNomeusuarioLogado();
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'jus-Person';
+    dialogConfig.width = '600px';
+    dialogConfig.data = data;
+    const modalDialog = this.jusRespExecDialog
+      .open(RespExecDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: RespExecDialogData) => {
+        console.log('Retorno data', data);
+        if (typeof data !== 'undefined' && data.processar) {
+          if ((tipo = 'R')) {
+            this.formulario.patchValue({ id_resp: data.id_usuario });
+          } else {
+            this.formulario.patchValue({ id_exec: data.id_usuario });
+          }
+          console.log('Fui....', this.formulario);
+          this.onSubmit();
+        }
+      });
   }
 }

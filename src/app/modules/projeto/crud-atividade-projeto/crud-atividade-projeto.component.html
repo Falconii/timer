@@ -2,19 +2,40 @@
 <div class="div-barra">
     <mat-toolbar>
         <span class="example-spacer">Contrato:{{projeto.id}}  {{projeto.descricao}} - Manutenção das Atividades </span>
-        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" matTooltip="Manutenção Auxliar" matTooltipPosition="above">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="onHorasDiretoria()">
-            <mat-icon>assignment</mat-icon>
-            <span>Horas Diretoria</span>
-          </button>
-            <button mat-menu-item (click)="onManutencaoLote()">
-            <mat-icon>assignment_ind</mat-icon>
-            <span>Manutenção Em Lote</span>
-          </button>
-        </mat-menu>
+        <section *ngIf="idAcao==99">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" matTooltip="Manutenção Auxliar" matTooltipPosition="above">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="onHorasDiretoria()">
+                  <mat-icon>assignment</mat-icon>
+                  <span>Horas Diretoria</span>
+                </button>
+                <button mat-menu-item (click)="onManutencaoLote()">
+                  <mat-icon>assignment_ind</mat-icon>
+                  <span>Manutenção Em Lote</span>
+                </button>
+            </mat-menu>
+        </section>
+        <section *ngIf="idAcao!=99">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" matTooltip="Manutenção Auditada ATIVIDADE" matTooltipPosition="above">
+                 <mat-icon>edit</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="onPeriodo()">
+                <mat-icon>assignment</mat-icon>
+                <span>Período</span>
+              </button>
+                <button mat-menu-item (click)="onResponsavel()">
+                <mat-icon>assignment_ind</mat-icon>
+                <span>Responsável</span>
+              </button>
+                <button mat-menu-item (click)="onExecutor()">
+                <mat-icon>assignment_ind</mat-icon>
+                <span>Executor</span>
+              </button>
+            </mat-menu>
+        </section>
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="onRetorno()" *ngIf="idAcao == 99">
           <mat-icon>arrow_back</mat-icon>
         </button>

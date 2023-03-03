@@ -14,13 +14,12 @@ import { AtividadesService } from 'src/app/services/atividades.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ParametroAtividade01 } from 'src/app/parametros/parametro-atividade01';
-import { FiltroOperacionalSubconta } from 'src/app/shared/filtro-operacional-subconta';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
-import { RespExecData } from 'src/app/shared/components/resp-exec-dialog/resp-exec-data';
 import { RespExecDialogComponent } from 'src/app/shared/components/resp-exec-dialog/resp-exec-dialog.component';
 import { PeriodoDialogComponent } from 'src/app/shared/components/periodo-dialog/periodo-dialog.component';
+import { FiltroOperacionalSubconta } from 'src/app/shared/classes/filtro-operacional-subconta';
 
 export class DisplayAtividade {
   public checked: boolean = false;
@@ -246,6 +245,7 @@ export class ManutAtividadeLoteComponent implements OnInit {
   }
 
   openRespExecDialog(titulo: string, texto: string) {
+    /*
     const data: RespExecData = new RespExecData();
     data.usuarios = this.usuarios;
     data.titulo = titulo;
@@ -266,6 +266,7 @@ export class ManutAtividadeLoteComponent implements OnInit {
           alert('Pode Processar');
         }
       });
+      */
   }
 
   onPeriodo() {

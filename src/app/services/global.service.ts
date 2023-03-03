@@ -1,4 +1,4 @@
-import { CelulaDia } from './../shared/celula-dia';
+import { CelulaDia } from '../shared/classes/celula-dia';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { Injectable, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';

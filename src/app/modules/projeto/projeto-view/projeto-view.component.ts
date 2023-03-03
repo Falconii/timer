@@ -1,4 +1,4 @@
-import { JustificativaPeriodoDialogComponent } from './../../../shared/justificativa-periodo-dialog/justificativa-periodo-dialog.component';
+import { JustificativaPeriodoDialogComponent } from '../../../shared/components/justificativa-periodo-dialog/justificativa-periodo-dialog.component';
 import { GlobalService } from 'src/app/services/global.service';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { ParametroCliente01 } from './../../../parametros/parametro-cliente-01';
@@ -9,12 +9,12 @@ import { UsuarioQuery01Model } from './../../../Models/usuario-query_01-model';
 import { ProjetosService } from './../../../services/projetos.service';
 import { ProjetoModel } from './../../../Models/projeto-model';
 import { Component, OnInit } from '@angular/core';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { Subscription, Subscriber } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { horahexa } from 'src/app/shared/util';
+import { horahexa } from 'src/app/shared/classes/util';
 import {
   MatDialog,
   MAT_DIALOG_DATA,
@@ -371,7 +371,6 @@ export class ProjetoViewComponent implements OnInit {
     data.justificativa = '';
     data.dataHota = new Date();
     data.usuarioNome = this.globalService.getNomeusuarioLogado();
-    data.temJustificativa = false;
 
     const dialogConfig = new MatDialogConfig();
 

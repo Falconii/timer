@@ -1,5 +1,5 @@
 import { GlobalService } from 'src/app/services/global.service';
-import { MensagensBotoes } from 'src/app/shared/util';
+import { MensagensBotoes } from 'src/app/shared/classes/util';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GrupoUserService } from 'src/app/services/grupo-user.service';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { GruUserModel } from 'src/app/Models/gru-user-model';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';

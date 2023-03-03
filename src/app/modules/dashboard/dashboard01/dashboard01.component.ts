@@ -6,7 +6,7 @@ import { GlobalService } from './../../../services/global.service';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { unsupported } from '@angular/compiler/src/render3/view/util';
-import { DataYYYYMMDDTHHMMSSZ } from 'src/app/shared/util';
+import { DataYYYYMMDDTHHMMSSZ } from 'src/app/shared/classes/util';
 
 @Component({
   selector: 'app-dashboard01',

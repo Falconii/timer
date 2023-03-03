@@ -4,7 +4,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { JustificativaDialogData } from '../justificativa-periodo-dialog/justificativa-dialog-data';
 import { MatSelectChange } from '@angular/material/select';
-import { ValidatorStringLen } from '../Validators/validator-string-len';
+import { ValidatorStringLen } from '../../Validators/validator-string-len';
 
 @Component({
   selector: 'app-justificativa-respexec-dialog',

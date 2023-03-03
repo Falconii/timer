@@ -1,9 +1,9 @@
 import { GlobalService } from './../../../services/global.service';
-import { MensagensBotoes } from 'src/app/shared/util';
+import { MensagensBotoes } from 'src/app/shared/classes/util';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ParametroGrupoEco01 } from 'src/app/parametros/parametro-grupo-eco01';

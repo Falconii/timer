@@ -1,4 +1,4 @@
-import { CelulaDia } from './../celula-dia';
+import { CelulaDia } from '../../classes/celula-dia';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({

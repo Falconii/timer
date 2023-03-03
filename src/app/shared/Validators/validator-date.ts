@@ -1,5 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { DataYYYYMMDD, ddmmaaaatoaaaammdd } from '../util';
+import { DataYYYYMMDD, ddmmaaaatoaaaammdd } from '../classes/util';
 
 export function ValidatorDate(required: boolean = false): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

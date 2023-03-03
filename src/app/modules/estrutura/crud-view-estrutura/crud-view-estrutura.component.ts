@@ -1,13 +1,13 @@
-import { SimNao } from './../../../shared/sim-nao';
+import { SimNao } from '../../../shared/classes/sim-nao';
 import { EstruturasService } from 'src/app/services/estruturas.service';
 import { EstruturaModel } from 'src/app/Models/estrutura-model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TipoConta } from 'src/app/shared/tipo-conta';
+import { TipoConta } from 'src/app/shared/classes/tipo-conta';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 @Component({
   selector: 'app-crud-view-estrutura',

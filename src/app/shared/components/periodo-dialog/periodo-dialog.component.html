@@ -17,15 +17,16 @@
     <mat-form-field class="full-width" appearance="outline" *ngIf="data.temJustificativa">
         <mat-label>Justificativa</mat-label>
         <textarea matInput formControlName="justificativa" oninput="this.value = this.value.toUpperCase()"></textarea>
+        <mat-error *ngIf="formulario.get('justificativa')?.status == 'INVALID' && touchedOrDirty('justificativa')">{{getMensafield('justificativa')}}</mat-error>
     </mat-form-field>
     <div class="button-container-right">
         <button mat-raised-button color="accent" cdkFocusInitial (click)="closeModal()">
         <mat-icon>cancel</mat-icon>
-        Cancelar
+        <span>Cancelar</span>
       </button>
         <button mat-raised-button color="primary" [mat-dialog-close]="data" (click)="actionFunction()" *ngIf="formulario.valid">
           <mat-icon>check</mat-icon>
-          Gravar
+          <span>Gravar</span>
       </button>
     </div>
     <div class="button-container-left">

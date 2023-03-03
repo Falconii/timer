@@ -4,7 +4,7 @@ import { ProjetoModel } from 'src/app/Models/projeto-model';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
-import { RetornoPesquisa } from 'src/app/shared/retorno-pesquisa';
+import { RetornoPesquisa } from 'src/app/shared/classes/retorno-pesquisa';
 
 @Component({
   selector: 'app-show-atividades-data',

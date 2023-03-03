@@ -1,10 +1,10 @@
 import { GlobalService } from './../../../services/global.service';
-import { ControlePaginas } from '../../../shared/controle-paginas';
-import { MensagensBotoes } from 'src/app/shared/util';
+import { ControlePaginas } from '../../../shared/classes/controle-paginas';
+import { MensagensBotoes } from 'src/app/shared/classes/util';
 import { GrupoEconomicoService } from '../../../services/grupo-economico.service';
 import { ClientesService } from '../../../services/clientes.service';
 import { ParametroCliente01 } from '../../../parametros/parametro-cliente-01';
-import { CadastroAcoes } from '../../../shared/cadastro-acoes';
+import { CadastroAcoes } from '../../../shared/classes/cadastro-acoes';
 import { GrupoEcoModel } from '../../../Models/gru-eco-models';
 import { ClientesQuery01Model } from '../../../Models/cliente-query_01-model';
 import { Component, OnInit } from '@angular/core';

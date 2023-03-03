@@ -14,7 +14,7 @@ export class PeriodoDialogComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    public dialogRef: MatDialogRef<PeriodoDialogData>,
+    public dialogRef: MatDialogRef<PeriodoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PeriodoDialogData
   ) {
     this.formulario = formBuilder.group({
@@ -43,6 +43,9 @@ export class PeriodoDialogComponent implements OnInit {
     this.data.processar = true;
     this.data.dataInicial = this.formulario.value.dataInicial;
     this.data.dataFinal = this.formulario.value.dataFinal;
+    if (this.data.temJustificativa) {
+      this.data.justificativa = this.formulario.value.justificativa;
+    }
     this.closeModal();
   }
 

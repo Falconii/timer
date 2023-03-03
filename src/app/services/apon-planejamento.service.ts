@@ -1,5 +1,5 @@
 import { ApoPlanejamentoMoldel } from 'src/app/Models/apo-planejamento-moldel';
-import { Dias_Planejados } from './../shared/dias-planejados';
+import { Dias_Planejados } from '../shared/classes/dias-planejados';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';

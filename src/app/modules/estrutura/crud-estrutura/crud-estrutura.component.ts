@@ -1,5 +1,5 @@
-import { QuestionDialogComponent } from './../../../shared/question-dialog/question-dialog.component';
-import { QuestionDialogData } from './../../../shared/question-dialog/Question-Dialog-Data';
+import { QuestionDialogComponent } from '../../../shared/components/question-dialog/question-dialog.component';
+import { QuestionDialogData } from '../../../shared/components/question-dialog/Question-Dialog-Data';
 import { EstruturaModel } from 'src/app/Models/estrutura-model';
 import { EstruturasService } from 'src/app/services/estruturas.service';
 import { Component, OnInit } from '@angular/core';
@@ -7,8 +7,8 @@ import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MensagensBotoes } from 'src/app/shared/util';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { MensagensBotoes } from 'src/app/shared/classes/util';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
 import { GlobalService } from 'src/app/services/global.service';
 import {

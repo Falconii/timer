@@ -1,13 +1,13 @@
 import { GlobalService } from 'src/app/services/global.service';
-import { ListaMeses } from './../../../shared/lista-meses';
+import { ListaMeses } from '../../../shared/classes/lista-meses';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CalendarLine } from 'src/app/shared/calendar-line';
-import { CelulaDia } from 'src/app/shared/celula-dia';
+import { CalendarLine } from 'src/app/shared/classes/calendar-line';
+import { CelulaDia } from 'src/app/shared/classes/celula-dia';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { AgeHorasModel } from 'src/app/Models/age-horas-model';

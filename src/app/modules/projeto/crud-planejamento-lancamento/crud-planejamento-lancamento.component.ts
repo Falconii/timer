@@ -19,15 +19,15 @@ import {
   setDBtoAngularGMT,
   setHorario,
   validaIntervalo,
-} from 'src/app/shared/util';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+} from 'src/app/shared/classes/util';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ApoPlanejamentoMoldel } from 'src/app/Models/apo-planejamento-moldel';
 import { ParametroAgendaPlanejamento03 } from 'src/app/parametros/parametro-agenda-planejamento03';
-import { ErrorIntervalo } from 'src/app/shared/error-intervalo';
+import { ErrorIntervalo } from 'src/app/shared/classes/error-intervalo';
 import { AtividadeModel } from 'src/app/Models/atividade-model';
 import { Movimento } from 'src/app/Models/movimento';
 import { AponPlanejamentoService } from 'src/app/services/apon-planejamento.service';
-import { Intervalo } from 'src/app/shared/intervalo';
+import { Intervalo } from 'src/app/shared/classes/intervalo';
 import { GlobalService } from 'src/app/services/global.service';
 
 @Component({

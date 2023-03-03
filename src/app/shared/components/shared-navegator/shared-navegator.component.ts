@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ControlePaginas } from '../controle-paginas';
+import { ControlePaginas } from '../../classes/controle-paginas';
 
 @Component({
   selector: 'app-navegator',

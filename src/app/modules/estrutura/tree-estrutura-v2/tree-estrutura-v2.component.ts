@@ -1,5 +1,5 @@
 import { GlobalService } from 'src/app/services/global.service';
-import { NivelEstrutura } from './../../../shared/nivel-estrutura';
+import { NivelEstrutura } from '../../../shared/classes/nivel-estrutura';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,11 +8,11 @@ import { Subscription } from 'rxjs';
 import { EstruturaModel } from 'src/app/Models/estrutura-model';
 import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
 import { EstruturasService } from 'src/app/services/estruturas.service';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
-import { SimNao } from 'src/app/shared/sim-nao';
-import { TipoConta } from 'src/app/shared/tipo-conta';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
+import { SimNao } from 'src/app/shared/classes/sim-nao';
+import { TipoConta } from 'src/app/shared/classes/tipo-conta';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
-import { TabelaNivel } from 'src/app/shared/tabela-nivel';
+import { TabelaNivel } from 'src/app/shared/classes/tabela-nivel';
 
 @Component({
   selector: 'app-tree-estrutura-v2',

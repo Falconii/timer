@@ -1,4 +1,4 @@
-import { UserEmail } from '../shared/User-Email';
+import { UserEmail } from '../shared/classes/User-Email';
 
 export class ParametroEmailOla {
   public id_empresa: number = 0;

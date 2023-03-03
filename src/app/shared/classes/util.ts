@@ -1,6 +1,6 @@
-import { ApoExecucaoModel } from '../Models/apo-execucao-model';
-import { Movimento } from '../Models/movimento';
-import { MoviData } from './../Models/movi-data';
+import { ApoExecucaoModel } from '../../Models/apo-execucao-model';
+import { Movimento } from '../../Models/movimento';
+import { MoviData } from '../../Models/movi-data';
 import { Dias_Planejados } from './dias-planejados';
 import { ErrorIntervalo } from './error-intervalo';
 import { Intervalo } from './intervalo';

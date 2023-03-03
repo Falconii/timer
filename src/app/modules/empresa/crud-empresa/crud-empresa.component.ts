@@ -3,14 +3,14 @@ import {
   DataDDMMYYYY,
   DataYYYYMMDD,
   MensagensBotoes,
-} from 'src/app/shared/util';
+} from 'src/app/shared/classes/util';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EmpresaQuery01Model } from 'src/app/Models/empresa-query_01-model';
-import { CadastroAcoes } from 'src/app/shared/cadastro-acoes';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ParametroEmpresa01 } from 'src/app/parametros/parametro-empresa-01';
 import { EmpresasService } from 'src/app/services/empresas.service';
 
