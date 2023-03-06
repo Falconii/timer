@@ -1,3 +1,4 @@
+import { ShowClienteDialogComponent } from './components/show-cliente-dialog/show-cliente-dialog.component';
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 import { SpinsComponent } from './spins/spins.component';
 import { VersaoPipe } from './pipes/versao-pipe';
@@ -49,6 +50,7 @@ import { RespExecDialogComponent } from './components/resp-exec-dialog/resp-exec
     JustificativaPeriodoDialogComponent,
     PeriodoDialogComponent,
     RespExecDialogComponent,
+    ShowClienteDialogComponent,
   ],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -74,6 +76,7 @@ import { RespExecDialogComponent } from './components/resp-exec-dialog/resp-exec
     JustificativaPeriodoDialogComponent,
     PeriodoDialogComponent,
     RespExecDialogComponent,
+    ShowClienteDialogComponent,
   ],
 })
 export class SharedModule {}

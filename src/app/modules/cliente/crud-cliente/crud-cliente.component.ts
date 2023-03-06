@@ -1,3 +1,5 @@
+import { ShowClienteDialogData } from './../../../shared/components/show-cliente-dialog/show-cliente-dialog-data';
+import { ClientesModel } from './../../../Models/cliente-model';
 import { GlobalService } from './../../../services/global.service';
 import { ControlePaginas } from '../../../shared/classes/controle-paginas';
 import { MensagensBotoes } from 'src/app/shared/classes/util';
@@ -12,6 +14,14 @@ import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogConfig,
+} from '@angular/material/dialog';
+import { ShowClienteDialogComponent } from 'src/app/shared/components/show-cliente-dialog/show-cliente-dialog.component';
+
 @Component({
   selector: 'app-crud-cliente',
   templateUrl: './crud-cliente.component.html',
@@ -44,7 +54,8 @@ export class CrudClienteComponent implements OnInit {
     private grupoEconomicoService: GrupoEconomicoService,
     private globalService: GlobalService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public showClienteDialog: MatDialog
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -226,5 +237,25 @@ export class CrudClienteComponent implements OnInit {
 
   onHome() {
     this.router.navigate(['']);
+  }
+
+  onShowCliente(cliente: any): void {
+    this.openShowClienteDialog(cliente);
+  }
+
+  openShowClienteDialog(cliente: ClientesQuery01Model) {
+    const data: ShowClienteDialogData = new ShowClienteDialogData();
+    data.cliente = cliente;
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.id = 'show-cliente';
+    dialogConfig.data = data;
+    const modalDialog = this.showClienteDialog
+      .open(ShowClienteDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: ShowClienteDialogData) => {
+        console.log('Retorno data', data);
+      });
   }
 }

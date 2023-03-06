@@ -10,6 +10,7 @@
         <button mat-button [matMenuTriggerFor]="planejamento" (click)="setOpcao('Planejamento')" [ngStyle]="{'color' : opcao==='Planejamento' ? 'red' : 'white' }" *ngIf="okPlanejamento()">Planejamento</button>
         <button mat-button [matMenuTriggerFor]="execucao"     (click)="setOpcao('Execução')" [ngStyle]="{'color' : opcao==='Execução' ? 'red' : 'white' }" *ngIf="okExecucao()">Execução</button>
         <button mat-button [matMenuTriggerFor]="sobre" (click)="setOpcao('Sobre')" [ngStyle]="{'color' : opcao==='Sobre' ? 'red' : 'white' }">Sobre</button>
+        <button mat-button [matMenuTriggerFor]="tabela" (click)="setOpcao('Cliente Tabela')" [ngStyle]="{'color' : opcao==='Cliente Tabela' ? 'red' : 'white' }">Cliente Tabela</button>
         </span>
         <span>
         <!-- #docregion sub-menu -->
@@ -37,6 +38,9 @@
         </mat-menu>
         <mat-menu #sobre="matMenu">
           <button mat-menu-item routerLink="sobre">Parâmentos Do Sistema</button>
+        </mat-menu>
+        <mat-menu #tabela="matMenu">
+          <button mat-menu-item routerLink="tabela">Cliente Tabela</button>
         </mat-menu>
       </span>
         <span class="example-spacer"></span>

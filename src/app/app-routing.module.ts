@@ -118,6 +118,14 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
+    path: 'tabela',
+    loadChildren: () =>
+      import('./modules/cliente-tabela/cliente-tabela.module').then(
+        (m) => m.ClienteTabelaModule
+      ),
+    canActivate: [DiganaoGuard],
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'home',
