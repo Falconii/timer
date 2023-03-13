@@ -1,3 +1,5 @@
+import { AppSnackbar } from './shared/classes/app-snackbar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { GlobalService } from './services/global.service';
 import { DiganaoGuard } from './guards/diganao.guard';
 import { MaterialModule } from './material/material.module';
@@ -12,6 +14,8 @@ import { HomeComponent } from './home/home.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgxMaskModule } from 'ngx-mask';
 import { SharedModule } from './shared/shared.module';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { BrPaginatorIntl } from './shared/classes/br-PaginatorIntl';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -31,6 +35,7 @@ import { SharedModule } from './shared/shared.module';
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     DiganaoGuard,
     GlobalService,
+    { provide: MatPaginatorIntl, useClass: BrPaginatorIntl },
   ],
   bootstrap: [AppComponent],
 })

@@ -1,5 +1,5 @@
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { AgeHorasModel } from '../../../Models/age-horas-model';
-import { AuditorModel } from './../../../Models/auditor-model';
 import { GlobalService } from 'src/app/services/global.service';
 import { UsuarioQuery01Model } from './../../../Models/usuario-query_01-model';
 import { UsuariosService } from 'src/app/services/usuarios.service';
@@ -10,7 +10,6 @@ import { CalendarLine } from 'src/app/shared/classes/calendar-line';
 import { CelulaDia } from 'src/app/shared/classes/celula-dia';
 import { ListaMeses } from 'src/app/shared/classes/lista-meses';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { ProjetosService } from 'src/app/services/projetos.service';
 import { ParametroAgeHoras01 } from 'src/app/parametros/parametro-age-horas-01';
@@ -46,15 +45,13 @@ export class AgendaViewComponent implements OnInit {
   showLancamento: boolean = false;
   celulaDia: CelulaDia = new CelulaDia();
 
-  durationInSeconds = 2;
-
   constructor(
     formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
     private projetosService: ProjetosService,
     private globalService: GlobalService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.parametro = formBuilder.group({
       diretores: [{ value: '' }],
@@ -86,6 +83,7 @@ export class AgendaViewComponent implements OnInit {
     this.globalService.setRefreshLançamentos(this.celulaDia);
     this.getAgenda();
   }
+
   setParametro() {
     this.parametro.setValue({
       diretores: this.diretor,
@@ -129,7 +127,7 @@ export class AgendaViewComponent implements OnInit {
       },
       (error: any) => {
         this.diretor = 0;
-        this.openSnackBar_Err(
+        this.appSnackBar.openSnackBar_Err(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
@@ -162,7 +160,7 @@ export class AgendaViewComponent implements OnInit {
         },
         (error: any) => {
           this.coordenador = 0;
-          this.openSnackBar_Err(
+          this.appSnackBar.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -204,7 +202,7 @@ export class AgendaViewComponent implements OnInit {
       },
       (error: any) => {
         this.auditor = 0;
-        this.openSnackBar_Err(
+        this.appSnackBar.openSnackBar_Err(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
@@ -241,7 +239,7 @@ export class AgendaViewComponent implements OnInit {
           });
           this.loadCalendario();
           if (this.agendas.length == 0) {
-            this.openSnackBar_OK(
+            this.appSnackBar.openSnackBar_OK(
               'Nenhuma Informação Para Esta Consulta!',
               'OK'
             );
@@ -250,7 +248,7 @@ export class AgendaViewComponent implements OnInit {
         (error: any) => {
           this.agendas = [];
           this.loadCalendario();
-          this.openSnackBar_Err(
+          this.appSnackBar.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -258,22 +256,8 @@ export class AgendaViewComponent implements OnInit {
       );
   }
 
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   onRetorno() {
     this.router.navigate(['/']);
-  }
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
   }
 
   loadCalendario() {

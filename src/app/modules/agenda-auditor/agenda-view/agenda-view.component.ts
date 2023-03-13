@@ -1,3 +1,4 @@
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { GlobalService } from 'src/app/services/global.service';
 import { ListaMeses } from '../../../shared/classes/lista-meses';
 import { Component, OnInit } from '@angular/core';
@@ -5,7 +6,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuariosService } from 'src/app/services/usuarios.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CalendarLine } from 'src/app/shared/classes/calendar-line';
 import { CelulaDia } from 'src/app/shared/classes/celula-dia';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
@@ -45,7 +45,7 @@ export class AgendaViewComponent implements OnInit {
     private projetosService: ProjetosService,
     private globalService: GlobalService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.parametro = formBuilder.group({
       auditores: [{ value: '' }],
@@ -112,7 +112,7 @@ export class AgendaViewComponent implements OnInit {
       },
       (error: any) => {
         this.auditor = 0;
-        this.openSnackBar_Err(
+        this.appSnackBar.openSnackBar_Err(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
@@ -150,7 +150,7 @@ export class AgendaViewComponent implements OnInit {
           console.log('Agenda:', this.agendas);
           this.loadCalendario();
           if (this.agendas.length == 0) {
-            this.openSnackBar_OK(
+            this.appSnackBar.openSnackBar_OK(
               'Nenhuma Informação Para Esta Consulta!',
               'OK'
             );
@@ -159,7 +159,7 @@ export class AgendaViewComponent implements OnInit {
         (error: any) => {
           this.agendas = [];
           this.loadCalendario();
-          this.openSnackBar_Err(
+          this.appSnackBar.openSnackBar_Err(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -170,21 +170,6 @@ export class AgendaViewComponent implements OnInit {
   onRetorno() {
     this.router.navigate(['/']);
   }
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   loadCalendario() {
     var inicio: Date = new Date(
       this.parametro.value.ano,

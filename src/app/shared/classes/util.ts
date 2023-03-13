@@ -399,3 +399,8 @@ export function aaaammddddmmaaaa(dt: string): string {
 
   return [data[2], data[1], data[0]].join('/');
 }
+
+export function getFirstName(value: string): string {
+  const nomes = value.split(' ');
+  return nomes[0];
+}

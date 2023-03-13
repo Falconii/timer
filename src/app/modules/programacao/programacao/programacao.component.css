@@ -7,7 +7,7 @@ th {
 }
 
 td {
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .table-wrapper {
@@ -20,4 +20,16 @@ td {
     font-size: 14px;
     color: blue;
     background-color: inherit;
+}
+
+.coluna_multipla {
+    display: block;
+    line-height: 7px;
+}
+
+.circulo {
+    --cor: var(--cor, green);
+    background-color: var(--cor);
+    width: 30px;
+    height: 30px;
 }

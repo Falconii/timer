@@ -112,6 +112,14 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
+    path: 'programacao',
+    loadChildren: () =>
+      import('./modules/programacao/programacao.module').then(
+        (m) => m.ProgramacaoModule
+      ),
+    canActivate: [DiganaoGuard],
+  },
+  {
     path: 'sobre',
     loadChildren: () =>
       import('./modules/sobre/sobre.module').then((m) => m.SobreModule),
