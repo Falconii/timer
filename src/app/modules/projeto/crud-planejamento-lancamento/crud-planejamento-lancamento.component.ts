@@ -260,6 +260,7 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
       .getAtividade(this.id_empresa, this.id_atividade)
       .subscribe(
         (data: AtividadeModel) => {
+          console.log('atividade==>', data);
           this.atividade = data;
           let agendamentos: MoviData[] = [];
           this.parametroAgendaPlanejamento03 =
@@ -284,6 +285,7 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
               this.atividade.id_exec
             );
           }
+          console.log('Agendamentos..', agendamentos);
           this.parametroAgendaPlanejamento03.agenda = agendamentos;
           console.log(
             'parametroAgendaPlanejamento03',

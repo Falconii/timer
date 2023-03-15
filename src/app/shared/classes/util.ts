@@ -134,19 +134,27 @@ export function DiasUteisV2(
   Final: string,
   id_exec: number
 ): MoviData[] {
+  console.log('Inicial', Inicial, 'Final', Final);
+
   let retorno: MoviData[] = [];
 
   let x = 0;
 
-  const date1 = new Date(Inicial);
+  let date1 = new Date(Inicial + 'T00:00:00');
 
-  const date2 = new Date(Final);
+  let date2 = new Date(Final + 'T00:00:00');
 
   date1.setHours(0);
   date1.setMinutes(0);
 
   date2.setHours(0);
   date2.setMinutes(0);
+
+  const addDays = (date: Date, days: number): Date => {
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  };
 
   // One day in milliseconds
   const oneDay = 1000 * 60 * 60 * 24;
@@ -157,11 +165,17 @@ export function DiasUteisV2(
   // Calculating the no. of days between two dates
   const diffInDays = Math.round(diffInTime / oneDay);
 
+  console.log('diffInDays', diffInDays);
+
   for (x = 1; x <= diffInDays + 1; x++) {
+    const date: Date = new Date(Inicial + 'T00:00:00.000Z');
+    const result: Date = addDays(date, x);
     const proxima = new MoviData();
+    result.setHours(0);
+    result.setMinutes(0);
     proxima.movimentos = [];
     proxima.id_exec = id_exec;
-    proxima.data.setDate(date1.getDate() + x);
+    proxima.data = new Date(result.toISOString());
     proxima.data.setHours(0);
     proxima.data.setMinutes(0);
     proxima.data_ = DataYYYYMMDD(proxima.data);

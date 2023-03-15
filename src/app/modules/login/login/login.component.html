@@ -1,28 +1,28 @@
 <div class="quadro">
-    <form [formGroup]="formulario" autocomplete="off" class="formulario">
-        <h2>Bem Vindo Ao Timer</h2>
-        <h3>Identifique-se Por Favor</h3>
-        <div class="campos">
-            <mat-form-field appearance="outline" class="col-70">
-                <mat-label>ID DO USUÁRIO</mat-label>
-                <input matInput formControlName="id" autofocus>
-            </mat-form-field>
-        </div>
-        <div class="campos">
-            <mat-form-field appearance="outline" class="col-70">
-                <mat-label>Senha</mat-label>
-                <input matInput formControlName="senha" type="password">
+  <form [formGroup]="formulario" autocomplete="off" class="formulario">
+    <h2>Bem Vindo Ao Timer</h2>
+    <h3>Identifique-se Por Favor</h3>
+    <div class="campos col-med-1">
+      <mat-form-field appearance="outline" class=".col-max">
+        <mat-label>ID DO USUÁRIO</mat-label>
+        <input matInput formControlName="id" autofocus>
+      </mat-form-field>
+    </div>
+    <div class="campos col-med-1">
+      <mat-form-field appearance="outline" class=".col-max">
+        <mat-label>Senha</mat-label>
+        <input matInput formControlName="senha" type="password">
 
-            </mat-form-field>
-        </div>
-        <div class="campos col-med-4">
-            <button mat-raised-button color="primary" class="col-70" (click)="onValidar()">Login</button>
-            <button mat-raised-button color="accent" class="col-70" (click)="onCancelar()">Cancelar</button>
-        </div>
-        <br/><br/>
-        <div class="button-container-right">
-            <button mat-button class="green-icon" (click)="onSair()">Sair</button>
-            <button mat-button class="green-icon" (click)="onEsqueceu()">Esqueceu A Senha</button>
-        </div>
-    </form>
+      </mat-form-field>
+    </div>
+    <div class="campos col-med-2">
+      <button mat-raised-button color="primary" class="col-70" (click)="onValidar()">Login</button>
+      <button mat-raised-button color="accent" class="col-70" (click)="onCancelar()">Cancelar</button>
+    </div>
+    <br /><br />
+    <div class="button-container-right">
+      <button mat-button class="green-icon" (click)="onSair()">Sair</button>
+      <button mat-button class="green-icon" (click)="onEsqueceu()">Esqueceu A Senha</button>
+    </div>
+  </form>
 </div>
