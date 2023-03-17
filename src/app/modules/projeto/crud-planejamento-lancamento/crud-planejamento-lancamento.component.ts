@@ -29,6 +29,7 @@ import { Movimento } from 'src/app/Models/movimento';
 import { AponPlanejamentoService } from 'src/app/services/apon-planejamento.service';
 import { Intervalo } from 'src/app/shared/classes/intervalo';
 import { GlobalService } from 'src/app/services/global.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-crud-planejamento-lancamento',
@@ -67,7 +68,8 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
     private route: ActivatedRoute,
     private globalService: GlobalService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private datePipe: DatePipe
   ) {
     this.formulario = formBuilder.group({
       entrada: [{ value: '' }],
@@ -150,13 +152,18 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
     this.apontamento.ativ_descricao = '';
     this.idAcao = opcao;
     this.setAcao(this.idAcao);
-    this.labelCadastro = agendamento.data_;
+    this.labelCadastro = (
+      this.datePipe.transform(agendamento.data, 'dd-MM-yyyy') || ''
+    ).toString();
     this.setValue();
   }
 
   outras(opcao: number, agendamento: MoviData, lanca: Movimento) {
     this.getApontamento(lanca.id_empresa, lanca.id, agendamento);
     this.agendamento = agendamento;
+    this.labelCadastro = (
+      this.datePipe.transform(this.agendamento.data, 'dd-MM-yyyy') || ''
+    ).toString();
     this.idAcao = opcao;
     this.setAcao(this.idAcao);
   }
@@ -271,7 +278,6 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
           this.parametroAgendaPlanejamento03.id_conta = this.atividade.conta;
           this.parametroAgendaPlanejamento03.id_subconta =
             this.atividade.subconta;
-          console.log('filtros =>', this.dataFiltro);
           if (this.dataFiltro !== '') {
             agendamentos = DiasUteisV2(
               this.dataFiltro,

@@ -16,6 +16,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { SharedModule } from './shared/shared.module';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { BrPaginatorIntl } from './shared/classes/br-PaginatorIntl';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -32,6 +33,7 @@ import { BrPaginatorIntl } from './shared/classes/br-PaginatorIntl';
   ],
   providers: [
     HttpClient,
+    DatePipe,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     DiganaoGuard,
     GlobalService,

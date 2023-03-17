@@ -48,7 +48,7 @@
       <th>AÇÃO</th>
     </tr>
     <tr *ngFor="let agendamento of parametroAgendaPlanejamento03.agenda">
-      <td class="coluna-codigo">{{agendamento.data_}}
+      <td class="coluna-codigo">{{agendamento.data | date : 'dd/MM/yyyy'}}
       </td>
       <td class="coluna-descricao">
         <div *ngFor="let lanca of agendamento.movimentos">
@@ -78,8 +78,8 @@
             <mat-label class="labelTitle">Atividade:</mat-label>
             <mat-label class="labelData">{{lanca.id_subconta}}-{{lanca.estru_descricao}}</mat-label>
           </div>
-          <div class="coluna-descricao cor-blue" *ngIf="exibir(lanca)">
-            <mat-label class="labelTitle">Obs.::</mat-label>
+          <div *ngIf="exibir(lanca)">
+            <mat-label class="labelTitle">Obs.:</mat-label>
             <mat-label class="labelData">{{lanca.obs}}</mat-label>
           </div>
         </div>
