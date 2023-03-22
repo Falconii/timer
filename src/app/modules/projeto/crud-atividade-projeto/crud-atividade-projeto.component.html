@@ -163,8 +163,8 @@
             <mat-label class="labelData">{{atividade.horasplan}}</mat-label>
             <mat-label class="labelTitle">Horas Ex.:</mat-label>
             <mat-label class="labelData">{{atividade.horasexec}}</mat-label>
-            <mat-label class="labelTitle">Horas Diretoria.:</mat-label>
-            <mat-label class="labelData">{{atividade.horasdir}}</mat-label>
+            <mat-label class="labelTitle" *ngIf="atividade.nivel == 1">Horas Diretoria.:</mat-label>
+            <mat-label class="labelData" *ngIf="atividade.nivel == 1">{{atividade.horasdir}}</mat-label>
           </div>
           <div class="coluna-descricao cor-blue" *ngIf="atividade.tipo=='O'">
             <mat-label class="labelTitle">Horas Pl.:</mat-label>
