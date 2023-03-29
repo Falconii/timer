@@ -28,4 +28,6 @@ export class AtividadeQuery_01Model {
   public resp_razao: string = '';
   public subcliente_razao: string = '';
   public gru_econo: number = 0;
+  public nivelplan: number = -1;
+  public nivelexec: number = -1;
 }

@@ -167,9 +167,13 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     this.inscricaoGetSubCliente?.unsubscribe();
   }
 
-  openQuestionDialog(atividade: AtividadeQuery_01Model): void {
+  openQuestionDialog(atividade: AtividadeQuery_01Model, tipo: string): void {
     const data: QuestionDialogData = new QuestionDialogData();
-    data.mensagem01 = 'Deseja Excluir A Atividade ?';
+    if (tipo == 'all') {
+      data.mensagem01 = 'Deseja Excluir TODA ATIVIDADE ?';
+    } else {
+      data.mensagem01 = 'Deseja Excluir A Atividade ?';
+    }
     data.mensagem02 = atividade.estru_descri;
     const dialogConfig = new MatDialogConfig();
 
@@ -183,7 +187,17 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       .subscribe((data: QuestionDialogData) => {
         console.log('data', data);
         if (data.resposta == 'S') {
-          this.excluir(atividade.id_empresa, atividade.id);
+          if (tipo == 'all') {
+            this.Desanexar(atividade);
+          } else {
+            this.excluir(
+              atividade.id_empresa,
+              atividade.id_projeto,
+              atividade.conta,
+              atividade.versao,
+              atividade.subconta
+            );
+          }
         }
       });
   }
@@ -422,10 +436,16 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       );
   }
 
-  excluir(id_empresa: number, id: number) {
+  excluir(
+    id_empresa: number,
+    id_projeto: number,
+    conta: string,
+    versao: string,
+    subconta: string
+  ) {
     this.globalService.setSpin(true);
     this.inscricaoAnexar = this.atividadesService
-      .atividadeDelete(id_empresa, id)
+      .atividadeDelete(id_empresa, id_projeto, conta, versao, subconta)
       .subscribe(
         (data: any) => {
           this.globalService.setSpin(false);
@@ -669,7 +689,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   onDesanexar(atividade: AtividadeQuery_01Model) {
-    this.openQuestionDialog(atividade);
+    this.openQuestionDialog(atividade, 'all');
   }
 
   Desanexar(atividade: AtividadeQuery_01Model): void {
@@ -682,7 +702,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   onExcluir(atividade: AtividadeQuery_01Model) {
-    this.openQuestionDialog(atividade);
+    this.openQuestionDialog(atividade, 'one');
   }
 
   openSnackBar_Err(message: string, action: string) {
@@ -868,5 +888,22 @@ export class CrudAtividadeProjetoComponent implements OnInit {
           this.onSubmit();
         }
       });
+  }
+
+  setStyle(atividade: AtividadeQuery_01Model, tipo: string) {
+    let cor = { 'background-color': 'white' };
+    console.log('nivel plan', atividade.nivelplan);
+    if (tipo == 'P') {
+      if (atividade.nivelplan == 1) cor = { 'background-color': 'green' };
+      if (atividade.nivelplan == 2) cor = { 'background-color': 'yellow' };
+      if (atividade.nivelplan == 3) cor = { 'background-color': 'red' };
+      if (atividade.nivelplan == 4) cor = { 'background-color': 'black' };
+    } else {
+      if (atividade.nivelexec == 1) cor = { 'background-color': 'green' };
+      if (atividade.nivelexec == 2) cor = { 'background-color': 'yellow' };
+      if (atividade.nivelexec == 3) cor = { 'background-color': 'red' };
+      if (atividade.nivelexec == 4) cor = { 'background-color': 'black' };
+    }
+    return cor;
   }
 }

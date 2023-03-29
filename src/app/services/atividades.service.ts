@@ -49,9 +49,15 @@ export class AtividadesService {
     );
   }
 
-  atividadeDelete(id_empresa: number, id: number) {
+  atividadeDelete(
+    id_empresa: number,
+    id_projeto: number,
+    conta: string,
+    versao: string,
+    subconta: string
+  ) {
     return this.http.delete<AtividadeModel>(
-      `${this.apiURL}atividade/${id_empresa}/${id}`
+      `${this.apiURL}atividade/${id_empresa}/${id_projeto}/${conta}/${versao}/${subconta}`
     );
   }
 

@@ -291,7 +291,7 @@ export class ProgramacaoComponent implements OnInit {
 
   setStyle() {
     let styles = {
-      '--cor': 'blue',
+      'background-color': 'blue',
     };
     return styles;
   }

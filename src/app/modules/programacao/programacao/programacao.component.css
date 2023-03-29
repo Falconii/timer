@@ -26,10 +26,3 @@ td {
     display: block;
     line-height: 7px;
 }
-
-.circulo {
-    --cor: var(--cor, green);
-    background-color: var(--cor);
-    width: 30px;
-    height: 30px;
-}

@@ -294,3 +294,11 @@ body {
 .menu-ativo {
     color: red;
 }
+
+.circulo {
+    background-color: blue;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+}
