@@ -301,4 +301,62 @@ body {
     width: 20px;
     height: 20px;
     min-width: 20px;
+    margin-left: 5px;
+}
+
+.linha-status {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    text-align: justify;
+}
+
+.linha-status-projeto {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    text-align: justify;
+}
+
+.mat-tooltip {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: large;
+    color: #0000CC;
+    background-color: coral;
+}
+
+.green-snackbar {
+    background: rgb(147, 216, 147);
+    color: blue;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: medium;
+}
+
+.green-snackbar button {
+    color: black;
+    font-weight: bolder;
+}
+
+.yellow-snackbar {
+    background: rgba(230, 230, 129, 0.712);
+    color: blue;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: medium;
+}
+
+.yellow-snackbar button {
+    color: black;
+    font-weight: bolder;
+}
+
+.red-snackbar {
+    background: rgb(233, 145, 145);
+    color: blue;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: medium;
+}
+
+.red-snackbar button {
+    color: black;
+    font-weight: bolder;
 }

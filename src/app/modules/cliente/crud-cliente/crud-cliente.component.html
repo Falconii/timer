@@ -4,11 +4,11 @@
     <span class="example-spacer">Clientes:</span>
     <app-navegator [controle]="controlePaginas" (changePage)="onChangePage()"></app-navegator>
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
-      (click)="getClientesContador()">
+      (click)="getClientesContador()" matTooltip="Atualizar" matTooltipPosition="above">
       <mat-icon>rotate_right</mat-icon>
     </button>
     <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno"
-      matTooltipPosition="above" (click)="onHome()">
+      matTooltipPosition="above" (click)="onHome()" matTooltip="Retorno" matTooltipPosition="above">
       <mat-icon>home</mat-icon>
     </button>
     <button mat-icon-button aria-label="Example icon-button with share icon "

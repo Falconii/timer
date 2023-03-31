@@ -35,10 +35,3 @@ table {
     margin-top: 12px;
     align-items: center;
 }
-
-.linha-status {
-    display: flex;
-    justify-items: left;
-    align-items: center;
-    text-align: justify;
-}

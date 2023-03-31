@@ -1,7 +1,13 @@
-.cad-container .mat-form-field {
-    margin-left: 8px;
+.pagina {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: inherit;
+    font-weight: inherit;
+    font: inherit;
 }
 
-.page {
-    margin-top: 25px;
+.pagina span {
+    margin-top: 2px;
 }

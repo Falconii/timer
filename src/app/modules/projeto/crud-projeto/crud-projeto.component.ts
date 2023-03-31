@@ -1,8 +1,8 @@
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { MensagensBotoes } from 'src/app/shared/classes/util';
 import { ControlePaginas } from 'src/app/shared/classes/controle-paginas';
@@ -44,7 +44,7 @@ export class CrudProjetoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private projetosServices: ProjetosService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -129,16 +129,22 @@ export class CrudProjetoComponent implements OnInit {
             trab.user_insert = 1;
             this.projetos = [];
             this.projetos.push(trab);
+            this.appSnackBar.openFailureSnackBar();
+            /*
+
             this.openSnackBar_OK(
               'Nenhuma Informação Encontrada Para Esta Consulta!',
               'OK'
             );
+            */
           } else {
             this.projetos = [];
+            /*
             this.openSnackBar_Err(
               `Pesquisa Nos Projetos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
               'OK'
             );
+            */
           }
         }
       );
@@ -196,13 +202,13 @@ export class CrudProjetoComponent implements OnInit {
       );
   }
   openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
+    //this._snackBar.open(message, action);
   }
 
   async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
+    //this._snackBar.open(message, action, {
+    //  duration: this.durationInSeconds * 1000,
+    //});
     await this.delay(this.durationInSeconds * 1000);
   }
 
@@ -225,5 +231,22 @@ export class CrudProjetoComponent implements OnInit {
 
   onChangePage() {
     this.getProjetos();
+  }
+
+  setStyle(projeto: ProjetoModel, tipo: string) {
+    let cor = { 'background-color': 'white' };
+    console.log('nivel plan', projeto.nivelplan);
+    if (tipo == 'P') {
+      if (projeto.nivelplan == 1) cor = { 'background-color': 'green' };
+      if (projeto.nivelplan == 2) cor = { 'background-color': 'yellow' };
+      if (projeto.nivelplan == 3) cor = { 'background-color': 'red' };
+      if (projeto.nivelplan == 4) cor = { 'background-color': 'black' };
+    } else {
+      if (projeto.nivelexec == 1) cor = { 'background-color': 'green' };
+      if (projeto.nivelexec == 2) cor = { 'background-color': 'yellow' };
+      if (projeto.nivelexec == 3) cor = { 'background-color': 'red' };
+      if (projeto.nivelexec == 4) cor = { 'background-color': 'black' };
+    }
+    return cor;
   }
 }

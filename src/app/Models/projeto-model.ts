@@ -19,4 +19,6 @@ export class ProjetoModel {
   public diretor_razao: string = '';
   public cliente_razao: string = '';
   public cliente_gru_econo: number = 0;
+  public nivelplan: number = -1;
+  public nivelexec: number = -1;
 }
