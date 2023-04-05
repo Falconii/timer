@@ -13,6 +13,7 @@ import { EmpresaQuery01Model } from 'src/app/Models/empresa-query_01-model';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ParametroEmpresa01 } from 'src/app/parametros/parametro-empresa-01';
 import { EmpresasService } from 'src/app/services/empresas.service';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-crud-empresa',
@@ -38,7 +39,7 @@ export class CrudEmpresaComponent implements OnInit {
     private formBuilder: FormBuilder,
     private empresaService: EmpresasService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -102,17 +103,13 @@ export class CrudEmpresaComponent implements OnInit {
       },
       (error: any) => {
         this.empresas = [];
-        this.openSnackBar_Err(
+        this.appSnackBar.openFailureSnackBar(
           `Pesquisa Nas Empresas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
         this.globalService.setSpin(false);
       }
     );
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
   }
 
   getTexto() {

@@ -6,9 +6,9 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { MensagensBotoes } from 'src/app/shared/classes/util';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-crud-motivo-apo',
@@ -35,7 +35,7 @@ export class CrudMotivoApoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private motivoApoService: MotivoApoService,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private appSnackBar: AppSnackbar,
     private globalService: GlobalService
   ) {
     this.parametros = formBuilder.group({
@@ -104,7 +104,7 @@ export class CrudMotivoApoComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.motivos = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nas motivos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -112,9 +112,6 @@ export class CrudMotivoApoComponent implements OnInit {
       );
   }
 
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
   /*
   method1CallForClick(motivo: MotivoApoModel, opcao: number) {
     this.isSingleClick = true;

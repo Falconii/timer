@@ -142,7 +142,7 @@ export class ProgramacaoComponent implements OnInit {
       },
       (error: any) => {
         this.diretor = 0;
-        this.appSnackBar.openSnackBar_Err(
+        this.appSnackBar.openFailureSnackBar(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
@@ -175,7 +175,7 @@ export class ProgramacaoComponent implements OnInit {
         },
         (error: any) => {
           this.coordenador = 0;
-          this.appSnackBar.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -217,7 +217,7 @@ export class ProgramacaoComponent implements OnInit {
       },
       (error: any) => {
         this.auditor = 0;
-        this.appSnackBar.openSnackBar_Err(
+        this.appSnackBar.openFailureSnackBar(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
@@ -243,13 +243,13 @@ export class ProgramacaoComponent implements OnInit {
         this.globalService.setSpin(false);
         if (error.error.message == 'Nehuma Informação Para Esta Consulta.') {
           this.lsProjetos = [];
-          this.appSnackBar.openSnackBar_OK(
+          this.appSnackBar.openSuccessSnackBar(
             'Nenhuma Informação Encontrada Para Esta Consulta!',
             'OK'
           );
         } else {
           this.lsProjetos = [];
-          this.appSnackBar.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Projetos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -273,7 +273,7 @@ export class ProgramacaoComponent implements OnInit {
       },
       (error: any) => {
         this.globalService.setSpin(false);
-        this.appSnackBar.openSnackBar_Err('Nehum Projeto Encontrado!', 'OK');
+        this.appSnackBar.openWarningnackBar('Nehum Projeto Encontrado!', 'OK');
       }
     );
   }

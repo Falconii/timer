@@ -15,6 +15,7 @@ import { GrupoEcoModel } from 'src/app/Models/gru-eco-models';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { GrupoEconomicoService } from 'src/app/services/grupo-economico.service';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-cliente-view',
@@ -55,7 +56,7 @@ export class ClienteViewComponent implements OnInit {
     private estadosSrv: DropdownService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private appSnackBar: AppSnackbar,
     private globaService: GlobalService
   ) {
     this.formulario = formBuilder.group({
@@ -91,17 +92,6 @@ export class ClienteViewComponent implements OnInit {
     });
   }
 
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
   ngOnInit() {
     if (this.idAcao == CadastroAcoes.Inclusao) {
       this.cliente = new ClientesModel();
@@ -131,7 +121,10 @@ export class ClienteViewComponent implements OnInit {
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
-      this.openSnackBar_OK(`Formulário Com Campos Inválidos.`, 'OK');
+      this.appSnackBar.openSuccessSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
     }
   }
 
@@ -145,7 +138,7 @@ export class ClienteViewComponent implements OnInit {
         this.ufs = data;
       },
       (error: any) => {
-        this.openSnackBar_Err(
+        this.appSnackBar.openFailureSnackBar(
           `Pesquisa Cadastrado De Estados ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
@@ -162,7 +155,7 @@ export class ClienteViewComponent implements OnInit {
           this.setValue();
         },
         (error: any) => {
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Clientes ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -182,7 +175,7 @@ export class ClienteViewComponent implements OnInit {
             this.grupos.push(data);
           },
           (error: any) => {
-            this.openSnackBar_Err(
+            this.appSnackBar.openFailureSnackBar(
               `Pesquisa Nos Grupos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
               'OK'
             );
@@ -196,7 +189,7 @@ export class ClienteViewComponent implements OnInit {
             this.grupos = data;
           },
           (error: any) => {
-            this.openSnackBar_Err(
+            this.appSnackBar.openFailureSnackBar(
               `Pesquisa Nos Grupos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
               'OK'
             );
@@ -316,7 +309,7 @@ export class ClienteViewComponent implements OnInit {
             },
             (error: any) => {
               this.globaService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -335,7 +328,7 @@ export class ClienteViewComponent implements OnInit {
             },
             (error: any) => {
               this.globaService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -353,7 +346,7 @@ export class ClienteViewComponent implements OnInit {
             },
             (error: any) => {
               this.globaService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );

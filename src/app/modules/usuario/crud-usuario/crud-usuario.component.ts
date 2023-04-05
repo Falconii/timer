@@ -12,6 +12,7 @@ import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { GruUserModel } from 'src/app/Models/gru-user-model';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { UsuarioModel } from 'src/app/Models/usuario-model';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-crud-usuario',
@@ -41,7 +42,7 @@ export class CrudUsuarioComponent implements OnInit {
     private grupoUserService: GrupoUserService,
     private globalService: GlobalService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -115,7 +116,7 @@ export class CrudUsuarioComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.usuarios = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Usuários ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -137,10 +138,6 @@ export class CrudUsuarioComponent implements OnInit {
         console.log('this.erro', this.erro);
       }
     );
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
   }
 
   isGrupo(): Boolean {

@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MensagensBotoes } from 'src/app/shared/classes/util';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
@@ -17,6 +16,7 @@ import {
   MatDialogRef,
   MatDialogConfig,
 } from '@angular/material/dialog';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-crud-estrutura',
@@ -51,7 +51,7 @@ export class CrudEstruturaComponent implements OnInit {
     public questionDialog: MatDialog,
     private estruturaService: EstruturasService,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private appSnackBar: AppSnackbar,
     private globalService: GlobalService
   ) {
     this.parametros = formBuilder.group({
@@ -113,16 +113,12 @@ export class CrudEstruturaComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.estruturas = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nas Estruturas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
         }
       );
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
   }
 
   getTexto() {
@@ -220,29 +216,18 @@ export class CrudEstruturaComponent implements OnInit {
       .subscribe(
         (data: EstruturaModel[]) => {
           this.globalService.setSpin(false);
-          this.openSnackBar_OK(`Estrutura Copiada!`, 'OK');
+          this.appSnackBar.openSuccessSnackBar(`Estrutura Copiada!`, 'OK');
           this.getEstruturas();
         },
         (error: any) => {
           this.globalService.setSpin(false);
           this.estruturas = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Copia Das Estruturas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
         }
       );
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   onHome() {

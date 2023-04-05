@@ -5,10 +5,10 @@ import { Subscription } from 'rxjs';
 import { GruUserModel } from 'src/app/Models/gru-user-model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ParametroGruuser01 } from 'src/app/parametros/parametro-gruuser-01';
 import { GrupoUserService } from 'src/app/services/grupo-user.service';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-crud-grupo-user',
@@ -34,7 +34,7 @@ export class CrudGrupoUserComponent implements OnInit {
     private globalService: GlobalService,
     private grupoUserService: GrupoUserService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -97,16 +97,12 @@ export class CrudGrupoUserComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.grupos = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Grupos de Usuários ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
         }
       );
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
   }
 
   setValues() {

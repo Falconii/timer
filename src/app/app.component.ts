@@ -47,13 +47,16 @@ export class AppComponent {
     return this.globalService.okExecucao();
   }
 
+  okGerencial(): boolean {
+    return this.globalService.okGerencial();
+  }
+
   getClassMenu(): string {
     if (this.opcao == 'Cadastros') return 'menu-ativo';
     return 'menu-standyby';
   }
 
   setOpcao(value: string): void {
-    console.log('SetOpcao', value);
     this.opcao = value;
   }
 }

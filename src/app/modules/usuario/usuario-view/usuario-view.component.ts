@@ -15,6 +15,7 @@ import { ValidatorCnpjCpf } from 'src/app/shared/Validators/validator-Cnpj-Cpf';
 import { EstadoModel } from 'src/app/Models/estado-model';
 import { DropdownService } from 'src/app/shared/services/dropdown.service';
 import { GruUserModel } from 'src/app/Models/gru-user-model';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-usuario-view',
@@ -56,7 +57,7 @@ export class UsuarioViewComponent implements OnInit {
     private estadosSrv: DropdownService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.formulario = formBuilder.group({
       id: [{ value: '', disabled: true }],
@@ -97,16 +98,6 @@ export class UsuarioViewComponent implements OnInit {
     });
   }
 
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
   ngOnInit() {
     if (this.idAcao == CadastroAcoes.Inclusao) {
       this.usuario = new UsuarioModel();
@@ -134,7 +125,10 @@ export class UsuarioViewComponent implements OnInit {
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
-      this.openSnackBar_OK(`Formulário Com Campos Inválidos.`, 'OK');
+      this.appSnackBar.openSuccessSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
     }
   }
 
@@ -152,7 +146,7 @@ export class UsuarioViewComponent implements OnInit {
         this.ufs = data;
       },
       (error: any) => {
-        this.openSnackBar_Err(
+        this.appSnackBar.openFailureSnackBar(
           `Pesquisa Cadastrado De Estados ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
@@ -169,7 +163,7 @@ export class UsuarioViewComponent implements OnInit {
           this.setValue();
         },
         (error: any) => {
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Usuários ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -200,7 +194,7 @@ export class UsuarioViewComponent implements OnInit {
             this.grupos.push(data);
           },
           (error: any) => {
-            this.openSnackBar_Err(
+            this.appSnackBar.openFailureSnackBar(
               `Pesquisa Nos Grupos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
               'OK'
             );
@@ -212,7 +206,7 @@ export class UsuarioViewComponent implements OnInit {
           this.grupos = data;
         },
         (error: any) => {
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Grupos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -318,7 +312,7 @@ export class UsuarioViewComponent implements OnInit {
               this.onCancel();
             },
             (error: any) => {
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -338,7 +332,7 @@ export class UsuarioViewComponent implements OnInit {
               }
             },
             (error: any) => {
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -355,7 +349,7 @@ export class UsuarioViewComponent implements OnInit {
             },
             (error: any) => {
               console.log('Error', error.error);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -370,7 +364,7 @@ export class UsuarioViewComponent implements OnInit {
               this.onCancel();
             },
             (error: any) => {
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );

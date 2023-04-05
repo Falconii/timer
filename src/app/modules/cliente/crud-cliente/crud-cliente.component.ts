@@ -21,6 +21,7 @@ import {
   MatDialogConfig,
 } from '@angular/material/dialog';
 import { ShowClienteDialogComponent } from 'src/app/shared/components/show-cliente-dialog/show-cliente-dialog.component';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-crud-cliente',
@@ -54,7 +55,7 @@ export class CrudClienteComponent implements OnInit {
     private grupoEconomicoService: GrupoEconomicoService,
     private globalService: GlobalService,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private appSnackBar: AppSnackbar,
     public showClienteDialog: MatDialog
   ) {
     this.parametros = formBuilder.group({
@@ -132,7 +133,7 @@ export class CrudClienteComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.clientes = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Clientes ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -180,16 +181,12 @@ export class CrudClienteComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.controlePaginas = new ControlePaginas(this.tamPagina, 0);
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Clientes ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
         }
       );
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
   }
 
   getGrupos() {

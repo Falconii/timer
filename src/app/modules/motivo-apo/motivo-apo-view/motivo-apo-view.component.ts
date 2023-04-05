@@ -6,8 +6,8 @@ import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-motivo-apo-view',
@@ -48,7 +48,7 @@ export class MotivoApoViewComponent implements OnInit {
     private globslService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private appSnackBar: AppSnackbar,
     private globalService: GlobalService
   ) {
     this.formulario = formBuilder.group({
@@ -89,7 +89,10 @@ export class MotivoApoViewComponent implements OnInit {
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
-      this.openSnackBar_OK(`Formulário Com Campos Inválidos.`, 'OK');
+      this.appSnackBar.openSuccessSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
     }
   }
 
@@ -132,7 +135,7 @@ export class MotivoApoViewComponent implements OnInit {
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Motivos De Apontamento ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -189,7 +192,7 @@ export class MotivoApoViewComponent implements OnInit {
             },
             (error: any) => {
               this.globalService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Inclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -208,7 +211,7 @@ export class MotivoApoViewComponent implements OnInit {
             },
             (error: any) => {
               this.globalService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -226,7 +229,7 @@ export class MotivoApoViewComponent implements OnInit {
             },
             (error: any) => {
               this.globalService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -236,21 +239,6 @@ export class MotivoApoViewComponent implements OnInit {
       default:
         break;
     }
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   getAcoes() {

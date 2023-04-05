@@ -97,6 +97,16 @@ export class GlobalService {
     return false;
   }
 
+  okGerencial(): boolean {
+    if (
+      this.usuarioService.isDiretoria(this.usuario.grupo) ||
+      this.usuarioService.isTi(this.usuario.grupo)
+    )
+      return true;
+
+    return false;
+  }
+
   setSpin(value: boolean) {
     this.showSpin = value;
     this.showSpinEmitter.emit(this.showSpin);

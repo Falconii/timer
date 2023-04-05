@@ -13,6 +13,7 @@ import { SimNao } from 'src/app/shared/classes/sim-nao';
 import { TipoConta } from 'src/app/shared/classes/tipo-conta';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 import { TabelaNivel } from 'src/app/shared/classes/tabela-nivel';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-tree-estrutura-v2',
@@ -95,7 +96,7 @@ export class TreeEstruturaV2Component implements OnInit {
     private estruturaService: EstruturasService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private appSnackBar: AppSnackbar,
     private formBuilder: FormBuilder,
     private globalService: GlobalService
   ) {
@@ -174,23 +175,12 @@ export class TreeEstruturaV2Component implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.estruturas = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nas Estruturas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
         }
       );
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
   }
 
   onRetorno() {
@@ -249,7 +239,10 @@ export class TreeEstruturaV2Component implements OnInit {
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
-      this.openSnackBar_OK(`Formulário Com Campos Inválidos.`, 'OK');
+      this.appSnackBar.openSuccessSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
     }
   }
 
@@ -625,7 +618,7 @@ export class TreeEstruturaV2Component implements OnInit {
       var newVersion = Number(p2);
       versao = `${p1}${this.addLeadingZeros(++newVersion, 2)}`;
     } else {
-      this.openSnackBar_Err('Erro Na Versão', 'OK');
+      this.appSnackBar.openFailureSnackBar('Erro Na Versão', 'OK');
     }
 
     return versao;
@@ -682,7 +675,7 @@ export class TreeEstruturaV2Component implements OnInit {
           this.estruturas = data;
           this.versao = this.estruturas[0].versao;
           this.setAcao(this.idAcao);
-          this.openSnackBar_OK(
+          this.appSnackBar.openSuccessSnackBar(
             `Estrutura Gravada Na Versão ${this.versao}`,
             'OK'
           );
@@ -690,7 +683,7 @@ export class TreeEstruturaV2Component implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.estruturas = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Falha Na Estrutura  ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -708,12 +701,12 @@ export class TreeEstruturaV2Component implements OnInit {
           this.estruturas = data;
           this.versao = this.estruturas[0].versao;
           this.setAcao(this.idAcao);
-          this.openSnackBar_OK(`Estrutura Atualizada!`, 'OK');
+          this.appSnackBar.openSuccessSnackBar(`Estrutura Atualizada!`, 'OK');
         },
         (error: any) => {
           this.globalService.setSpin(false);
           this.estruturas = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Falha Na Estrutura  ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );

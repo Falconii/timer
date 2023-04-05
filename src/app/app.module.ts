@@ -1,5 +1,3 @@
-import { AppSnackbar } from './shared/classes/app-snackbar';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { GlobalService } from './services/global.service';
 import { DiganaoGuard } from './guards/diganao.guard';
 import { MaterialModule } from './material/material.module';
@@ -17,9 +15,10 @@ import { SharedModule } from './shared/shared.module';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { BrPaginatorIntl } from './shared/classes/br-PaginatorIntl';
 import { DatePipe } from '@angular/common';
+import { BarAtividadesComponent } from './home/bar-atividades/bar-atividades.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent, HomeComponent, BarAtividadesComponent],
   imports: [
     SharedModule,
     BrowserModule,

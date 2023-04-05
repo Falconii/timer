@@ -9,6 +9,7 @@ import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ParametroEmailOla } from 'src/app/parametros/parametro-email-ola';
 import { UserEmail } from 'src/app/shared/classes/User-Email';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-sobre',
@@ -20,7 +21,7 @@ export class SobreComponent implements OnInit {
     private router: Router,
     private usuariosService: UsuariosService,
     private emailServiceService: EmailServiceService,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {}
 
   versao: string = '';
@@ -65,16 +66,12 @@ export class SobreComponent implements OnInit {
         },
         (error: any) => {
           this.usuarios = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Usuários ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
         }
       );
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
   }
 
   onSendOla() {
@@ -101,7 +98,7 @@ export class SobreComponent implements OnInit {
       },
       (error: any) => {
         this.usuarios = [];
-        this.openSnackBar_Err(
+        this.appSnackBar.openFailureSnackBar(
           `Pesquisa Nos Usuários ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );

@@ -1,13 +1,10 @@
-import { AgendaAuditorModule } from './modules/agenda-auditor/agenda-auditor.module';
-import { ExecucaoModule } from './modules/execucao/execucao.module';
 import { DiganaoGuard } from './guards/diganao.guard';
 import { HomeComponent } from './home/home.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AtualizacaoCadastralComponent } from './modules/usuario/crud-usuario/atualizacao-cadastral/atualizacao-cadastral.component';
-
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
   {
     path: 'login',
     loadChildren: () =>
@@ -88,6 +85,14 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
+    path: 'gerencial',
+    loadChildren: () =>
+      import('./modules/gerencial/gerencial.module').then(
+        (m) => m.GerencialModule
+      ),
+    canActivate: [DiganaoGuard],
+  },
+  {
     path: 'execucao',
     loadChildren: () =>
       import('./modules/execucao/execucao.module').then(
@@ -132,11 +137,6 @@ const routes: Routes = [
         (m) => m.ClienteTabelaModule
       ),
     canActivate: [DiganaoGuard],
-  },
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'home',
   },
 ];
 @NgModule({

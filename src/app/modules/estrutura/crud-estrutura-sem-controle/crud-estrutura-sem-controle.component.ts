@@ -9,11 +9,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TipoConta } from 'src/app/shared/classes/tipo-conta';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 export interface UsersChoices {
   id: number;
@@ -73,7 +73,7 @@ export class CrudEstruturaSemControleComponent implements OnInit {
     private globalService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.formulario = formBuilder.group({
       conta: [{ value: '' }],
@@ -111,17 +111,6 @@ export class CrudEstruturaSemControleComponent implements OnInit {
     });
   }
 
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
   ngOnInit(): void {
     if (this.idAcao == CadastroAcoes.Inclusao) {
       this.estrutura = new EstruturaModel();
@@ -151,12 +140,18 @@ export class CrudEstruturaSemControleComponent implements OnInit {
 
   onSubmit() {
     if (!this.hasUsers()) {
-      this.openSnackBar_OK(`Pelo Menos Um Usuário Deve Ser Escolhido.`, 'OK');
+      this.appSnackBar.openSuccessSnackBar(
+        `Pelo Menos Um Usuário Deve Ser Escolhido.`,
+        'OK'
+      );
     } else {
       if (this.formulario.valid) {
         this.executaAcao();
       } else {
-        this.openSnackBar_OK(`Formulário Com Campos Inválidos.`, 'OK');
+        this.appSnackBar.openSuccessSnackBar(
+          `Formulário Com Campos Inválidos.`,
+          'OK'
+        );
       }
     }
   }
@@ -181,7 +176,7 @@ export class CrudEstruturaSemControleComponent implements OnInit {
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nas EStruturas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -235,7 +230,7 @@ export class CrudEstruturaSemControleComponent implements OnInit {
         this.choices.escolhido = false;
         this.choices.users = [];
         this.setAllUsers(false);
-        this.openSnackBar_Err(
+        this.appSnackBar.openFailureSnackBar(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
@@ -327,7 +322,7 @@ export class CrudEstruturaSemControleComponent implements OnInit {
               this.onCancel();
             },
             (error: any) => {
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Inclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -343,7 +338,7 @@ export class CrudEstruturaSemControleComponent implements OnInit {
             },
             (error: any) => {
               console.log('Error', error.error);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -362,7 +357,7 @@ export class CrudEstruturaSemControleComponent implements OnInit {
               this.onCancel();
             },
             (error: any) => {
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );

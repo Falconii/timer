@@ -43,6 +43,7 @@ import { PeriodoDialogData } from 'src/app/shared/components/periodo-dialog/peri
 import { PeriodoDialogComponent } from 'src/app/shared/components/periodo-dialog/periodo-dialog.component';
 import { RespExecDialogData } from 'src/app/shared/components/resp-exec-dialog/resp-exec-dialog-data';
 import { FiltroOperacionalSubconta } from 'src/app/shared/classes/filtro-operacional-subconta';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-crud-atividade-projeto',
@@ -121,7 +122,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     private clientesService: ClientesService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private appSnackBar: AppSnackbar,
     private globalService: GlobalService
   ) {
     this.formulario = formBuilder.group({
@@ -240,7 +241,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa  Projeto ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -271,7 +272,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.atividades = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -292,7 +293,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.atividade = new AtividadeModel();
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -325,7 +326,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.atividades = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -371,7 +372,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.executores = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -397,11 +398,14 @@ export class CrudAtividadeProjetoComponent implements OnInit {
           this.conta = '';
           this.getProjeto();
           this.parametros.reset();
-          this.openSnackBar_OK(`Estrutura Anexada Com Sucesso!`, 'OK');
+          this.appSnackBar.openSuccessSnackBar(
+            `Estrutura Anexada Com Sucesso!`,
+            'OK'
+          );
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -424,11 +428,14 @@ export class CrudAtividadeProjetoComponent implements OnInit {
           this.atividades = [];
           this.conta = '';
           this.getProjeto();
-          this.openSnackBar_OK(`Estrutura Excluída Com Sucesso!`, 'OK');
+          this.appSnackBar.openSuccessSnackBar(
+            `Estrutura Excluída Com Sucesso!`,
+            'OK'
+          );
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -452,12 +459,15 @@ export class CrudAtividadeProjetoComponent implements OnInit {
           this.atividades = [];
           this.conta = '';
           this.getProjeto();
-          this.openSnackBar_OK(`Atividade Excluída Com Sucesso!`, 'OK');
+          this.appSnackBar.openSuccessSnackBar(
+            `Atividade Excluída Com Sucesso!`,
+            'OK'
+          );
         },
         (error: any) => {
           this.globalService.setSpin(false);
           console.log(error);
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -537,7 +547,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   escolha(atividade: AtividadeQuery_01Model, opcao: number) {
     if (opcao == 98) {
       if (atividade.id_exec == 0 || atividade.id_resp == 0) {
-        this.openSnackBar_OK(
+        this.appSnackBar.openSuccessSnackBar(
           `Responsável e Executor são abrigatorios, para agendamento.`,
           'OK'
         );
@@ -605,7 +615,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
             },
             (error: any) => {
               this.globalService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -621,7 +631,10 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
-      this.openSnackBar_OK(`Formulário Com Campos Inválidos.`, 'OK');
+      this.appSnackBar.openFailureSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
     }
   }
 
@@ -629,7 +642,10 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     if (this.parametros.value.conta?.trim() != '') {
       this.openDialogRespAudi();
     } else {
-      this.openSnackBar_OK(`Informe Uma Estrutura Primeiro`, 'OK');
+      this.appSnackBar.openSuccessSnackBar(
+        `Informe Uma Estrutura Primeiro`,
+        'OK'
+      );
     }
   }
 
@@ -640,7 +656,10 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       this.filtro = new FiltroOperacionalSubconta();
       this.getAtividades();
     } else {
-      this.openSnackBar_OK(`Informe Uma Atividade Primeiro`, 'OK');
+      this.appSnackBar.openSuccessSnackBar(
+        `Informe Uma Atividade Primeiro`,
+        'OK'
+      );
     }
   }
 
@@ -703,21 +722,6 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   onExcluir(atividade: AtividadeQuery_01Model) {
     this.openQuestionDialog(atividade, 'one');
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   getAcoes() {
@@ -802,7 +806,10 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       this.id_atividade_conta == 'NULL' ||
       this.id_atividade_conta.trim() == ''
     ) {
-      this.openSnackBar_OK('Selecione A Atividade Primeiro!', 'OK');
+      this.appSnackBar.openSuccessSnackBar(
+        'Selecione A Atividade Primeiro!',
+        'OK'
+      );
     } else {
       this.router.navigate([
         '/projetos/manuemlote',

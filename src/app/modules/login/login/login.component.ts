@@ -10,9 +10,9 @@ import { GlobalService } from './../../../services/global.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ProgressBarComponent } from 'src/app/shared/components/progress-bar/progress-bar.component';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-login',
@@ -23,15 +23,14 @@ export class LoginComponent implements OnInit {
   formulario: FormGroup;
   usuario: UsuarioModel = new UsuarioModel();
   inscricaoUsuario!: Subscription;
-  durationInSeconds = 2;
 
   constructor(
     private formBuilder: FormBuilder,
     private globalService: GlobalService,
     private usuariosService: UsuariosService,
     private router: Router,
-    private _snackBar: MatSnackBar,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private appSnackBar: AppSnackbar
   ) {
     this.formulario = this.formulario = formBuilder.group({
       id: [{ value: '' }],
@@ -66,28 +65,23 @@ export class LoginComponent implements OnInit {
             this.globalService.setUsuario(this.usuario);
             this.globalService.setLogado(true);
           } else {
-            this.openSnackBar_OK(`Usuário Ou Senha Incorretos`, 'OK');
+            this.appSnackBar.openFailureSnackBar(
+              `Usuário Ou Senha Incorretos`,
+              'OK'
+            );
           }
           this.globalService.setSpin(false);
         },
         (error: any) => {
           console.log('error', error);
           this.usuario = new UsuarioModel();
-          this.openSnackBar_OK(`Usuário Ou Senha Incorretos`, 'OK');
+          this.appSnackBar.openFailureSnackBar(
+            `Usuário Ou Senha Incorretos`,
+            'OK'
+          );
           this.globalService.setSpin(false);
         }
       );
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   onValidar() {
@@ -114,7 +108,6 @@ export class LoginComponent implements OnInit {
     mensa.labelOk = 'Continua...';
     mensa.labelCancel = 'Cancelar';
     const dialogConfig = new MatDialogConfig();
-    // The user can't close the dialog by clicking outside its body
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
     dialogConfig.height = '350px';

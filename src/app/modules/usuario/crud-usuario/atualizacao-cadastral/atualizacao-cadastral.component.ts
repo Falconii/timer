@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioModel } from 'src/app/Models/usuario-model';
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-atualizacao-cadastral',
@@ -22,7 +23,7 @@ export class AtualizacaoCadastralComponent implements OnInit {
     private route: ActivatedRoute,
     private usuariosService: UsuariosService,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.inscricaoRota = route.params.subscribe((params: any) => {
       this.usuario.id_empresa = params.id_empresa;
@@ -53,25 +54,11 @@ export class AtualizacaoCadastralComponent implements OnInit {
           ]);
         },
         (error: any) => {
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Usuários ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
         }
       );
-  }
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

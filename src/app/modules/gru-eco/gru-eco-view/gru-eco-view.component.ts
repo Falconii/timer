@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 import { GlobalService } from 'src/app/services/global.service';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-gru-eco-view',
@@ -41,7 +42,7 @@ export class GruEcoViewComponent implements OnInit {
     private globalService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.formulario = formBuilder.group({
       id: [{ value: '', disabled: true }],
@@ -77,7 +78,10 @@ export class GruEcoViewComponent implements OnInit {
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
-      this.openSnackBar_OK(`Formulário Com Campos Inválidos.`, 'OK');
+      this.appSnackBar.openFailureSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
     }
   }
 
@@ -112,7 +116,7 @@ export class GruEcoViewComponent implements OnInit {
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nas Empresas ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -162,7 +166,7 @@ export class GruEcoViewComponent implements OnInit {
             },
             (error: any) => {
               this.globalService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -180,7 +184,7 @@ export class GruEcoViewComponent implements OnInit {
             },
             (error: any) => {
               this.globalService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -198,7 +202,7 @@ export class GruEcoViewComponent implements OnInit {
             },
             (error: any) => {
               this.globalService.setSpin(false);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -208,17 +212,6 @@ export class GruEcoViewComponent implements OnInit {
       default:
         break;
     }
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
   }
 
   delay(ms: number) {

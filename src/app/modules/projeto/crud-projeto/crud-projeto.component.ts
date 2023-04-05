@@ -129,18 +129,14 @@ export class CrudProjetoComponent implements OnInit {
             trab.user_insert = 1;
             this.projetos = [];
             this.projetos.push(trab);
-            this.appSnackBar.openFailureSnackBar();
-            /*
-
-            this.openSnackBar_OK(
+            this.appSnackBar.openSuccessSnackBar(
               'Nenhuma Informação Encontrada Para Esta Consulta!',
               'OK'
             );
-            */
           } else {
             this.projetos = [];
             /*
-            this.openSnackBar_Err(
+            this.appSnackBar.openFailureSnackBar(
               `Pesquisa Nos Projetos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
               'OK'
             );
@@ -187,13 +183,13 @@ export class CrudProjetoComponent implements OnInit {
         (error: any) => {
           if (error.error.message == 'Nehuma Informação Para Esta Consulta.') {
             this.controlePaginas = new ControlePaginas(this.tamPagina, 0);
-            this.openSnackBar_OK(
+            this.appSnackBar.openSuccessSnackBar(
               'Nenhuma Informação Encontrada Para Esta Consulta!',
               'OK'
             );
           } else {
             this.controlePaginas = new ControlePaginas(this.tamPagina, 0);
-            this.openSnackBar_Err(
+            this.appSnackBar.openFailureSnackBar(
               `Pesquisa Nos Projetos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
               'OK'
             );

@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HorasDiretoriaDialogComponent } from './horas-diretoria-dialog/horas-diretoria-dialog.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-horas-diretoria',
@@ -48,7 +49,7 @@ export class HorasDiretoriaComponent implements OnInit {
     private projetosService: ProjetosService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.inscricaoRota = route.params.subscribe((params: any) => {
       this.id_empresa = params.id_empresa;
@@ -97,12 +98,12 @@ export class HorasDiretoriaComponent implements OnInit {
           this.globalService.setSpin(false);
           this.atividades = [];
           if (error.error.message == 'Nehuma Informação Para Esta Consulta.') {
-            this.openSnackBar_OK(
+            this.appSnackBar.openSuccessSnackBar(
               'Nenhuma Atividade Encontrada Para Este Projeto!',
               'OK'
             );
           } else {
-            this.openSnackBar_Err(
+            this.appSnackBar.openFailureSnackBar(
               `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
               'OK'
             );
@@ -126,9 +127,12 @@ export class HorasDiretoriaComponent implements OnInit {
           this.projeto = new ProjetoModel();
           this.setValue();
           if (error.error.message == 'Nehuma Informação Para Esta Consulta.') {
-            this.openSnackBar_OK('Nenhum Projeto! Encontrado', 'OK');
+            this.appSnackBar.openSuccessSnackBar(
+              'Nenhum Projeto! Encontrado',
+              'OK'
+            );
           } else {
-            this.openSnackBar_Err(
+            this.appSnackBar.openFailureSnackBar(
               `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
               'OK'
             );
@@ -149,14 +153,14 @@ export class HorasDiretoriaComponent implements OnInit {
       .subscribe(
         (data: AtividadeHorasDirModel) => {
           this.globalService.setSpin(false);
-          this.openSnackBar_OK('Horas Alteradas!', 'OK');
+          this.appSnackBar.openSuccessSnackBar('Horas Alteradas!', 'OK');
           this.getProjeto();
           this.getAtividades();
         },
         (error: any) => {
           this.globalService.setSpin(false);
           this.atividades = [];
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -170,21 +174,6 @@ export class HorasDiretoriaComponent implements OnInit {
       horasexec: this.projeto.horasexec,
       horasdir: this.projeto.horasdir,
     });
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   getLabelCabec(): string {

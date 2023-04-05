@@ -30,6 +30,7 @@ import { AponPlanejamentoService } from 'src/app/services/apon-planejamento.serv
 import { Intervalo } from 'src/app/shared/classes/intervalo';
 import { GlobalService } from 'src/app/services/global.service';
 import { DatePipe } from '@angular/common';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 @Component({
   selector: 'app-crud-planejamento-lancamento',
@@ -68,7 +69,7 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
     private route: ActivatedRoute,
     private globalService: GlobalService,
     private router: Router,
-    private _snackBar: MatSnackBar,
+    private appSnackBar: AppSnackbar,
     private datePipe: DatePipe
   ) {
     this.formulario = formBuilder.group({
@@ -196,7 +197,7 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
               this.onCancel();
             },
             (error: any) => {
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -210,12 +211,12 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
           .subscribe(
             async (data: any) => {
               this.getAponAgendas();
-              await this.openSnackBar_OK(data.message, 'OK');
+              await this.appSnackBar.openSuccessSnackBar(data.message, 'OK');
               this.onCancel();
             },
             (error: any) => {
               console.log('Error', error.error);
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -231,11 +232,11 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
           .subscribe(
             async (data: any) => {
               this.getAponAgendas();
-              await this.openSnackBar_OK(data.message, 'OK');
+              await this.appSnackBar.openSuccessSnackBar(data.message, 'OK');
               this.onCancel();
             },
             (error: any) => {
-              this.openSnackBar_Err(
+              this.appSnackBar.openFailureSnackBar(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
               );
@@ -301,7 +302,7 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
         },
         (error: any) => {
           this.atividade = new AtividadeModel();
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -320,7 +321,7 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
         },
         (error: any) => {
           this.atividade = new AtividadeModel();
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -337,16 +338,12 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
         },
         (error: any) => {
           this.atividade = new AtividadeModel();
-          this.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
         }
       );
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
   }
 
   onSubmit() {
@@ -364,27 +361,23 @@ export class CrudPlanejamentoLancamentoComponent implements OnInit {
       if (this.formulario.valid) {
         this.executaAcao();
       } else {
-        this.openSnackBar_OK(`Formulário Com Campos Inválidos.`, 'OK');
+        this.appSnackBar.openSuccessSnackBar(
+          `Formulário Com Campos Inválidos.`,
+          'OK'
+        );
       }
     } catch (err) {
       if (err instanceof ErrorIntervalo) {
-        this.openSnackBar_OK(`Lançamento Conflitando: ${err.message}`, 'OK');
+        this.appSnackBar.openSuccessSnackBar(
+          `Lançamento Conflitando: ${err.message}`,
+          'OK'
+        );
       } else {
         console.log(err);
       }
     }
   }
 
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
   onCancel() {
     this.idAcao = 99;
     this.setAcao(99);

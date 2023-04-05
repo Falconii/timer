@@ -20,6 +20,7 @@ import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { RespExecDialogComponent } from 'src/app/shared/components/resp-exec-dialog/resp-exec-dialog.component';
 import { PeriodoDialogComponent } from 'src/app/shared/components/periodo-dialog/periodo-dialog.component';
 import { FiltroOperacionalSubconta } from 'src/app/shared/classes/filtro-operacional-subconta';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 
 export class DisplayAtividade {
   public checked: boolean = false;
@@ -62,7 +63,7 @@ export class ManutAtividadeLoteComponent implements OnInit {
     private usuariosService: UsuariosService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private appSnackBar: AppSnackbar
   ) {
     this.inscricaoRota = route.params.subscribe((params: any) => {
       this.id_empresa = params.id_empresa;
@@ -107,12 +108,12 @@ export class ManutAtividadeLoteComponent implements OnInit {
           this.globalService.setSpin(false);
           this.atividades = [];
           if (error.error.message == 'Nehuma Informação Para Esta Consulta.') {
-            this.openSnackBar_OK(
+            this.appSnackBar.openSuccessSnackBar(
               'Nenhuma Atividade Encontrada Para Este Projeto!',
               'OK'
             );
           } else {
-            this.openSnackBar_Err(
+            this.appSnackBar.openFailureSnackBar(
               `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
               'OK'
             );
@@ -142,26 +143,12 @@ export class ManutAtividadeLoteComponent implements OnInit {
       (error: any) => {
         this.globalService.setSpin(false);
         this.usuarios = [];
-        this.openSnackBar_Err(
+        this.appSnackBar.openFailureSnackBar(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
       }
     );
-  }
-  async openSnackBar_OK(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: this.durationInSeconds * 1000,
-    });
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  openSnackBar_Err(message: string, action: string) {
-    this._snackBar.open(message, action);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   onRetorno(): void {

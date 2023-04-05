@@ -131,7 +131,7 @@ export class AgendaViewComponent implements OnInit {
         },
         (error: any) => {
           this.coordenador = 0;
-          this.appSnackBar.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -179,7 +179,7 @@ export class AgendaViewComponent implements OnInit {
       },
       (error: any) => {
         this.auditor = 0;
-        this.appSnackBar.openSnackBar_Err(
+        this.appSnackBar.openFailureSnackBar(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
           'OK'
         );
@@ -215,7 +215,7 @@ export class AgendaViewComponent implements OnInit {
           });
           this.loadCalendario();
           if (this.agendas.length == 0) {
-            this.appSnackBar.openSnackBar_OK(
+            this.appSnackBar.openWarningnackBar(
               'Nenhuma Informação Para Esta Consulta!',
               'OK'
             );
@@ -224,7 +224,7 @@ export class AgendaViewComponent implements OnInit {
         (error: any) => {
           this.agendas = [];
           this.loadCalendario();
-          this.appSnackBar.openSnackBar_Err(
+          this.appSnackBar.openFailureSnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
