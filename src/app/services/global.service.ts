@@ -3,6 +3,7 @@ import { UsuariosService } from 'src/app/services/usuarios.service';
 import { Injectable, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioModel } from '../Models/usuario-model';
+import { SituacaoTrabalho } from '../shared/classes/situacao-trabalho';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ export class GlobalService {
   logado: boolean = false;
   id_empresa: number = 1;
   showSpin: boolean = false;
+  lsSituacoesTrabalho: SituacaoTrabalho[] = [];
 
   shomMenuEmitter = new EventEmitter<boolean>();
   refreshLançamentos = new EventEmitter<CelulaDia>();
@@ -20,6 +22,15 @@ export class GlobalService {
   constructor(private usuarioService: UsuariosService, private router: Router) {
     this.usuario = new UsuarioModel();
     this.logado = false;
+    this.lsSituacoesTrabalho = [
+      { id: '1', descricao: 'Não Iniciado' },
+      { id: '2', descricao: 'Em Andamento' },
+      { id: '3', descricao: 'Prazo Estourado' },
+      { id: '4', descricao: 'Suspenso' },
+      { id: '5', descricao: 'Finalizado' },
+      { id: '6', descricao: 'Folllow up' },
+      { id: '7', descricao: 'Abortado' },
+    ];
   }
 
   getUsuario(): UsuarioModel {
@@ -114,5 +125,18 @@ export class GlobalService {
 
   getSpin(): boolean {
     return this.showSpin;
+  }
+
+  getSituacaoTrabalho(id: string): SituacaoTrabalho {
+    let retorno = new SituacaoTrabalho();
+
+    let i: number = this.lsSituacoesTrabalho.findIndex((obj) => obj.id == id);
+
+    if (i >= 0) {
+      retorno.id = this.lsSituacoesTrabalho[i].id;
+      retorno.descricao = this.lsSituacoesTrabalho[i].descricao;
+    }
+
+    return retorno;
   }
 }

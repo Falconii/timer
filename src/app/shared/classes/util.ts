@@ -418,3 +418,26 @@ export function getFirstName(value: string): string {
   const nomes = value.split(' ');
   return nomes[0];
 }
+
+export function messageError(value: any): string {
+  var retorno = '';
+
+  console.log(value);
+
+  if (!(typeof value.error === 'undefined')) {
+    retorno += `${value.error.message} `;
+  } else {
+    if (!(typeof value.tabela === 'undefined')) {
+      retorno += `${value.tabela} `;
+    }
+
+    if (!(typeof value.erro === 'undefined')) {
+      retorno += `${value.erro} `;
+    }
+
+    if (!(typeof value.message === 'undefined')) {
+      retorno += `${value.message} `;
+    }
+  }
+  return retorno;
+}

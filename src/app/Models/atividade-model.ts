@@ -20,4 +20,6 @@ export class AtividadeModel {
   public user_insert: number = 0;
   public user_update: number = 0;
   public descricao_estru: string = '';
+  public razao_cliente: string = '';
+  public resp_nome: string = '';
 }

@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ParametroEstruHisto } from '../parametros/parametro-estru-histo';
 
 @Injectable({
   providedIn: 'root',
@@ -335,5 +336,9 @@ export class EstruturasService {
         }
       }
     }
+  }
+
+  estrutura_histo(par: ParametroEstruHisto) {
+    return this.http.post<any>(`${this.apiURL}estrutura_histo`, par);
   }
 }

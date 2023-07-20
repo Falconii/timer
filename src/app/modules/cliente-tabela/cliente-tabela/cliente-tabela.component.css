@@ -12,7 +12,7 @@ td {
 
 .table-wrapper {
     overflow: auto;
-    height: 75%;
+    height: auto;
     padding: 15px;
 }
 
