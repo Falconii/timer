@@ -18,7 +18,7 @@ export const environment = {
   data: '11/05/2022',
   production: false,
   ambiente: 'Desenvolvimento',
-  apiURL: 'http://localhost:3000/api/',
+  apiURL: 'https://backend-controle-time.up.railway.app/api/',
 };
 
 /*
