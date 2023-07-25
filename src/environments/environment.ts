@@ -1,18 +1,3 @@
-/* export const environment = {
-  production: false,
-  ambiente: 'Desenvolvimento',
-  apiURL: 'http://192.168.0.161:63999/api/',
-};
-
-
-export const environment = {
-  production: false,
-  ambiente: 'Desenvolvimento',
-  apiURL: '/api/',
-};
-
-*/
-
 export const environment = {
   versao: 'V 01.50 - Beta',
   data: '25/07/2023',

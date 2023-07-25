@@ -2,6 +2,7 @@ import { UsuarioModel } from './Models/usuario-model';
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from './services/global.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +16,12 @@ export class AppComponent {
 
   opcao: string = '';
 
+  apiURL: string = '';
+
   constructor(private globalService: GlobalService, private router: Router) {}
 
   ngOnInit(): void {
+    this.apiURL = environment.apiURL;
     this.globalService.shomMenuEmitter.subscribe((show) => {
       this.showMenu = show;
     });
