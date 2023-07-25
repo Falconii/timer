@@ -1,4 +1,6 @@
-* Make the modal a three-row grid */ #modal-content-wrapper {
+/* Make the modal a three-row grid */
+
+#modal-content-wrapper {
     width: 100%;
     height: 100%;
     display: grid;

@@ -14,8 +14,8 @@ export const environment = {
 */
 
 export const environment = {
-  versao: 'V 01.00 - Beta',
-  data: '11/05/2022',
+  versao: 'V 01.50 - Beta',
+  data: '25/07/2023',
   production: false,
   ambiente: 'Desenvolvimento',
   apiURL: 'https://backend-controle-time.up.railway.app/api/',
