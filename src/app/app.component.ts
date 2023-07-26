@@ -25,6 +25,7 @@ export class AppComponent {
     this.globalService.shomMenuEmitter.subscribe((show) => {
       this.showMenu = show;
     });
+    this.onLogin();
   }
 
   ngOnDestroy(): void {
