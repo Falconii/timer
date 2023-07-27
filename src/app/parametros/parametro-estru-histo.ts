@@ -4,4 +4,7 @@ export class ParametroEstruHisto {
   public subconta: string = '';
   public versao: string = '';
   public nivel: number = 0;
+  public pagina: number = 1;
+  public tamPagina: number = 50;
+  public contador: string = 'N';
 }

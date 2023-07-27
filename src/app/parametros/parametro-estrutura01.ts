@@ -7,7 +7,7 @@ export class ParametroEstrutura01 {
   public nivel: number = 0;
   public tipo: string = '';
   public pagina: number = 1;
-  public tamPagina: number = 50;
+  public tamPagina: number = 1000;
   public contador: string = 'N';
   public orderby: string = '';
   public sharp: Boolean = false;
