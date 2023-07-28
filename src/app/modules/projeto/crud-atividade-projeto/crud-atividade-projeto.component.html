@@ -1,7 +1,7 @@
 <!--http://jsfiddle.net/danield770/sNwrs/3158/-->
 <div class="div-barra">
   <mat-toolbar>
-    <span class="example-spacer">Contrato:{{projeto.id}} {{projeto.descricao}} - Manutenção das Atividades </span>
+    <span class="example-spacer">Contrato:{{projeto.id}} {{projeto.descricao}} - Manutenção das Atividades</span>
     <section *ngIf="idAcao==99">
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu"
         matTooltip="Manutenção Auxliar" matTooltipPosition="above">
@@ -163,11 +163,11 @@
           </div>
           <div class="coluna-descricao cor-blue" *ngIf="atividade.nivel == 1 || atividade.tipo == 'S'">
             <mat-label class="labelTitle">Horas Pl.:</mat-label>
-            <mat-label class="labelData">{{atividade.horasplan}}</mat-label>
+            <mat-label class="labelData">{{atividade.horasplan | horaSexagenal}}</mat-label>
             <mat-label class="labelTitle">Horas Ex.:</mat-label>
-            <mat-label class="labelData">{{atividade.horasexec}}</mat-label>
+            <mat-label class="labelData">{{atividade.horasexec | horaSexagenal}}</mat-label>
             <mat-label class="labelTitle" *ngIf="atividade.nivel == 1">Horas Diretoria.:</mat-label>
-            <mat-label class="labelData" *ngIf="atividade.nivel == 1">{{atividade.horasdir}}</mat-label>
+            <mat-label class="labelData" *ngIf="atividade.nivel == 1">{{atividade.horasdir | horaSexagenal}}</mat-label>
           </div>
           <div class="coluna-descricao cor-blue">
             <mat-label class="labelTitle" *ngIf="atividade.nivel == 1">Status:</mat-label>
@@ -182,9 +182,9 @@
           </div>
           <div class="coluna-descricao cor-blue" *ngIf="atividade.tipo=='O'">
             <mat-label class="labelTitle">Horas Pl.:</mat-label>
-            <mat-label class="labelData">{{atividade.horasplan}}</mat-label>
+            <mat-label class="labelData">{{atividade.horasplan | horaSexagenal}}</mat-label>
             <mat-label class="labelTitle">Horas Ex.:</mat-label>
-            <mat-label class="labelData">{{atividade.horasexec}}</mat-label>
+            <mat-label class="labelData">{{atividade.horasexec | horaSexagenal}}</mat-label>
           </div>
           <div class="coluna-descricao cor-blue" *ngIf="atividade.tipo=='O' || atividade.tipo == 'S'">
             <mat-label class="labelTitle">Status:</mat-label>
@@ -233,7 +233,8 @@
             <mat-icon>assignment</mat-icon>
           </button>
           <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Excluir Atividade"
-            matTooltipPosition="above" (click)="onExcluir(atividade)" *ngIf="atividade.tipo == 'O'">
+            matTooltipPosition="above" (click)="onExcluir(atividade)"
+            *ngIf="atividade.tipo == 'O' || atividade.tipo == 'S'">
             <mat-icon>delete</mat-icon>
           </button>
         </td>

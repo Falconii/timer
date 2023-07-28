@@ -3,6 +3,7 @@ export class ApoExecucaoModel01 {
   public id: number = 0;
   public id_projeto: number = 0;
   public id_conta: string = '';
+  public id_conta_versao: string = '';
   public id_subconta: string = '';
   public id_resp: number = 0;
   public id_exec: number = 0;

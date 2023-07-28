@@ -95,8 +95,8 @@ const routes: Routes = [
   {
     path: 'execucao',
     loadChildren: () =>
-      import('./modules/execucao/execucao.module').then(
-        (m) => m.ExecucaoModule
+      import('./modules/execucao-v2/execucao-v2.module').then(
+        (m) => m.ExecucaoV2Module
       ),
     canActivate: [DiganaoGuard],
   },

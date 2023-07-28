@@ -44,6 +44,19 @@ body {
     height: 500px;
 }
 
+.Browse_Lanc {
+    margin-left: auto;
+    margin-right: auto;
+    overflow-y: scroll;
+    width: 100%;
+    height: auto;
+}
+
+.Browse_Lanc_td {
+    font-size: small;
+    color: #0000CC;
+}
+
 .linha {
     background-color: white;
 }

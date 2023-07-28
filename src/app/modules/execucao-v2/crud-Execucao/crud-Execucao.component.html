@@ -1,0 +1,174 @@
+<div *ngIf="(idAcao == 99)">
+  <div class="div-barra">
+    <mat-toolbar>
+      <span class="example-spacer">{{getTitulo()}}</span>
+      <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Apontamento"
+        matTooltipPosition="above" (click)="adicao(getAcoes()['Inclusao'])">
+        <mat-icon>add_circle_outline</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+        (click)="onRetorno()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+</div>
+<div *ngIf="(idAcao == 99)">
+  <form [formGroup]="parametro" autocomplete="off">
+    <div class="col-med-2">
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Usuário:</mat-label>
+        <input matInput formControlName="usuario" readonly="true">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Data:</mat-label>
+        <input matInput [matDatepicker]="dataDatePicker" formControlName="data" (dateChange)="onParametrosChange()">
+        <mat-datepicker-toggle matSuffix [for]="dataDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #dataDatePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="col-med-1">
+      <mat-form-field field appearance="outline" class="col-max">
+        <mat-label>Contratos</mat-label>
+        <mat-select formControlName="id_contrato" (selectionChange)="onChangeContrato()">
+          <mat-option *ngFor="let contrato of contratos" [value]="contrato.id">
+            {{contrato.id}}-{{contrato.cliente_razao}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-med-2">
+      <mat-form-field field appearance="outline" class="col-max">
+        <mat-label>Grupos</mat-label>
+        <mat-select formControlName="id_grupo" (selectionChange)="onChangeGrupos()">
+          <mat-option *ngFor="let grupo of grupos" [value]="grupo.id">
+            {{grupo.estru_descri}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field field appearance="outline" class="col-max">
+        <mat-label>Atividades</mat-label>
+        <mat-select formControlName="id_atividade" (selectionChange)="onParametrosChange()">
+          <mat-option *ngFor="let atividade of atividades" [value]="atividade.id">
+            {{atividade.estru_descri}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+<div *ngIf="idAcao == 99 && !showAtividades">
+  <table class="Browse_Lanc">
+    <tr class="coluna-cabec">
+      <th>HORÁRIO</th>
+      <th>CLIENTE/ATIVIDADE</th>
+      <th>MOTIVO/OBS</th>
+      <th>AÇÕES</th>
+    </tr>
+    <tr *ngFor="let lanca of apontamentos">
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}
+          </mat-label>
+          <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{lanca.proj_descricao}}</mat-label>
+        </div>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{lanca.estru_descricao}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{lanca.motivo_descricao}}</mat-label>
+        </div>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{lanca.obs}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+            matTooltip="Alterar Apontamento" matTooltipPosition="above" (click)="outras(getAcoes()['Edicao'],lanca)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+            matTooltip="Excluir Apontamento" matTooltipPosition="above" (click)="outras(getAcoes()['Exclusao'],lanca)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<form [formGroup]="formulario" autocomplete="off" *ngIf="idAcao !== 99">
+  <div class="div-barra">
+    <mat-toolbar>
+      <span class="example-spacer">{{labelCadastro}}</span>
+      <button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="Example icon-button with share icon "
+        matTooltip="Lanç. Automático" matTooltipPosition="above">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #appMenu="matMenu">
+        <ng-template matMenuContent>
+          <button mat-menu-item (click)="onManha()">
+            <mat-icon>watch_later</mat-icon>
+            <span>Manhã</span>
+          </button>
+          <button mat-menu-item (click)="onTarde()">
+            <mat-icon>watch_later</mat-icon>
+            <span>Tarde</span>
+          </button>
+        </ng-template>
+      </mat-menu>
+    </mat-toolbar>
+  </div>
+  <div class="col-med-5">
+    <mat-form-field appearance="outline" class="col-max">
+      <mat-label>Entrada</mat-label>
+      <input matInput autofocus formControlName="entrada" placeholder="HH:MM" mask="00:00" [readonly]="readOnly">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-max">
+      <mat-label>Saída</mat-label>
+      <input matInput formControlName="saida" placeholder="HH:MM" mask="00:00" [readonly]="readOnly">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-max column-span-2">
+      <mat-label>Atividade</mat-label>
+      <input matInput formControlName="atividade" readonly="true" tabindex="-1">
+    </mat-form-field>
+    <div class="col-max">
+      <mat-checkbox class="encerramento" formControlName="encerra" [disableRipple]="false">Encerrar Atividade
+      </mat-checkbox>
+    </div>
+  </div>
+  <div class="col-med-1">
+    <mat-form-field appearance="outline" class="col-max">
+      <mat-label>Cliente</mat-label>
+      <input matInput formControlName="cliente" readonly="true" tabindex="-1">
+    </mat-form-field>
+  </div>
+  <div class="col-med-1">
+    <mat-form-field field appearance="outline" class="col-max"
+      *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']))">
+      <mat-label>Motivo</mat-label>
+      <mat-select formControlName="id_motivo">
+        <mat-option *ngFor="let motivo of motivos" [value]="motivo.codigo">
+          {{motivo.motivo}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-med-1">
+    <mat-form-field appearance="outline" class="col-max">
+      <mat-label>Observação</mat-label>
+      <input matInput formControlName="obs" oninput="this.value = this.value.toUpperCase()" [readonly]="readOnly">
+    </mat-form-field>
+  </div>
+  <div class="button-container-right">
+    <button class="buttons" mat-raised-button color="primary" (click)=onSubmit()>{{acao}}</button>
+    <button class="buttons" mat-raised-button color="accent" (click)="onCancel()">{{getLabelCancel()}}</button>
+  </div>
+</form>

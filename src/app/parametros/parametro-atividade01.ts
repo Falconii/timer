@@ -13,4 +13,6 @@ export class ParametroAtividade01 {
   public so_abertas_ex: string = '';
   public orderby: string = '';
   public sharp: Boolean = true;
+  public subconta_nivel: string = 'N';
+  public nivel_filtro: number = 0;
 }

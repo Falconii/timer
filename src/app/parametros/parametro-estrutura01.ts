@@ -6,7 +6,7 @@ export class ParametroEstrutura01 {
   public descricao: string = '';
   public nivel: number = 0;
   public tipo: string = '';
-  public pagina: number = 1;
+  public pagina: number = 0;
   public tamPagina: number = 1000;
   public contador: string = 'N';
   public orderby: string = '';
