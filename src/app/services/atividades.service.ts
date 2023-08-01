@@ -84,4 +84,17 @@ export class AtividadesService {
       `${this.apiURL}desanexaatividade/${id_empresa}/${conta}/${versao}/${id_projeto}`
     );
   }
+
+  desanexasubconta(
+    id_empresa: number,
+    id_projeto: number,
+    id_conta: string,
+    id_conta_versao: string,
+    id_subconta: string,
+    nivel: number
+  ) {
+    return this.http.get<any>(
+      `${this.apiURL}desanexasubconta/${id_empresa}/${id_projeto}/${id_conta}/${id_conta_versao}/${id_subconta}/${nivel}`
+    );
+  }
 }

@@ -15,6 +15,7 @@ import { RespAudiDialogComponent } from './crud-atividade-projeto/resp-audi-dial
 import { ManutAtividadeLoteComponent } from './manut-atividade-lote/manut-atividade-lote.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HorasDiretoriaDialogComponent } from './horas-diretoria/horas-diretoria-dialog/horas-diretoria-dialog.component';
+import { AnexarV2Component } from './anexar-v2/anexar-v2.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { HorasDiretoriaDialogComponent } from './horas-diretoria/horas-diretoria
     HorasDiretoriaComponent,
     HorasDiretoriaDialogComponent,
     RespAudiDialogComponent,
+    AnexarV2Component,
   ],
   imports: [
     ScrollingModule,

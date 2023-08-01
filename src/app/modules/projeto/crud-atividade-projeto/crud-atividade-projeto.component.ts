@@ -1,3 +1,4 @@
+import { TipoConta } from 'src/app/shared/classes/tipo-conta';
 import { RespExecDialogComponent } from 'src/app/shared/components/resp-exec-dialog/resp-exec-dialog.component';
 import { JustificativaRespexecDialogComponent } from '../../../shared/components/justificativa-respexec-dialog/justificativa-respexec-dialog.component';
 import { JustificativaDialogData } from '../../../shared/components/justificativa-periodo-dialog/justificativa-dialog-data';
@@ -172,9 +173,14 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     const data: QuestionDialogData = new QuestionDialogData();
     if (tipo == 'all') {
       data.mensagem01 = 'Deseja Excluir TODA ATIVIDADE ?';
-    } else {
+    }
+    if (tipo == 'one') {
       data.mensagem01 = 'Deseja Excluir A Atividade ?';
     }
+    if (tipo == 'partial') {
+      data.mensagem01 = 'Deseja Excluir A SubAtividade ?';
+    }
+
     data.mensagem02 = atividade.estru_descri;
     const dialogConfig = new MatDialogConfig();
 
@@ -190,13 +196,24 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         if (data.resposta == 'S') {
           if (tipo == 'all') {
             this.Desanexar(atividade);
-          } else {
+          }
+          if (tipo == 'one') {
             this.excluir(
               atividade.id_empresa,
               atividade.id_projeto,
               atividade.conta,
               atividade.versao,
               atividade.subconta
+            );
+          }
+          if (tipo == 'partial') {
+            this.excluirPartial(
+              atividade.id_empresa,
+              atividade.id_projeto,
+              atividade.conta,
+              atividade.versao,
+              atividade.subconta,
+              atividade.nivel
             );
           }
         }
@@ -394,6 +411,17 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.globalService.setSpin(false);
+          this.appSnackBar.openSuccessSnackBar(
+            `Estrutura Anexada Com Sucesso!`,
+            'OK'
+          );
+          this.router.navigate([
+            '/projetos/anexarv2',
+            this.conta,
+            this.versao,
+            this.id_projeto,
+          ]);
+          /*
           this.atividades = [];
           this.conta = '';
           this.getProjeto();
@@ -402,7 +430,9 @@ export class CrudAtividadeProjetoComponent implements OnInit {
             `Estrutura Anexada Com Sucesso!`,
             'OK'
           );
+          */
         },
+
         (error: any) => {
           this.globalService.setSpin(false);
           this.appSnackBar.openFailureSnackBar(
@@ -475,6 +505,46 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       );
   }
 
+  excluirPartial(
+    id_empresa: number,
+    id_projeto: number,
+    id_conta: string,
+    id_conta_versao: string,
+    id_subconta: string,
+    nivel: number
+  ) {
+    this.globalService.setSpin(true);
+    this.inscricaoAnexar = this.atividadesService
+      .desanexasubconta(
+        id_empresa,
+        id_projeto,
+        id_conta,
+        id_conta_versao,
+        id_subconta,
+        nivel
+      )
+      .subscribe(
+        (data: any) => {
+          this.globalService.setSpin(false);
+          this.atividades = [];
+          this.conta = '';
+          this.getProjeto();
+          this.appSnackBar.openSuccessSnackBar(
+            `SubAtividade Excluída Com Sucesso!`,
+            'OK'
+          );
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          console.log(error);
+          this.appSnackBar.openFailureSnackBar(
+            `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            'OK'
+          );
+        }
+      );
+  }
+
   getEstruturasOff() {
     let par = new ParametroEstrutura01();
 
@@ -524,7 +594,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
           this.globalService.setSpin(false);
           this.estruturasIn = data;
           if (
-            this.id_atividade_conta != 'NULL' &&
+            this.id_atividade_conta == 'NULL' &&
             this.estruturasIn.length > 0
           ) {
             this.id_atividade_conta = this.estruturasIn[0].conta;
@@ -721,7 +791,10 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   onExcluir(atividade: AtividadeQuery_01Model) {
-    this.openQuestionDialog(atividade, 'one');
+    this.openQuestionDialog(
+      atividade,
+      atividade.tipo == 'S' ? 'partial' : 'one'
+    );
   }
 
   getAcoes() {
@@ -899,7 +972,6 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   setStyle(atividade: AtividadeQuery_01Model, tipo: string) {
     let cor = { 'background-color': 'white' };
-    console.log('nivel plan', atividade.nivelplan);
     if (tipo == 'P') {
       if (atividade.nivelplan == 1) cor = { 'background-color': 'green' };
       if (atividade.nivelplan == 2) cor = { 'background-color': 'yellow' };

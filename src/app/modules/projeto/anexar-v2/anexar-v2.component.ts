@@ -1,38 +1,36 @@
-import { UsuariosService } from './../../../services/usuarios.service';
-import { ProjetoModel } from 'src/app/Models/projeto-model';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import { DisplayAtividade } from './../manut-atividade-lote/manut-atividade-lote.component';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { AtividadeQuery_01Model } from 'src/app/Models/atividade-query_01-model';
-import { GlobalService } from 'src/app/services/global.service';
-import { AtividadesService } from 'src/app/services/atividades.service';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ParametroAtividade01 } from 'src/app/parametros/parametro-atividade01';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
+import { Subscription } from 'rxjs';
+import { AtividadeModel } from 'src/app/Models/atividade-model';
+import { AtividadeQuery_01Model } from 'src/app/Models/atividade-query_01-model';
+import { ClientesQuery01Model } from 'src/app/Models/cliente-query_01-model';
+import { EstruturaModel } from 'src/app/Models/estrutura-model';
+import { ProjetoModel } from 'src/app/Models/projeto-model';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
-import { RespExecDialogComponent } from 'src/app/shared/components/resp-exec-dialog/resp-exec-dialog.component';
-import { PeriodoDialogComponent } from 'src/app/shared/components/periodo-dialog/periodo-dialog.component';
-import { FiltroOperacionalSubconta } from 'src/app/shared/classes/filtro-operacional-subconta';
+import { AtividadesService } from 'src/app/services/atividades.service';
+import { ClientesService } from 'src/app/services/clientes.service';
+import { EstruturasService } from 'src/app/services/estruturas.service';
+import { GlobalService } from 'src/app/services/global.service';
+import { ProjetosService } from 'src/app/services/projetos.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
+import { FiltroOperacionalSubconta } from 'src/app/shared/classes/filtro-operacional-subconta';
+import { ParametroAtividade01 } from 'src/app/parametros/parametro-atividade01';
+import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
+import { DisplayAtividadeV2 } from 'src/app/shared/classes/DisplayAtividadeV2';
+import { LastRecursivo } from 'src/app/shared/classes/last-recursivo';
 
-export class DisplayAtividade {
-  public checked: boolean = false;
-  public atividade: AtividadeQuery_01Model = new AtividadeQuery_01Model();
-}
 @Component({
-  selector: 'app-manut-atividade-lote',
-  templateUrl: './manut-atividade-lote.component.html',
-  styleUrls: ['./manut-atividade-lote.component.css'],
+  selector: 'app-anexar-v2',
+  templateUrl: './anexar-v2.component.html',
+  styleUrls: ['./anexar-v2.component.css'],
 })
-export class ManutAtividadeLoteComponent implements OnInit {
-  displayAtividades: DisplayAtividade[] = [];
+export class AnexarV2Component implements OnInit {
+  displayAtividades: DisplayAtividadeV2[] = [];
 
   projeto: ProjetoModel = new ProjetoModel();
 
@@ -41,9 +39,9 @@ export class ManutAtividadeLoteComponent implements OnInit {
   inscricaoSave!: Subscription;
   inscricaoUsuario!: Subscription;
 
-  id_empresa: number = 0;
-
   conta: string = '';
+
+  conta_versao: string = '';
 
   id_projeto: number = 0;
 
@@ -66,8 +64,8 @@ export class ManutAtividadeLoteComponent implements OnInit {
     private appSnackBar: AppSnackbar
   ) {
     this.inscricaoRota = route.params.subscribe((params: any) => {
-      this.id_empresa = params.id_empresa;
       this.conta = params.conta;
+      this.conta_versao = params.conta_versao;
       this.id_projeto = params.id_projeto;
     });
   }
@@ -87,22 +85,27 @@ export class ManutAtividadeLoteComponent implements OnInit {
   getAtividades() {
     let par = new ParametroAtividade01();
 
-    par.id_empresa = this.id_empresa;
+    par.id_empresa = this.globalService.id_empresa;
 
     par.id_projeto = this.id_projeto;
 
     par.conta = this.conta;
 
-    par.orderby = 'projeto';
+    par.versao = this.conta_versao;
 
+    par.orderby = 'projeto';
+    console.log(
+      `Parametros getAtividades ==> conta = ${par.conta} subconta = ${par.subconta} versao = ${par.versao}`
+    );
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.atividadesService
       .getAtividades_01(par)
       .subscribe(
         (data: AtividadeQuery_01Model[]) => {
           this.globalService.setSpin(false);
-          this.atividades = data;
-          this.loadDisplayItens();
+          this.loadDisplayItens(data);
+          this.displayAtividades[0].expandido = true;
+          this.expandeContrair(this.displayAtividades[0]);
         },
         (error: any) => {
           this.globalService.setSpin(false);
@@ -125,7 +128,7 @@ export class ManutAtividadeLoteComponent implements OnInit {
   getUsuarios() {
     let par = new ParametroUsuario01();
 
-    par.id_empresa = this.id_empresa;
+    par.id_empresa = this.globalService.id_empresa;
 
     par.orderby = 'Razão';
 
@@ -152,19 +155,16 @@ export class ManutAtividadeLoteComponent implements OnInit {
   }
 
   onRetorno(): void {
-    this.router.navigate(['/projetos']);
+    this.router.navigate([
+      'projetos/anexaratividade',
+      this.globalService.getIdEmpresa(),
+      this.id_projeto,
+      'NULL',
+    ]);
   }
 
   setAllItens(value: boolean, atividade: AtividadeQuery_01Model): void {
     this.displayAtividades.forEach((obj) => {
-      console.log(
-        atividade.subconta.substring(0, atividade.nivel * 2),
-        obj.atividade.subconta.substring(0, atividade.nivel * 2),
-        atividade.subconta.substring(0, atividade.nivel * 2) ==
-          obj.atividade.subconta.substring(0, atividade.nivel * 2),
-        atividade.nivel,
-        obj.atividade.nivel
-      );
       if (
         atividade.subconta.substring(0, atividade.nivel * 2) ==
           obj.atividade.subconta.substring(0, atividade.nivel * 2) &&
@@ -177,50 +177,10 @@ export class ManutAtividadeLoteComponent implements OnInit {
         }
       }
     });
-  }
-
-  loadDisplayItens(): void {
-    this.displayAtividades = [];
-    this.atividades.forEach((obj) => {
-      if (this.getFiltro(obj)) {
-        const disp: DisplayAtividade = new DisplayAtividade();
-        disp.checked = false;
-        disp.atividade = obj;
-        this.displayAtividades.push(disp);
-      }
-    });
-  }
-
-  onFiltro(conta: string, nivel: number): void {
-    this.SetFiltroSubConta(conta, nivel);
-
-    this.loadDisplayItens();
-  }
-  SetFiltroSubConta(conta: string, nivel: number) {
-    if (this.filtro.subconta == conta) {
-      this.filtro.subconta = '';
-      this.filtro.nivel = 0;
-    } else {
-      this.filtro.subconta = conta;
-      this.filtro.nivel = nivel;
-    }
-    console.log('Filtro Conta:', this.filtro.subconta, this.filtro.nivel);
-  }
-
-  getFiltro(atividade: AtividadeQuery_01Model): Boolean {
-    var filtroSubConta: boolean = false;
-    if (this.filtro.subconta == '') {
-      return true;
-    }
-    if (
-      this.filtro.subconta.trim() ==
-      atividade.subconta.substring(0, this.filtro.nivel * 2)
-    ) {
-      filtroSubConta = true;
-    } else {
-      filtroSubConta = false;
-    }
-    return filtroSubConta;
+    this.displayAtividades[0].checked = this.setStatusRecursivo(
+      1,
+      this.displayAtividades[0].atividade.conta
+    ).status;
   }
 
   onResponsavel() {
@@ -282,4 +242,110 @@ export class ManutAtividadeLoteComponent implements OnInit {
       });
       */
   }
+
+  setStyle(atividade: AtividadeQuery_01Model) {
+    let margem = { 'margin-left': '5px' };
+    switch (atividade.nivel) {
+      case 1:
+        margem = { 'margin-left': '5px' };
+        break;
+      case 2:
+        margem = { 'margin-left': '0px' };
+        break;
+      case 3:
+        margem = { 'margin-left': '62px' };
+        break;
+      default:
+        margem = { 'margin-left': '5px' };
+        break;
+    }
+    return margem;
+  }
+
+  loadDisplayItens(data: AtividadeQuery_01Model[]): void {
+    this.displayAtividades = [];
+    data.forEach((obj) => {
+      const disp: DisplayAtividadeV2 = new DisplayAtividadeV2();
+      disp.checked = true;
+      disp.show = true;
+      disp.expandido = false;
+      disp.atividade = obj;
+      this.displayAtividades.push(disp);
+    });
+  }
+
+  getVisiblesAtividades(): DisplayAtividadeV2[] {
+    return this.displayAtividades.filter((disp) =>
+      disp.atividade.nivel == 1 ? true : disp.show
+    );
+  }
+
+  expandeContrair(atividade: DisplayAtividadeV2) {
+    atividade.expandido = !atividade.expandido;
+    this.displayAtividades.forEach((obj) => {
+      if (
+        (atividade.atividade.nivel == 1 &&
+          obj.atividade.subconta.substring(0, 2) ==
+            atividade.atividade.subconta.substring(0, 2)) ||
+        (obj.atividade.conta == atividade.atividade.conta &&
+          obj.atividade.subconta.trim() == atividade.atividade.subconta.trim())
+      ) {
+        obj.expandido = atividade.expandido;
+        this.setSubConta(
+          obj.atividade.subconta.trim(),
+          obj.expandido,
+          obj.atividade.nivel
+        );
+      }
+    });
+  }
+
+  setSubConta(subconta: string, value: boolean, nivel: number) {
+    this.displayAtividades.forEach((obj) => {
+      if (
+        obj.atividade.nivel > nivel &&
+        obj.atividade.subconta.trim().substring(0, nivel * 2) == subconta
+      ) {
+        if (obj.atividade.tipo == 'O') {
+          obj.show = value;
+        }
+        obj.expandido = value;
+      }
+    });
+  }
+
+  setStatusRecursivo(idx: number, subconta: string): LastRecursivo {
+    let retorno: LastRecursivo = new LastRecursivo();
+    let ct: number = 0;
+    for (let x: number = idx; x < this.displayAtividades.length; x++) {
+      if (
+        this.displayAtividades[x].atividade.tipo == 'C' ||
+        this.displayAtividades[x].atividade.tipo == 'S'
+      ) {
+        let ret = this.setStatusRecursivo(
+          x + 1,
+          this.displayAtividades[x].atividade.subconta
+        );
+        this.displayAtividades[x].checked = ret.status;
+        x = ret.last;
+        if (ret.status) {
+          retorno.status = true;
+        }
+        continue;
+      }
+      retorno.last = x;
+      if (this.displayAtividades[x].checked) {
+        retorno.status = true;
+      }
+      if (
+        x < this.displayAtividades.length - 1 &&
+        this.displayAtividades[x + 1].atividade.tipo != 'O'
+      ) {
+        return retorno;
+      }
+    }
+    return retorno;
+  }
+
+  onSave() {}
 }

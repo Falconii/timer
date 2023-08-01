@@ -6,6 +6,7 @@ import { CrudAtividadeProjetoComponent } from './crud-atividade-projeto/crud-ati
 import { CrudPlanejamentoLancamentoComponent } from './crud-planejamento-lancamento/crud-planejamento-lancamento.component';
 import { ManutAtividadeLoteComponent } from './manut-atividade-lote/manut-atividade-lote.component';
 import { HorasDiretoriaComponent } from './horas-diretoria/horas-diretoria.component';
+import { AnexarV2Component } from './anexar-v2/anexar-v2.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'projetos', pathMatch: 'full' },
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'manuemlote/:id_empresa/:conta/:id_projeto',
     component: ManutAtividadeLoteComponent,
+  },
+  {
+    path: 'anexarv2/:conta/:conta_versao/:id_projeto',
+    component: AnexarV2Component,
   },
   {
     path: 'horasdiretoria/:id_empresa/:id_projeto',
