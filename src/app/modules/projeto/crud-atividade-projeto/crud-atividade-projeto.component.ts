@@ -242,7 +242,14 @@ export class CrudAtividadeProjetoComponent implements OnInit {
           this.conta = this.parametros.value.conta?.trim();
           this.versao = '0101';
           this.filtro = new FiltroOperacionalSubconta();
-          this.anexarAtividades();
+          this.router.navigate([
+            '/projetos/anexarv2',
+            this.conta,
+            this.versao,
+            this.id_projeto,
+            this.id_resp,
+            this.id_exec,
+          ]);
         }
       });
   }
@@ -254,6 +261,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         (data: ProjetoModel) => {
           this.globalService.setSpin(false);
           this.projeto = data;
+          this.id_atividade_conta = '';
           this.getEstruturasIn();
         },
         (error: any) => {
@@ -397,6 +405,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       );
   }
 
+  /*
   anexarAtividades() {
     this.globalService.setSpin(true);
     this.inscricaoAnexar = this.atividadesService
@@ -415,13 +424,6 @@ export class CrudAtividadeProjetoComponent implements OnInit {
             `Estrutura Anexada Com Sucesso!`,
             'OK'
           );
-          this.router.navigate([
-            '/projetos/anexarv2',
-            this.conta,
-            this.versao,
-            this.id_projeto,
-          ]);
-          /*
           this.atividades = [];
           this.conta = '';
           this.getProjeto();
@@ -430,7 +432,6 @@ export class CrudAtividadeProjetoComponent implements OnInit {
             `Estrutura Anexada Com Sucesso!`,
             'OK'
           );
-          */
         },
 
         (error: any) => {
@@ -442,6 +443,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         }
       );
   }
+*/
 
   desanexarAtividades(
     id_empresa: number,
@@ -593,10 +595,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         (data: EstruturaModel[]) => {
           this.globalService.setSpin(false);
           this.estruturasIn = data;
-          if (
-            this.id_atividade_conta == 'NULL' &&
-            this.estruturasIn.length > 0
-          ) {
+          if (this.id_atividade_conta == '' && this.estruturasIn.length > 0) {
             this.id_atividade_conta = this.estruturasIn[0].conta;
             this.setParametrosPath();
             this.onVisualizar();
@@ -722,6 +721,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   onVisualizar() {
     if (this.parametros.value.atividade?.trim() != '') {
       this.id_atividade_conta = this.parametros.value.atividade?.trim();
+      this.versao = '0101';
       this.setParamentos();
       this.filtro = new FiltroOperacionalSubconta();
       this.getAtividades();

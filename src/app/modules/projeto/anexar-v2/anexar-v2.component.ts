@@ -23,6 +23,7 @@ import { ParametroAtividade01 } from 'src/app/parametros/parametro-atividade01';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { DisplayAtividadeV2 } from 'src/app/shared/classes/DisplayAtividadeV2';
 import { LastRecursivo } from 'src/app/shared/classes/last-recursivo';
+import { ParametroAtividade02 } from 'src/app/parametros/parametro-atividade02';
 
 @Component({
   selector: 'app-anexar-v2',
@@ -45,6 +46,10 @@ export class AnexarV2Component implements OnInit {
 
   id_projeto: number = 0;
 
+  id_resp: number = 0;
+
+  id_exec: number = 0;
+
   atividades: AtividadeQuery_01Model[] = [];
 
   durationInSeconds = 2;
@@ -54,8 +59,6 @@ export class AnexarV2Component implements OnInit {
   usuarios: UsuarioQuery01Model[] = [];
 
   constructor(
-    private respExecDialog: MatDialog,
-    private periodoDialog: MatDialog,
     private globalService: GlobalService,
     private atividadesService: AtividadesService,
     private usuariosService: UsuariosService,
@@ -67,6 +70,8 @@ export class AnexarV2Component implements OnInit {
       this.conta = params.conta;
       this.conta_versao = params.conta_versao;
       this.id_projeto = params.id_projeto;
+      this.id_resp = params.id_resp;
+      this.id_exec = params.id_exec;
     });
   }
 
@@ -83,7 +88,7 @@ export class AnexarV2Component implements OnInit {
   }
 
   getAtividades() {
-    let par = new ParametroAtividade01();
+    let par = new ParametroAtividade02();
 
     par.id_empresa = this.globalService.id_empresa;
 
@@ -93,13 +98,13 @@ export class AnexarV2Component implements OnInit {
 
     par.versao = this.conta_versao;
 
-    par.orderby = 'projeto';
-    console.log(
-      `Parametros getAtividades ==> conta = ${par.conta} subconta = ${par.subconta} versao = ${par.versao}`
-    );
+    par.id_resp = this.id_resp;
+
+    par.id_exec = this.id_exec;
+
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.atividadesService
-      .getAtividades_01(par)
+      .getAtividades_02(par)
       .subscribe(
         (data: AtividadeQuery_01Model[]) => {
           this.globalService.setSpin(false);
@@ -116,10 +121,8 @@ export class AnexarV2Component implements OnInit {
               'OK'
             );
           } else {
-            this.appSnackBar.openFailureSnackBar(
-              `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
-              'OK'
-            );
+            console.log(error);
+            this.appSnackBar.openFailureSnackBar(`${error}`, 'OK');
           }
         }
       );
@@ -181,66 +184,6 @@ export class AnexarV2Component implements OnInit {
       1,
       this.displayAtividades[0].atividade.conta
     ).status;
-  }
-
-  onResponsavel() {
-    this.openRespExecDialog('Responsável', 'Defina O Responsável');
-  }
-
-  onExecutor() {
-    this.openRespExecDialog('Executor', 'Defina O Executor');
-  }
-
-  openRespExecDialog(titulo: string, texto: string) {
-    /*
-    const data: RespExecData = new RespExecData();
-    data.usuarios = this.usuarios;
-    data.titulo = titulo;
-    data.texto = texto;
-    data.id_usuario = 0;
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.id = 'modal-resp-exec';
-    dialogConfig.width = '600px';
-    dialogConfig.data = data;
-    const modalDialog = this.respExecDialog
-      .open(RespExecDialogComponent, dialogConfig)
-      .beforeClosed()
-      .subscribe((data: RespExecData) => {
-        console.log('data', data);
-        if (data.processar) {
-          alert('Pode Processar');
-        }
-      });
-      */
-  }
-
-  onPeriodo() {
-    this.openPeriodoDialog();
-  }
-
-  openPeriodoDialog() {
-    /*
-    const data: PeriodoData = new PeriodoData();
-    data.texto = 'Defino Novo Periodo';
-
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.id = 'modal-periodo';
-    dialogConfig.width = '600px';
-    dialogConfig.data = data;
-    const modalDialog = this.respExecDialog
-      .open(PeriodoDialogComponent, dialogConfig)
-      .beforeClosed()
-      .subscribe((data: PeriodoData) => {
-        console.log('data', data);
-        if (data.processar) {
-          alert('Pode Processar');
-        }
-      });
-      */
   }
 
   setStyle(atividade: AtividadeQuery_01Model) {
@@ -347,5 +290,32 @@ export class AnexarV2Component implements OnInit {
     return retorno;
   }
 
-  onSave() {}
+  onSave() {
+    this.displayAtividades.forEach((disp) => {
+      disp.atividade.id_resp = this.id_resp;
+      disp.atividade.id_exec = this.id_exec;
+    });
+    this.globalService.setSpin(true);
+    this.inscricaoSave = this.atividadesService
+      .anexaatividadev2(this.displayAtividades)
+      .subscribe(
+        (data: any) => {
+          this.globalService.setSpin(false);
+          this.appSnackBar.openSuccessSnackBar(data.message, 'OK');
+          this.onRetorno();
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.atividades = [];
+          if (error.error.message == 'Nehuma Informação Para Esta Consulta.') {
+            this.appSnackBar.openSuccessSnackBar(
+              'Nenhuma Atividade Encontrada Para Este Projeto!',
+              'OK'
+            );
+          } else {
+            this.appSnackBar.openFailureSnackBar(`${error}`, 'OK');
+          }
+        }
+      );
+  }
 }

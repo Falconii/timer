@@ -377,11 +377,13 @@ export class CrudExecucaoComponent implements OnInit {
           this.formulario.value.entrada,
           this.formulario.value.saida
         );
+        /*
         validaIntervalo(
           this.intervalos,
           this.formulario.value.entrada,
           this.formulario.value.saida
         );
+        */
       }
       if (this.formulario.valid) {
         this.executaAcao();

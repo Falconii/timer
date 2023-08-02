@@ -29,7 +29,13 @@
         </div>
     </form>
 </div>
-<div mat-dialog-actions>
-    <button mat-button (click)="closeModal()">Cancelar</button>
-    <button mat-button *ngIf="itsOK()" [mat-dialog-close]="data" cdkFocusInitial (click)="actionFunction()">Confirmar</button>
+<div class="button-container-right">
+    <button mat-raised-button color="accent" cdkFocusInitial (click)="closeModal()">
+    <mat-icon>cancel</mat-icon>
+    Cancelar
+  </button>
+    <button mat-raised-button color="primary" *ngIf="itsOK()" [mat-dialog-close]="data" (click)="actionFunction()">
+    <mat-icon>check</mat-icon>
+    Confirmar
+  </button>
 </div>

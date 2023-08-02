@@ -25,7 +25,7 @@ const routes: Routes = [
     component: ManutAtividadeLoteComponent,
   },
   {
-    path: 'anexarv2/:conta/:conta_versao/:id_projeto',
+    path: 'anexarv2/:conta/:conta_versao/:id_projeto/:id_resp/:id_exec',
     component: AnexarV2Component,
   },
   {

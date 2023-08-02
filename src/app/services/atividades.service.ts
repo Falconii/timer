@@ -6,6 +6,8 @@ import { AtividadeHorasDirModel } from '../Models/atividade-horas-dir-model';
 import { AtividadeModel } from '../Models/atividade-model';
 import { AtividadeQuery_01Model } from '../Models/atividade-query_01-model';
 import { ParametroAtividade01 } from '../parametros/parametro-atividade01';
+import { ParametroAtividade02 } from '../parametros/parametro-atividade02';
+import { DisplayAtividadeV2 } from '../shared/classes/DisplayAtividadeV2';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +30,14 @@ export class AtividadesService {
     );
   }
 
+  getAtividades_02(
+    params: ParametroAtividade02
+  ): Observable<AtividadeQuery_01Model[]> {
+    return this.http.post<AtividadeQuery_01Model[]>(
+      `${this.apiURL}atividadesvazia`,
+      params
+    );
+  }
   getAtividade(id_empresa: number, id: number) {
     return this.http.get<AtividadeModel>(
       `${this.apiURL}atividade/${id_empresa}/${id}`
@@ -72,6 +82,10 @@ export class AtividadesService {
     return this.http.get<any>(
       `${this.apiURL}anexaatividade/${id_empresa}/${conta}/${versao}/${id_projeto}/${id_exec}/${id_resp}`
     );
+  }
+
+  anexaatividadev2(atividades: DisplayAtividadeV2[]) {
+    return this.http.post<any>(`${this.apiURL}anexaatividadev2`, atividades);
   }
 
   desanexaatividade(
