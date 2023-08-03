@@ -97,9 +97,10 @@ export class AgendaViewComponent implements OnInit {
 
     par.orderby = 'Razão';
 
-    console.log('Coordenadores:', par);
+    this.globalService.setSpin(true);
     this.inscricaoAuditor = this.usuariosService.getusuarios_01(par).subscribe(
       (data: UsuarioQuery01Model[]) => {
+        this.globalService.setSpin(false);
         this.auditor = 0;
         const audi = new UsuarioQuery01Model();
         audi.id = 0;
@@ -111,6 +112,7 @@ export class AgendaViewComponent implements OnInit {
         this.parametro.patchValue({ auditores: this.auditor });
       },
       (error: any) => {
+        this.globalService.setSpin(false);
         this.auditor = 0;
         this.appSnackBar.openFailureSnackBar(
           `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -135,10 +137,12 @@ export class AgendaViewComponent implements OnInit {
 
     console.log('Mes ==>', par.mes);
 
+    this.globalService.setSpin(true);
     this.inscricaoAgenda = this.projetosService
       .getParametroAgeHorasAgeHoras01(par)
       .subscribe(
         (data: any[]) => {
+          this.globalService.setSpin(false);
           this.agendas = [];
           data.forEach((dt) => {
             const age = new AgeHorasModel();
@@ -157,6 +161,7 @@ export class AgendaViewComponent implements OnInit {
           }
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.agendas = [];
           this.loadCalendario();
           this.appSnackBar.openFailureSnackBar(

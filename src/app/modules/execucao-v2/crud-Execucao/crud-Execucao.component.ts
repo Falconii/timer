@@ -28,6 +28,7 @@ import {
   getHora,
   getMinuto,
   MensagensBotoes,
+  messageError,
   minutostostohorasexagenal,
   populaIntervalo2,
   setDBtoAngular,
@@ -168,8 +169,8 @@ export class CrudExecucaoComponent implements OnInit {
   getApontamentosExecucao() {
     let para = new ParametroAponExecucao01();
     para.id_empresa = 1;
-    para.id_exec = this.usuario.id;
-    para.id_projeto = this.atividade.id_projeto;
+    para.id_exec = this.globalService.getUsuario().id;
+    para.id_projeto = 0;
     para.data = DataYYYYMMDD(this.parametro.value.data);
     para.orderby = 'Executor';
     this.globalService.setSpin(true);
@@ -183,7 +184,10 @@ export class CrudExecucaoComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.apontamentos = [];
-          console.log(`Erro getApontamentosExecucao: ${error}`);
+          this.appSnackBar.openFailureSnackBar(
+            `Pesquisa Nos Apontamentos ${messageError(error)}`,
+            'OK'
+          );
         }
       );
   }
@@ -371,13 +375,15 @@ export class CrudExecucaoComponent implements OnInit {
         this.idAcao == CadastroAcoes.Inclusao ||
         this.idAcao == CadastroAcoes.Edicao
       ) {
+        /*
+        Estou fazendo no BackEnd
         console.log(
           'Edição =>',
           this.intervalos,
           this.formulario.value.entrada,
           this.formulario.value.saida
         );
-        /*
+
         validaIntervalo(
           this.intervalos,
           this.formulario.value.entrada,
@@ -501,7 +507,6 @@ export class CrudExecucaoComponent implements OnInit {
           .ApoExecucaoInsert(this.apontamento)
           .subscribe(
             async (data: ApoExecucaoModel) => {
-              this.getApontamentosExecucao();
               this.onCancel();
             },
             (error: any) => {
@@ -519,7 +524,6 @@ export class CrudExecucaoComponent implements OnInit {
           .ApoExecucaoUpdate(this.apontamento)
           .subscribe(
             async (data: any) => {
-              this.getApontamentosExecucao();
               this.onCancel();
             },
             (error: any) => {
@@ -536,7 +540,6 @@ export class CrudExecucaoComponent implements OnInit {
           .ApoExecucaoDelete(this.apontamento.id_empresa, this.apontamento.id)
           .subscribe(
             async (data: any) => {
-              this.getApontamentosExecucao();
               this.onCancel();
             },
             (error: any) => {
@@ -553,6 +556,12 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   onCancel() {
+    if (
+      this.idAcao == this.getAcoes().Inclusao ||
+      this.idAcao == this.getAcoes().Edicao
+    ) {
+      this.getApontamentosExecucao();
+    }
     this.idAcao = 99;
     this.setAcao(99);
   }

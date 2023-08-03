@@ -25,6 +25,7 @@ import { JustificativaRespexecDialogComponent } from './components/justificativa
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PeriodoDialogComponent } from './components/periodo-dialog/periodo-dialog.component';
 import { RespExecDialogComponent } from './components/resp-exec-dialog/resp-exec-dialog.component';
+import { CelApontamentosExecucaoComponent } from './components/cel-apontamentos-Execucao/cel-apontamentos-execucao.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { RespExecDialogComponent } from './components/resp-exec-dialog/resp-exec
     SharedNavegatorComponent,
     CelCalendarComponent,
     CelApontamentosComponent,
+    CelApontamentosExecucaoComponent,
     AtivoPipe,
     SpinsComponent,
     ProgressBarComponent,
@@ -69,6 +71,7 @@ import { RespExecDialogComponent } from './components/resp-exec-dialog/resp-exec
     SharedNavegatorComponent,
     CelCalendarComponent,
     CelApontamentosComponent,
+    CelApontamentosExecucaoComponent,
     SpinsComponent,
     ProgressBarComponent,
     QuestionDialogComponent,

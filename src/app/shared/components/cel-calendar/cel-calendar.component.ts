@@ -41,14 +41,25 @@ export class CelCalendarComponent implements OnInit {
   }
 
   show(): boolean {
+    return true;
+    /*
     if (this.Celula.tipo == 1) {
       if (this.Celula.horasexecutadas + this.Celula.horasplanejadas > 0) {
         return true;
-      } else {
-        return false;
       }
     } else {
       return true;
     }
+    */
+  }
+
+  showHoras(): boolean {
+    if (
+      this.Celula.tipo == 1 &&
+      this.Celula.horasexecutadas + this.Celula.horasplanejadas > 0
+    ) {
+      return true;
+    }
+    return false;
   }
 }
