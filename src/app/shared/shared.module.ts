@@ -26,6 +26,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PeriodoDialogComponent } from './components/periodo-dialog/periodo-dialog.component';
 import { RespExecDialogComponent } from './components/resp-exec-dialog/resp-exec-dialog.component';
 import { CelApontamentosExecucaoComponent } from './components/cel-apontamentos-Execucao/cel-apontamentos-execucao.component';
+import { SetfocusDirective } from './components/setfocus.directive';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { CelApontamentosExecucaoComponent } from './components/cel-apontamentos-
     PeriodoDialogComponent,
     RespExecDialogComponent,
     ShowClienteDialogComponent,
+    SetfocusDirective,
   ],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -80,6 +82,7 @@ import { CelApontamentosExecucaoComponent } from './components/cel-apontamentos-
     PeriodoDialogComponent,
     RespExecDialogComponent,
     ShowClienteDialogComponent,
+    SetfocusDirective,
   ],
 })
 export class SharedModule {}
