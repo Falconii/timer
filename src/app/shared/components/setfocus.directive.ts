@@ -11,7 +11,6 @@ export class SetfocusDirective {
   ngOnInit() {
     if (this.isFocused) {
       this.renderer.selectRootElement(this.hostElement.nativeElement).focus();
-      this.hostElement.nativeElement.select();
     }
   }
 }

@@ -415,3 +415,12 @@ body {
 .input-numerico {
     text-align: right;
 }
+
+.status-execucao {
+    display: flex;
+    width: 5px;
+    height: 5px;
+    justify-items: center;
+    align-items: center;
+    text-align: justify;
+}

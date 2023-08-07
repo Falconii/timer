@@ -71,6 +71,13 @@
           <mat-label class="Browse_Lanc_td">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}
           </mat-label>
           <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
+          <mat-icon class="status-execucao">texture</mat-icon>
+        </div>
+        <div>
+          <mat-label class="Browse_Lanc_td">Resp:{{getfirstName(lanca.resp_razao)}}</mat-label>
+        </div>
+        <div>
+          <mat-label class="Browse_Lanc_td">Exec:{{getfirstName(lanca.exec_razao)}}</mat-label>
         </div>
       </td>
       <td>
@@ -131,7 +138,7 @@
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Entrada</mat-label>
         <input matInput formControlName="entrada" placeholder="HH:MM" mask="00:00" [readonly]="readOnly"
-          [Setfocus]="true">
+          [Setfocus]="focusEntrada">
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Saída</mat-label>
@@ -171,7 +178,9 @@
     </div>
     <div class="button-container-right">
       <button class="buttons" mat-raised-button color="primary" (click)=onSubmit()>{{acao}}</button>
-      <button class="buttons" mat-raised-button color="accent" (click)="onCancel()">{{getLabelCancel()}}</button>
+      <button class="buttons" mat-raised-button color="accent" (click)="onCancel()"
+        [Setfocus]="focusCancelar">{{getLabelCancel()}}
+      </button>
     </div>
   </form>
 </div>

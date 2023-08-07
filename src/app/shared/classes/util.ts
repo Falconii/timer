@@ -441,3 +441,7 @@ export function messageError(value: any): string {
   }
   return retorno;
 }
+
+export function getfirstName(name: string): string {
+  return getFirstName(name);
+}

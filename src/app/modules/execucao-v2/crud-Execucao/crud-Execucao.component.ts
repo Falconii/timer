@@ -25,6 +25,7 @@ import {
   DataYYYYMMDD,
   DataYYYYMMDDTHHMMSSZ,
   DifHoras,
+  getFirstName,
   getHora,
   getMinuto,
   MensagensBotoes,
@@ -86,6 +87,9 @@ export class CrudExecucaoComponent implements OnInit {
 
   grupo: AtividadeQuery_01Model = new AtividadeQuery_01Model();
   grupos: AtividadeQuery_01Model[] = [];
+
+  focusEntrada: boolean = false;
+  focusCancelar: boolean = false;
 
   constructor(
     formBuilder: FormBuilder,
@@ -184,10 +188,12 @@ export class CrudExecucaoComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.apontamentos = [];
-          this.appSnackBar.openFailureSnackBar(
-            `Pesquisa Nos Apontamentos ${messageError(error)}`,
-            'OK'
-          );
+          if (error.error.message != 'Nehuma Informação Para Esta Consulta.') {
+            this.appSnackBar.openFailureSnackBar(
+              `Pesquisa Nos Apontamentos ${messageError(error)}`,
+              'OK'
+            );
+          }
         }
       );
   }
@@ -210,15 +216,11 @@ export class CrudExecucaoComponent implements OnInit {
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          if (error.error.message == 'Nehuma Informação Para Esta Consulta.') {
-            this.contratos = [];
-            this.appSnackBar.openSuccessSnackBar(
-              'Nenhuma Informação Encontrada Para Esta Consulta!',
-              'OK'
-            );
-          } else {
-            this.contratos = [];
-          }
+          this.appSnackBar.openSuccessSnackBar(
+            `Pesquisa Contratos ${messageError(error)}`,
+            'OK'
+          );
+          this.contratos = [];
         }
       );
   }
@@ -289,7 +291,7 @@ export class CrudExecucaoComponent implements OnInit {
           this.globalService.setSpin(false);
           this.motivos = [];
           this.appSnackBar.openFailureSnackBar(
-            `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            `Pesquisa Motivos Apontamentos ${messageError(error)}`,
             'OK'
           );
         }
@@ -307,7 +309,7 @@ export class CrudExecucaoComponent implements OnInit {
         16
       ),
       atividade: this.apontamento.estru_descricao,
-      cliente: this.atividade.subcliente_razao,
+      cliente: this.apontamento.cli_razao,
       id_motivo: this.apontamento.id_motivo,
       encerra: this.apontamento.encerramento == 'S' ? true : false,
       obs: this.apontamento.obs,
@@ -325,6 +327,8 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   setAcao(op: number) {
+    this.focusEntrada = false;
+    this.focusCancelar = false;
     switch (+op) {
       case CadastroAcoes.Inclusao:
         this.acao = 'Gravar';
@@ -332,6 +336,7 @@ export class CrudExecucaoComponent implements OnInit {
           this.apontamento.inicial
         )}`;
         this.readOnly = false;
+        this.focusEntrada = true;
         break;
       case CadastroAcoes.Edicao:
         this.acao = 'Gravar';
@@ -339,6 +344,7 @@ export class CrudExecucaoComponent implements OnInit {
           this.apontamento.inicial
         )}`;
         this.readOnly = false;
+        this.focusEntrada = true;
         break;
       case CadastroAcoes.Consulta:
         this.acao = 'Voltar';
@@ -346,6 +352,7 @@ export class CrudExecucaoComponent implements OnInit {
           this.apontamento.inicial
         )}`;
         this.readOnly = true;
+        this.focusCancelar = true;
         break;
       case CadastroAcoes.Exclusao:
         this.acao = 'Excluir';
@@ -438,16 +445,19 @@ export class CrudExecucaoComponent implements OnInit {
       const date1 = new Date(
         setDBtoAngularGMT(DataYYYYMMDD(this.parametro.value.data) + ' 00:00:00')
       );
-      this.intervalos = populaIntervalo2(
-        this.apontamentos,
-        this.apontamento.id
-      );
+      //this.intervalos = populaIntervalo2(
+      //  this.apontamentos,
+      //  this.apontamento.id
+      //);
       console.log('Intervalos Adicao ==>', this.intervalos);
       this.apontamento.id_empresa = this.usuario.id_empresa;
       this.apontamento.id = 0;
       this.apontamento.id_projeto = this.atividade.id_projeto;
       this.apontamento.id_conta = this.atividade.conta;
       this.apontamento.id_subconta = this.atividade.subconta;
+      this.apontamento.id_conta_versao = this.atividade.versao;
+      this.apontamento.id_subcliente = this.atividade.id_subcliente;
+      this.apontamento.cli_razao = this.atividade.subcliente_razao;
       this.apontamento.id_resp = this.atividade.id_resp;
       this.apontamento.id_exec = this.usuario.id;
       this.apontamento.inicial = setDBtoAngularGMT(
@@ -457,6 +467,8 @@ export class CrudExecucaoComponent implements OnInit {
         DataYYYYMMDD(this.parametro.value.data) + ' 00:00:00'
       ); //DataYYYYMMDDTHHMMSSZ(date1);
       this.apontamento.horasapon = 0;
+      this.apontamento.id_motivo = this.globalService.codigoMotivo;
+      this.apontamento.produtivo = 'S';
       this.apontamento.obs = '';
       this.apontamento.encerramento = 'N';
       this.apontamento.user_insert = this.usuario.id;
@@ -467,14 +479,33 @@ export class CrudExecucaoComponent implements OnInit {
       this.idAcao = opcao;
       this.setAcao(this.idAcao);
       this.setValue();
-      console.log('inicial', this.apontamento.inicial);
-      console.log('final', this.apontamento.final);
     }
   }
 
-  outras(opcao: number, lanca: ApoExecucaoModel) {
-    this.apontamento = lanca;
-    this.intervalos = populaIntervalo2(this.apontamentos, this.apontamento.id);
+  outras(opcao: number, lanca: ApoExecucaoModel01) {
+    this.apontamento = new ApoExecucaoModel();
+    this.apontamento.id_empresa = this.usuario.id_empresa;
+    this.apontamento.id = lanca.id;
+    this.apontamento.id_projeto = lanca.id_projeto;
+    this.apontamento.id_conta = lanca.id_conta;
+    this.apontamento.id_subconta = lanca.id_subconta;
+    this.apontamento.id_conta_versao = lanca.id_conta_versao;
+    this.apontamento.id_subcliente = lanca.id_subcliente;
+    this.apontamento.cli_razao = lanca.cli_razao;
+    this.apontamento.id_resp = lanca.id_resp;
+    this.apontamento.id_exec = lanca.id_exec;
+    this.apontamento.inicial = lanca.inicial;
+    this.apontamento.final = lanca.final;
+    this.apontamento.horasapon = 0;
+    this.apontamento.id_motivo = this.globalService.codigoMotivo;
+    this.apontamento.produtivo = 'S';
+    this.apontamento.obs = '';
+    this.apontamento.encerramento = 'N';
+    this.apontamento.user_insert = lanca.user_insert;
+    this.apontamento.user_update = lanca.user_update;
+    this.apontamento.resp_razao = lanca.resp_razao;
+    this.apontamento.exec_razao = lanca.exec_razao;
+    this.apontamento.estru_descricao = lanca.estru_descricao;
     this.idAcao = opcao;
     this.setAcao(this.idAcao);
     this.setValue();
@@ -556,10 +587,7 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   onCancel() {
-    if (
-      this.idAcao == this.getAcoes().Inclusao ||
-      this.idAcao == this.getAcoes().Edicao
-    ) {
+    if (this.idAcao != this.getAcoes().Consulta) {
       this.getApontamentosExecucao();
     }
     this.idAcao = 99;
@@ -707,4 +735,8 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   onDiaTodo() {}
+
+  getfirstName(name: string): string {
+    return getFirstName(name);
+  }
 }

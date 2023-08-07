@@ -14,6 +14,7 @@ export class GlobalService {
   id_empresa: number = 1;
   showSpin: boolean = false;
   lsSituacoesTrabalho: SituacaoTrabalho[] = [];
+  codigoMotivo: string = '001001';
 
   shomMenuEmitter = new EventEmitter<boolean>();
   refreshLançamentos = new EventEmitter<CelulaDia>();

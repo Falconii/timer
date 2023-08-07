@@ -98,9 +98,6 @@ export class CrudProjetoComponent implements OnInit {
 
     if (this.parametros.value.campo == 'Código') {
       let key = parseInt(this.parametros.value.filtro, 10);
-
-      console.log('key', key);
-
       if (isNaN(key)) {
         par.id = 0;
       } else {
@@ -154,8 +151,6 @@ export class CrudProjetoComponent implements OnInit {
     if (this.parametros.value.campo == 'Código') {
       let key = parseInt(this.parametros.value.filtro, 10);
 
-      console.log('key', key);
-
       if (isNaN(key)) {
         par.id = 0;
       } else {
@@ -176,7 +171,7 @@ export class CrudProjetoComponent implements OnInit {
         (data: any) => {
           this.controlePaginas = new ControlePaginas(
             this.tamPagina,
-            data.total
+            data.total == 0 ? 1 : data.total
           );
           this.getProjetos();
         },
