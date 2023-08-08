@@ -22,7 +22,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Data:</mat-label>
-        <input matInput [matDatepicker]="dataDatePicker" formControlName="data" (dateChange)="onParametrosChange()">
+        <input matInput [matDatepicker]="dataDatePicker" formControlName="data" (dateChange)="onChangeData()">
         <mat-datepicker-toggle matSuffix [for]="dataDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #dataDatePicker></mat-datepicker>
       </mat-form-field>
@@ -67,11 +67,15 @@
     </tr>
     <tr *ngFor="let lanca of apontamentos">
       <td>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}
-          </mat-label>
-          <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
-          <mat-icon class="status-execucao">texture</mat-icon>
+        <div class="wrapper">
+          <div class="first">
+            <mat-label class="Browse_Lanc_td">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}
+            </mat-label>
+            <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
+          </div>
+          <div class="second">
+            <mat-icon class="green-icon">check</mat-icon>
+          </div>
         </div>
         <div>
           <mat-label class="Browse_Lanc_td">Resp:{{getfirstName(lanca.resp_razao)}}</mat-label>

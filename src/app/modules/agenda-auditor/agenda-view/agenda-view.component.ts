@@ -101,7 +101,7 @@ export class AgendaViewComponent implements OnInit {
     this.inscricaoAuditor = this.usuariosService.getusuarios_01(par).subscribe(
       (data: UsuarioQuery01Model[]) => {
         this.globalService.setSpin(false);
-        this.auditor = 0;
+        this.auditor = this.globalService.getUsuario().id;
         const audi = new UsuarioQuery01Model();
         audi.id = 0;
         audi.razao = 'TODOS';
@@ -110,6 +110,7 @@ export class AgendaViewComponent implements OnInit {
           this.auditores.push(auditor);
         });
         this.parametro.patchValue({ auditores: this.auditor });
+        this.onSubmit();
       },
       (error: any) => {
         this.globalService.setSpin(false);

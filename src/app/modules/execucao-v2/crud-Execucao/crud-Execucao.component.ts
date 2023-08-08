@@ -423,7 +423,6 @@ export class CrudExecucaoComponent implements OnInit {
       this.atividade = this.atividades.filter(
         (ativ) => ativ.id === this.parametro.value.id_atividade
       )[0];
-      this.getApontamentosExecucao();
     } else {
       this.appSnackBar.openSuccessSnackBar(
         `Formulário Com Campos Inválidos.`,
@@ -439,6 +438,9 @@ export class CrudExecucaoComponent implements OnInit {
         'OK'
       );
     } else {
+      this.atividade = this.atividades.filter(
+        (ativ) => ativ.id === this.parametro.value.id_atividade
+      )[0];
       this.idAcao = opcao;
       this.setAcao(this.idAcao);
       this.apontamento = new ApoExecucaoModel();
@@ -618,6 +620,10 @@ export class CrudExecucaoComponent implements OnInit {
 
   getTexto() {
     return MensagensBotoes;
+  }
+
+  onChangeData() {
+    this.getApontamentosExecucao();
   }
 
   onParametrosChange() {
