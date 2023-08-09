@@ -32,7 +32,7 @@ export class CrudProjetoComponent implements OnInit {
 
   erro: string = '';
 
-  opcoesOrdenacao = ['Código', 'Descricao'];
+  opcoesOrdenacao = ['Código', 'Descrição'];
 
   opcoesCampo = ['Código', 'Descrição'];
 
@@ -209,8 +209,8 @@ export class CrudProjetoComponent implements OnInit {
 
   setValues() {
     this.parametros.setValue({
-      ordenacao: 'Código',
-      campo: 'Código',
+      ordenacao: 'Descrição',
+      campo: 'Descrição',
       filtro: '',
       grupo: 1,
     });

@@ -50,7 +50,7 @@
         <mat-label>Atividades</mat-label>
         <mat-select formControlName="id_atividade" (selectionChange)="onParametrosChange()">
           <mat-option *ngFor="let atividade of atividades" [value]="atividade.id">
-            {{atividade.estru_descri}}
+            {{atividade.subconta}}-{{atividade.estru_descri}}
           </mat-option>
         </mat-select>
       </mat-form-field>

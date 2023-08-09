@@ -223,6 +223,10 @@
             matTooltipPosition="above" (click)="onDesanexar(atividade)" *ngIf="atividade.nivel == 1">
             <mat-icon>delete</mat-icon>
           </button>
+          <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Incuir Novas Atividades"
+            matTooltipPosition="above" (click)="onIncluirNovaAtividade(atividade)" *ngIf="atividade.nivel == 1">
+            <mat-icon>add_circle_outline</mat-icon>
+          </button>
           <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Editar Atividade"
             matTooltipPosition="above" (click)="escolha(atividade,getAcoes()[ 'Edicao'])" *ngIf="atividade.tipo == 'O'">
             <mat-icon>edit</mat-icon>

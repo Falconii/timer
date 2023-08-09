@@ -337,7 +337,7 @@ export class ProjetoViewComponent implements OnInit {
 
     par2.id_empresa = 1;
 
-    par2.orderby = 'Razão';
+    par2.orderby = 'Fantasia';
 
     this.inscricaoGetClientes = this.clientesService
       .getClientes_01(par2)

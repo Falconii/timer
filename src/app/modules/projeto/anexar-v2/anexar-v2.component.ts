@@ -167,6 +167,8 @@ export class AnexarV2Component implements OnInit {
   }
 
   setAllItens(value: boolean, atividade: AtividadeQuery_01Model): void {
+    let novoStatus: boolean;
+
     this.displayAtividades.forEach((obj) => {
       if (
         atividade.subconta.substring(0, atividade.nivel * 2) ==
@@ -180,10 +182,13 @@ export class AnexarV2Component implements OnInit {
         }
       }
     });
-    this.displayAtividades[0].checked = this.setStatusRecursivo(
+    novoStatus = this.setStatusRecursivo(
       1,
       this.displayAtividades[0].atividade.conta
     ).status;
+    if (this.displayAtividades[0].vazia) {
+      this.displayAtividades[0].checked = novoStatus;
+    }
   }
 
   setStyle(atividade: AtividadeQuery_01Model) {
@@ -209,9 +214,10 @@ export class AnexarV2Component implements OnInit {
     this.displayAtividades = [];
     data.forEach((obj) => {
       const disp: DisplayAtividadeV2 = new DisplayAtividadeV2();
-      disp.checked = true;
+      disp.checked = obj.vazia == 'N' ? true : false;
       disp.show = true;
       disp.expandido = false;
+      disp.vazia = obj.vazia == 'S' ? true : false;
       disp.atividade = obj;
       this.displayAtividades.push(disp);
     });

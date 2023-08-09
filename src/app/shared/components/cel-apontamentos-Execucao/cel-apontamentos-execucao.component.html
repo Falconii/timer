@@ -1,11 +1,12 @@
 <div class="div-barra" *ngIf="cel.dia > 0">
   <mat-toolbar>
     <span>
-      <mat-label>APONTAMENTOS - {{cel.data | date : 'dd/MM/yyyy'}}</mat-label>
+      <mat-label *ngIf="apontamentos.length > 0">APONTAMENTOS - {{cel.data | date : 'dd/MM/yyyy'}}</mat-label>
+      <mat-label *ngIf="apontamentos.length == 0">Nenhum Apontamento Para Este Dia!</mat-label>
     </span>
   </mat-toolbar>
 </div>
-<div>
+<div *ngIf="apontamentos.length > 0">
   <table class="Browse_Lanc">
     <tr class="coluna-cabec">
       <th>HORÁRIO</th>
@@ -45,3 +46,4 @@
     </tr>
   </table>
 </div>
+<div class="rodape"></div>

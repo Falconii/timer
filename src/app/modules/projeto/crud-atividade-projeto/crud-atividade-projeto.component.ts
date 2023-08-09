@@ -220,7 +220,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       });
   }
 
-  openDialogRespAudi(): void {
+  openDialogRespAudi(acao: string): void {
     const data: RespAudiData = new RespAudiData();
     data.executores = this.executores;
     const dialogConfig = new MatDialogConfig();
@@ -239,17 +239,33 @@ export class CrudAtividadeProjetoComponent implements OnInit {
         this.id_resp = data.id_resp;
         this.id_exec = data.id_exec;
         if (data.processar) {
-          this.conta = this.parametros.value.conta?.trim();
-          this.versao = '0101';
-          this.filtro = new FiltroOperacionalSubconta();
-          this.router.navigate([
-            '/projetos/anexarv2',
-            this.conta,
-            this.versao,
-            this.id_projeto,
-            this.id_resp,
-            this.id_exec,
-          ]);
+          if (acao == 'INCLUSAO') {
+            this.conta = this.parametros.value.conta?.trim();
+            this.versao = '0101';
+            this.filtro = new FiltroOperacionalSubconta();
+            this.router.navigate([
+              '/projetos/anexarv2',
+              this.conta,
+              this.versao,
+              this.id_projeto,
+              this.id_resp,
+              this.id_exec,
+            ]);
+          } else {
+            this.conta = this.atividades[0].conta;
+            this.versao = this.atividades[0].versao;
+            this.id_projeto = this.atividades[0].id_projeto;
+            this.id_resp = data.id_resp;
+            this.id_exec = data.id_exec;
+            this.router.navigate([
+              '/projetos/anexarv2',
+              this.conta,
+              this.versao,
+              this.id_projeto,
+              this.id_resp,
+              this.id_exec,
+            ]);
+          }
         }
       });
   }
@@ -709,7 +725,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
   onAnexar() {
     if (this.parametros.value.conta?.trim() != '') {
-      this.openDialogRespAudi();
+      this.openDialogRespAudi('INCLUSAO');
     } else {
       this.appSnackBar.openSuccessSnackBar(
         `Informe Uma Estrutura Primeiro`,
@@ -984,5 +1000,9 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       if (atividade.nivelexec == 4) cor = { 'background-color': 'black' };
     }
     return cor;
+  }
+
+  onIncluirNovaAtividade(atividade: AtividadeQuery_01Model) {
+    this.openDialogRespAudi('EDICAO');
   }
 }
