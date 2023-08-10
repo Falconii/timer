@@ -16,6 +16,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { BrPaginatorIntl } from './shared/classes/br-PaginatorIntl';
 import { DatePipe } from '@angular/common';
 import { BarAtividadesComponent } from './home/bar-atividades/bar-atividades.component';
+import { SituacaoProjetoPipe } from './shared/pipes/situacao-projeto.pipe';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, BarAtividadesComponent],
@@ -33,6 +34,7 @@ import { BarAtividadesComponent } from './home/bar-atividades/bar-atividades.com
   providers: [
     HttpClient,
     DatePipe,
+    SituacaoProjetoPipe,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     DiganaoGuard,
     GlobalService,

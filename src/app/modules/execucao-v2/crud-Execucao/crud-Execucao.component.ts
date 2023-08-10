@@ -91,6 +91,10 @@ export class CrudExecucaoComponent implements OnInit {
   focusEntrada: boolean = false;
   focusCancelar: boolean = false;
 
+  gravando: boolean = false;
+
+  totalHoras: number = 0;
+
   constructor(
     formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
@@ -184,10 +188,16 @@ export class CrudExecucaoComponent implements OnInit {
         (data: ApoExecucaoModel01[]) => {
           this.globalService.setSpin(false);
           this.apontamentos = data;
+          this.totalHoras = 0;
+          this.apontamentos.forEach((lan) => {
+            console.log(lan.horasapon);
+            this.totalHoras = this.totalHoras + Number(lan.horasapon);
+          });
         },
         (error: any) => {
           this.globalService.setSpin(false);
           this.apontamentos = [];
+          this.totalHoras = 0;
           if (error.error.message != 'Nehuma Informação Para Esta Consulta.') {
             this.appSnackBar.openFailureSnackBar(
               `Pesquisa Nos Apontamentos ${messageError(error)}`,
@@ -203,7 +213,8 @@ export class CrudExecucaoComponent implements OnInit {
 
     par.id_empresa = 1;
 
-    par.orderby = 'Código';
+    par.orderby = 'Descrição';
+
     this.globalService.setSpin(true);
     this.inscricaoGetContratos = this.projetosServices
       .getProjetos_01(par)
@@ -377,6 +388,7 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   onSubmit() {
+    this.gravando = true;
     try {
       if (
         this.idAcao == CadastroAcoes.Inclusao ||
@@ -432,6 +444,22 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   adicao(opcao: number) {
+    this.gravando = false;
+    let lastTime: string = '';
+    if (this.apontamentos.length == 0) {
+      lastTime = '07:45:00';
+    } else {
+      lastTime = this.apontamentos[
+        this.apontamentos.length - 1
+      ].final.substring(
+        this.apontamentos[this.apontamentos.length - 1].final.indexOf(' ') + 1,
+        16
+      );
+      if (lastTime === '12:00') {
+        lastTime = '13:00';
+      }
+    }
+
     if (!this.parametro.valid) {
       this.appSnackBar.openSuccessSnackBar(
         `Favor Preencher Os Parâmetros`,
@@ -445,7 +473,9 @@ export class CrudExecucaoComponent implements OnInit {
       this.setAcao(this.idAcao);
       this.apontamento = new ApoExecucaoModel();
       const date1 = new Date(
-        setDBtoAngularGMT(DataYYYYMMDD(this.parametro.value.data) + ' 00:00:00')
+        setDBtoAngularGMT(
+          `${DataYYYYMMDD(this.parametro.value.data)} ${lastTime}`
+        )
       );
       //this.intervalos = populaIntervalo2(
       //  this.apontamentos,
@@ -463,7 +493,7 @@ export class CrudExecucaoComponent implements OnInit {
       this.apontamento.id_resp = this.atividade.id_resp;
       this.apontamento.id_exec = this.usuario.id;
       this.apontamento.inicial = setDBtoAngularGMT(
-        DataYYYYMMDD(this.parametro.value.data) + ' 00:00:00'
+        `${DataYYYYMMDD(this.parametro.value.data)} ${lastTime}`
       ); //DataYYYYMMDDTHHMMSSZ(date1);
       this.apontamento.final = setDBtoAngularGMT(
         DataYYYYMMDD(this.parametro.value.data) + ' 00:00:00'
@@ -485,6 +515,7 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   outras(opcao: number, lanca: ApoExecucaoModel01) {
+    this.gravando = false;
     this.apontamento = new ApoExecucaoModel();
     this.apontamento.id_empresa = this.usuario.id_empresa;
     this.apontamento.id = lanca.id;
@@ -543,6 +574,7 @@ export class CrudExecucaoComponent implements OnInit {
               this.onCancel();
             },
             (error: any) => {
+              this.gravando = false;
               console.log('erro=>', error);
               this.appSnackBar.openFailureSnackBar(
                 `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -560,6 +592,7 @@ export class CrudExecucaoComponent implements OnInit {
               this.onCancel();
             },
             (error: any) => {
+              this.gravando = false;
               console.log('Error', error.error);
               this.appSnackBar.openFailureSnackBar(
                 `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
@@ -576,6 +609,7 @@ export class CrudExecucaoComponent implements OnInit {
               this.onCancel();
             },
             (error: any) => {
+              this.gravando = false;
               this.appSnackBar.openFailureSnackBar(
                 `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -631,11 +665,7 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   getTitulo(): string {
-    if (this.atividade.id !== 0) {
-      return `Projeto: ${this.atividade.id_projeto} Atividade: ${this.atividade.estru_descri}`;
-    } else {
-      return 'Apontamentos de execução';
-    }
+    return 'Apontamentos de execução ';
   }
 
   showDadosProjetoAgendamento(lanca: ApoPlanejamentoQuery_01Model): string {
@@ -716,8 +746,14 @@ export class CrudExecucaoComponent implements OnInit {
       ),
     });
   }
-
   onTarde() {
+    let lastTime = '';
+    let hoje: Date = new Date('10/01/2023');
+    if (hoje.getDay() == 5) {
+      lastTime = '16:33';
+    } else {
+      lastTime = '17:48';
+    }
     this.apontamento.inicial =
       this.apontamento.inicial.substring(
         0,
@@ -727,7 +763,30 @@ export class CrudExecucaoComponent implements OnInit {
       this.apontamento.final.substring(
         0,
         this.apontamento.final.indexOf(' ') + 1
-      ) + '17:45';
+      ) + lastTime;
+    this.formulario.patchValue({
+      entrada: this.apontamento.inicial.substring(
+        this.apontamento.inicial.indexOf(' ') + 1,
+        16
+      ),
+      saida: this.apontamento.final.substring(
+        this.apontamento.final.indexOf(' ') + 1,
+        16
+      ),
+    });
+  }
+
+  onAlmoco() {
+    this.apontamento.inicial =
+      this.apontamento.inicial.substring(
+        0,
+        this.apontamento.inicial.indexOf(' ') + 1
+      ) + '12:00';
+    this.apontamento.final =
+      this.apontamento.final.substring(
+        0,
+        this.apontamento.final.indexOf(' ') + 1
+      ) + '13:00';
     this.formulario.patchValue({
       entrada: this.apontamento.inicial.substring(
         this.apontamento.inicial.indexOf(' ') + 1,

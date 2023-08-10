@@ -1,7 +1,7 @@
 <div *ngIf="(idAcao == 99)">
   <div class="div-barra">
     <mat-toolbar>
-      <span class="example-spacer">{{getTitulo()}}</span>
+      <span class="example-spacer">{{getTitulo()}} Total de Horas {{totalHoras | horaSexagenal}}</span>
       <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Apontamento"
         matTooltipPosition="above" (click)="adicao(getAcoes()['Inclusao'])">
         <mat-icon>add_circle_outline</mat-icon>
@@ -32,7 +32,7 @@
         <mat-label>Contratos</mat-label>
         <mat-select formControlName="id_contrato" (selectionChange)="onChangeContrato()">
           <mat-option *ngFor="let contrato of contratos" [value]="contrato.id">
-            {{contrato.id}}-{{contrato.cliente_razao}}
+            {{contrato.cliente_razao.trim()}} ({{contrato.id}})
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -119,22 +119,14 @@
   <div class="div-barra">
     <mat-toolbar>
       <span class="example-spacer">{{labelCadastro}}</span>
-      <button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="Example icon-button with share icon "
-        matTooltip="Lanç. Automático" matTooltipPosition="above">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #appMenu="matMenu">
-        <ng-template matMenuContent>
-          <button mat-menu-item (click)="onManha()">
-            <mat-icon>watch_later</mat-icon>
-            <span>Manhã</span>
-          </button>
-          <button mat-menu-item (click)="onTarde()">
-            <mat-icon>watch_later</mat-icon>
-            <span>Tarde</span>
-          </button>
-        </ng-template>
-      </mat-menu>
+      <div class="button-container-right">
+        <button mat-button class="green-icon" (click)="onManha()"
+          *ngIf="((idAcao == getAcoes().Inclusao) ||(idAcao == getAcoes().Edicao))">Manhã</button>
+        <button mat-button class="green-icon" (click)="onAlmoco()"
+          *ngIf="((idAcao == getAcoes().Inclusao) ||(idAcao == getAcoes().Edicao))">Almoço</button>
+        <button mat-button class="green-icon" (click)="onTarde()"
+          *ngIf="((idAcao == getAcoes().Inclusao) ||(idAcao == getAcoes().Edicao))">Tarde</button>
+      </div>
     </mat-toolbar>
   </div>
   <form [formGroup]="formulario" autocomplete="off">
@@ -181,7 +173,8 @@
       </mat-form-field>
     </div>
     <div class="button-container-right">
-      <button class="buttons" mat-raised-button color="primary" (click)=onSubmit()>{{acao}}</button>
+      <button class="buttons" mat-raised-button color="primary" (click)=onSubmit()
+        [disabled]="gravando">{{acao}}</button>
       <button class="buttons" mat-raised-button color="accent" (click)="onCancel()"
         [Setfocus]="focusCancelar">{{getLabelCancel()}}
       </button>

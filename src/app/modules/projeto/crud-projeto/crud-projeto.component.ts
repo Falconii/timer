@@ -32,9 +32,9 @@ export class CrudProjetoComponent implements OnInit {
 
   erro: string = '';
 
-  opcoesOrdenacao = ['Código', 'Descrição'];
+  opcoesOrdenacao = ['Código', 'Descrição', 'Fantasia'];
 
-  opcoesCampo = ['Código', 'Descrição'];
+  opcoesCampo = ['Código', 'Descrição', 'Fantasia'];
 
   controlePaginas: ControlePaginas = new ControlePaginas(0, 0);
 
@@ -107,6 +107,9 @@ export class CrudProjetoComponent implements OnInit {
 
     if (this.parametros.value.campo == 'Descrição')
       par.descricao = this.parametros.value.filtro.toUpperCase();
+
+    if (this.parametros.value.campo == 'Fantasia')
+      par.cli_razao = this.parametros.value.filtro.toUpperCase();
 
     par.orderby = this.parametros.value.ordenacao;
 

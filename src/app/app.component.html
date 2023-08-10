@@ -9,17 +9,16 @@
       <button mat-button [matMenuTriggerFor]="cadastros" (click)="setOpcao('Cadastros')"
         [ngStyle]="{'color' : opcao==='Cadastros' ? 'red' : 'white' }">Cadastros</button>
       <button mat-button [matMenuTriggerFor]="projetos" (click)="setOpcao('Projetos')"
-        [ngStyle]="{'color' : opcao==='Projetos' ? 'red' : 'white' }" *ngIf="okProjetos()">Contratos</button>
+        [ngStyle]="{'color' : opcao==='Projetos' ? 'red' : 'white' }" *ngIf="okProjetos()">Diretoria</button>
       <button mat-button [matMenuTriggerFor]="planejamento" (click)="setOpcao('Planejamento')"
-        [ngStyle]="{'color' : opcao==='Planejamento' ? 'red' : 'white' }" *ngIf="okPlanejamento()">Planejamento</button>
+        [ngStyle]="{'color' : opcao==='Planejamento' ? 'red' : 'white' }"
+        *ngIf="okPlanejamento()">Coordenadores</button>
       <button mat-button [matMenuTriggerFor]="execucao" (click)="setOpcao('Execução')"
-        [ngStyle]="{'color' : opcao==='Execução' ? 'red' : 'white' }" *ngIf="okExecucao()">Execução</button>
+        [ngStyle]="{'color' : opcao==='Execução' ? 'red' : 'white' }" *ngIf="okExecucao()">Auditores</button>
       <button mat-button [matMenuTriggerFor]="gerencial" (click)="setOpcao('Gerencial')"
         [ngStyle]="{'color' : opcao==='Gerencial' ? 'red' : 'white' }">Gerencial</button>
       <button mat-button [matMenuTriggerFor]="sobre" (click)="setOpcao('Sobre')"
         [ngStyle]="{'color' : opcao==='Sobre' ? 'red' : 'white' }">Sobre</button>
-      <button mat-button [matMenuTriggerFor]="tabela" (click)="setOpcao('Cliente Tabela')"
-        [ngStyle]="{'color' : opcao==='Cliente Tabela' ? 'red' : 'white' }">Cliente Tabela</button>
     </span>
     <span>
       <!-- #docregion sub-menu -->
@@ -33,26 +32,22 @@
         <button mat-menu-item routerLink="estruturas">Estruturas</button>
       </mat-menu>
       <mat-menu #projetos="matMenu">
-        <button mat-menu-item routerLink="projetos">Contratos Manutenção</button>
-        <button mat-menu-item routerLink="agendaprojeto">Agenda Contratos</button>
-        <button mat-menu-item routerLink="programacao">Programação</button>
+        <button mat-menu-item routerLink="projetos">Contratos</button>
+        <button mat-menu-item routerLink="agendaprojeto">Agenda Diretoria</button>
       </mat-menu>
       <mat-menu #planejamento="matMenu">
         <button mat-menu-item routerLink="projetos">Contratos</button>
-        <button mat-menu-item routerLink="agendacoordenador">Agenda Planejamento</button>
+        <button mat-menu-item routerLink="agendacoordenador">Agenda Coordenadores</button>
       </mat-menu>
       <mat-menu #execucao="matMenu">
         <button mat-menu-item routerLink="execucao">Apontamentos</button>
-        <button mat-menu-item routerLink="agendatrabalhos">Agenda Trabalhos</button>
+        <button mat-menu-item routerLink="agendatrabalhos">Agenda Auditores</button>
       </mat-menu>
       <mat-menu #gerencial="matMenu">
-        <button mat-menu-item routerLink="gerencial">Modelo A</button>
+        <button mat-menu-item routerLink="gerencial">Controle Dos Contratos</button>
       </mat-menu>
       <mat-menu #sobre="matMenu">
         <button mat-menu-item routerLink="sobre">Parâmentos Do Sistema</button>
-      </mat-menu>
-      <mat-menu #tabela="matMenu">
-        <button mat-menu-item routerLink="tabela">Cliente Tabela</button>
       </mat-menu>
     </span>
     <span class="example-spacer"></span>

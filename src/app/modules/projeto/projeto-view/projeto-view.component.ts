@@ -23,6 +23,7 @@ import {
 import { PeriodoDialogData } from 'src/app/shared/components/periodo-dialog/periodo-dialog-data';
 import { PeriodoDialogComponent } from 'src/app/shared/components/periodo-dialog/periodo-dialog.component';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
+import { SituacaoProjetoPipe } from 'src/app/shared/pipes/situacao-projeto.pipe';
 
 @Component({
   selector: 'app-projeto-view',
@@ -66,7 +67,8 @@ export class ProjetoViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public justificaticaPeriodoDialog: MatDialog,
-    public appSnackBar: AppSnackbar
+    public appSnackBar: AppSnackbar,
+    private situacaoProjetoPipe: SituacaoProjetoPipe
   ) {
     this.formulario = formBuilder.group({
       id: [{ value: '', disabled: true }],
@@ -188,7 +190,7 @@ export class ProjetoViewComponent implements OnInit {
       horasplan: horahexa(this.projeto.horasplan),
       horasexec: horahexa(this.projeto.horasexec),
       horasdir: horahexa(this.projeto.horasdir),
-      status: this.projeto.status,
+      status: this.situacaoProjetoPipe.transform(this.projeto.status),
     });
   }
 
