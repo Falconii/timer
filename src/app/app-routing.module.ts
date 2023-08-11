@@ -101,6 +101,14 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
+    path: 'extratoaudi',
+    loadChildren: () =>
+      import('./modules/extrato-auditor/extrato-auditor.module').then(
+        (m) => m.ExtratoAuditorModule
+      ),
+    canActivate: [DiganaoGuard],
+  },
+  {
     path: 'agendatrabalhos',
     loadChildren: () =>
       import('./modules/agenda-auditor/agenda-auditor.module').then(

@@ -6,44 +6,49 @@
     </span>
   </mat-toolbar>
 </div>
-<div *ngIf="apontamentos.length > 0">
-  <table class="Browse_Lanc">
-    <tr class="coluna-cabec">
-      <th>HORÁRIO</th>
-      <th>CLIENTE/ATIVIDADE</th>
-      <th>MOTIVO/OBS</th>
-    </tr>
-    <tr *ngFor="let lanca of apontamentos">
-      <td>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}
-          </mat-label>
-          <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">Resp:{{getfirstName(lanca.resp_razao)}}</mat-label>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">Exec:{{getfirstName(lanca.exec_razao)}}</mat-label>
-        </div>
-      </td>
-      <td>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.proj_descricao}}</mat-label>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.estru_descricao}}</mat-label>
-        </div>
-      </td>
-      <td>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.motivo_descricao}}</mat-label>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.obs}}</mat-label>
-        </div>
-      </td>
-    </tr>
-  </table>
+<div class="spin">
+  <app-spin-apontamentos></app-spin-apontamentos>
+</div>
+<div>
+  <div *ngIf="apontamentos.length > 0">
+    <table class="Browse_Lanc">
+      <tr class="coluna-cabec">
+        <th>HORÁRIO</th>
+        <th>CLIENTE/ATIVIDADE</th>
+        <th>MOTIVO/OBS</th>
+      </tr>
+      <tr *ngFor="let lanca of apontamentos">
+        <td>
+          <div>
+            <mat-label class="Browse_Lanc_td">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}
+            </mat-label>
+            <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
+          </div>
+          <div>
+            <mat-label class="Browse_Lanc_td">Resp:{{getfirstName(lanca.resp_razao)}}</mat-label>
+          </div>
+          <div>
+            <mat-label class="Browse_Lanc_td">Exec:{{getfirstName(lanca.exec_razao)}}</mat-label>
+          </div>
+        </td>
+        <td>
+          <div>
+            <mat-label class="Browse_Lanc_td">{{lanca.proj_descricao}}</mat-label>
+          </div>
+          <div>
+            <mat-label class="Browse_Lanc_td">{{lanca.estru_descricao}}</mat-label>
+          </div>
+        </td>
+        <td>
+          <div>
+            <mat-label class="Browse_Lanc_td">{{lanca.motivo_descricao}}</mat-label>
+          </div>
+          <div>
+            <mat-label class="Browse_Lanc_td">{{lanca.obs}}</mat-label>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>
 <div class="rodape"></div>

@@ -63,6 +63,8 @@ export class AgendaViewComponent implements OnInit {
     this.inscricaoAgenda?.unsubscribe();
   }
 
+  ngAfterViewChecked(): void {}
+
   onSubmit() {
     this.auditor = this.parametro.value.auditores;
     this.celulaDia = new CelulaDia();

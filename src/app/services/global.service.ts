@@ -13,12 +13,14 @@ export class GlobalService {
   logado: boolean = false;
   id_empresa: number = 1;
   showSpin: boolean = false;
+  showSpinApontamentos: boolean = false;
   lsSituacoesTrabalho: SituacaoTrabalho[] = [];
   codigoMotivo: string = '001001';
 
   shomMenuEmitter = new EventEmitter<boolean>();
   refreshLançamentos = new EventEmitter<CelulaDia>();
   showSpinEmitter = new EventEmitter<boolean>();
+  showSpinApontamentosEmitter = new EventEmitter<boolean>();
 
   constructor(private usuarioService: UsuariosService, private router: Router) {
     this.usuario = new UsuarioModel();
@@ -126,6 +128,15 @@ export class GlobalService {
 
   getSpin(): boolean {
     return this.showSpin;
+  }
+
+  setSpinApontamentos(value: boolean) {
+    this.showSpinApontamentos = value;
+    this.showSpinApontamentosEmitter.emit(this.showSpinApontamentos);
+  }
+
+  getSpinApontamentos(): boolean {
+    return this.showSpinApontamentos;
   }
 
   getSituacaoTrabalho(id: string): SituacaoTrabalho {

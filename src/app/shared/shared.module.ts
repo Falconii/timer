@@ -27,6 +27,8 @@ import { PeriodoDialogComponent } from './components/periodo-dialog/periodo-dial
 import { RespExecDialogComponent } from './components/resp-exec-dialog/resp-exec-dialog.component';
 import { CelApontamentosExecucaoComponent } from './components/cel-apontamentos-Execucao/cel-apontamentos-execucao.component';
 import { SetfocusDirective } from './components/setfocus.directive';
+import { SpinApontamentosComponent } from './spin-apontamentos/spin-apontamentos.component';
+import { BarraParametrosv01Component } from './components/barra-parametrosv01/barra-parametrosv01.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,7 @@ import { SetfocusDirective } from './components/setfocus.directive';
     CelApontamentosExecucaoComponent,
     AtivoPipe,
     SpinsComponent,
+    SpinApontamentosComponent,
     ProgressBarComponent,
     QuestionDialogComponent,
     JustificativaRespexecDialogComponent,
@@ -55,6 +58,7 @@ import { SetfocusDirective } from './components/setfocus.directive';
     RespExecDialogComponent,
     ShowClienteDialogComponent,
     SetfocusDirective,
+    BarraParametrosv01Component,
   ],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -75,6 +79,7 @@ import { SetfocusDirective } from './components/setfocus.directive';
     CelApontamentosComponent,
     CelApontamentosExecucaoComponent,
     SpinsComponent,
+    SpinApontamentosComponent,
     ProgressBarComponent,
     QuestionDialogComponent,
     JustificativaRespexecDialogComponent,
@@ -83,6 +88,7 @@ import { SetfocusDirective } from './components/setfocus.directive';
     RespExecDialogComponent,
     ShowClienteDialogComponent,
     SetfocusDirective,
+    BarraParametrosv01Component,
   ],
 })
 export class SharedModule {}

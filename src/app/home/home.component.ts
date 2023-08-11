@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
     private projetosServices: ProjetosService,
     private appSnackBar: AppSnackbar
   ) {
-    google.charts.load('current', { packages: ['corechart'] });
+    //google.charts.load('current', { packages: ['corechart'] });
   }
 
   ngOnInit(): void {
@@ -46,6 +46,7 @@ export class HomeComponent implements OnInit {
     return this.globalService.logado;
   }
 
+  /*
   buidChartContratosAtivos(dados: ProjetoModel[]) {
     var func = (chart: any) => {
       var horas: number = 0;
@@ -68,7 +69,7 @@ export class HomeComponent implements OnInit {
     var callBack = () => func(chart);
     google.charts.setOnLoadCallback(callBack);
   }
-
+*/
   getProjetos() {
     let par = new ParametroProjeto01();
     par.id_empresa = 1;
@@ -99,7 +100,7 @@ export class HomeComponent implements OnInit {
 
   Atualizar() {
     if (this.globalService.logado) {
-      this.buidChartContratosAtivos(this.lsProjetos);
+      // this.buidChartContratosAtivos(this.lsProjetos);
     }
   }
 

@@ -2,7 +2,7 @@ import { GlobalService } from '../../../services/global.service';
 import { ParametroAponExecucao01 } from '../../../parametros/parametro-apon-execucao01';
 import { AponExecucaoService } from '../../../services/apon-execucao.service';
 import { CelulaDia } from 'src/app/shared/classes/celula-dia';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ApoExecucaoModel } from 'src/app/Models/apo-execucao-model';
 import { ApoExecucaoModel01 } from 'src/app/Models/apo-execucao-model01';
 import { ApoPlanejamentoQuery_01Model } from 'src/app/Models/apo-planejamento-query_01-model';
@@ -64,17 +64,16 @@ export class CelApontamentosExecucaoComponent implements OnInit {
     par.id_resp = this.cel.id_resp;
     par.id_exec = this.cel.id_exec;
     par.data = dt;
-    this.globslService.setSpin(true);
+    this.globslService.setSpinApontamentos(true);
     this.inscricaoExecutadas = this.aponExecucaoService
       .getApoExecucoes_01(par)
       .subscribe(
         (data: ApoExecucaoModel01[]) => {
-          this.globslService.setSpin(false);
+          this.globslService.setSpinApontamentos(false);
           this.apontamentos = data;
-          console.log(this.apontamentos);
         },
         (error: any) => {
-          this.globslService.setSpin(false);
+          this.globslService.setSpinApontamentos(false);
           this.apontamentos = [];
         }
       );

@@ -94,7 +94,7 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
     </mat-form-field>
     <mat-form-field appearance="outline" class="col-max">
       <mat-label>Descrição</mat-label>
-      <input matInput formControlName="descricao" [readonly]="readOnly">
+      <input matInput formControlName="descricao" oninput="this.value = this.value.toUpperCase()" [readonly]="readOnly">
       <mat-error *ngIf="formulario.get('descricao')?.status == 'INVALID' && touchedOrDirty('descricao')">Descrição - No
         mínimo 03 letras e no máximo 50 letras</mat-error>
     </mat-form-field>
