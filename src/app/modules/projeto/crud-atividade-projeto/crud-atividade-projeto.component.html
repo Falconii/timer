@@ -158,7 +158,7 @@
         </td>
         <td class="coluna-descricao" *ngIf="getFiltro(atividade)">
           <div class="linha-status-projeto">
-            <div class="circulo" [ngStyle]="setStyle(atividade,'P')"></div>
+            <div class="circulo" [CorStatusProj]="'E'" [nivel]="atividade.nivelexec"></div>
             <mat-label class="labelData">{{atividade.estru_descri}}</mat-label>
           </div>
           <div class="coluna-descricao cor-blue" *ngIf="atividade.nivel == 1 || atividade.tipo == 'S'">

@@ -146,6 +146,10 @@ const routes: Routes = [
       ),
     canActivate: [DiganaoGuard],
   },
+  {
+    path: '**',
+    redirectTo: 'home',
+  },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

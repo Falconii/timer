@@ -117,7 +117,6 @@ export class ClienteViewComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('this.formulario', this.formulario);
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
@@ -209,7 +208,6 @@ export class ClienteViewComponent implements OnInit {
   }
 
   setValue() {
-    console.log('gru_descricao', this.cliente.gru_descricao);
     this.formulario.setValue({
       id: this.cliente.id,
       razao: this.cliente.razao,

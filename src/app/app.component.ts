@@ -40,6 +40,10 @@ export class AppComponent {
     return this.globalService.getNomeusuarioLogado();
   }
 
+  okCadastros(): boolean {
+    return this.globalService.okCadastros();
+  }
+
   okProjetos(): boolean {
     return this.globalService.okProjetos();
   }

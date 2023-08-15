@@ -986,6 +986,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       });
   }
 
+  /*
   setStyle(atividade: AtividadeQuery_01Model, tipo: string) {
     let cor = { 'background-color': 'white' };
     if (tipo == 'P') {
@@ -1001,6 +1002,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     }
     return cor;
   }
+  */
 
   onIncluirNovaAtividade(atividade: AtividadeQuery_01Model) {
     this.openDialogRespAudi('EDICAO');

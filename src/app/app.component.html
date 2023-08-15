@@ -7,7 +7,7 @@
     <span>Simionato Auditores</span>
     <span *ngIf="showMenu">
       <button mat-button [matMenuTriggerFor]="cadastros" (click)="setOpcao('Cadastros')"
-        [ngStyle]="{'color' : opcao==='Cadastros' ? 'red' : 'white' }">Cadastros</button>
+        [ngStyle]="{'color' : opcao==='Cadastros' ? 'red' : 'white' }" *ngIf="okCadastros()">Cadastros</button>
       <button mat-button [matMenuTriggerFor]="projetos" (click)="setOpcao('Projetos')"
         [ngStyle]="{'color' : opcao==='Projetos' ? 'red' : 'white' }" *ngIf="okProjetos()">Diretoria</button>
       <button mat-button [matMenuTriggerFor]="planejamento" (click)="setOpcao('Planejamento')"
@@ -16,7 +16,7 @@
       <button mat-button [matMenuTriggerFor]="execucao" (click)="setOpcao('Execução')"
         [ngStyle]="{'color' : opcao==='Execução' ? 'red' : 'white' }" *ngIf="okExecucao()">Auditores</button>
       <button mat-button [matMenuTriggerFor]="gerencial" (click)="setOpcao('Gerencial')"
-        [ngStyle]="{'color' : opcao==='Gerencial' ? 'red' : 'white' }">Gerencial</button>
+        [ngStyle]="{'color' : opcao==='Gerencial' ? 'red' : 'white' }" *ngIf="okGerencial()">Gerencial</button>
       <button mat-button [matMenuTriggerFor]="sobre" (click)="setOpcao('Sobre')"
         [ngStyle]="{'color' : opcao==='Sobre' ? 'red' : 'white' }">Sobre</button>
     </span>

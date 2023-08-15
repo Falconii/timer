@@ -29,6 +29,7 @@ import { CelApontamentosExecucaoComponent } from './components/cel-apontamentos-
 import { SetfocusDirective } from './components/setfocus.directive';
 import { SpinApontamentosComponent } from './spin-apontamentos/spin-apontamentos.component';
 import { BarraParametrosv01Component } from './components/barra-parametrosv01/barra-parametrosv01.component';
+import { CorStatusProjDirective } from './diretivas/cor-status-proj.directive';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { BarraParametrosv01Component } from './components/barra-parametrosv01/ba
     ShowClienteDialogComponent,
     SetfocusDirective,
     BarraParametrosv01Component,
+    CorStatusProjDirective,
   ],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -89,6 +91,7 @@ import { BarraParametrosv01Component } from './components/barra-parametrosv01/ba
     ShowClienteDialogComponent,
     SetfocusDirective,
     BarraParametrosv01Component,
+    CorStatusProjDirective,
   ],
 })
 export class SharedModule {}

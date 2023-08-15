@@ -24,9 +24,9 @@ export class BarraParametrosv01Component implements OnInit {
     private router: Router
   ) {
     this.parametro = formBuilder.group({
-      diretores: [{ value: '' }],
-      coordenadores: [{ value: '' }],
-      auditores: [{ value: '' }],
+      diretor: [{ value: '' }],
+      coordenador: [{ value: '' }],
+      auditor: [{ value: '' }],
     });
     this.setParametro();
   }
@@ -35,9 +35,9 @@ export class BarraParametrosv01Component implements OnInit {
 
   setParametro() {
     this.parametro.setValue({
-      diretores: this.diretores,
-      coordenadores: this.coordenadores,
-      auditores: this.auditores,
+      diretor: 0,
+      coordenador: 0,
+      auditor: 0,
     });
   }
 }

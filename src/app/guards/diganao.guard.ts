@@ -12,20 +12,19 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class DiganaoGuard implements CanActivate, CanActivateChild {
+export class DiganaoGuard implements CanActivate {
   constructor(private globalService: GlobalService, private router: Router) {}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
     if (!this.globalService.getLogado()) return false;
-    return true;
-  }
-  canActivateChild(
-    childRoute: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
-    console.log('Estou na Child');
+    console.log(`Principal Estou no canActivate`);
+    console.log(route);
+    console.log(state);
+    console.log(`Path -> ${route.routeConfig?.path}`);
+    if (this.globalService.validarGuardiaoMestre(route.routeConfig?.path))
+      return true;
     return false;
   }
 }

@@ -42,7 +42,7 @@
       <mat-card-actions>
         <span class="button-container-right ">
           <div class="linha-status">
-            <div class="circulo" [ngStyle]="setStyle(projeto,'P')"></div>
+            <div class="circulo" [CorStatusProj]="'P'" [nivel]="projeto.nivelplan"></div>
           </div>
           <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(projeto,99)"
             matTooltip="Anexar Atividades" matTooltipPosition="above">

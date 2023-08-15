@@ -103,8 +103,6 @@ export class CrudClienteComponent implements OnInit {
     if (this.parametros.value.campo == 'Código') {
       let key = parseInt(this.parametros.value.filtro, 10);
 
-      console.log('key', key);
-
       if (isNaN(key)) {
         par.id = 0;
       } else {
@@ -148,8 +146,6 @@ export class CrudClienteComponent implements OnInit {
 
     if (this.parametros.value.campo == 'Código') {
       let key = parseInt(this.parametros.value.filtro, 10);
-
-      console.log('key', key);
 
       if (isNaN(key)) {
         par.id = 0;
@@ -202,7 +198,6 @@ export class CrudClienteComponent implements OnInit {
           this.globalService.setSpin(false);
           this.erro = error;
           this.grupos = [];
-          console.log('this.erro', this.erro);
         }
       );
   }

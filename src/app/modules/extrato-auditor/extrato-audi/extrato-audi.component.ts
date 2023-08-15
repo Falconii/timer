@@ -59,11 +59,11 @@ export class ExtratoAudiComponent implements OnInit {
     this.inscricaoDiretor = this.usuariosService.getusuarios_01(par).subscribe(
       (data: UsuarioQuery01Model[]) => {
         this.globalService.setSpin(false);
-        this.diretores = data;
         this.diretor = 0;
         const dir = new UsuarioQuery01Model();
         dir.id = 0;
         dir.razao = 'TODOS';
+        this.diretores = [];
         this.diretores.push(dir);
         data.forEach((diretor) => {
           this.diretores.push(diretor);
@@ -94,11 +94,11 @@ export class ExtratoAudiComponent implements OnInit {
       .subscribe(
         (data: UsuarioQuery01Model[]) => {
           this.globalService.setSpin(false);
-          this.coordenadores = data;
           this.coordenador = 0;
           const coord = new UsuarioQuery01Model();
           coord.id = 0;
           coord.razao = 'TODOS';
+          this.coordenadores = [];
           this.coordenadores.push(coord);
           data.forEach((coordenador) => {
             this.coordenadores.push(coordenador);
@@ -135,13 +135,15 @@ export class ExtratoAudiComponent implements OnInit {
     this.inscricaoAuditor = this.usuariosService.getusuarios_01(par).subscribe(
       (data: UsuarioQuery01Model[]) => {
         this.globalService.setSpin(false);
-        this.auditores = data;
         this.auditor = 0;
         const audi = new UsuarioQuery01Model();
         audi.id = 0;
         audi.razao = 'TODOS';
+        this.auditores = [];
         this.auditores.push(audi);
-        console.log(this.auditores);
+        data.forEach((auditor) => {
+          this.auditores.push(auditor);
+        });
       },
       (error: any) => {
         this.globalService.setSpin(false);

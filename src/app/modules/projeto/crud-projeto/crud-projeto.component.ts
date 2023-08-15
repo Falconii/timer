@@ -227,9 +227,10 @@ export class CrudProjetoComponent implements OnInit {
     this.getProjetos();
   }
 
+  /*
+  troquei por diretiva
   setStyle(projeto: ProjetoModel, tipo: string) {
     let cor = { 'background-color': 'white' };
-    console.log('nivel plan', projeto.nivelplan);
     if (tipo == 'P') {
       if (projeto.nivelplan == 1) cor = { 'background-color': 'green' };
       if (projeto.nivelplan == 2) cor = { 'background-color': 'yellow' };
@@ -243,4 +244,5 @@ export class CrudProjetoComponent implements OnInit {
     }
     return cor;
   }
+  */
 }
