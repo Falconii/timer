@@ -13,6 +13,7 @@ import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { AgeHorasModel } from 'src/app/Models/age-horas-model';
 import { ProjetosService } from 'src/app/services/projetos.service';
 import { ParametroAgeHoras01 } from 'src/app/parametros/parametro-age-horas-01';
+import { getFirstName } from 'src/app/shared/classes/util';
 
 @Component({
   selector: 'app-agenda-view',
@@ -70,6 +71,7 @@ export class AgendaViewComponent implements OnInit {
     this.celulaDia = new CelulaDia();
     this.showLancamento = true;
     this.globalService.setRefreshLançamentos(this.celulaDia);
+    alert(this.auditor);
     this.getAgenda();
   }
   setParametro() {
@@ -89,6 +91,9 @@ export class AgendaViewComponent implements OnInit {
 
     par.id_empresa = this.globalService.id_empresa;
 
+    par.id = this.globalService.getUsuario().id;
+
+    /*
     coorde.forEach((value) => {
       par.grupo.push(value);
     });
@@ -97,6 +102,8 @@ export class AgendaViewComponent implements OnInit {
       par.grupo.push(value);
     });
 
+    */
+
     par.orderby = 'Razão';
 
     this.globalService.setSpin(true);
@@ -104,14 +111,18 @@ export class AgendaViewComponent implements OnInit {
       (data: UsuarioQuery01Model[]) => {
         this.globalService.setSpin(false);
         this.auditor = this.globalService.getUsuario().id;
-        const audi = new UsuarioQuery01Model();
-        audi.id = 0;
-        audi.razao = 'TODOS';
-        this.auditores.push(audi);
-        data.forEach((auditor) => {
-          this.auditores.push(auditor);
+        this.auditores = data;
+        //const audi = new UsuarioQuery01Model();
+        //audi.id = 0;
+        //audi.razao = 'TODOS';
+        //this.auditores.push(audi);
+        //ata.forEach((auditor) => {
+        //  this.auditores.push(auditor);
+        //});
+        this.auditores.forEach((auditor) => {
+          auditor.razao = getFirstName(auditor.razao);
         });
-        this.parametro.patchValue({ auditores: this.auditor });
+        this.parametro.patchValue({ auditores: this.auditores[0].id });
         this.onSubmit();
       },
       (error: any) => {
@@ -138,7 +149,9 @@ export class AgendaViewComponent implements OnInit {
 
     par.mes = this.adicionaZero(this.parametro.value.mes + 1);
 
-    console.log('Mes ==>', par.mes);
+    console.log('Parametros da Agenda:', this.auditor);
+
+    console.log(par);
 
     this.globalService.setSpin(true);
     this.inscricaoAgenda = this.projetosService
@@ -154,7 +167,6 @@ export class AgendaViewComponent implements OnInit {
             age.horas_exec = Number(dt.horas_exec);
             this.agendas.push(age);
           });
-          console.log('Agenda:', this.agendas);
           this.loadCalendario();
           if (this.agendas.length == 0) {
             this.appSnackBar.openSuccessSnackBar(

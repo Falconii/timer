@@ -80,7 +80,7 @@ export function nextCode(value: string): string {
 export class MensagensBotoes {
   static incluir: string = 'Novo Registro';
   static alterar: string = 'Alterar Registro';
-  static consultar: string = 'Consulta registro';
+  static consultar: string = 'Consultar registro';
   static excluir: string = 'Excluir Registro';
   static tarefas_incluir = 'Manutenção Das Tarefas';
   static trabalhos_incluir = 'Manutenção Dos Trabalhos';

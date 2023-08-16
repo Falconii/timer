@@ -1,3 +1,4 @@
+import { OpcoesGuard } from './guards/opcoes.guard';
 import { GlobalService } from './services/global.service';
 import { DiganaoGuard } from './guards/diganao.guard';
 import { MaterialModule } from './material/material.module';
@@ -37,6 +38,7 @@ import { SituacaoProjetoPipe } from './shared/pipes/situacao-projeto.pipe';
     SituacaoProjetoPipe,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     DiganaoGuard,
+    OpcoesGuard,
     GlobalService,
     { provide: MatPaginatorIntl, useClass: BrPaginatorIntl },
   ],

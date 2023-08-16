@@ -1,3 +1,4 @@
+import { GlobalService } from 'src/app/services/global.service';
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
@@ -12,6 +13,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ClienteGuard implements CanActivate {
+  constructor(private globalService: GlobalService) {}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -20,9 +22,6 @@ export class ClienteGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    console.log(`Estou no canActivate`);
-    console.log(`Acao ${route.params.acao}`);
-    console.log(state);
     return true;
   }
 }
