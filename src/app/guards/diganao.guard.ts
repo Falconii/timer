@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  CanActivateChild,
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
@@ -18,7 +17,12 @@ export class DiganaoGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
+    let retorno = false;
     if (!this.globalService.getLogado()) return false;
-    return this.globalService.validarGuardiaoMestre(route.routeConfig?.path);
+    retorno = this.globalService.validarGuardiaoMestre(route.routeConfig?.path);
+    if (!retorno) {
+      this.router.navigate(['/home']);
+    }
+    return retorno;
   }
 }

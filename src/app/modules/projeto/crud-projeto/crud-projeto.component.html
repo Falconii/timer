@@ -38,7 +38,7 @@
 </div>
 <div class="Browse">
   <div class="linha" *ngFor="let projeto of projetos ; index as id">
-    <mat-card class="example-card" (click)="escolha(projeto,getAcoes()['Consulta'])" *ngIf="projeto.id !=0">
+    <mat-card class="example-card" *ngIf="projeto.id !=0">
       <mat-card-actions>
         <span class="button-container-right ">
           <div class="linha-status">
@@ -47,6 +47,11 @@
           <button mat-icon-button aria-label="Example icon-button with share icon " (click)="escolha(projeto,99)"
             matTooltip="Anexar Atividades" matTooltipPosition="above">
             <mat-icon>assignment</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="Example icon-button with share icon "
+            (click)="escolha(projeto,getAcoes()['Consulta'])" [matTooltip]="getTexto().consultar"
+            matTooltipPosition="above">
+            <mat-icon>remove_red_eye</mat-icon>
           </button>
           <button mat-icon-button aria-label="Example icon-button with share icon "
             (click)="escolha(projeto,getAcoes()[ 'Edicao'])" [matTooltip]="getTexto().alterar"

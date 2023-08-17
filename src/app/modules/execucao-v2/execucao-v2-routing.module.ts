@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CrudExecucaoComponent } from './crud-Execucao/crud-Execucao.component';
+import { CrudProjetoComponent } from '../projeto/crud-projeto/crud-projeto.component';
+import { ProjetoViewComponent } from '../projeto/projeto-view/projeto-view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'execucoesv2', pathMatch: 'full' },

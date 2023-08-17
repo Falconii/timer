@@ -71,7 +71,6 @@ export class AgendaViewComponent implements OnInit {
     this.celulaDia = new CelulaDia();
     this.showLancamento = true;
     this.globalService.setRefreshLançamentos(this.celulaDia);
-    alert(this.auditor);
     this.getAgenda();
   }
   setParametro() {

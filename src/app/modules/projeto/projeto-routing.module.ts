@@ -7,11 +7,16 @@ import { CrudPlanejamentoLancamentoComponent } from './crud-planejamento-lancame
 import { ManutAtividadeLoteComponent } from './manut-atividade-lote/manut-atividade-lote.component';
 import { HorasDiretoriaComponent } from './horas-diretoria/horas-diretoria.component';
 import { AnexarV2Component } from './anexar-v2/anexar-v2.component';
+import { OpcoesGuard } from 'src/app/guards/opcoes.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'projetos', pathMatch: 'full' },
   { path: 'projetos', component: CrudProjetoComponent },
-  { path: 'projeto/:id_empresa/:id/:acao', component: ProjetoViewComponent },
+  {
+    path: 'projeto/:id_empresa/:id/:acao',
+    component: ProjetoViewComponent,
+    canActivate: [OpcoesGuard],
+  },
   {
     path: 'anexaratividade/:id_empresa/:id_projeto/:id_atividade',
     component: CrudAtividadeProjetoComponent,

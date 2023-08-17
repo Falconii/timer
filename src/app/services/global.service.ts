@@ -179,7 +179,7 @@ export class GlobalService {
     this.guadiaoMestre = [];
 
     guard.path = 'empresas';
-    guard.grupos = [900, 906];
+    guard.grupos = [0];
     this.guadiaoMestre.push(guard);
 
     guard = new GuardiaoMestre();
@@ -204,7 +204,7 @@ export class GlobalService {
 
     guard = new GuardiaoMestre();
     guard.path = 'motivos';
-    guard.grupos = [900, 904, 906];
+    guard.grupos = [900, 901, 904, 906];
     this.guadiaoMestre.push(guard);
 
     guard = new GuardiaoMestre();
@@ -215,21 +215,16 @@ export class GlobalService {
     //diretoria
     guard = new GuardiaoMestre();
     guard.path = 'projetos';
-    guard.grupos = [900, 901, 904, 906];
+    guard.grupos = [900, 901, 902, 906];
     this.guadiaoMestre.push(guard);
 
     guard = new GuardiaoMestre();
     guard.path = 'agendaprojeto';
-    guard.grupos = [900, 901, 904, 906];
+    guard.grupos = [900, 906];
     this.guadiaoMestre.push(guard);
 
     guard = new GuardiaoMestre();
     guard.path = 'agendacoordenador';
-    guard.grupos = [900, 901, 904, 906];
-    this.guadiaoMestre.push(guard);
-
-    guard = new GuardiaoMestre();
-    guard.path = 'agendacoodenador';
     guard.grupos = [900, 901, 906];
     this.guadiaoMestre.push(guard);
 
@@ -278,7 +273,7 @@ export class GlobalService {
     let guard = new GuardiaoOpcoes();
     this.guardiaoOpcoes = [];
 
-    guard.path = 'empresas';
+    guard.path = 'empresa';
     guard.usuario = 16;
     guard.acoes = [
       CadastroAcoes.Inclusao,
@@ -288,6 +283,7 @@ export class GlobalService {
     ];
     this.guardiaoOpcoes.push(guard);
 
+    guard = new GuardiaoOpcoes();
     guard.path = 'empresa';
     guard.usuario = 0;
     guard.acoes = [CadastroAcoes.Consulta];
@@ -296,20 +292,13 @@ export class GlobalService {
     guard = new GuardiaoOpcoes();
     guard.path = 'usuario';
     guard.usuario = 999;
-    guard.acoes = [
-      CadastroAcoes.Inclusao,
-      CadastroAcoes.Edicao,
-      CadastroAcoes.Exclusao,
-      CadastroAcoes.Consulta,
-    ];
+    guard.acoes = [CadastroAcoes.Edicao, CadastroAcoes.Consulta];
     this.guardiaoOpcoes.push(guard);
 
     guard = new GuardiaoOpcoes();
     guard.path = 'usuario';
     guard.usuario = 0;
     guard.acoes = [CadastroAcoes.Consulta];
-    this.guardiaoOpcoes.push(guard);
-
     this.guardiaoOpcoes.push(guard);
 
     guard = new GuardiaoOpcoes();
@@ -329,112 +318,106 @@ export class GlobalService {
     ];
     this.guardiaoOpcoes.push(guard);
 
-    /*
-    guard = new GuardiaoMestre();
-    guard.path = 'clientes';
-    guard.grupos.push(0);
-    this.guadiaoMestre.push(guard);
+    guard = new GuardiaoOpcoes();
+    guard.path = 'economico';
+    guard.usuario = 0;
+    guard.acoes = [
+      CadastroAcoes.Inclusao,
+      CadastroAcoes.Edicao,
+      CadastroAcoes.Exclusao,
+      CadastroAcoes.Consulta,
+    ];
+    this.guardiaoOpcoes.push(guard);
 
-    guard = new GuardiaoMestre();
-    guard.path = 'users';
-    guard.grupos = [900, 904, 906];
-    this.guadiaoMestre.push(guard);
+    guard = new GuardiaoOpcoes();
+    guard.path = 'user';
+    guard.usuario = 0;
+    guard.acoes = [
+      CadastroAcoes.Inclusao,
+      CadastroAcoes.Edicao,
+      CadastroAcoes.Exclusao,
+      CadastroAcoes.Consulta,
+    ];
+    this.guardiaoOpcoes.push(guard);
 
-    guard = new GuardiaoMestre();
-    guard.path = 'economicos';
-    guard.grupos = [900, 904, 906];
-    this.guadiaoMestre.push(guard);
+    guard = new GuardiaoOpcoes();
+    guard.path = 'motivo';
+    guard.usuario = 0;
+    guard.acoes = [CadastroAcoes.Consulta];
+    this.guardiaoOpcoes.push(guard);
 
-    guard = new GuardiaoMestre();
-    guard.path = 'motivos';
-    guard.grupos = [900, 904, 906];
-    this.guadiaoMestre.push(guard);
+    guard = new GuardiaoOpcoes();
+    guard.path = 'motivo';
+    guard.usuario = 16;
+    guard.acoes = [
+      CadastroAcoes.Inclusao,
+      CadastroAcoes.Edicao,
+      CadastroAcoes.Exclusao,
+      CadastroAcoes.Consulta,
+    ];
+    this.guardiaoOpcoes.push(guard);
 
-    guard = new GuardiaoMestre();
-    guard.path = 'estruturas';
-    guard.grupos = [900, 901, 904, 906];
-    this.guadiaoMestre.push(guard);
+    guard = new GuardiaoOpcoes();
+    guard.path = 'projeto';
+    guard.grupo = 901;
+    guard.acoes = [CadastroAcoes.Consulta];
+    this.guardiaoOpcoes.push(guard);
 
-    //diretoria
-    guard = new GuardiaoMestre();
-    guard.path = 'projetos';
-    guard.grupos = [900, 901, 904, 906];
-    this.guadiaoMestre.push(guard);
-
-    guard = new GuardiaoMestre();
-    guard.path = 'agendaprojeto';
-    guard.grupos = [900, 901, 904, 906];
-    this.guadiaoMestre.push(guard);
-
-    guard = new GuardiaoMestre();
-    guard.path = 'agendacoordenador';
-    guard.grupos = [900, 901, 904, 906];
-    this.guadiaoMestre.push(guard);
-
-    guard = new GuardiaoMestre();
-    guard.path = 'agendacoodenador';
-    guard.grupos = [900, 901, 906];
-    this.guadiaoMestre.push(guard);
-
-    guard = new GuardiaoMestre();
-    guard.path = 'execucao';
-    guard.grupos = [0];
-    this.guadiaoMestre.push(guard);
-
-    guard = new GuardiaoMestre();
-    guard.path = 'agendatrabalhos';
-    guard.grupos = [0];
-    this.guadiaoMestre.push(guard);
-
-    guard = new GuardiaoMestre();
-    guard.path = 'gerencial';
-    guard.grupos = [900, 906];
-    this.guadiaoMestre.push(guard);
-
-    guard = new GuardiaoMestre();
-    guard.path = 'sobre';
-    guard.grupos = [906];
-    this.guadiaoMestre.push(guard);
-    */
+    guard = new GuardiaoOpcoes();
+    guard.path = 'projeto';
+    guard.usuario = 0;
+    guard.acoes = [
+      CadastroAcoes.Inclusao,
+      CadastroAcoes.Edicao,
+      CadastroAcoes.Exclusao,
+      CadastroAcoes.Consulta,
+    ];
+    this.guardiaoOpcoes.push(guard);
   }
 
-  validarGuardiaoOpcoes(value?: string, opcao?: number): boolean {
+  validarGuardiaoOpcoes(value?: string, opcao?: number, id?: number): boolean {
     if (typeof value === 'undefined') return false;
     if (typeof opcao === 'undefined') return false;
-    const opc: number = opcao;
+    if (typeof id === 'undefined') return false;
+    const opc: number = opcao as number;
     const guardUser = this.guardiaoOpcoes.filter(
       (g) => g.path === value && g.usuario === this.usuario.id
     );
-    const guardGen = this.guardiaoOpcoes.filter(
-      (g) => g.path === value && g.usuario === 0
+    const guardGrupo = this.guardiaoOpcoes.filter(
+      (g) => g.path === value && g.grupo === this.usuario.grupo
     );
     const guardOwner = this.guardiaoOpcoes.filter(
-      (g) => g.path === value && g.usuario === 999
+      (g) => g.path === value && g.usuario === 999 && this.usuario.id == id
+    );
+    const guardGen = this.guardiaoOpcoes.filter(
+      (g) => g.path === value && g.usuario === 0
     );
     let guard: GuardiaoOpcoes[] = [];
     if (guardUser.length > 0) {
       guard = guardUser as GuardiaoOpcoes[];
       console.log('guardUser');
       console.log(guard);
-    }
-    if (guardOwner.length > 0) {
-      guard = guardOwner as GuardiaoOpcoes[];
-      console.log('guardOwner');
-      console.log(guard);
-      if (guard[0].usuario != this.usuario.id) {
-        return false;
-      }
     } else {
-      if (guardGen.length == 0) {
-        return true;
-      } else {
-        guard = guardGen as GuardiaoOpcoes[];
-        console.log('guardGen');
+      if (guardGrupo.length > 0) {
+        guard = guardGrupo as GuardiaoOpcoes[];
+        console.log('guardGrupo');
         console.log(guard);
+      } else {
+        if (guardOwner.length > 0) {
+          guard = guardOwner as GuardiaoOpcoes[];
+          console.log('guardOwner');
+          console.log(guard);
+        } else {
+          if (guardGen.length == 0) {
+            return true;
+          } else {
+            guard = guardGen as GuardiaoOpcoes[];
+            console.log('guardGen');
+            console.log(guard);
+          }
+        }
       }
     }
-    console.log(guard);
-
     let idx = -1;
     guard[0].acoes.forEach((op) => {
       if (op == opc) idx = 1;

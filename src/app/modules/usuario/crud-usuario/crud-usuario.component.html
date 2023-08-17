@@ -50,9 +50,14 @@
 </div>
 <div class="Browse">
   <div class="linha" *ngFor="let usuario of usuarios ; index as id">
-    <mat-card class="example-card" (click)="escolha(getAcoes()['Consulta'],usuario)">
+    <mat-card class="example-card">
       <mat-card-actions>
         <span class="button-container-right ">
+          <button mat-icon-button aria-label="Example icon-button with share icon "
+            (click)="escolha(getAcoes()['Consulta'],usuario)" [matTooltip]="getTexto().consultar"
+            matTooltipPosition="above">
+            <mat-icon>remove_red_eye</mat-icon>
+          </button>
           <button mat-icon-button aria-label="Example icon-button with share icon "
             (click)="escolha(getAcoes()[ 'Edicao'],usuario) " [matTooltip]="getTexto().alterar"
             matTooltipPosition="above">
