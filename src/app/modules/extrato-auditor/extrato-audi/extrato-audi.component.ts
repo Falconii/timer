@@ -156,6 +156,18 @@ export class ExtratoAudiComponent implements OnInit {
     );
   }
 
+  onChangeAuditor(id_auditor: number) {
+    this.auditor = id_auditor;
+  }
+
+  onChangeCoordenador(id_coordenador: number) {
+    this.coordenador = id_coordenador;
+  }
+
+  onChangeDiretor(id_diretor: number) {
+    this.diretor = id_diretor;
+  }
+
   onRetorno() {
     this.router.navigate(['/']);
   }

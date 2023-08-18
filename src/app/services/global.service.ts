@@ -239,6 +239,11 @@ export class GlobalService {
     this.guadiaoMestre.push(guard);
 
     guard = new GuardiaoMestre();
+    guard.path = 'extratoaudi';
+    guard.grupos = [906];
+    this.guadiaoMestre.push(guard);
+
+    guard = new GuardiaoMestre();
     guard.path = 'gerencial';
     guard.grupos = [900, 906];
     this.guadiaoMestre.push(guard);

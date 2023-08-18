@@ -14,7 +14,9 @@ export class BarraParametrosv01Component implements OnInit {
   @Input('coordenadores') coordenadores!: UsuarioQuery01Model[];
   @Input('auditores') auditores!: UsuarioQuery01Model[];
 
-  @Output('changePage') change = new EventEmitter();
+  @Output('changeDiretor') changeDiretor = new EventEmitter<number>();
+  @Output('changeCoordenador') changeCoordenador = new EventEmitter<number>();
+  @Output('changeAuditor') changeAuditor = new EventEmitter<number>();
 
   parametro: FormGroup;
 
@@ -32,6 +34,21 @@ export class BarraParametrosv01Component implements OnInit {
   }
 
   ngOnInit() {}
+
+  onChangeDiretor() {
+    const id: number = this.parametro.value.diretor as number;
+    this.changeDiretor.emit(id);
+  }
+
+  onChangeCoordenador() {
+    const id: number = this.parametro.value.coordenador as number;
+    this.changeCoordenador.emit(id);
+  }
+
+  onChangeAuditor() {
+    const id: number = this.parametro.value.auditor as number;
+    this.changeAuditor.emit(id);
+  }
 
   setParametro() {
     this.parametro.setValue({

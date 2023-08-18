@@ -2,6 +2,7 @@ export class ParametroProjeto01 {
   public id_empresa: number = 0;
   public id: number = 0;
   public descricao: string = '';
+  public id_diretor: number = 0;
   public cli_razao: string = '';
   public cli_grupo: string = '';
   public dataproj: string = '';

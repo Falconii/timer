@@ -30,6 +30,10 @@ import { SetfocusDirective } from './components/setfocus.directive';
 import { SpinApontamentosComponent } from './spin-apontamentos/spin-apontamentos.component';
 import { BarraParametrosv01Component } from './components/barra-parametrosv01/barra-parametrosv01.component';
 import { CorStatusProjDirective } from './diretivas/cor-status-proj.directive';
+import { BarraParametrosv02Component } from './components/barra-parametrosv02/barra-parametrosv02.component';
+import { ParamAuditorComponent } from './components/param-auditor/param-auditor.component';
+import { ParamCoordenadorComponent } from './components/param-coordenador/param-coordenador.component';
+import { ParamDiretorComponent } from './components/param-diretor/param-diretor.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +65,10 @@ import { CorStatusProjDirective } from './diretivas/cor-status-proj.directive';
     SetfocusDirective,
     BarraParametrosv01Component,
     CorStatusProjDirective,
+    BarraParametrosv02Component,
+    ParamAuditorComponent,
+    ParamCoordenadorComponent,
+    ParamDiretorComponent,
   ],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -91,6 +99,10 @@ import { CorStatusProjDirective } from './diretivas/cor-status-proj.directive';
     ShowClienteDialogComponent,
     SetfocusDirective,
     BarraParametrosv01Component,
+    BarraParametrosv02Component,
+    ParamAuditorComponent,
+    ParamCoordenadorComponent,
+    ParamDiretorComponent,
     CorStatusProjDirective,
   ],
 })

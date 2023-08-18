@@ -445,3 +445,25 @@ export function messageError(value: any): string {
 export function getfirstName(name: string): string {
   return getFirstName(name);
 }
+
+export function getSituacoesProjeto(): SituacaoProjeto[] {
+  const retorno: SituacaoProjeto[] = [];
+  retorno.push(new SituacaoProjeto(-1, 'TODAS'));
+  retorno.push(new SituacaoProjeto(0, 'Proposta'));
+  retorno.push(new SituacaoProjeto(1, 'Em Aberto'));
+  retorno.push(new SituacaoProjeto(2, 'Em Andamento'));
+  retorno.push(new SituacaoProjeto(3, 'Encerrado'));
+  retorno.push(new SituacaoProjeto(4, 'Suspenso'));
+  retorno.push(new SituacaoProjeto(5, 'Cancelado'));
+  return retorno;
+}
+
+export class SituacaoProjeto {
+  public idx: number = 0;
+  public descricao: string = '';
+
+  constructor(idx: number, descricao: string) {
+    this.idx = idx;
+    this.descricao = descricao;
+  }
+}

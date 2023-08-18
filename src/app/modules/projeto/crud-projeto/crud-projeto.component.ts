@@ -9,6 +9,7 @@ import { ControlePaginas } from 'src/app/shared/classes/controle-paginas';
 import { ProjetoModel } from 'src/app/Models/projeto-model';
 import { ParametroProjeto01 } from 'src/app/parametros/parametro-projeto01';
 import { ProjetosService } from 'src/app/services/projetos.service';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-crud-projeto',
@@ -43,6 +44,7 @@ export class CrudProjetoComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private projetosServices: ProjetosService,
+    private globalService: GlobalService,
     private router: Router,
     private appSnackBar: AppSnackbar
   ) {
@@ -114,14 +116,16 @@ export class CrudProjetoComponent implements OnInit {
     par.orderby = this.parametros.value.ordenacao;
 
     par.pagina = this.controlePaginas.getPaginalAtual();
-
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.projetosServices
       .getProjetos_01(par)
       .subscribe(
         (data: ProjetoModel[]) => {
+          this.globalService.setSpin(false);
           this.projetos = data;
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           if (error.error.message == 'Nehuma Informação Para Esta Consulta.') {
             let trab = new ProjetoModel();
             trab.id_empresa = 1;
@@ -167,11 +171,12 @@ export class CrudProjetoComponent implements OnInit {
     par.orderby = this.parametros.value.ordenacao;
 
     par.contador = 'S';
-
+    this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.projetosServices
       .getProjetos_01(par)
       .subscribe(
         (data: any) => {
+          this.globalService.setSpin(false);
           this.controlePaginas = new ControlePaginas(
             this.tamPagina,
             data.total == 0 ? 1 : data.total
@@ -179,6 +184,7 @@ export class CrudProjetoComponent implements OnInit {
           this.getProjetos();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           if (error.error.message == 'Nehuma Informação Para Esta Consulta.') {
             this.controlePaginas = new ControlePaginas(this.tamPagina, 0);
             this.appSnackBar.openSuccessSnackBar(

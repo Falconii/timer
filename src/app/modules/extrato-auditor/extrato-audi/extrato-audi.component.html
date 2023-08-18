@@ -10,5 +10,20 @@
     </button>
   </mat-toolbar>
 </div>
-<app-barra-parametrosv01 [auditores]="auditores" [coordenadores]="coordenadores" [diretores]="diretores">
-</app-barra-parametrosv01>
+<div class="col-med-4">
+  <param-auditor [auditores]="auditores" (changeAuditor)="onChangeAuditor($event)"></param-auditor>
+  <param-coordenador [coordenadores]="coordenadores" (changeCoordenador)="onChangeCoordenador($event)">
+  </param-coordenador>
+  <param-diretor [diretores]="diretores" (changeDiretor)="onChangeDiretor($event)"></param-diretor>
+</div>
+<div class="col-med-4">
+  <div>
+    Auditor Escolhido: {{auditor}}
+  </div>
+  <div>
+    Coordenador Escolhido: {{coordenador}}
+  </div>
+  <div>
+    Diretor Escolhido: {{diretor}}
+  </div>
+</div>
