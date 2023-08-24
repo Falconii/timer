@@ -47,9 +47,9 @@ export class CrudClienteComponent implements OnInit {
 
   erro: string = '';
 
-  opcoesOrdenacao: string[] = this.globalService.getOrdenacao('cliente');
+  opcoesOrdenacao: string[] = [];
 
-  opcoesCampo: string[] = this.globalService.getPesquisar('cliente');
+  opcoesCampo: string[] = [];
 
   tamPagina = 50;
 
@@ -60,6 +60,8 @@ export class CrudClienteComponent implements OnInit {
   page_retorno: number = 0;
 
   inclusao: boolean = false;
+
+  parametro: ParametroModel = new ParametroModel();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -88,7 +90,7 @@ export class CrudClienteComponent implements OnInit {
         this.inclusao = params.new === 'true';
       }
     });
-    this.setValues();
+    this.loadParametros();
     this.getGrupos();
   }
 
@@ -283,35 +285,37 @@ export class CrudClienteComponent implements OnInit {
       );
   }
 
-  saveParametros() {
+  getParametro() {
     this.globalService.setSpin(true);
-    this.globalService.parametros[0].user_insert =
-      this.globalService.usuario.id;
-    this.globalService.parametros[0].id_usuario = this.globalService.usuario.id;
     this.inscricaoParametro = this.parametrosService
-      .ParametroInsert(this.globalService.parametros[0])
+      .getParametro(
+        this.parametro.id_empresa,
+        this.parametro.modulo,
+        this.parametro.assinatura,
+        this.parametro.id_usuario
+      )
       .subscribe(
         (data: ParametroModel) => {
           this.globalService.setSpin(false);
+          this.parametro = data;
+          console.log('ACHEI....');
+          this.opcoesOrdenacao = this.getOrdenacao();
+          this.opcoesCampo = this.getPesquisar();
+          this.setValues();
         },
         (error: any) => {
-          this.inclusao = false;
-          this.page_retorno = 0;
+          console.log('NAO ACHEI....');
           this.globalService.setSpin(false);
-          this.appSnackBar.openFailureSnackBar(
-            `Gravação Dos Parametros ${messageError(error)}`,
-            'OK'
-          );
+          this.setValues();
         }
       );
   }
 
   updateParametros() {
     this.globalService.setSpin(true);
-    this.globalService.parametros[0].user_update =
-      this.globalService.usuario.id;
-    this.globalService.parametros[0].id_usuario = this.globalService.usuario.id;
-    let config = this.globalService.parametros[0].getParametro();
+    this.parametro.user_insert = this.globalService.usuario.id;
+    this.parametro.user_update = this.globalService.usuario.id;
+    let config = this.parametro.getParametro();
     Object(config).op_ordenacao = this.opcoesOrdenacao.findIndex(
       (op) => this.parametros.value.ordenacao == op
     );
@@ -319,13 +323,13 @@ export class CrudClienteComponent implements OnInit {
       (op) => this.parametros.value.campo == op
     );
     Object(config).descricao = this.parametros.value.filtro;
-    this.globalService.parametros[0].parametro = JSON.stringify(config);
-    console.log(this.globalService.parametros[0]);
+    this.parametro.parametro = JSON.stringify(config);
     this.inscricaoParametro = this.parametrosService
-      .ParametroUpdate(this.globalService.parametros[0])
+      .ParametroAtualiza(this.parametro)
       .subscribe(
         (data: ParametroModel) => {
           this.globalService.setSpin(false);
+          this.appSnackBar.openSuccessSnackBar(`Parâmetros Atualizados`, 'OK');
         },
         (error: any) => {
           this.inclusao = false;
@@ -349,10 +353,9 @@ export class CrudClienteComponent implements OnInit {
 
   setValues() {
     this.parametros.setValue({
-      ordenacao:
-        this.opcoesOrdenacao[this.globalService.getOpOrdenacao('cliente')],
-      campo: this.opcoesCampo[this.globalService.getOpPesquisar('cliente')],
-      filtro: this.globalService.getDescricao('cliente'),
+      ordenacao: this.opcoesOrdenacao[this.getOpOrdenacao()],
+      campo: this.opcoesCampo[this.getOpPesquisar()],
+      filtro: this.getDescricao(),
       grupo: 1,
     });
   }
@@ -389,5 +392,53 @@ export class CrudClienteComponent implements OnInit {
 
   onSaveConfig() {
     this.updateParametros();
+  }
+
+  /* rotinas dos parametros */
+
+  loadParametros() {
+    this.parametro = new ParametroModel();
+    this.parametro.id_empresa = 1;
+    this.parametro.modulo = 'cliente';
+    this.parametro.assinatura = 'V1.00 24/08/23';
+    this.parametro.id_usuario = this.globalService.usuario.id;
+    this.parametro.parametro = `
+    {
+      "op_ordenacao": 0,
+      "ordenacao": ["Código", "Razão", "Grupo"],
+      "op_pesquisar": 1,
+      "pesquisar": ["Código", "Razão", "Grupo"],
+      "descricao": ""
+    }`;
+
+    this.opcoesOrdenacao = this.getOrdenacao();
+    this.opcoesCampo = this.getPesquisar();
+    this.getParametro();
+  }
+
+  getOpOrdenacao(): number {
+    const retorno = Object(this.parametro.getParametro()).op_ordenacao;
+    return retorno;
+  }
+
+  getOrdenacao(): string[] {
+    console.log(this.parametro.getParametro());
+    const retorno = Object(this.parametro.getParametro()).ordenacao;
+    return retorno;
+  }
+
+  getOpPesquisar(): number {
+    const retorno = Object(this.parametro.getParametro()).op_pesquisar;
+    return retorno;
+  }
+
+  getPesquisar(): string[] {
+    const retorno = Object(this.parametro.getParametro()).pesquisar;
+    return retorno;
+  }
+
+  getDescricao(): string[] {
+    const retorno = Object(this.parametro.getParametro()).descricao;
+    return retorno;
   }
 }

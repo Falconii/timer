@@ -23,9 +23,14 @@ export class ParametrosService {
     return this.http.post<ParametroModel[]>(`${this.apiURL}parametros`, params);
   }
 
-  getParametro(id_empresa: number, modulo: string, id_usuario: number) {
+  getParametro(
+    id_empresa: number,
+    modulo: string,
+    assinatura: string,
+    id_usuario: number
+  ) {
     return this.http.get<ParametroModel>(
-      `${this.apiURL}parametro/${id_empresa}/${modulo}/${id_usuario}`
+      `${this.apiURL}parametro/${id_empresa}/${modulo}/${assinatura}/${id_usuario}`
     );
   }
 
@@ -40,9 +45,21 @@ export class ParametrosService {
     return this.http.put<ParametroModel>(`${this.apiURL}parametro/`, parametro);
   }
 
-  ParametroDelete(id_empresa: number, modulo: string, id_usuario: number) {
+  ParametroAtualiza(parametro: ParametroModel) {
+    return this.http.post<ParametroModel>(
+      `${this.apiURL}atualizarparametro/`,
+      parametro
+    );
+  }
+
+  ParametroDelete(
+    id_empresa: number,
+    modulo: string,
+    assinatura: string,
+    id_usuario: number
+  ) {
     return this.http.delete<ParametroModel>(
-      `${this.apiURL}parametro/${id_empresa}/${modulo}/${id_usuario}`
+      `${this.apiURL}parametro/${id_empresa}/${modulo}/${assinatura}/${id_usuario}`
     );
   }
 }

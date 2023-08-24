@@ -26,14 +26,11 @@ export class GlobalService {
   showSpinEmitter = new EventEmitter<boolean>();
   showSpinApontamentosEmitter = new EventEmitter<boolean>();
 
-  parametros: ParametroModel[] = [];
-
   constructor(private usuarioService: UsuariosService, private router: Router) {
     this.usuario = new UsuarioModel();
     this.logado = false;
     this.loadGuardiaoMestre();
     this.loadGuardiaoOpcoes();
-    this.loadParametros();
   }
 
   getUsuario(): UsuarioModel {
@@ -421,47 +418,5 @@ export class GlobalService {
       if (op == opc) idx = 1;
     });
     return idx == -1 ? false : true;
-  }
-
-  loadParametros(): void {
-    const cliente = new ParametroModel();
-    cliente.id_empresa = 1;
-    cliente.modulo = 'cliente';
-    cliente.id_usuario = this.usuario.id;
-    cliente.parametro = `
-    {
-      "op_ordenacao": 0,
-      "ordenacao": ["Código", "Razão", "Grupo"],
-      "op_pesquisar": 1,
-      "pesquisar": ["Código", "Razão", "Grupo"],
-      "descricao": "ANA"
-    }`;
-    this.parametros.push(cliente);
-  }
-
-  getOpOrdenacao(value: string): number {
-    const retorno = Object(this.parametros[0].getParametro()).op_ordenacao;
-    return retorno;
-  }
-
-  getOrdenacao(value: string): string[] {
-    console.log(this.parametros[0].getParametro());
-    const retorno = Object(this.parametros[0].getParametro()).ordenacao;
-    return retorno;
-  }
-
-  getOpPesquisar(value: string): number {
-    const retorno = Object(this.parametros[0].getParametro()).op_pesquisar;
-    return retorno;
-  }
-
-  getPesquisar(value: string): string[] {
-    const retorno = Object(this.parametros[0].getParametro()).pesquisar;
-    return retorno;
-  }
-
-  getDescricao(value: string): string[] {
-    const retorno = Object(this.parametros[0].getParametro()).descricao;
-    return retorno;
   }
 }
