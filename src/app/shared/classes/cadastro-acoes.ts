@@ -5,4 +5,7 @@ export enum CadastroAcoes {
   Exclusao = 4,
   Atualizacao = 5,
   Gravacao = 6,
+  Copy_Estrutura = 7,
+  Sub_Conta = 8,
+  Visualizar_Estrtura = 9,
 }

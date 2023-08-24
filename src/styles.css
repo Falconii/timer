@@ -16,7 +16,6 @@ body {
 .button-container-right {
     display: flex;
     justify-content: right;
-    height: min-content;
     width: 100%;
 }
 
@@ -201,7 +200,7 @@ body {
 }
 
 .container {
-    width: 80%;
+    width: 90%;
     height: 90%;
     margin: auto;
 }
@@ -444,4 +443,16 @@ body {
 .rodape {
     width: 100%;
     height: 10px;
+}
+
+.max-length {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: '...';
+    white-space: nowrap;
+}
+
+.max-length hover {
+    text-overflow: clip;
+    max-width: none
 }

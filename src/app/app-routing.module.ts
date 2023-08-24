@@ -147,6 +147,14 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
+    path: 'clientes-scroll',
+    loadChildren: () =>
+      import('./modules/cliente-scroll/cliente-scroll.module').then(
+        (m) => m.ClienteScrollModule
+      ),
+    canActivate: [],
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },

@@ -201,20 +201,6 @@ export class CrudProjetoComponent implements OnInit {
         }
       );
   }
-  openSnackBar_Err(message: string, action: string) {
-    //this._snackBar.open(message, action);
-  }
-
-  async openSnackBar_OK(message: string, action: string) {
-    //this._snackBar.open(message, action, {
-    //  duration: this.durationInSeconds * 1000,
-    //});
-    await this.delay(this.durationInSeconds * 1000);
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
 
   setValues() {
     this.parametros.setValue({

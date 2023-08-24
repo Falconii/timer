@@ -49,4 +49,8 @@ export class ControlePaginas {
     }
     this.paginaFinal = this.totalPaginas;
   }
+
+  setPaginaAtual(value: number) {
+    this.paginaAtual = value;
+  }
 }

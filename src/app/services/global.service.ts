@@ -6,6 +6,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsuarioModel } from '../Models/usuario-model';
 import { CadastroAcoes } from '../shared/classes/cadastro-acoes';
+import { ParametroModel } from '../Models/parametro-model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,6 @@ export class GlobalService {
   id_empresa: number = 1;
   showSpin: boolean = false;
   showSpinApontamentos: boolean = false;
-  //lsSituacoesTrabalho: SituacaoTrabalho[] = [];
   codigoMotivo: string = '001001';
   guadiaoMestre: GuardiaoMestre[] = [];
   guardiaoOpcoes: GuardiaoOpcoes[] = [];
@@ -26,22 +26,14 @@ export class GlobalService {
   showSpinEmitter = new EventEmitter<boolean>();
   showSpinApontamentosEmitter = new EventEmitter<boolean>();
 
+  parametros: ParametroModel[] = [];
+
   constructor(private usuarioService: UsuariosService, private router: Router) {
     this.usuario = new UsuarioModel();
     this.logado = false;
-    /*
-    this.lsSituacoesTrabalho = [
-      { id: '1', descricao: 'Não Iniciado' },
-      { id: '2', descricao: 'Em Andamento' },
-      { id: '3', descricao: 'Prazo Estourado' },
-      { id: '4', descricao: 'Suspenso' },
-      { id: '5', descricao: 'Finalizado' },
-      { id: '6', descricao: 'Folllow up' },
-      { id: '7', descricao: 'Abortado' },
-    ];
-    */
     this.loadGuardiaoMestre();
     this.loadGuardiaoOpcoes();
+    this.loadParametros();
   }
 
   getUsuario(): UsuarioModel {
@@ -314,7 +306,7 @@ export class GlobalService {
 
     guard = new GuardiaoOpcoes();
     guard.path = 'cliente';
-    guard.usuario = 16;
+    guard.usuario = 99;
     guard.acoes = [
       CadastroAcoes.Inclusao,
       CadastroAcoes.Edicao,
@@ -362,12 +354,13 @@ export class GlobalService {
     ];
     this.guardiaoOpcoes.push(guard);
 
+    /*
     guard = new GuardiaoOpcoes();
     guard.path = 'projeto';
     guard.grupo = 901;
     guard.acoes = [CadastroAcoes.Consulta];
     this.guardiaoOpcoes.push(guard);
-
+*/
     guard = new GuardiaoOpcoes();
     guard.path = 'projeto';
     guard.usuario = 0;
@@ -428,5 +421,47 @@ export class GlobalService {
       if (op == opc) idx = 1;
     });
     return idx == -1 ? false : true;
+  }
+
+  loadParametros(): void {
+    const cliente = new ParametroModel();
+    cliente.id_empresa = 1;
+    cliente.modulo = 'cliente';
+    cliente.id_usuario = this.usuario.id;
+    cliente.parametro = `
+    {
+      "op_ordenacao": 0,
+      "ordenacao": ["Código", "Razão", "Grupo"],
+      "op_pesquisar": 1,
+      "pesquisar": ["Código", "Razão", "Grupo"],
+      "descricao": "ANA"
+    }`;
+    this.parametros.push(cliente);
+  }
+
+  getOpOrdenacao(value: string): number {
+    const retorno = Object(this.parametros[0].getParametro()).op_ordenacao;
+    return retorno;
+  }
+
+  getOrdenacao(value: string): string[] {
+    console.log(this.parametros[0].getParametro());
+    const retorno = Object(this.parametros[0].getParametro()).ordenacao;
+    return retorno;
+  }
+
+  getOpPesquisar(value: string): number {
+    const retorno = Object(this.parametros[0].getParametro()).op_pesquisar;
+    return retorno;
+  }
+
+  getPesquisar(value: string): string[] {
+    const retorno = Object(this.parametros[0].getParametro()).pesquisar;
+    return retorno;
+  }
+
+  getDescricao(value: string): string[] {
+    const retorno = Object(this.parametros[0].getParametro()).descricao;
+    return retorno;
   }
 }

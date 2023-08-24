@@ -34,6 +34,7 @@ import { BarraParametrosv02Component } from './components/barra-parametrosv02/ba
 import { ParamAuditorComponent } from './components/param-auditor/param-auditor.component';
 import { ParamCoordenadorComponent } from './components/param-coordenador/param-coordenador.component';
 import { ParamDiretorComponent } from './components/param-diretor/param-diretor.component';
+import { BarraAcoesComponent } from './components/barra-acoes/barra-acoes.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { ParamDiretorComponent } from './components/param-diretor/param-diretor.
     ParamAuditorComponent,
     ParamCoordenadorComponent,
     ParamDiretorComponent,
+    BarraAcoesComponent,
   ],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
@@ -104,6 +106,7 @@ import { ParamDiretorComponent } from './components/param-diretor/param-diretor.
     ParamCoordenadorComponent,
     ParamDiretorComponent,
     CorStatusProjDirective,
+    BarraAcoesComponent,
   ],
 })
 export class SharedModule {}
