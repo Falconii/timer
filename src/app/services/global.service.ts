@@ -21,6 +21,8 @@ export class GlobalService {
   guadiaoMestre: GuardiaoMestre[] = [];
   guardiaoOpcoes: GuardiaoOpcoes[] = [];
 
+  lsParametros: ParametroModel[] = [];
+
   shomMenuEmitter = new EventEmitter<boolean>();
   refreshLançamentos = new EventEmitter<CelulaDia>();
   showSpinEmitter = new EventEmitter<boolean>();
@@ -148,20 +150,6 @@ export class GlobalService {
     return this.showSpinApontamentos;
   }
 
-  /*
-  getSituacaoTrabalho(id: string): SituacaoTrabalho {
-    let retorno = new SituacaoTrabalho();
-
-    let i: number = this.lsSituacoesTrabalho.findIndex((obj) => obj.id == id);
-
-    if (i >= 0) {
-      retorno.id = this.lsSituacoesTrabalho[i].id;
-      retorno.descricao = this.lsSituacoesTrabalho[i].descricao;
-    }
-
-    return retorno;
-  }
-*/
   loadGuardiaoMestre() {
     //Cadastros
     let guard = new GuardiaoMestre();
@@ -418,5 +406,29 @@ export class GlobalService {
       if (op == opc) idx = 1;
     });
     return idx == -1 ? false : true;
+  }
+
+  estadoSave(par: ParametroModel) {
+    const idx = this.lsParametros.findIndex((p) => par.modulo == p.modulo);
+    if (idx == -1) {
+      this.lsParametros.push(par);
+      console.log('inserção');
+    } else {
+      this.lsParametros[idx] = par;
+      console.log('Atualizar');
+    }
+  }
+
+  estadoFind(value: string): ParametroModel | null {
+    const idx = this.lsParametros.findIndex((p) => value == p.modulo);
+    if (idx == -1) return null;
+    return this.lsParametros[idx];
+  }
+
+  estadoDelete(par: ParametroModel) {
+    const idx = this.lsParametros.findIndex((p) => par.modulo == p.modulo);
+    if (idx > -1) {
+      this.lsParametros.splice(idx, 1);
+    }
   }
 }

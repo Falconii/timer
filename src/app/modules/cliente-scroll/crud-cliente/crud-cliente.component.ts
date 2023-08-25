@@ -14,6 +14,8 @@ import { ClientesQuery01Model } from 'src/app/Models/cliente-query_01-model';
 import { GrupoEcoModel } from 'src/app/Models/gru-eco-models';
 import { ParametroModel } from 'src/app/Models/parametro-model';
 import { ParametroCliente01 } from 'src/app/parametros/parametro-cliente-01';
+import { ParametroGrupoEco01 } from 'src/app/parametros/parametro-grupo-eco01';
+import { ParametroParametro01 } from 'src/app/parametros/parametro-parametro01';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { GrupoEconomicoService } from 'src/app/services/grupo-economico.service';
@@ -21,7 +23,14 @@ import { ParametrosService } from 'src/app/services/parametros.service';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ControlePaginas } from 'src/app/shared/classes/controle-paginas';
-import { MensagensBotoes, messageError } from 'src/app/shared/classes/util';
+import {
+  GetValueJsonBoolean,
+  GetValueJsonNumber,
+  GetValueJsonString,
+  GetValueJsonStringArray,
+  MensagensBotoes,
+  messageError,
+} from 'src/app/shared/classes/util';
 import { ShowClienteDialogData } from 'src/app/shared/components/show-cliente-dialog/show-cliente-dialog-data';
 import { ShowClienteDialogComponent } from 'src/app/shared/components/show-cliente-dialog/show-cliente-dialog.component';
 
@@ -269,9 +278,13 @@ export class CrudClienteComponent implements OnInit {
   }
 
   getGrupos() {
+    let par = new ParametroGrupoEco01();
+    par.id_empresa = this.globalService.getIdEmpresa();
+    par.pagina = 0;
+    par.orderby = 'Razão';
     this.globalService.setSpin(true);
     this.inscricaoGetGrupo = this.grupoEconomicoService
-      .getGrupoEcos()
+      .getGrupoEcos_01(par)
       .subscribe(
         (data: GrupoEcoModel[]) => {
           this.globalService.setSpin(false);
@@ -281,30 +294,69 @@ export class CrudClienteComponent implements OnInit {
           this.globalService.setSpin(false);
           this.erro = error;
           this.grupos = [];
+          console.log(error);
+          this.appSnackBar.openFailureSnackBar(
+            `Falha Nos Grupos Ecônomicos ${messageError(error)}`,
+            'OK'
+          );
         }
       );
   }
 
   getParametro() {
     this.globalService.setSpin(true);
+    let par = new ParametroParametro01();
+    par.id_empresa = this.parametro.id_empresa;
+    par.modulo = this.parametro.modulo;
+    par.assinatura = this.parametro.assinatura;
+    par.id_usuario = this.parametro.id_usuario;
+    par.orderby = 'Usuário';
     this.inscricaoParametro = this.parametrosService
-      .getParametro(
-        this.parametro.id_empresa,
-        this.parametro.modulo,
-        this.parametro.assinatura,
-        this.parametro.id_usuario
-      )
+      .getParametrosParametro01(par)
       .subscribe(
-        (data: ParametroModel) => {
+        (data: ParametroModel[]) => {
           this.globalService.setSpin(false);
-          this.parametro = data;
-          console.log('ACHEI....');
-          this.opcoesOrdenacao = this.getOrdenacao();
-          this.opcoesCampo = this.getPesquisar();
-          this.setValues();
+          this.parametro = new ParametroModel();
+          this.parametro.id_empresa = data[0].id_empresa;
+          this.parametro.modulo = data[0].modulo;
+          this.parametro.id_usuario = data[0].id_usuario;
+          this.parametro.assinatura = data[0].assinatura;
+          this.parametro.parametro = data[0].parametro;
+          this.parametro.user_insert = data[0].user_insert;
+          this.parametro.user_update = data[0].user_update;
+          this.opcoesOrdenacao = GetValueJsonStringArray(
+            this.parametro.getParametro(),
+            'ordenacao'
+          );
+          this.opcoesCampo = GetValueJsonStringArray(
+            this.parametro.getParametro(),
+            'pesquisar'
+          );
+          if (this.inclusao) this.setPosicaoInclusao();
+          console.log(
+            'Valor do new',
+            Object(this.parametro.getParametro()).new
+          );
+          if (GetValueJsonBoolean(this.parametro.getParametro(), 'new')) {
+            console.log('sou verdadeiro');
+          } else {
+            console.log('sou false');
+          }
+          this.globalService.estadoSave(this.parametro);
+          this.parametro.user_insert = 9090;
+          this.globalService.estadoSave(this.parametro);
+          console.log('lista', this.globalService.lsParametros);
+          console.log(
+            'Encontrei: ',
+            this.globalService.estadoFind(this.parametro.modulo)
+          );
+          console.log(
+            'Apaguei',
+            this.globalService.estadoDelete(this.parametro)
+          );
+          console.log('Fim', this.globalService.lsParametros);
         },
         (error: any) => {
-          console.log('NAO ACHEI....');
           this.globalService.setSpin(false);
           this.setValues();
         }
@@ -353,9 +405,15 @@ export class CrudClienteComponent implements OnInit {
 
   setValues() {
     this.parametros.setValue({
-      ordenacao: this.opcoesOrdenacao[this.getOpOrdenacao()],
-      campo: this.opcoesCampo[this.getOpPesquisar()],
-      filtro: this.getDescricao(),
+      ordenacao:
+        this.opcoesOrdenacao[
+          GetValueJsonNumber(this.parametro.getParametro(), 'op_ordenacao')
+        ],
+      campo:
+        this.opcoesCampo[
+          GetValueJsonNumber(this.parametro.getParametro(), 'op_pesquisar')
+        ],
+      filtro: GetValueJsonString(this.parametro.getParametro(), 'descricao'),
       grupo: 1,
     });
   }
@@ -398,9 +456,9 @@ export class CrudClienteComponent implements OnInit {
 
   loadParametros() {
     this.parametro = new ParametroModel();
-    this.parametro.id_empresa = 1;
+    this.parametro.id_empresa = this.globalService.getIdEmpresa();
     this.parametro.modulo = 'cliente';
-    this.parametro.assinatura = 'V1.00 24/08/23';
+    this.parametro.assinatura = 'V1.00 25/08/23';
     this.parametro.id_usuario = this.globalService.usuario.id;
     this.parametro.parametro = `
     {
@@ -408,37 +466,59 @@ export class CrudClienteComponent implements OnInit {
       "ordenacao": ["Código", "Razão", "Grupo"],
       "op_pesquisar": 1,
       "pesquisar": ["Código", "Razão", "Grupo"],
-      "descricao": ""
+      "descricao": "",
+      "page": 1,
+      "new": true
     }`;
 
-    this.opcoesOrdenacao = this.getOrdenacao();
-    this.opcoesCampo = this.getPesquisar();
+    this.opcoesOrdenacao = GetValueJsonStringArray(
+      this.parametro.getParametro(),
+      'ordenacao'
+    );
+    this.opcoesCampo = GetValueJsonStringArray(
+      this.parametro.getParametro(),
+      'pesquisar'
+    );
     this.getParametro();
   }
 
-  getOpOrdenacao(): number {
+  /*
+  getOpOrdenacaoxx(): number {
     const retorno = Object(this.parametro.getParametro()).op_ordenacao;
     return retorno;
   }
 
-  getOrdenacao(): string[] {
-    console.log(this.parametro.getParametro());
+  getOrdenacaoxx(): string[] {
     const retorno = Object(this.parametro.getParametro()).ordenacao;
     return retorno;
   }
 
-  getOpPesquisar(): number {
-    const retorno = Object(this.parametro.getParametro()).op_pesquisar;
+  getOpPesquisarxx(): number {
+    const retorno = Object(this.parametro.getParametro())['op_pesquisar'];
     return retorno;
   }
 
-  getPesquisar(): string[] {
+  getPesquisarxx(): string[] {
     const retorno = Object(this.parametro.getParametro()).pesquisar;
     return retorno;
   }
 
-  getDescricao(): string[] {
+  getDescricaoxx(): string[] {
     const retorno = Object(this.parametro.getParametro()).descricao;
     return retorno;
+  }
+*/
+  setPosicaoInclusao() {
+    console.log('setPosicaoInclusao-entrada');
+    console.log(this.parametro);
+    const config = this.parametro.getParametro();
+    Object(config).op_ordenacao = 0;
+    Object(config).op_pesquisar = 0;
+    Object(config).descricao = '';
+    console.log('Objeto Alterado');
+    console.log(config);
+    this.parametro.setParametro(config);
+    console.log('setPosicaoInclusao-saida');
+    console.log(this.parametro);
   }
 }

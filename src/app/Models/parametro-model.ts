@@ -17,7 +17,7 @@ export class ParametroModel {
     }
   }
 
-  public setParametro(value: JSON): string {
-    return JSON.stringify(value);
+  public setParametro(value: JSON) {
+    this.parametro = JSON.stringify(value);
   }
 }

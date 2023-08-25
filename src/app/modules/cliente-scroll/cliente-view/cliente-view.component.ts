@@ -16,6 +16,8 @@ import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { GrupoEconomicoService } from 'src/app/services/grupo-economico.service';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
+import { ParametroGrupoEco01 } from 'src/app/parametros/parametro-grupo-eco01';
+import { messageError } from 'src/app/shared/classes/util';
 
 @Component({
   selector: 'app-cliente-view',
@@ -59,7 +61,7 @@ export class ClienteViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private appSnackBar: AppSnackbar,
-    private globaService: GlobalService
+    private globalService: GlobalService
   ) {
     this.formulario = formBuilder.group({
       id: [{ value: '', disabled: true }],
@@ -170,14 +172,17 @@ export class ClienteViewComponent implements OnInit {
   }
 
   getCliente() {
+    this.globalService.setSpin(true);
     this.inscricaoGetCliente = this.clientesServices
       .getCliente(this.cliente.id_empresa, this.cliente.id)
       .subscribe(
         (data: ClientesModel) => {
+          this.globalService.setSpin(false);
           this.cliente = data;
           this.setValue();
         },
         (error: any) => {
+          this.globalService.setSpin(false);
           this.appSnackBar.openFailureSnackBar(
             `Pesquisa Nos Clientes ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
@@ -191,29 +196,39 @@ export class ClienteViewComponent implements OnInit {
       this.idAcao == CadastroAcoes.Consulta ||
       this.idAcao == CadastroAcoes.Exclusao
     ) {
+      this.globalService.setSpin(true);
       this.inscricaoGetGrupo = this.grupoEconomicoService
         .getGrupoEco(this.cliente.id_empresa, this.cliente.gru_econo)
         .subscribe(
           (data: GrupoEcoModel) => {
+            this.globalService.setSpin(false);
             this.grupos.push(data);
           },
           (error: any) => {
+            this.globalService.setSpin(false);
             this.appSnackBar.openFailureSnackBar(
-              `Pesquisa Nos Grupos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+              `Pesquisa Nos Grupos  ${messageError(error)}`,
               'OK'
             );
           }
         );
     } else {
+      let par = new ParametroGrupoEco01();
+      par.id_empresa = this.globalService.getIdEmpresa();
+      par.pagina = 0;
+      par.orderby = 'Razão';
+      this.globalService.setSpin(true);
       this.inscricaoGetGrupo = this.grupoEconomicoService
-        .getGrupoEcos()
+        .getGrupoEcos_01(par)
         .subscribe(
           (data: GrupoEcoModel[]) => {
+            this.globalService.setSpin(false);
             this.grupos = data;
           },
           (error: any) => {
+            this.globalService.setSpin(false);
             this.appSnackBar.openFailureSnackBar(
-              `Pesquisa Nos Grupos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+              `Pesquisa Nos Grupos ${messageError(error)}`,
               'OK'
             );
           }
@@ -310,18 +325,18 @@ export class ClienteViewComponent implements OnInit {
     this.cliente.gru_descricao = this.formulario.value.gru_econo_;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
-        this.cliente.user_insert = this.globaService.getUsuario().id;
-        this.globaService.setSpin(true);
+        this.cliente.user_insert = this.globalService.getUsuario().id;
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.clientesServices
           .clienteInsert(this.cliente)
           .subscribe(
             async (data: ClientesModel) => {
               this.cliente.id = data.id;
-              this.globaService.setSpin(false);
+              this.globalService.setSpin(false);
               this.onRetorno();
             },
             (error: any) => {
-              this.globaService.setSpin(false);
+              this.globalService.setSpin(false);
               this.appSnackBar.openFailureSnackBar(
                 `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -330,17 +345,17 @@ export class ClienteViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
-        this.globaService.setSpin(true);
-        this.cliente.user_update = this.globaService.getUsuario().id;
+        this.globalService.setSpin(true);
+        this.cliente.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.clientesServices
           .clienteUpdate(this.cliente)
           .subscribe(
             async (data: any) => {
-              this.globaService.setSpin(false);
+              this.globalService.setSpin(false);
               this.onRetorno();
             },
             (error: any) => {
-              this.globaService.setSpin(false);
+              this.globalService.setSpin(false);
               this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -349,16 +364,16 @@ export class ClienteViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Exclusao:
-        this.globaService.setSpin(true);
+        this.globalService.setSpin(true);
         this.inscricaoAcao = this.clientesServices
           .clienteDelete(this.cliente.id_empresa, this.cliente.id)
           .subscribe(
             async (data: any) => {
-              this.globaService.setSpin(false);
+              this.globalService.setSpin(false);
               this.onRetorno();
             },
             (error: any) => {
-              this.globaService.setSpin(false);
+              this.globalService.setSpin(false);
               this.appSnackBar.openFailureSnackBar(
                 `Erro Na Exclusão $Mesage `,
                 'OK'
