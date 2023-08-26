@@ -470,24 +470,20 @@ export class SituacaoProjeto {
 
 export function GetValueJsonNumber(obj: JSON, tag: string): number {
   const retorno = Object(obj)[tag];
-  console.log('number', retorno);
   return retorno;
 }
 
 export function GetValueJsonString(obj: JSON, tag: string): string {
   const retorno = Object(obj)[tag];
-  console.log('string', retorno);
   return retorno;
 }
 
 export function GetValueJsonStringArray(obj: JSON, tag: string): string[] {
   const retorno = Object(obj)[tag];
-  console.log('string[]', retorno);
   return retorno;
 }
 
 export function GetValueJsonBoolean(obj: JSON, tag: string): boolean {
   const retorno = Object(obj)[tag];
-  console.log('boolean', retorno);
   return retorno;
 }

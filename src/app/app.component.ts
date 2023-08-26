@@ -68,4 +68,15 @@ export class AppComponent {
   setOpcao(value: string): void {
     this.opcao = value;
   }
+
+  getLenPar(): string {
+    let config = this.globalService.estadoFind('cliente');
+    if (config != null) {
+      return `ID_RETORNO ${Object(config.getParametro())['id_retorno']} PAGE ${
+        Object(config.getParametro())['page']
+      } NEW ${Object(config.getParametro())['new']}`;
+    } else {
+      return '';
+    }
+  }
 }

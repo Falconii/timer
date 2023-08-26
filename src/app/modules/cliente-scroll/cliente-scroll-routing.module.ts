@@ -11,12 +11,12 @@ const routes: Routes = [
     canActivate: [],
   },
   {
-    path: 'clientes-scroll/:id_empresa/:id/:page/:new',
+    path: 'clientes-scroll/:retorno',
     component: CrudClienteComponent,
     canActivate: [],
   },
   {
-    path: 'cliente-scroll/:id_empresa/:id/:page/:acao',
+    path: 'cliente-scroll/:id_empresa/:id/:acao',
     component: ClienteViewComponent,
     canActivate: [],
   },

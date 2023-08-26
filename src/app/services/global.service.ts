@@ -412,21 +412,25 @@ export class GlobalService {
     const idx = this.lsParametros.findIndex((p) => par.modulo == p.modulo);
     if (idx == -1) {
       this.lsParametros.push(par);
-      console.log('inserção');
+      console.log('inserção', par.getParametro());
     } else {
       this.lsParametros[idx] = par;
-      console.log('Atualizar');
+      console.log('Atualizar', par.getParametro());
     }
   }
 
   estadoFind(value: string): ParametroModel | null {
-    const idx = this.lsParametros.findIndex((p) => value == p.modulo);
+    const idx = this.lsParametros.findIndex(
+      (p) => value.trim() == p.modulo.trim()
+    );
     if (idx == -1) return null;
     return this.lsParametros[idx];
   }
 
   estadoDelete(par: ParametroModel) {
-    const idx = this.lsParametros.findIndex((p) => par.modulo == p.modulo);
+    const idx = this.lsParametros.findIndex(
+      (p) => par.modulo.trim() == p.modulo.trim()
+    );
     if (idx > -1) {
       this.lsParametros.splice(idx, 1);
     }

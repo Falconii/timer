@@ -20,7 +20,6 @@ export class ParametrosService {
   getParametrosParametro01(
     params: ParametroParametro01
   ): Observable<ParametroModel[]> {
-    console.log(params);
     return this.http.post<ParametroModel[]>(`${this.apiURL}parametros`, params);
   }
 

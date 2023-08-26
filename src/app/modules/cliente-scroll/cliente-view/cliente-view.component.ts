@@ -51,8 +51,6 @@ export class ClienteViewComponent implements OnInit {
 
   ufs: EstadoModel[] = [];
 
-  paginaRetorno: number = 0;
-
   constructor(
     private formBuilder: FormBuilder,
     private clientesServices: ClientesService,
@@ -91,7 +89,6 @@ export class ClienteViewComponent implements OnInit {
       this.cliente.id_empresa = params.id_empresa;
       this.cliente.id = params.id;
       this.idAcao = params.acao;
-      this.paginaRetorno = params.page;
       this.cliente.gru_econo = 1;
       this.setAcao(params.acao);
     });
@@ -133,28 +130,28 @@ export class ClienteViewComponent implements OnInit {
   }
 
   onRetorno() {
-    console.log(
-      `Retorno ${
-        this.idAcao == CadastroAcoes.Inclusao ? true : false
-      } Pagina de retorno: ${this.paginaRetorno}`
-    );
-    this.router.navigate([
-      '/clientes-scroll/clientes-scroll',
-      this.cliente.id_empresa,
-      this.cliente.id,
-      this.paginaRetorno,
-      this.idAcao == CadastroAcoes.Inclusao ? true : false,
-    ]);
+    const par = this.globalService.estadoFind('cliente');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = this.idAcao == CadastroAcoes.Inclusao ? true : false;
+      Object(config).id_retorno = this.cliente.id;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/clientes-scroll/clientes-scroll', 'SIM']);
   }
 
   onCancel() {
-    this.router.navigate([
-      '/clientes-scroll/clientes-scroll',
-      this.cliente.id_empresa,
-      this.cliente.id,
-      this.paginaRetorno,
-      false,
-    ]);
+    const par = this.globalService.estadoFind('cliente');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = false;
+      Object(config).id_retorno =
+        this.idAcao == CadastroAcoes.Consulta ? this.cliente.id : 0;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/clientes-scroll/clientes-scroll', 'SIM']);
   }
 
   getUfs() {

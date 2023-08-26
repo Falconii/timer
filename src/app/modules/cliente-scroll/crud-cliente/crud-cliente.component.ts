@@ -68,7 +68,7 @@ export class CrudClienteComponent implements OnInit {
 
   page_retorno: number = 0;
 
-  inclusao: boolean = false;
+  retorno: boolean = false;
 
   parametro: ParametroModel = new ParametroModel();
 
@@ -91,12 +91,13 @@ export class CrudClienteComponent implements OnInit {
       grupo: [],
     });
     this.inscricaoRota = route.params.subscribe((params: any) => {
-      if (typeof params.id_empresa == 'undefined') {
-        this.inclusao = false;
+      if (typeof params.retorno == 'undefined') {
+        this.retorno = false;
       } else {
-        this.id_retorno = params.id;
-        this.page_retorno = params.page;
-        this.inclusao = params.new === 'true';
+        this.retorno = true;
+        const par = this.globalService.estadoFind('cliente');
+        console.log(this.globalService.lsParametros);
+        console.log(par?.getParametro());
       }
     });
     this.loadParametros();
@@ -136,21 +137,27 @@ export class CrudClienteComponent implements OnInit {
 
   escolha(opcao: number, cliente?: ClientesQuery01Model) {
     if (typeof cliente !== 'undefined') {
+      let config = this.parametro.getParametro();
+      Object(config).new = false;
+      Object(config).id_retorno = cliente.id;
+      Object(config).page = this.controlePaginas.getPaginalAtual();
+      this.parametro.parametro = JSON.stringify(config);
+      console.log('escolha', this.parametro.getParametro());
+      this.globalService.estadoSave(this.parametro);
       this.router.navigate([
         '/clientes-scroll/cliente-scroll',
         cliente.id_empresa,
         cliente.id,
-        this.controlePaginas.getPaginalAtual(),
         opcao,
       ]);
     } else {
-      this.router.navigate([
-        '/clientes-scroll/cliente-scroll',
-        1,
-        0,
-        this.controlePaginas.getPaginalAtual(),
-        opcao,
-      ]);
+      let config = this.parametro.getParametro();
+      Object(config).new = false;
+      Object(config).id_retorno = 0;
+      Object(config).page = this.controlePaginas.getPaginalAtual();
+      this.parametro.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(this.parametro);
+      this.router.navigate(['/clientes-scroll/cliente-scroll', 1, 0, opcao]);
     }
   }
 
@@ -161,33 +168,24 @@ export class CrudClienteComponent implements OnInit {
   getClientes() {
     let par = new ParametroCliente01();
 
-    par.id_empresa = 1;
+    par.id_empresa = this.globalService.getIdEmpresa();
 
-    if (this.inclusao == true) {
-      par.id = 0;
-      par.orderby = this.parametros.value.ordenacao;
-      par.pagina = this.controlePaginas.goLast();
-    } else {
-      if (this.parametros.value.campo == 'Código') {
-        let key = parseInt(this.parametros.value.filtro, 10);
-        if (isNaN(key)) {
-          par.id = 0;
-        } else {
-          par.id = key;
-        }
+    if (this.parametros.value.campo == 'Código') {
+      let key = parseInt(this.parametros.value.filtro, 10);
+      if (isNaN(key)) {
+        par.id = 0;
+      } else {
+        par.id = key;
       }
-      if (this.parametros.value.campo == 'Razão')
-        par.razao = this.parametros.value.filtro.toUpperCase();
-      if (this.parametros.value.campo == 'Grupo')
-        par.grupo = this.parametros.value.grupo;
-
-      par.orderby = this.parametros.value.ordenacao;
-
-      if (this.page_retorno > 0)
-        this.controlePaginas.setPaginaAtual(this.page_retorno);
-
-      par.pagina = this.controlePaginas.getPaginalAtual();
     }
+    if (this.parametros.value.campo == 'Razão')
+      par.razao = this.parametros.value.filtro.toUpperCase();
+    if (this.parametros.value.campo == 'Grupo')
+      par.grupo = this.parametros.value.grupo;
+
+    par.orderby = this.parametros.value.ordenacao;
+
+    par.pagina = this.controlePaginas.getPaginalAtual();
 
     par.contador = 'N';
 
@@ -198,21 +196,27 @@ export class CrudClienteComponent implements OnInit {
       .getClientes_01(par)
       .subscribe(
         (data: ClientesQuery01Model[]) => {
-          this.inclusao = false;
           this.page_retorno = 0;
           this.globalService.setSpin(false);
           this.clientes = [];
           this.clientes = data;
           const idx = this.clientes.findIndex(
-            (cli) => cli.id == this.id_retorno
+            (cli) =>
+              cli.id ==
+              GetValueJsonNumber(this.parametro.getParametro(), 'id_retorno')
           );
           setTimeout(() => this.viewPort.scrollToIndex(idx), 10);
-          this.id_retorno = 0;
-          this.inclusao = false;
+          this.retorno = false;
+          let config = this.parametro.getParametro();
+          Object(config).id_retorno = 0;
+          Object(config).new = false;
+          this.parametro.parametro = JSON.stringify(config);
         },
         (error: any) => {
-          this.inclusao = false;
-          this.page_retorno = 0;
+          let config = this.parametro.getParametro();
+          Object(config).id_retorno = 0;
+          Object(config).new = false;
+          this.retorno = false;
           this.globalService.setSpin(false);
           this.clientes = [];
           this.appSnackBar.openFailureSnackBar(
@@ -228,26 +232,22 @@ export class CrudClienteComponent implements OnInit {
 
     par.id_empresa = 1;
 
-    if (this.inclusao) {
-      par.id = 0;
+    par.orderby = 'Código';
 
-      par.orderby = 'Código';
-    } else {
-      if (this.parametros.value.campo == 'Código') {
-        let key = parseInt(this.parametros.value.filtro, 10);
+    if (this.parametros.value.campo == 'Código') {
+      let key = parseInt(this.parametros.value.filtro, 10);
 
-        if (isNaN(key)) {
-          par.id = 0;
-        } else {
-          par.id = key;
-        }
-        if (this.parametros.value.campo == 'Razão')
-          par.razao = this.parametros.value.filtro.toUpperCase();
-        if (this.parametros.value.campo == 'Grupo')
-          par.grupo = this.parametros.value.grupo;
-
-        par.orderby = this.parametros.value.ordenacao;
+      if (isNaN(key)) {
+        par.id = 0;
+      } else {
+        par.id = key;
       }
+      if (this.parametros.value.campo == 'Razão')
+        par.razao = this.parametros.value.filtro.toUpperCase();
+      if (this.parametros.value.campo == 'Grupo')
+        par.grupo = this.parametros.value.grupo;
+
+      par.orderby = this.parametros.value.ordenacao;
     }
 
     par.contador = 'S';
@@ -315,6 +315,7 @@ export class CrudClienteComponent implements OnInit {
       .getParametrosParametro01(par)
       .subscribe(
         (data: ParametroModel[]) => {
+          console.log('Achei..', data);
           this.globalService.setSpin(false);
           this.parametro = new ParametroModel();
           this.parametro.id_empresa = data[0].id_empresa;
@@ -332,29 +333,7 @@ export class CrudClienteComponent implements OnInit {
             this.parametro.getParametro(),
             'pesquisar'
           );
-          if (this.inclusao) this.setPosicaoInclusao();
-          console.log(
-            'Valor do new',
-            Object(this.parametro.getParametro()).new
-          );
-          if (GetValueJsonBoolean(this.parametro.getParametro(), 'new')) {
-            console.log('sou verdadeiro');
-          } else {
-            console.log('sou false');
-          }
-          this.globalService.estadoSave(this.parametro);
-          this.parametro.user_insert = 9090;
-          this.globalService.estadoSave(this.parametro);
-          console.log('lista', this.globalService.lsParametros);
-          console.log(
-            'Encontrei: ',
-            this.globalService.estadoFind(this.parametro.modulo)
-          );
-          console.log(
-            'Apaguei',
-            this.globalService.estadoDelete(this.parametro)
-          );
-          console.log('Fim', this.globalService.lsParametros);
+          this.setValues();
         },
         (error: any) => {
           this.globalService.setSpin(false);
@@ -384,7 +363,6 @@ export class CrudClienteComponent implements OnInit {
           this.appSnackBar.openSuccessSnackBar(`Parâmetros Atualizados`, 'OK');
         },
         (error: any) => {
-          this.inclusao = false;
           this.page_retorno = 0;
           this.globalService.setSpin(false);
           this.appSnackBar.openFailureSnackBar(
@@ -458,7 +436,7 @@ export class CrudClienteComponent implements OnInit {
     this.parametro = new ParametroModel();
     this.parametro.id_empresa = this.globalService.getIdEmpresa();
     this.parametro.modulo = 'cliente';
-    this.parametro.assinatura = 'V1.00 25/08/23';
+    this.parametro.assinatura = 'V1.00 26/08/23';
     this.parametro.id_usuario = this.globalService.usuario.id;
     this.parametro.parametro = `
     {
@@ -468,7 +446,8 @@ export class CrudClienteComponent implements OnInit {
       "pesquisar": ["Código", "Razão", "Grupo"],
       "descricao": "",
       "page": 1,
-      "new": true
+      "new": false,
+      "id_retorno":0
     }`;
 
     this.opcoesOrdenacao = GetValueJsonStringArray(
@@ -479,7 +458,26 @@ export class CrudClienteComponent implements OnInit {
       this.parametro.getParametro(),
       'pesquisar'
     );
-    this.getParametro();
+    if (this.retorno && this.globalService.estadoFind('cliente') !== null) {
+      console.log('Carregando retorno');
+      const par = this.globalService.estadoFind('cliente');
+      console.log('Par Retorno', par?.getParametro());
+      if (par != null) {
+        if (GetValueJsonBoolean(par.getParametro(), 'new')) {
+          this.setPosicaoInclusao();
+        } else {
+          this.controlePaginas.setPaginaAtual(
+            GetValueJsonNumber(par.getParametro(), 'page')
+          );
+          this.parametro.setParametro(par.getParametro());
+          console.log('parametro atualizado', this.parametro.getParametro());
+        }
+        this.globalService.estadoDelete(par);
+      }
+    } else {
+      console.log('busncando do banco');
+      this.getParametro();
+    }
   }
 
   /*
@@ -509,16 +507,22 @@ export class CrudClienteComponent implements OnInit {
   }
 */
   setPosicaoInclusao() {
-    console.log('setPosicaoInclusao-entrada');
-    console.log(this.parametro);
     const config = this.parametro.getParametro();
     Object(config).op_ordenacao = 0;
     Object(config).op_pesquisar = 0;
     Object(config).descricao = '';
-    console.log('Objeto Alterado');
-    console.log(config);
     this.parametro.setParametro(config);
-    console.log('setPosicaoInclusao-saida');
-    console.log(this.parametro);
+    this.controlePaginas.goLast();
+  }
+
+  getLenPar(): string {
+    let config = this.parametro;
+    if (config != null) {
+      return `ID_RETORNO ${Object(config.getParametro())['id_retorno']} PAGE ${
+        Object(config.getParametro())['page']
+      } NEW ${Object(config.getParametro())['new']}`;
+    } else {
+      return '';
+    }
   }
 }
