@@ -99,8 +99,29 @@ export class GruUserViewComponent implements OnInit {
     }
   }
 
+  onRetorno() {
+    const par = this.globalService.estadoFind('grupo-user');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = this.idAcao == CadastroAcoes.Inclusao ? true : false;
+      Object(config).id_retorno = this.grupo.id;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/users/users', 'SIM']);
+  }
+
   onCancel() {
-    this.router.navigate(['/users/users']);
+    const par = this.globalService.estadoFind('grupo-user');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = false;
+      Object(config).id_retorno =
+        this.idAcao == CadastroAcoes.Consulta ? this.grupo.id : 0;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/users/users', 'SIM']);
   }
 
   getGrupo() {
@@ -160,8 +181,9 @@ export class GruUserViewComponent implements OnInit {
           .GrupoUserInsert(this.grupo)
           .subscribe(
             async (data: GruUserModel) => {
+              this.grupo.id = data.id;
               this.globalService.setSpin(false);
-              this.onCancel();
+              this.onRetorno();
             },
             (error: any) => {
               this.globalService.setSpin(false);
@@ -180,7 +202,7 @@ export class GruUserViewComponent implements OnInit {
           .subscribe(
             async (data: any) => {
               this.globalService.setSpin(false);
-              this.onCancel();
+              this.onRetorno();
             },
             (error: any) => {
               this.globalService.setSpin(false);
@@ -198,7 +220,7 @@ export class GruUserViewComponent implements OnInit {
           .subscribe(
             async (data: any) => {
               this.globalService.setSpin(false);
-              this.onCancel();
+              this.onRetorno();
             },
             (error: any) => {
               this.globalService.setSpin(false);

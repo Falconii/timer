@@ -132,11 +132,32 @@ export class UsuarioViewComponent implements OnInit {
     }
   }
 
+  onRetorno() {
+    const par = this.globalService.estadoFind('usuario');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = this.idAcao == CadastroAcoes.Inclusao ? true : false;
+      Object(config).id_retorno = this.usuario.id;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/usuarios/usuarios', 'SIM']);
+  }
+
   onCancel() {
     if (this.idAcao == CadastroAcoes.Atualizacao) {
       this.router.navigate(['/']);
     } else {
-      this.router.navigate(['/usuarios']);
+      const par = this.globalService.estadoFind('usuario');
+      if (par != null) {
+        let config = par.getParametro();
+        Object(config).new = false;
+        Object(config).id_retorno =
+          this.idAcao == CadastroAcoes.Consulta ? this.usuario.id : 0;
+        par.parametro = JSON.stringify(config);
+        this.globalService.estadoSave(par);
+      }
+      this.router.navigate(['/usuarios/usuarios', 'SIM']);
     }
   }
 

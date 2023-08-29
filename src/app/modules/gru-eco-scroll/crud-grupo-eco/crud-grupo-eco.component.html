@@ -3,6 +3,10 @@
   <mat-toolbar>
     <span class="example-spacer">Grp Econômicos: </span>
     <app-navegator [controle]="controlePaginas" (changePage)="onChangePage()"></app-navegator>
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+      (click)="getGruposContador()" matTooltip="Atualizar" matTooltipPosition="above">
+      <mat-icon>rotate_right</mat-icon>
+    </button>
     <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above"
       (click)="onSaveConfig()" matTooltip="Salvar Parâmetros" matTooltipPosition="above">
       <mat-icon>brightness_high</mat-icon>
@@ -10,10 +14,6 @@
     <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno"
       matTooltipPosition="above" (click)="onHome()">
       <mat-icon>home</mat-icon>
-    </button>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
-      (click)="getGruposContador()" matTooltip="Atualizar" matTooltipPosition="above">
-      <mat-icon>rotate_right</mat-icon>
     </button>
     <button mat-icon-button aria-label="Example icon-button with share icon "
       (click)="escolha(getAcoes()[ 'Inclusao']) " [matTooltip]="getTexto().incluir" matTooltipPosition="above">
@@ -65,7 +65,7 @@
         </div>
       </td>
       <td class="acoes">
-        <barra-acoes [EXCLUIR]="false" (changeOpcao)="escolha($event,grupo)"></barra-acoes>
+        <barra-acoes [BARRA_ATIVIDADES]="false" [EXCLUIR]="false" (changeOpcao)="escolha($event,grupo)"></barra-acoes>
       </td>
     </tr>
   </table>

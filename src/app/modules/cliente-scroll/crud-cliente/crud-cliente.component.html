@@ -90,7 +90,8 @@
         </div>
       </td>
       <td class="acoes">
-        <barra-acoes (changeOpcao)="escolha($event,cliente)"></barra-acoes>
+        <barra-acoes [BARRA_VERTICAL]="true" [BARRA_ATIVIDADES]="false" [EXCLUIR]="false"
+          (changeOpcao)="escolha($event,cliente)"></barra-acoes>
       </td>
     </tr>
   </table>

@@ -2,6 +2,7 @@
 <div class="div-barra">
   <mat-toolbar>
     <span class="example-spacer">Usuários: </span>
+    <app-navegator [controle]="controlePaginas" (changePage)="onChangePage()"></app-navegator>
     <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno"
       matTooltipPosition="above" (click)="onHome()">
       <mat-icon>home</mat-icon>
@@ -9,6 +10,10 @@
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
       (click)="getUsuarios()" matTooltip="Atualizar" matTooltipPosition="above">
       <mat-icon>rotate_right</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above"
+      (click)="onSaveConfig()" matTooltip="Salvar Parâmetros" matTooltipPosition="above">
+      <mat-icon>brightness_high</mat-icon>
     </button>
     <button mat-icon-button aria-label="Example icon-button with share icon "
       (click)="escolha(getAcoes()[ 'Inclusao']) " [matTooltip]="getTexto().incluir" matTooltipPosition="above">
@@ -48,6 +53,44 @@
     </mat-form-field>
   </form>
 </div>
+<cdk-virtual-scroll-viewport [itemSize]="50" class="content">
+  <table class="Browse-Scroll">
+    <tr class="coluna-cabec">
+      <th>Código</th>
+      <th>Razão</th>
+      <th>Grupo</th>
+      <th>E-Mail</th>
+      <th>AÇÕES</th>
+    </tr>
+    <tr *cdkVirtualFor="let usuario of usuarios">
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{usuario.id}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{usuario.razao}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{usuario.grupo}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td_medium">{{usuario.email}}</mat-label>
+        </div>
+      </td>
+      <td class="acoes">
+        <barra-acoes [BARRA_VERTICAL]="true" [BARRA_ATIVIDADES]="false" [EXCLUIR]="false"
+          (changeOpcao)="escolha($event,usuario)"></barra-acoes>
+      </td>
+    </tr>
+  </table>
+</cdk-virtual-scroll-viewport>
+<!--
 <div class="Browse">
   <div class="linha" *ngFor="let usuario of usuarios ; index as id">
     <mat-card class="example-card">
@@ -85,3 +128,4 @@
   </div>
 
 </div>
+-->

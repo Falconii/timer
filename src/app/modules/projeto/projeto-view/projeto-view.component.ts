@@ -134,8 +134,29 @@ export class ProjetoViewComponent implements OnInit {
     }
   }
 
+  onRetorno() {
+    const par = this.globalService.estadoFind('projeto');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = this.idAcao == CadastroAcoes.Inclusao ? true : false;
+      Object(config).id_retorno = this.projeto.id;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/projetos/projetos', 'SIM']);
+  }
+
   onCancel() {
-    this.router.navigate(['/projetos']);
+    const par = this.globalService.estadoFind('projeto');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = false;
+      Object(config).id_retorno =
+        this.idAcao == CadastroAcoes.Consulta ? this.projeto.id : 0;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/projetos/projetos', 'SIM']);
   }
 
   getProjeto() {
@@ -154,16 +175,6 @@ export class ProjetoViewComponent implements OnInit {
           );
         }
       );
-  }
-
-  setReadOnly(value: Boolean) {
-    /*
-  Posso fazer na criação tb
-  this.formGroupName = this.fb.group({
-    xyz: [{ value: '', disabled: true }, Validators.required]
-});
-*/
-    //this.formulario.get('grupo')?.disable({ onlySelf: true });
   }
 
   setValue() {
@@ -246,7 +257,8 @@ export class ProjetoViewComponent implements OnInit {
           .ProjetoInsert(this.projeto)
           .subscribe(
             async (data: ProjetoModel) => {
-              this.onCancel();
+              this.projeto.id = data.id;
+              this.onRetorno();
             },
             (error: any) => {
               this.appSnackBar.openFailureSnackBar(
@@ -262,7 +274,7 @@ export class ProjetoViewComponent implements OnInit {
           .ProjetoUpdate(this.projeto)
           .subscribe(
             async (data: any) => {
-              this.onCancel();
+              this.onRetorno();
             },
             (error: any) => {
               console.log('Error', error.error);
@@ -278,7 +290,7 @@ export class ProjetoViewComponent implements OnInit {
           .ProjetoDelete(this.projeto.id_empresa, this.projeto.id)
           .subscribe(
             async (data: any) => {
-              this.onCancel();
+              this.onRetorno();
             },
             (error: any) => {
               this.appSnackBar.openFailureSnackBar(
@@ -291,10 +303,6 @@ export class ProjetoViewComponent implements OnInit {
       default:
         break;
     }
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   getAcoes() {

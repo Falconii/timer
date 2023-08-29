@@ -52,12 +52,12 @@
           </button>
           <button mat-icon-button aria-label="Example icon-button with share icon "
             (click)="escolha(getAcoes()[ 'Edicao'],empresa) " [matTooltip]="getTexto().alterar"
-            matTooltipPosition="above">
+            matTooltipPosition="above" *ngIf="false">
             <mat-icon>edit</mat-icon>
           </button>
           <button mat-icon-button aria-label="Example icon-button with share icon "
             (click)="escolha(getAcoes()[ 'Exclusao'],empresa) " [matTooltip]="getTexto().incluir"
-            matTooltipPosition="above">
+            matTooltipPosition="above" *ngIf="false">
             <mat-icon>delete</mat-icon>
           </button>
         </span>

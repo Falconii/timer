@@ -17,12 +17,6 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
-    path: 'clientes',
-    loadChildren: () =>
-      import('./modules/cliente/cliente.module').then((m) => m.ClienteModule),
-    canActivate: [DiganaoGuard],
-  },
-  {
     path: 'usuarios',
     loadChildren: () =>
       import('./modules/usuario/usuario.module').then((m) => m.UsuarioModule),
@@ -33,6 +27,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/usuario/usuario.module').then((m) => m.UsuarioModule),
     canActivate: [DiganaoGuard],
+  },
+  {
+    path: 'clientes',
+    loadChildren: () =>
+      import('./modules/cliente/cliente.module').then((m) => m.ClienteModule),
+    canActivate: [],
   },
   {
     path: 'economicos',

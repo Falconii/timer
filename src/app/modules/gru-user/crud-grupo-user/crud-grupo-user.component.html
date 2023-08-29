@@ -2,13 +2,18 @@
 <div class="div-barra">
   <mat-toolbar>
     <span class="example-spacer">Grp de Usuários: </span>
-    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno"
-      matTooltipPosition="above" (click)="onHome()">
-      <mat-icon>home</mat-icon>
-    </button>
+    <app-navegator [controle]="controlePaginas" (changePage)="onChangePage()"></app-navegator>
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="getGrupos()"
       matTooltip="Atualizar" matTooltipPosition="above">
       <mat-icon>rotate_right</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above"
+      (click)="onSaveConfig()" matTooltip="Salvar Parâmetros" matTooltipPosition="above">
+      <mat-icon>brightness_high</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno"
+      matTooltipPosition="above" (click)="onHome()">
+      <mat-icon>home</mat-icon>
     </button>
     <button mat-icon-button aria-label="Example icon-button with share icon "
       (click)="escolha(getAcoes()[ 'Inclusao']) " [matTooltip]="getTexto().incluir" matTooltipPosition="above">
@@ -36,10 +41,37 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="col-max column-span-2">
       <mat-label>Descrição</mat-label>
-      <input matInput formControlName="filtro">
+      <input matInput formControlName="filtro" oninput="this.value = this.value.toUpperCase()">
     </mat-form-field>
   </form>
 </div>
+
+<cdk-virtual-scroll-viewport [itemSize]="50" class="content">
+  <table class="Browse-Scroll">
+    <tr class="coluna-cabec">
+      <th>Cod.</th>
+      <th>Descrição</th>
+      <th>AÇÕES</th>
+    </tr>
+    <tr *cdkVirtualFor="let grupo of grupos ">
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{grupo.id}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{grupo.grupo}}</mat-label>
+        </div>
+      </td>
+      <td class="acoes">
+        <barra-acoes [BARRA_VERTICAL]="true" [BARRA_ATIVIDADES]="false" [EXCLUIR]="false"
+          (changeOpcao)="escolha($event,grupo)"></barra-acoes>
+      </td>
+    </tr>
+  </table>
+</cdk-virtual-scroll-viewport>
+<!--
 <div class="Browse">
   <div class="linha" *ngFor="let grupo of grupos ; index as id">
     <mat-card class="example-card" (click)="escolha(getAcoes()['Consulta'],grupo)">
@@ -68,3 +100,4 @@
   </div>
 
 </div>
+-->

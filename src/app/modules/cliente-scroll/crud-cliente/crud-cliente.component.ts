@@ -248,13 +248,13 @@ export class CrudClienteComponent implements OnInit {
       } else {
         par.id = key;
       }
-      if (this.parametros.value.campo == 'Razão')
-        par.razao = this.parametros.value.filtro.toUpperCase();
-      if (this.parametros.value.campo == 'Grupo')
-        par.grupo = this.parametros.value.grupo;
-
-      par.orderby = this.parametros.value.ordenacao;
     }
+    if (this.parametros.value.campo == 'Razão')
+      par.razao = this.parametros.value.filtro.toUpperCase();
+    if (this.parametros.value.campo == 'Grupo')
+      par.grupo = this.parametros.value.grupo;
+
+    par.orderby = this.parametros.value.ordenacao;
 
     par.contador = 'S';
 
@@ -268,7 +268,7 @@ export class CrudClienteComponent implements OnInit {
           this.globalService.setSpin(false);
           this.controlePaginas = new ControlePaginas(
             this.tamPagina,
-            data.total
+            data.total == 0 ? 1 : data.total
           );
           //atualiza com o parametro
           if (this.retorno)
@@ -315,6 +315,128 @@ export class CrudClienteComponent implements OnInit {
           );
         }
       );
+  }
+
+  isGrupo(): Boolean {
+    if (this.parametros.value.campo == 'Grupo') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  setValues() {
+    this.parametros.setValue({
+      ordenacao:
+        this.opcoesOrdenacao[
+          GetValueJsonNumber(this.parametro.getParametro(), 'op_ordenacao')
+        ],
+      campo:
+        this.opcoesCampo[
+          GetValueJsonNumber(this.parametro.getParametro(), 'op_pesquisar')
+        ],
+      filtro: GetValueJsonString(this.parametro.getParametro(), 'descricao'),
+      grupo: 1,
+    });
+  }
+
+  getTexto() {
+    return MensagensBotoes;
+  }
+
+  onChangePage() {
+    this.getClientes();
+  }
+
+  onChangeParametros() {
+    this.getClientesContador();
+  }
+  onHome() {
+    this.router.navigate(['']);
+  }
+
+  onShowCliente(cliente: any): void {
+    this.openShowClienteDialog(cliente);
+  }
+
+  openShowClienteDialog(cliente: ClientesQuery01Model) {
+    const data: ShowClienteDialogData = new ShowClienteDialogData();
+    data.cliente = cliente;
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.id = 'show-cliente';
+    dialogConfig.data = data;
+    const modalDialog = this.showClienteDialog
+      .open(ShowClienteDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: ShowClienteDialogData) => {});
+  }
+
+  /* rotinas dos parametros e scroll */
+
+  onSaveConfig() {
+    this.updateParametros();
+  }
+
+  loadParametros() {
+    this.parametro = new ParametroModel();
+    this.parametro.id_empresa = this.globalService.getIdEmpresa();
+    this.parametro.modulo = 'cliente';
+    this.parametro.assinatura = 'V1.00 26/08/23';
+    this.parametro.id_usuario = this.globalService.usuario.id;
+    this.parametro.parametro = `
+    {
+      "op_ordenacao": 0,
+      "ordenacao": ["Código", "Razão", "Grupo"],
+      "op_pesquisar": 1,
+      "pesquisar": ["Código", "Razão", "Grupo"],
+      "descricao": "",
+      "page": 1,
+      "new": false,
+      "id_retorno":0
+    }`;
+
+    this.opcoesOrdenacao = GetValueJsonStringArray(
+      this.parametro.getParametro(),
+      'ordenacao'
+    );
+    this.opcoesCampo = GetValueJsonStringArray(
+      this.parametro.getParametro(),
+      'pesquisar'
+    );
+    if (this.retorno && this.globalService.estadoFind('cliente') !== null) {
+      const par = this.globalService.estadoFind('cliente');
+      if (par != null) {
+        if (GetValueJsonBoolean(par.getParametro(), 'new')) {
+          let config = this.parametro.getParametro();
+          Object(config).id_retorno = GetValueJsonNumber(
+            par.getParametro(),
+            'id_retorno'
+          );
+          this.parametro.parametro = JSON.stringify(config);
+          this.setPosicaoInclusao();
+        } else {
+          this.controlePaginas.setPaginaAtual(
+            GetValueJsonNumber(par.getParametro(), 'page')
+          );
+          this.parametro.setParametro(par.getParametro());
+        }
+        this.globalService.estadoDelete(par);
+        this.setValues();
+      }
+    } else {
+      this.getParametro();
+    }
+  }
+
+  setPosicaoInclusao() {
+    const config = this.parametro.getParametro();
+    Object(config).op_ordenacao = 0;
+    Object(config).op_pesquisar = 0;
+    Object(config).descricao = '';
+    Object(config).new = true;
+    this.parametro.setParametro(config);
   }
 
   getParametro() {
@@ -385,127 +507,5 @@ export class CrudClienteComponent implements OnInit {
           );
         }
       );
-  }
-
-  isGrupo(): Boolean {
-    if (this.parametros.value.campo == 'Grupo') {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  setValues() {
-    this.parametros.setValue({
-      ordenacao:
-        this.opcoesOrdenacao[
-          GetValueJsonNumber(this.parametro.getParametro(), 'op_ordenacao')
-        ],
-      campo:
-        this.opcoesCampo[
-          GetValueJsonNumber(this.parametro.getParametro(), 'op_pesquisar')
-        ],
-      filtro: GetValueJsonString(this.parametro.getParametro(), 'descricao'),
-      grupo: 1,
-    });
-  }
-
-  getTexto() {
-    return MensagensBotoes;
-  }
-
-  onChangePage() {
-    this.getClientes();
-  }
-
-  onChangeParametros() {
-    this.getClientesContador();
-  }
-  onHome() {
-    this.router.navigate(['']);
-  }
-
-  onShowCliente(cliente: any): void {
-    this.openShowClienteDialog(cliente);
-  }
-
-  openShowClienteDialog(cliente: ClientesQuery01Model) {
-    const data: ShowClienteDialogData = new ShowClienteDialogData();
-    data.cliente = cliente;
-
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.id = 'show-cliente';
-    dialogConfig.data = data;
-    const modalDialog = this.showClienteDialog
-      .open(ShowClienteDialogComponent, dialogConfig)
-      .beforeClosed()
-      .subscribe((data: ShowClienteDialogData) => {});
-  }
-
-  onSaveConfig() {
-    this.updateParametros();
-  }
-
-  /* rotinas dos parametros */
-
-  loadParametros() {
-    this.parametro = new ParametroModel();
-    this.parametro.id_empresa = this.globalService.getIdEmpresa();
-    this.parametro.modulo = 'cliente';
-    this.parametro.assinatura = 'V1.00 26/08/23';
-    this.parametro.id_usuario = this.globalService.usuario.id;
-    this.parametro.parametro = `
-    {
-      "op_ordenacao": 0,
-      "ordenacao": ["Código", "Razão", "Grupo"],
-      "op_pesquisar": 1,
-      "pesquisar": ["Código", "Razão", "Grupo"],
-      "descricao": "",
-      "page": 1,
-      "new": false,
-      "id_retorno":0
-    }`;
-
-    this.opcoesOrdenacao = GetValueJsonStringArray(
-      this.parametro.getParametro(),
-      'ordenacao'
-    );
-    this.opcoesCampo = GetValueJsonStringArray(
-      this.parametro.getParametro(),
-      'pesquisar'
-    );
-    if (this.retorno && this.globalService.estadoFind('cliente') !== null) {
-      const par = this.globalService.estadoFind('cliente');
-      if (par != null) {
-        if (GetValueJsonBoolean(par.getParametro(), 'new')) {
-          let config = this.parametro.getParametro();
-          Object(config).id_retorno = GetValueJsonNumber(
-            par.getParametro(),
-            'id_retorno'
-          );
-          this.parametro.parametro = JSON.stringify(config);
-          this.setPosicaoInclusao();
-        } else {
-          this.controlePaginas.setPaginaAtual(
-            GetValueJsonNumber(par.getParametro(), 'page')
-          );
-          this.parametro.setParametro(par.getParametro());
-        }
-        this.globalService.estadoDelete(par);
-        this.setValues();
-      }
-    } else {
-      this.getParametro();
-    }
-  }
-
-  setPosicaoInclusao() {
-    const config = this.parametro.getParametro();
-    Object(config).op_ordenacao = 0;
-    Object(config).op_pesquisar = 0;
-    Object(config).descricao = '';
-    Object(config).new = true;
-    this.parametro.setParametro(config);
   }
 }

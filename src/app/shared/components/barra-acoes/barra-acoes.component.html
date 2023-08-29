@@ -27,4 +27,19 @@
     (click)="onChangeOpcao(getAcoes().Exclusao)" matTooltipPosition="above">
     <mat-icon class="icon-size">delete</mat-icon>
   </button>
+  <button mat-icon-button [matMenuTriggerFor]="appMenu" aria-label="Example icon-button with share icon " *ngIf="barra">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #appMenu="matMenu">
+    <ng-template matMenuContent>
+      <button mat-menu-item (click)="onChangeOpcao(getAcoes().Exclusao)" *ngIf="barra_excluir">
+        <mat-icon>delete</mat-icon>
+        <span>{{getTexto().excluir}}</span>
+      </button>
+      <button mat-menu-item (click)="onChangeOpcao(99)" *ngIf="barra_atividades">
+        <mat-icon>assignment</mat-icon>
+        <span>Anexar Atividades</span>
+      </button>
+    </ng-template>
+  </mat-menu>
 </div>

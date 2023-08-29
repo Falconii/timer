@@ -14,6 +14,9 @@ export class BarraAcoesComponent implements OnInit {
   @Input('CONSULTAR') consulta: boolean = true;
   @Input('ALTERAR') alterar: boolean = true;
   @Input('EXCLUIR') excluir: boolean = true;
+  @Input('BARRA_VERTICAL') barra: boolean = false;
+  @Input('BARRA_EXCLUIR') barra_excluir: boolean = true;
+  @Input('BARRA_ATIVIDADES') barra_atividades: boolean = true;
 
   @Output('changeOpcao') changeOpcao = new EventEmitter<number>();
 

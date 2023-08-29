@@ -12,6 +12,7 @@ import { OpcoesGuard } from 'src/app/guards/opcoes.guard';
 const routes: Routes = [
   { path: '', redirectTo: 'projetos', pathMatch: 'full' },
   { path: 'projetos', component: CrudProjetoComponent },
+  { path: 'projetos/:retorno', component: CrudProjetoComponent },
   {
     path: 'projeto/:id_empresa/:id/:acao',
     component: ProjetoViewComponent,

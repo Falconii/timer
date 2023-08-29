@@ -36,6 +36,7 @@ import { AnexarV2Component } from './anexar-v2/anexar-v2.component';
     ProjetoRoutingModule,
     MaterialModule,
     FormsModule,
+    ScrollingModule,
     ReactiveFormsModule,
     SharedModule,
     NgxMaskModule.forChild(),

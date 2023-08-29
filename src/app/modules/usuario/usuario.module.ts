@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 import { MaterialModule } from 'src/app/material/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [CrudUsuarioComponent, UsuarioViewComponent],
@@ -17,6 +18,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     UsuarioRoutingModule,
     MaterialModule,
     FormsModule,
+    ScrollingModule,
     ReactiveFormsModule,
     SharedModule,
     NgxMaskModule.forChild(),

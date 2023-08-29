@@ -230,7 +230,7 @@ export class CrudGrupoEcoComponent implements OnInit {
           this.globalService.setSpin(false);
           this.controlePaginas = new ControlePaginas(
             this.tamPagina,
-            data.total
+            data.total == 0 ? 1 : data.total
           );
           //atualiza com o parametro
           if (this.retorno)

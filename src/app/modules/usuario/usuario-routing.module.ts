@@ -13,6 +13,10 @@ const routes: Routes = [
     component: CrudUsuarioComponent,
   },
   {
+    path: 'usuarios/:retorno',
+    component: CrudUsuarioComponent,
+  },
+  {
     path: 'usuario/:id_empresa/:id/:acao',
     component: UsuarioViewComponent,
     canActivate: [OpcoesGuard],

@@ -8,6 +8,7 @@ import { MaterialModule } from 'src/app/material/material.module';
 import { GruUserViewComponent } from './gru-user-view/gru-user-view.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CrudGrupoUserComponent } from './crud-grupo-user/crud-grupo-user.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [CrudGrupoUserComponent, GruUserViewComponent],
@@ -16,6 +17,7 @@ import { CrudGrupoUserComponent } from './crud-grupo-user/crud-grupo-user.compon
     GruUserRoutingModule,
     MaterialModule,
     FormsModule,
+    ScrollingModule,
     ReactiveFormsModule,
     SharedModule,
     NgxMaskModule.forChild(),

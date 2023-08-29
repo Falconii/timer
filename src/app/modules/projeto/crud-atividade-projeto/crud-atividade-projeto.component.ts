@@ -790,7 +790,15 @@ export class CrudAtividadeProjetoComponent implements OnInit {
   }
 
   onRetorno() {
-    this.router.navigate(['/projetos']);
+    const par = this.globalService.estadoFind('projeto');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = this.idAcao == CadastroAcoes.Inclusao ? true : false;
+      Object(config).id_retorno = this.projeto.id;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/projetos/projetos', 'SIM']);
   }
 
   onDesanexar(atividade: AtividadeQuery_01Model) {

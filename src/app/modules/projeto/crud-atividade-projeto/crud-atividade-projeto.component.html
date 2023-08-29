@@ -38,8 +38,8 @@
         </button>
       </mat-menu>
     </section>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="onRetorno()"
-      *ngIf="idAcao == 99">
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Retorno"
+      matTooltipPosition="above" (click)="onRetorno()" *ngIf="idAcao == 99">
       <mat-icon>arrow_back</mat-icon>
     </button>
   </mat-toolbar>

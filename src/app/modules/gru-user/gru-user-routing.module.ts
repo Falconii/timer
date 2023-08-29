@@ -7,6 +7,7 @@ import { OpcoesGuard } from 'src/app/guards/opcoes.guard';
 const routes: Routes = [
   { path: '', redirectTo: 'users', pathMatch: 'full' },
   { path: 'users', component: CrudGrupoUserComponent },
+  { path: 'users:/retorno', component: CrudGrupoUserComponent },
   {
     path: 'user/:id_empresa/:id/:acao',
     component: GruUserViewComponent,
