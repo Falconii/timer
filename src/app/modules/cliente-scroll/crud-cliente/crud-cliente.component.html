@@ -7,8 +7,12 @@
       (click)="getClientesContador()" matTooltip="Atualizar" matTooltipPosition="above">
       <mat-icon>rotate_right</mat-icon>
     </button>
-    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Retorno"
-      matTooltipPosition="above" (click)="onHome()" matTooltip="Retorno" matTooltipPosition="above">
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above"
+      (click)="onSaveConfig()" matTooltip="Salvar Parâmetros" matTooltipPosition="above">
+      <mat-icon>brightness_high</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above"
+      (click)="onHome()" matTooltip="Retorno" matTooltipPosition="above">
       <mat-icon>home</mat-icon>
     </button>
     <button mat-icon-button aria-label="Example icon-button with share icon "
@@ -21,7 +25,7 @@
   <form [formGroup]="parametros" autocomplete="off" class="col-med-4">
     <mat-form-field field appearance="outline" class="col-max">
       <mat-label>Ordenação</mat-label>
-      <mat-select formControlName="ordenacao">
+      <mat-select formControlName="ordenacao" (selectionChange)="onChangeParametros()">
         <mat-option *ngFor="let op of opcoesOrdenacao" [value]="op">
           {{op}}
         </mat-option>
@@ -29,7 +33,7 @@
     </mat-form-field>
     <mat-form-field field appearance="outline" class="col-max">
       <mat-label>Pesquisar Por</mat-label>
-      <mat-select formControlName="campo">
+      <mat-select formControlName="campo" (selectionChange)="onChangeParametros()">
         <mat-option *ngFor="let op of opcoesCampo" [value]="op">
           {{op}}
         </mat-option>
@@ -37,7 +41,7 @@
     </mat-form-field>
     <mat-form-field field appearance="outline" class="col-max column-span-2" *ngIf="isGrupo()">
       <mat-label>Pesquisar Por</mat-label>
-      <mat-select formControlName="grupo">
+      <mat-select formControlName="grupo" (selectionChange)="onChangeParametros()">
         <mat-option *ngFor="let gru of grupos" [value]="gru.id">
           {{gru.razao}}
         </mat-option>
@@ -45,13 +49,9 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="col-max column-span-2" *ngIf="!isGrupo()">
       <mat-label>Descrição</mat-label>
-      <input matInput formControlName="filtro">
+      <input matInput formControlName="filtro" oninput="this.value = this.value.toUpperCase()">
     </mat-form-field>
   </form>
-</div>
-<div class="button-container-right">
-  <mat-label>{{getLenPar()}}</mat-label>
-  <mat-label class="blue-icon" (click)="onSaveConfig()">Gravar Configuração</mat-label>
 </div>
 <cdk-virtual-scroll-viewport [itemSize]="50" class="content">
   <table class="Browse-Scroll">
@@ -81,7 +81,7 @@
       </td>
       <td>
         <div>
-          <mat-label class="Browse_Lanc_td">{{cliente.cnpj_cpf}}</mat-label>
+          <mat-label class="Browse_Lanc_td">{{cliente.cnpj_cpf | cnpjcpf}}</mat-label>
         </div>
       </td>
       <td>

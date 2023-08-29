@@ -35,6 +35,7 @@ import { ParamAuditorComponent } from './components/param-auditor/param-auditor.
 import { ParamCoordenadorComponent } from './components/param-coordenador/param-coordenador.component';
 import { ParamDiretorComponent } from './components/param-diretor/param-diretor.component';
 import { BarraAcoesComponent } from './components/barra-acoes/barra-acoes.component';
+import { CnpjCpfPipe } from './pipes/cnpj-cpf.pipe';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { BarraAcoesComponent } from './components/barra-acoes/barra-acoes.compon
     AtivoPipe,
     SpinsComponent,
     SpinApontamentosComponent,
+    CnpjCpfPipe,
     ProgressBarComponent,
     QuestionDialogComponent,
     JustificativaRespexecDialogComponent,
@@ -85,6 +87,7 @@ import { BarraAcoesComponent } from './components/barra-acoes/barra-acoes.compon
     VersaoPipe,
     SoHorasPipe,
     AtivoPipe,
+    CnpjCpfPipe,
     SituacaoPadraoPipe,
     SharedNavegatorComponent,
     CelCalendarComponent,

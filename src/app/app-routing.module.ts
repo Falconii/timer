@@ -155,6 +155,14 @@ const routes: Routes = [
     canActivate: [],
   },
   {
+    path: 'economicos-scroll',
+    loadChildren: () =>
+      import('./modules/gru-eco-scroll/gru-eco-scroll.module').then(
+        (m) => m.GruEcoScrollModule
+      ),
+    canActivate: [],
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },

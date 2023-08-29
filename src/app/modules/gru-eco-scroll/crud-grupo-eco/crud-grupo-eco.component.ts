@@ -1,28 +1,5 @@
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  NgZone,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { ClientesQuery01Model } from 'src/app/Models/cliente-query_01-model';
-import { GrupoEcoModel } from 'src/app/Models/gru-eco-models';
-import { ParametroModel } from 'src/app/Models/parametro-model';
-import { ParametroCliente01 } from 'src/app/parametros/parametro-cliente-01';
-import { ParametroGrupoEco01 } from 'src/app/parametros/parametro-grupo-eco01';
-import { ParametroParametro01 } from 'src/app/parametros/parametro-parametro01';
-import { ClientesService } from 'src/app/services/clientes.service';
-import { GlobalService } from 'src/app/services/global.service';
-import { GrupoEconomicoService } from 'src/app/services/grupo-economico.service';
 import { ParametrosService } from 'src/app/services/parametros.service';
-import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
-import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
-import { ControlePaginas } from 'src/app/shared/classes/controle-paginas';
+import { GlobalService } from './../../../services/global.service';
 import {
   GetValueJsonBoolean,
   GetValueJsonNumber,
@@ -31,24 +8,31 @@ import {
   MensagensBotoes,
   messageError,
 } from 'src/app/shared/classes/util';
-import { ShowClienteDialogData } from 'src/app/shared/components/show-cliente-dialog/show-cliente-dialog-data';
-import { ShowClienteDialogComponent } from 'src/app/shared/components/show-cliente-dialog/show-cliente-dialog.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ParametroGrupoEco01 } from 'src/app/parametros/parametro-grupo-eco01';
+import { GrupoEcoModel } from 'src/app/Models/gru-eco-models';
+import { GrupoEconomicoService } from 'src/app/services/grupo-economico.service';
+import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
+import { ControlePaginas } from 'src/app/shared/classes/controle-paginas';
+import { ParametroModel } from 'src/app/Models/parametro-model';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { ParametroParametro01 } from 'src/app/parametros/parametro-parametro01';
 
 @Component({
-  selector: 'app-crud-cliente',
-  templateUrl: './crud-cliente.component.html',
-  styleUrls: ['./crud-cliente.component.css'],
+  selector: 'app-crud-grupo-eco',
+  templateUrl: './crud-grupo-eco.component.html',
+  styleUrls: ['./crud-grupo-eco.component.css'],
 })
-export class CrudClienteComponent implements OnInit {
+export class CrudGrupoEcoComponent implements OnInit {
   @ViewChild(CdkVirtualScrollViewport) viewPort!: CdkVirtualScrollViewport;
-
   inscricaoGetAll!: Subscription;
   inscricaoGetFiltro!: Subscription;
-  inscricaoGetGrupo!: Subscription;
-  inscricaoRota!: Subscription;
   inscricaoParametro!: Subscription;
-
-  clientes: ClientesQuery01Model[] = [];
+  inscricaoRota!: Subscription;
 
   grupos: GrupoEcoModel[] = [];
 
@@ -56,9 +40,9 @@ export class CrudClienteComponent implements OnInit {
 
   erro: string = '';
 
-  opcoesOrdenacao: string[] = [];
+  opcoesOrdenacao = ['Código', 'Razão'];
 
-  opcoesCampo: string[] = [];
+  opcoesCampo = ['Código', 'Razão'];
 
   tamPagina = 50;
 
@@ -70,70 +54,45 @@ export class CrudClienteComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private clientesServices: ClientesService,
     private grupoEconomicoService: GrupoEconomicoService,
-    private globalService: GlobalService,
     private router: Router,
-    private appSnackBar: AppSnackbar,
-    public showClienteDialog: MatDialog,
-    public parametrosService: ParametrosService,
     private route: ActivatedRoute,
-    private ngZone: NgZone
+    private appSnackBar: AppSnackbar,
+    private globalService: GlobalService,
+    private parametrosService: ParametrosService
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
       campo: [null],
       filtro: [null],
-      grupo: [],
     });
     this.inscricaoRota = route.params.subscribe((params: any) => {
       if (typeof params.retorno == 'undefined') {
         this.retorno = false;
       } else {
         this.retorno = true;
-        const par = this.globalService.estadoFind('cliente');
+        const par = this.globalService.estadoFind('economico');
       }
     });
     this.loadParametros();
-    this.getGrupos();
   }
 
   ngOnInit(): void {
-    this.getClientesContador();
-  }
-
-  ngAfterViewInit(): void {
-    //this.viewPort.scrollToIndex(10, 'smooth');
-    /*
-    this.viewPort
-      .elementScrolled()
-      .pipe(
-        new Map(() => this.viewPort.measureScrollOffset('bottom')),
-        pairwise(),
-        filter(([y1, y2]) => y2 < y1 && y2 < 140),
-        throttleTime(200)
-      )
-      .subscribe(() => {
-        this.ngZone.run(() => {
-          this.fetchMore();
-        });
-      });
-      */
+    this.getGruposContador();
   }
 
   ngOnDestroy() {
     this.inscricaoGetAll?.unsubscribe();
     this.inscricaoGetFiltro?.unsubscribe();
-    this.inscricaoGetGrupo?.unsubscribe();
-    this.inscricaoRota?.unsubscribe();
     this.inscricaoParametro?.unsubscribe();
+    this.inscricaoRota?.unsubscribe();
   }
 
-  escolha(opcao: number, cliente?: ClientesQuery01Model) {
-    if (typeof cliente !== 'undefined') {
+  escolha(opcao: number, grupo?: GrupoEcoModel) {
+    if (typeof grupo !== 'undefined') {
       let config = this.parametro.getParametro();
       Object(config).new = false;
-      Object(config).id_retorno = cliente.id;
+      Object(config).id_retorno = grupo.id;
       Object(config).page = this.controlePaginas.getPaginalAtual();
       Object(config).op_ordenacao = this.opcoesOrdenacao.findIndex(
         (op) => this.parametros.value.ordenacao == op
@@ -145,9 +104,9 @@ export class CrudClienteComponent implements OnInit {
       this.parametro.parametro = JSON.stringify(config);
       this.globalService.estadoSave(this.parametro);
       this.router.navigate([
-        '/clientes-scroll/cliente-scroll',
-        cliente.id_empresa,
-        cliente.id,
+        '/economicos-scroll/economico-scroll',
+        grupo.id_empresa,
+        grupo.id,
         opcao,
       ]);
     } else {
@@ -164,7 +123,12 @@ export class CrudClienteComponent implements OnInit {
       Object(config).descricao = this.parametros.value.filtro;
       this.parametro.parametro = JSON.stringify(config);
       this.globalService.estadoSave(this.parametro);
-      this.router.navigate(['/clientes-scroll/cliente-scroll', 1, 0, opcao]);
+      this.router.navigate([
+        '/economicos-scroll/economico-scroll',
+        1,
+        0,
+        opcao,
+      ]);
     }
   }
 
@@ -172,13 +136,16 @@ export class CrudClienteComponent implements OnInit {
     return CadastroAcoes;
   }
 
-  getClientes() {
-    let par = new ParametroCliente01();
+  getGrupos() {
+    let par = new ParametroGrupoEco01();
 
-    par.id_empresa = this.globalService.getIdEmpresa();
+    par.id_empresa = 1;
 
     if (this.parametros.value.campo == 'Código') {
       let key = parseInt(this.parametros.value.filtro, 10);
+
+      console.log('key', key);
+
       if (isNaN(key)) {
         par.id = 0;
       } else {
@@ -187,8 +154,6 @@ export class CrudClienteComponent implements OnInit {
     }
     if (this.parametros.value.campo == 'Razão')
       par.razao = this.parametros.value.filtro.toUpperCase();
-    if (this.parametros.value.campo == 'Grupo')
-      par.grupo = this.parametros.value.grupo;
 
     par.orderby = this.parametros.value.ordenacao;
 
@@ -199,14 +164,13 @@ export class CrudClienteComponent implements OnInit {
     par.tamPagina = this.tamPagina;
 
     this.globalService.setSpin(true);
-    this.inscricaoGetFiltro = this.clientesServices
-      .getClientes_01(par)
+    this.inscricaoGetFiltro = this.grupoEconomicoService
+      .getGrupoEcos_01(par)
       .subscribe(
-        (data: ClientesQuery01Model[]) => {
+        (data: GrupoEcoModel[]) => {
           this.globalService.setSpin(false);
-          this.clientes = [];
-          this.clientes = data;
-          const idx = this.clientes.findIndex(
+          this.grupos = data;
+          const idx = this.grupos.findIndex(
             (cli) =>
               cli.id ==
               GetValueJsonNumber(this.parametro.getParametro(), 'id_retorno')
@@ -224,17 +188,17 @@ export class CrudClienteComponent implements OnInit {
           Object(config).new = false;
           this.retorno = false;
           this.globalService.setSpin(false);
-          this.clientes = [];
+          this.grupos = [];
           this.appSnackBar.openFailureSnackBar(
-            `Pesquisa Nos Clientes ${messageError(error)}`,
+            `Pesquisa Nos Grupos Econômicos ${messageError(error)}`,
             'OK'
           );
         }
       );
   }
 
-  getClientesContador() {
-    let par = new ParametroCliente01();
+  getGruposContador() {
+    let par = new ParametroGrupoEco01();
 
     par.id_empresa = 1;
 
@@ -248,21 +212,19 @@ export class CrudClienteComponent implements OnInit {
       } else {
         par.id = key;
       }
-      if (this.parametros.value.campo == 'Razão')
-        par.razao = this.parametros.value.filtro.toUpperCase();
-      if (this.parametros.value.campo == 'Grupo')
-        par.grupo = this.parametros.value.grupo;
-
-      par.orderby = this.parametros.value.ordenacao;
     }
+    if (this.parametros.value.campo == 'Razão')
+      par.razao = this.parametros.value.filtro.toUpperCase();
+
+    par.orderby = this.parametros.value.ordenacao;
 
     par.contador = 'S';
 
     par.tamPagina = this.tamPagina;
 
     this.globalService.setSpin(true);
-    this.inscricaoGetFiltro = this.clientesServices
-      .getClientes_01_C(par)
+    this.inscricaoGetFiltro = this.grupoEconomicoService
+      .getGrupoEcos_01(par)
       .subscribe(
         (data: any) => {
           this.globalService.setSpin(false);
@@ -279,38 +241,13 @@ export class CrudClienteComponent implements OnInit {
               //'É inclusao ',
               this.controlePaginas.goLast();
             }
-          this.getClientes();
+          this.getGrupos();
         },
         (error: any) => {
           this.globalService.setSpin(false);
           this.controlePaginas = new ControlePaginas(this.tamPagina, 0);
           this.appSnackBar.openFailureSnackBar(
-            `Pesquisa Nos Clientes ${messageError(error)}`,
-            'OK'
-          );
-        }
-      );
-  }
-
-  getGrupos() {
-    let par = new ParametroGrupoEco01();
-    par.id_empresa = this.globalService.getIdEmpresa();
-    par.pagina = 0;
-    par.orderby = 'Razão';
-    this.globalService.setSpin(true);
-    this.inscricaoGetGrupo = this.grupoEconomicoService
-      .getGrupoEcos_01(par)
-      .subscribe(
-        (data: GrupoEcoModel[]) => {
-          this.globalService.setSpin(false);
-          this.grupos = data;
-        },
-        (error: any) => {
-          this.globalService.setSpin(false);
-          this.erro = error;
-          this.grupos = [];
-          this.appSnackBar.openFailureSnackBar(
-            `Falha Nos Grupos Ecônomicos ${messageError(error)}`,
+            `Pesquisa Nos Grupos Econômicos ${messageError(error)}`,
             'OK'
           );
         }
@@ -329,6 +266,7 @@ export class CrudClienteComponent implements OnInit {
       .getParametrosParametro01(par)
       .subscribe(
         (data: ParametroModel[]) => {
+          console.log('achei...', data);
           this.globalService.setSpin(false);
           this.parametro = new ParametroModel();
           this.parametro.id_empresa = data[0].id_empresa;
@@ -387,14 +325,6 @@ export class CrudClienteComponent implements OnInit {
       );
   }
 
-  isGrupo(): Boolean {
-    if (this.parametros.value.campo == 'Grupo') {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   setValues() {
     this.parametros.setValue({
       ordenacao:
@@ -406,7 +336,6 @@ export class CrudClienteComponent implements OnInit {
           GetValueJsonNumber(this.parametro.getParametro(), 'op_pesquisar')
         ],
       filtro: GetValueJsonString(this.parametro.getParametro(), 'descricao'),
-      grupo: 1,
     });
   }
 
@@ -415,32 +344,15 @@ export class CrudClienteComponent implements OnInit {
   }
 
   onChangePage() {
-    this.getClientes();
+    this.getGrupos();
   }
 
   onChangeParametros() {
-    this.getClientesContador();
+    this.getGruposContador();
   }
+
   onHome() {
     this.router.navigate(['']);
-  }
-
-  onShowCliente(cliente: any): void {
-    this.openShowClienteDialog(cliente);
-  }
-
-  openShowClienteDialog(cliente: ClientesQuery01Model) {
-    const data: ShowClienteDialogData = new ShowClienteDialogData();
-    data.cliente = cliente;
-
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.id = 'show-cliente';
-    dialogConfig.data = data;
-    const modalDialog = this.showClienteDialog
-      .open(ShowClienteDialogComponent, dialogConfig)
-      .beforeClosed()
-      .subscribe((data: ShowClienteDialogData) => {});
   }
 
   onSaveConfig() {
@@ -452,15 +364,15 @@ export class CrudClienteComponent implements OnInit {
   loadParametros() {
     this.parametro = new ParametroModel();
     this.parametro.id_empresa = this.globalService.getIdEmpresa();
-    this.parametro.modulo = 'cliente';
+    this.parametro.modulo = 'economico';
     this.parametro.assinatura = 'V1.00 26/08/23';
     this.parametro.id_usuario = this.globalService.usuario.id;
     this.parametro.parametro = `
     {
       "op_ordenacao": 0,
-      "ordenacao": ["Código", "Razão", "Grupo"],
+      "ordenacao": ["Código", "Razão"],
       "op_pesquisar": 1,
-      "pesquisar": ["Código", "Razão", "Grupo"],
+      "pesquisar": ["Código", "Razão"],
       "descricao": "",
       "page": 1,
       "new": false,
@@ -475,8 +387,8 @@ export class CrudClienteComponent implements OnInit {
       this.parametro.getParametro(),
       'pesquisar'
     );
-    if (this.retorno && this.globalService.estadoFind('cliente') !== null) {
-      const par = this.globalService.estadoFind('cliente');
+    if (this.retorno && this.globalService.estadoFind('economico') !== null) {
+      const par = this.globalService.estadoFind('economico');
       if (par != null) {
         if (GetValueJsonBoolean(par.getParametro(), 'new')) {
           let config = this.parametro.getParametro();
