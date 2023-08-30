@@ -67,7 +67,7 @@ export class UsuariosService {
   }
 
   getGruposAuditor(): number[] {
-    return [902];
+    return [902, 906];
   }
 
   getGruposTrainee(): number[] {

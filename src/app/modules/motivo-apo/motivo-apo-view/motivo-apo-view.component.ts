@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
+import { messageError } from 'src/app/shared/classes/util';
 
 @Component({
   selector: 'app-motivo-apo-view',
@@ -37,8 +38,6 @@ export class MotivoApoViewComponent implements OnInit {
   inscricaoGet!: Subscription;
   inscricaoRota!: Subscription;
   inscricaoAcao!: Subscription;
-
-  durationInSeconds = 2;
 
   labelCadastro: string = '';
 
@@ -119,8 +118,29 @@ export class MotivoApoViewComponent implements OnInit {
     }
   }
 
+  onRetorno() {
+    const par = this.globalService.estadoFind('motivo');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = this.idAcao == CadastroAcoes.Inclusao ? true : false;
+      Object(config).id_retorno = this.motivo.codigo;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/motivos/motivos', 'SIM']);
+  }
+
   onCancel() {
-    this.router.navigate(['/motivos']);
+    const par = this.globalService.estadoFind('motivo');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = false;
+      Object(config).id_retorno =
+        this.idAcao == CadastroAcoes.Consulta ? this.motivo.codigo : '';
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/motivos/motivos', 'SIM']);
   }
 
   getMotivo() {
@@ -136,7 +156,7 @@ export class MotivoApoViewComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.appSnackBar.openFailureSnackBar(
-            `Pesquisa Nos Motivos De Apontamento ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            `Pesquisa Nos Motivos De Apontamento ${messageError(error)}`,
             'OK'
           );
         }
@@ -187,13 +207,14 @@ export class MotivoApoViewComponent implements OnInit {
           .MotivoApoInsert(this.motivo)
           .subscribe(
             async (data: MotivoApoModel) => {
+              this.motivo.codigo = data.codigo;
               this.globalService.setSpin(false);
-              this.onCancel();
+              this.onRetorno();
             },
             (error: any) => {
               this.globalService.setSpin(false);
               this.appSnackBar.openFailureSnackBar(
-                `Erro Na Inclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+                `Erro Na Inclusão ${messageError(error)}`,
                 'OK'
               );
             }
@@ -207,12 +228,12 @@ export class MotivoApoViewComponent implements OnInit {
           .subscribe(
             async (data: any) => {
               this.globalService.setSpin(false);
-              this.onCancel();
+              this.onRetorno();
             },
             (error: any) => {
               this.globalService.setSpin(false);
               this.appSnackBar.openFailureSnackBar(
-                `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+                `Erro Na Alteração ${messageError(error)}`,
                 'OK'
               );
             }
@@ -225,12 +246,12 @@ export class MotivoApoViewComponent implements OnInit {
           .subscribe(
             async (data: any) => {
               this.globalService.setSpin(false);
-              this.onCancel();
+              this.onRetorno();
             },
             (error: any) => {
               this.globalService.setSpin(false);
               this.appSnackBar.openFailureSnackBar(
-                `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+                `Erro Na Exclusao ${messageError(error)}`,
                 'OK'
               );
             }

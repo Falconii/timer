@@ -13,7 +13,7 @@ import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { AgeHorasModel } from 'src/app/Models/age-horas-model';
 import { ProjetosService } from 'src/app/services/projetos.service';
 import { ParametroAgeHoras01 } from 'src/app/parametros/parametro-age-horas-01';
-import { getFirstName } from 'src/app/shared/classes/util';
+import { getFirstName, messageError } from 'src/app/shared/classes/util';
 
 @Component({
   selector: 'app-agenda-view',
@@ -38,7 +38,6 @@ export class AgendaViewComponent implements OnInit {
   hoje: Date = new Date();
   showLancamento: boolean = false;
   celulaDia: CelulaDia = new CelulaDia();
-  durationInSeconds = 2;
 
   constructor(
     formBuilder: FormBuilder,
@@ -92,17 +91,6 @@ export class AgendaViewComponent implements OnInit {
 
     par.id = this.globalService.getUsuario().id;
 
-    /*
-    coorde.forEach((value) => {
-      par.grupo.push(value);
-    });
-
-    audi.forEach((value) => {
-      par.grupo.push(value);
-    });
-
-    */
-
     par.orderby = 'Razão';
 
     this.globalService.setSpin(true);
@@ -111,24 +99,16 @@ export class AgendaViewComponent implements OnInit {
         this.globalService.setSpin(false);
         this.auditor = this.globalService.getUsuario().id;
         this.auditores = data;
-        //const audi = new UsuarioQuery01Model();
-        //audi.id = 0;
-        //audi.razao = 'TODOS';
-        //this.auditores.push(audi);
-        //ata.forEach((auditor) => {
-        //  this.auditores.push(auditor);
-        //});
         this.auditores.forEach((auditor) => {
           auditor.razao = getFirstName(auditor.razao);
         });
-        this.parametro.patchValue({ auditores: this.auditores[0].id });
-        this.onSubmit();
+        this.parametro.patchValue({ auditores: par.id });
       },
       (error: any) => {
         this.globalService.setSpin(false);
         this.auditor = 0;
         this.appSnackBar.openFailureSnackBar(
-          `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+          `Tabela De Usuários: ${messageError(error)}`,
           'OK'
         );
       }

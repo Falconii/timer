@@ -7,6 +7,7 @@ import { OpcoesGuard } from 'src/app/guards/opcoes.guard';
 const routes: Routes = [
   { path: '', redirectTo: 'motivos', pathMatch: 'full' },
   { path: 'motivos', component: CrudMotivoApoComponent },
+  { path: 'motivos/:retorno', component: CrudMotivoApoComponent },
   {
     path: 'motivo/:id_empresa/:codigo/:acao',
     component: MotivoApoViewComponent,

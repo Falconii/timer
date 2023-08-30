@@ -25,7 +25,7 @@
   <form [formGroup]="parametros" autocomplete="off" class="col-med-4">
     <mat-form-field field appearance="outline" class="col-max">
       <mat-label>Ordenação</mat-label>
-      <mat-select formControlName="ordenacao">
+      <mat-select formControlName="ordenacao" (selectionChange)="onChangeParametros()">
         <mat-option *ngFor="let op of opcoesOrdenacao" [value]="op">
           {{op}}
         </mat-option>
@@ -33,7 +33,7 @@
     </mat-form-field>
     <mat-form-field field appearance="outline" class="col-max">
       <mat-label>Pesquisar Por</mat-label>
-      <mat-select formControlName="campo">
+      <mat-select formControlName="campo" (selectionChange)="onChangeParametros()">
         <mat-option *ngFor="let op of opcoesCampo" [value]="op">
           {{op}}
         </mat-option>
@@ -41,7 +41,7 @@
     </mat-form-field>
     <mat-form-field field appearance="outline" class="col-max column-span-2" *ngIf="isGrupo()">
       <mat-label>Pesquisar Por</mat-label>
-      <mat-select formControlName="grupo">
+      <mat-select formControlName="grupo" (selectionChange)="onChangeParametros()">
         <mat-option *ngFor="let gru of grupos" [value]="gru.id">
           {{gru.grupo}}
         </mat-option>
@@ -49,7 +49,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="col-max column-span-2" *ngIf="!isGrupo()">
       <mat-label>Descrição</mat-label>
-      <input matInput formControlName="filtro">
+      <input matInput formControlName="filtro" oninput="this.value = this.value.toUpperCase()">
     </mat-form-field>
   </form>
 </div>

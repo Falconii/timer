@@ -30,9 +30,20 @@
     <div class="col-med-1">
       <mat-form-field field appearance="outline" class="col-max">
         <mat-label>Contratos</mat-label>
+        <input matInput formControlName="opcoes" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let contrato of contratos" [value]="contrato.id">
+            {{contrato.cliente_razao.trim()}} ({{contrato.id}}) {{contrato.descricao}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col-med-1">
+      <mat-form-field field appearance="outline" class="col-max">
+        <mat-label>Contratos</mat-label>
         <mat-select formControlName="id_contrato" (selectionChange)="onChangeContrato()">
           <mat-option *ngFor="let contrato of contratos" [value]="contrato.id">
-            {{contrato.cliente_razao.trim()}} ({{contrato.id}})
+            {{contrato.cliente_razao.trim()}} ({{contrato.id}}) {{contrato.descricao}}
           </mat-option>
         </mat-select>
       </mat-form-field>

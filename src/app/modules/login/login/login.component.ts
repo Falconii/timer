@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.usuario = this.globalService.getUsuario();
+    this.usuario.senha = '';
     this.setValue();
   }
 

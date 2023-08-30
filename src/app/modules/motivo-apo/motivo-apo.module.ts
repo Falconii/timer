@@ -8,6 +8,7 @@ import { MaterialModule } from 'src/app/material/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CrudMotivoApoComponent } from './crud-motivo-apo/crud-motivo-apo.component';
 import { MotivoApoViewComponent } from './motivo-apo-view/motivo-apo-view.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [CrudMotivoApoComponent, MotivoApoViewComponent],
@@ -17,6 +18,7 @@ import { MotivoApoViewComponent } from './motivo-apo-view/motivo-apo-view.compon
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    ScrollingModule,
     SharedModule,
     NgxMaskModule.forChild(),
   ],

@@ -190,7 +190,7 @@ export class CrudUsuarioComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.usuarios = [];
-          this.appSnackBar.openFailureSnackBar(
+          this.appSnackBar.openSuccessSnackBar(
             `Pesquisa Nos Usuários ${messageError(error)}`,
             'OK'
           );
@@ -289,7 +289,7 @@ export class CrudUsuarioComponent implements OnInit {
           GetValueJsonNumber(this.parametro.getParametro(), 'op_pesquisar')
         ],
       filtro: GetValueJsonString(this.parametro.getParametro(), 'descricao'),
-      grupo: 1,
+      grupo: 900,
     });
   }
 

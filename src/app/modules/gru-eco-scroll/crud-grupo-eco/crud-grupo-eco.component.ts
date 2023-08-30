@@ -40,9 +40,9 @@ export class CrudGrupoEcoComponent implements OnInit {
 
   erro: string = '';
 
-  opcoesOrdenacao = ['Código', 'Razão'];
+  opcoesOrdenacao: string[] = [];
 
-  opcoesCampo = ['Código', 'Razão'];
+  opcoesCampo: string[] = [];
 
   tamPagina = 50;
 

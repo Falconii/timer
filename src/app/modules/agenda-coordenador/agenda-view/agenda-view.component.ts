@@ -41,7 +41,6 @@ export class AgendaViewComponent implements OnInit {
   hoje: Date = new Date();
   showLancamento: boolean = false;
   celulaDia: CelulaDia = new CelulaDia();
-  durationInSeconds = 2;
 
   constructor(
     formBuilder: FormBuilder,
@@ -115,6 +114,12 @@ export class AgendaViewComponent implements OnInit {
 
     par.orderby = 'Razão';
 
+    if (
+      this.usuariosService.isCoordenador(this.globalService.getUsuario().grupo)
+    ) {
+      par.id = this.globalService.getUsuario().id;
+    }
+
     this.inscricaoCoordenador = this.usuariosService
       .getusuarios_01(par)
       .subscribe(
@@ -122,12 +127,17 @@ export class AgendaViewComponent implements OnInit {
           this.globalService.setSpin(false);
           this.coordenador = 0;
           const coord = new UsuarioQuery01Model();
-          coord.id = 0;
-          coord.razao = 'TODOS';
-          this.coordenadores.push(coord);
-          data.forEach((coordenador) => {
-            this.coordenadores.push(coordenador);
-          });
+          if (par.id == 0) {
+            coord.id = 0;
+            coord.razao = 'TODOS';
+            this.coordenadores.push(coord);
+            data.forEach((coordenador) => {
+              this.coordenadores.push(coordenador);
+            });
+          } else {
+            this.coordenador = par.id;
+            this.coordenadores = data;
+          }
           this.parametro.patchValue({ coordenadores: this.coordenador });
         },
         (error: any) => {

@@ -6,13 +6,18 @@ import { MotivoApoModel } from 'src/app/Models/motivo-apo-model';
 import { AtividadeQuery_01Model } from 'src/app/Models/atividade-query_01-model';
 import { ApoExecucaoModel } from 'src/app/Models/apo-execucao-model';
 import { MoviData } from 'src/app/Models/movi-data';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ApoExecucaoModel01 } from 'src/app/Models/apo-execucao-model01';
 import { ApoPlanejamentoQuery_01Model } from 'src/app/Models/apo-planejamento-query_01-model';
 import { Intervalo } from 'src/app/shared/classes/intervalo';
 import { RetornoPesquisa } from 'src/app/shared/classes/retorno-pesquisa';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { AtividadesService } from 'src/app/services/atividades.service';
 import { GlobalService } from 'src/app/services/global.service';
@@ -51,7 +56,6 @@ import { ParametroProjeto01 } from 'src/app/parametros/parametro-projeto01';
   styleUrls: ['./crud-Execucao.component.css'],
 })
 export class CrudExecucaoComponent implements OnInit {
-  durationInSeconds: number = 2;
   agendamento: MoviData = new MoviData();
   inscricaoGetAll!: Subscription;
   inscricaoAcao!: Subscription;
@@ -119,6 +123,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.parametro = formBuilder.group({
       usuario: [{ value: '' }],
       data: [{ value: '' }],
+      opcoes: [{ value: '' }],
       id_contrato: [{ value: '' }, [Validators.required, Validators.min(1)]],
       id_grupo: [{ value: '' }, [Validators.required, Validators.min(1)]],
       id_atividade: [{ value: '' }, [Validators.required, Validators.min(1)]],
@@ -331,6 +336,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.parametro.setValue({
       usuario: this.usuario.razao,
       data: new Date(),
+      opcoes: '',
       id_contrato: 0,
       id_grupo: 0,
       id_atividade: 0,
@@ -804,4 +810,6 @@ export class CrudExecucaoComponent implements OnInit {
   getfirstName(name: string): string {
     return getFirstName(name);
   }
+
+  /* Rotinas para autocomplete */
 }

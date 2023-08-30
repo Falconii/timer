@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { ParametroUsuario01 } from 'src/app/parametros/parametro-usuario01';
 import { ProjetosService } from 'src/app/services/projetos.service';
 import { ParametroAgeHoras01 } from 'src/app/parametros/parametro-age-horas-01';
+import { messageError } from 'src/app/shared/classes/util';
 
 @Component({
   selector: 'app-agenda-view',
@@ -123,14 +124,14 @@ export class AgendaViewComponent implements OnInit {
             diretores: this.globalService.getUsuario().id,
           });
         } else {
-          this.parametro.patchValue({ diretores: this.diretor });
+          this.parametro.patchValue({ diretores: 0 });
         }
       },
       (error: any) => {
         this.globalService.setSpin(false);
         this.diretor = 0;
         this.appSnackBar.openFailureSnackBar(
-          `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+          `Falha Ao Carregar Tabela Diretores ${messageError(error)}`,
           'OK'
         );
       }
