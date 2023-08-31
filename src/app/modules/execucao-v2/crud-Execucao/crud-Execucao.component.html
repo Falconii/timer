@@ -27,17 +27,20 @@
         <mat-datepicker #dataDatePicker></mat-datepicker>
       </mat-form-field>
     </div>
+    <!--
     <div class="col-med-1">
       <mat-form-field field appearance="outline" class="col-max">
         <mat-label>Contratos</mat-label>
-        <input matInput formControlName="opcoes" [matAutocomplete]="auto">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let contrato of contratos" [value]="contrato.id">
+        <input matInput formControlName="opcoes" [matAutocomplete]="auto"
+          oninput="this.value = this.value.toUpperCase()">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='onChangeContrato2($event.option.value)'>
+          <mat-option *ngFor="let contrato of contratosFiltrados" [value]="contrato">
             {{contrato.cliente_razao.trim()}} ({{contrato.id}}) {{contrato.descricao}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
     </div>
+    -->
     <div class="col-med-1">
       <mat-form-field field appearance="outline" class="col-max">
         <mat-label>Contratos</mat-label>
@@ -61,7 +64,7 @@
         <mat-label>Atividades</mat-label>
         <mat-select formControlName="id_atividade" (selectionChange)="onParametrosChange()">
           <mat-option *ngFor="let atividade of atividades" [value]="atividade.id">
-            {{atividade.subconta}}-{{atividade.estru_descri}}
+            {{atividade.subconta.substring(4,6)}}-{{atividade.estru_descri}}
           </mat-option>
         </mat-select>
       </mat-form-field>

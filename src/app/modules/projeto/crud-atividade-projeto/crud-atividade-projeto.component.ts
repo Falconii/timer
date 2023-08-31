@@ -133,7 +133,7 @@ export class CrudAtividadeProjetoComponent implements OnInit {
       final: [],
       id_resp: [{ value: '' }, [Validators.required, Validators.min(1)]],
       status: [],
-      id_exec: [{ value: '' }, [Validators.required, Validators.min(1)]],
+      id_exec: [{ value: '' }],
       id_subcliente: [{ value: '' }, [Validators.required, Validators.min(1)]],
       obs: [{ value: '' }],
     });

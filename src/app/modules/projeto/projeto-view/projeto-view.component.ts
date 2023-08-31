@@ -123,7 +123,6 @@ export class ProjetoViewComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('this.formulario', this.formulario);
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
@@ -165,7 +164,6 @@ export class ProjetoViewComponent implements OnInit {
       .subscribe(
         (data: ProjetoModel) => {
           this.projeto = data;
-          console.log('Retorno', this.projeto, data);
           this.setValue();
         },
         (error: any) => {
@@ -178,7 +176,6 @@ export class ProjetoViewComponent implements OnInit {
   }
 
   setValue() {
-    console.log('this.projeto-tela', this.projeto);
     this.formulario.setValue({
       id: this.projeto.id,
       descricao: this.projeto.descricao,
@@ -277,7 +274,6 @@ export class ProjetoViewComponent implements OnInit {
               this.onRetorno();
             },
             (error: any) => {
-              console.log('Error', error.error);
               this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -385,11 +381,9 @@ export class ProjetoViewComponent implements OnInit {
       .open(PeriodoDialogComponent, dialogConfig)
       .beforeClosed()
       .subscribe((data: PeriodoDialogData) => {
-        console.log('Retorno data', data);
         if (typeof data !== 'undefined' && data.processar) {
           this.formulario.patchValue({ dataproj: data.dataInicial });
           this.formulario.patchValue({ dataenc: data.dataFinal });
-          console.log('Fui....', this.formulario);
           this.onSubmit();
         }
       });

@@ -88,6 +88,7 @@ export class CrudExecucaoComponent implements OnInit {
 
   contrato: ProjetoModel = new ProjetoModel();
   contratos: ProjetoModel[] = [];
+  contratosFiltrados: ProjetoModel[] = [];
 
   grupo: AtividadeQuery_01Model = new AtividadeQuery_01Model();
   grupos: AtividadeQuery_01Model[] = [];
@@ -118,16 +119,18 @@ export class CrudExecucaoComponent implements OnInit {
       cliente: [{ value: '' }, [Validators.required]],
       id_motivo: [{ value: '' }, [Validators.required]],
       encerra: [{ value: '' }, [Validators.required]],
-      obs: [{ value: '' }, [Validators.maxLength(50)]],
+      obs: [{ value: '' }, [Validators.maxLength(150)]],
     });
     this.parametro = formBuilder.group({
       usuario: [{ value: '' }],
       data: [{ value: '' }],
-      opcoes: [{ value: '' }],
       id_contrato: [{ value: '' }, [Validators.required, Validators.min(1)]],
       id_grupo: [{ value: '' }, [Validators.required, Validators.min(1)]],
       id_atividade: [{ value: '' }, [Validators.required, Validators.min(1)]],
     });
+    //this.parametro.get('opcoes')?.valueChanges.subscribe((value) => {
+    //  this.filtroContratos(value);
+    //});
     this.getUsuario();
     this.setValue();
     this.idAcao = 99;
@@ -227,6 +230,7 @@ export class CrudExecucaoComponent implements OnInit {
         (data: ProjetoModel[]) => {
           this.globalService.setSpin(false);
           this.contratos = data;
+          this.contratosFiltrados = data;
           this.parametro.patchValue({ id_contrato: this.contratos[0].id });
           this.onChangeContrato();
         },
@@ -336,7 +340,6 @@ export class CrudExecucaoComponent implements OnInit {
     this.parametro.setValue({
       usuario: this.usuario.razao,
       data: new Date(),
-      opcoes: '',
       id_contrato: 0,
       id_grupo: 0,
       id_atividade: 0,
@@ -812,4 +815,13 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   /* Rotinas para autocomplete */
+  filtroContratos(value: string) {
+    this.contratosFiltrados = this.contratos.filter((ct) => {
+      return ct.descricao.indexOf(value) > -1;
+    });
+  }
+
+  onChangeContrato2(event: any) {
+    console.log(event);
+  }
 }

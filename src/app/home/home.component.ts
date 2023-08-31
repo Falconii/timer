@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getProjetos();
+    //this.getProjetos();
   }
 
   ngOnDestroy(): void {

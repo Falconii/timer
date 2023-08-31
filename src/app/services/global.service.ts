@@ -378,25 +378,17 @@ export class GlobalService {
     let guard: GuardiaoOpcoes[] = [];
     if (guardUser.length > 0) {
       guard = guardUser as GuardiaoOpcoes[];
-      console.log('guardUser');
-      console.log(guard);
     } else {
       if (guardGrupo.length > 0) {
         guard = guardGrupo as GuardiaoOpcoes[];
-        console.log('guardGrupo');
-        console.log(guard);
       } else {
         if (guardOwner.length > 0) {
           guard = guardOwner as GuardiaoOpcoes[];
-          console.log('guardOwner');
-          console.log(guard);
         } else {
           if (guardGen.length == 0) {
             return true;
           } else {
             guard = guardGen as GuardiaoOpcoes[];
-            console.log('guardGen');
-            console.log(guard);
           }
         }
       }
@@ -412,10 +404,8 @@ export class GlobalService {
     const idx = this.lsParametros.findIndex((p) => par.modulo == p.modulo);
     if (idx == -1) {
       this.lsParametros.push(par);
-      console.log('inserção', par.getParametro());
     } else {
       this.lsParametros[idx] = par;
-      console.log('Atualizar', par.getParametro());
     }
   }
 
