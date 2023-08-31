@@ -541,7 +541,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.apontamento.horasapon = 0;
     this.apontamento.id_motivo = this.globalService.codigoMotivo;
     this.apontamento.produtivo = 'S';
-    this.apontamento.obs = '';
+    this.apontamento.obs = lanca.obs;
     this.apontamento.encerramento = 'N';
     this.apontamento.user_insert = lanca.user_insert;
     this.apontamento.user_update = lanca.user_update;
