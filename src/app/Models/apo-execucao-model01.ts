@@ -27,4 +27,6 @@ export class ApoExecucaoModel01 {
   public ativ_final: string = '';
   public ativ_id_subcliente: number = 0;
   public cli_razao: string = '';
+  public id_diretor: number = 0;
+  public dir_razao: string = '';
 }

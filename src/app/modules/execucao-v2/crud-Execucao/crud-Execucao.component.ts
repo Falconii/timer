@@ -184,7 +184,7 @@ export class CrudExecucaoComponent implements OnInit {
 
   getApontamentosExecucao() {
     let para = new ParametroAponExecucao01();
-    para.id_empresa = 1;
+    para.id_empresa = this.globalService.getIdEmpresa();
     para.id_exec = this.globalService.getUsuario().id;
     para.id_projeto = 0;
     para.data = DataYYYYMMDD(this.parametro.value.data);

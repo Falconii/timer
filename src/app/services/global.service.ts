@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { UsuarioModel } from '../Models/usuario-model';
 import { CadastroAcoes } from '../shared/classes/cadastro-acoes';
 import { ParametroModel } from '../Models/parametro-model';
+import { ParceiraModel } from '../Models/parceira-model';
+import { TipoContratoModel } from '../Models/tipo-contrato-model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +22,9 @@ export class GlobalService {
   codigoMotivo: string = '001001';
   guadiaoMestre: GuardiaoMestre[] = [];
   guardiaoOpcoes: GuardiaoOpcoes[] = [];
-
   lsParametros: ParametroModel[] = [];
+  lsParceiras: ParceiraModel[] = [];
+  lsTpoContratos: TipoContratoModel[] = [];
 
   shomMenuEmitter = new EventEmitter<boolean>();
   refreshLançamentos = new EventEmitter<CelulaDia>();
@@ -31,6 +34,8 @@ export class GlobalService {
   constructor(private usuarioService: UsuariosService, private router: Router) {
     this.usuario = new UsuarioModel();
     this.logado = false;
+    this.loadParceiras();
+    this.loadTipoContratos();
     this.loadGuardiaoMestre();
     this.loadGuardiaoOpcoes();
   }
@@ -424,5 +429,21 @@ export class GlobalService {
     if (idx > -1) {
       this.lsParametros.splice(idx, 1);
     }
+  }
+
+  loadParceiras() {
+    this.lsParceiras = [
+      { id: 1, descricao: 'CONTLINE' },
+      { id: 2, descricao: 'SIMIONATO AUDITORES CPS' },
+      { id: 3, descricao: 'SIMIONATO AUDITORES SP' },
+      { id: 4, descricao: 'SIMIONATO AUDITORES GESTÃO' },
+    ];
+  }
+
+  loadTipoContratos() {
+    this.lsTpoContratos = [
+      { id: '1', descricao: 'FIXO' },
+      { id: '2', descricao: 'TRABALHO ESPECIAL' },
+    ];
   }
 }

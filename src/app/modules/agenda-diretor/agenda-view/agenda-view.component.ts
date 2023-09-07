@@ -77,8 +77,16 @@ export class AgendaViewComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.diretores);
+    this.diretor = this.parametro.value.diretores;
     this.coordenador = this.parametro.value.coordenadores;
     this.auditor = this.parametro.value.auditores;
+    console.log(
+      this.parametro.value.diretores,
+      this.parametro.value.coordenadores,
+      this.parametro.value.auditores
+    );
+    console.log(this.diretor, this.coordenador, this.auditor);
     this.celulaDia = new CelulaDia();
     this.showLancamento = true;
     this.globalService.setRefreshLançamentos(this.celulaDia);
@@ -223,11 +231,13 @@ export class AgendaViewComponent implements OnInit {
 
     par.id_resp = this.coordenador;
 
+    par.id_dir = this.diretor;
+
     par.ano = this.parametro.value.ano;
 
     par.mes = this.adicionaZero(this.parametro.value.mes + 1);
 
-    console.log('Mes ==>', par.mes);
+    console.log('ParametroAgeHoras01 ==>', par);
     this.globalService.setSpin(true);
     this.inscricaoAgenda = this.projetosService
       .getParametroAgeHorasAgeHoras01(par)
@@ -290,6 +300,7 @@ export class AgendaViewComponent implements OnInit {
       dia.descricao = 'Antes';
       dia.id_resp = this.coordenador;
       dia.id_exec = this.auditor;
+      dia.id_diretor = this.diretor;
       dia.id_projeto = 0;
       this.calendario.push(dia);
       inicio.setDate(inicio.getDate() + 1);
@@ -313,6 +324,7 @@ export class AgendaViewComponent implements OnInit {
       dia.descricao = 'Dias do mês';
       dia.id_resp = this.coordenador;
       dia.id_exec = this.auditor;
+      dia.id_diretor = this.diretor;
       dia.id_projeto = 0;
       this.calendario.push(dia);
       inicio.setDate(inicio.getDate() + 1);
@@ -345,6 +357,7 @@ export class AgendaViewComponent implements OnInit {
         dia.descricao = 'Depois';
         dia.id_resp = this.coordenador;
         dia.id_exec = this.auditor;
+        dia.id_diretor = this.diretor;
         dia.id_projeto = 0;
         this.calendario.push(dia);
         inicio.setDate(inicio.getDate() + 1);

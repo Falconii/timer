@@ -10,6 +10,10 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
     <span class="example-spacer">
       <mat-label>{{labelCadastro}}</mat-label>
     </span>
+    <div class="button-container-right">
+      <button mat-raised-button color="primary" *ngIf="idAcao != 3" (click)=onSubmit()>{{acao}}</button>
+      <button mat-raised-button color="accent" (click)="onCancel()">{{getLabelCancel()}}</button>
+    </div>
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu"
       matTooltip="Manutenção Datas" matTooltipPosition="above" *ngIf="( (idAcao == getAcoes()[ 'Edicao']) )">
       <mat-icon>calendar_today</mat-icon>
@@ -23,98 +27,175 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
   </mat-toolbar>
 </div>
 <form [formGroup]="formulario" autocomplete="off">
-  <div class="col-med-2">
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Código</mat-label>
-      <input matInput formControlName="id">
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Situação</mat-label>
-      <input matInput formControlName="status" [readonly]="readOnly">
-    </mat-form-field>
-  </div>
-  <div class="col-med-3">
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Data Proposta</mat-label>
-      <input matInput [matDatepicker]="propostaDatePicker" formControlName="dataprop" [readonly]="readOnly">
-      <mat-datepicker-toggle matSuffix [for]="propostaDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #propostaDatePicker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Data Contrato</mat-label>
-      <input matInput [matDatepicker]="projetoDatePicker" formControlName="dataproj" [readonly]="readOnly">
-      <mat-datepicker-toggle matSuffix [for]="projetoDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #projetoDatePicker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Data Encerramento</mat-label>
-      <input matInput [matDatepicker]="encerramentoDatePicker" formControlName="dataenc" [readonly]="readOnly">
-      <mat-datepicker-toggle matSuffix [for]="encerramentoDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #encerramentoDatePicker></mat-datepicker>
-    </mat-form-field>
-  </div>
+  <div>
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+          First
+        </ng-template>
 
-  <div class="col-med-2">
-    <mat-form-field field appearance="outline" class="col-max"
-      *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']))">
-      <mat-label>Diretor</mat-label>
-      <mat-select formControlName="id_diretor">
-        <mat-option *ngFor="let diretor of diretores" [value]="diretor.id">
-          {{diretor.razao}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field field appearance="outline" class="col-max"
-      *ngIf="( (idAcao == getAcoes()[ 'Consulta']) || (idAcao == getAcoes()[ 'Exclusao']) )">
-      <mat-label>Diretor</mat-label>
-      <input matInput formControlName="diretor_razao" [readonly]="readOnly">
-    </mat-form-field>
-    <mat-form-field field appearance="outline" class="col-max"
-      *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']))">
-      <mat-label>Cliente</mat-label>
-      <mat-select formControlName="id_cliente">
-        <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">
-          {{cliente.fantasi}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field field appearance="outline" class="col-max"
-      *ngIf="( (idAcao == getAcoes()[ 'Consulta']) || (idAcao == getAcoes()[ 'Exclusao']) )">
-      <mat-label>Cliente</mat-label>
-      <input matInput formControlName="cliente_razao" [readonly]="readOnly">
-    </mat-form-field>
-  </div>
-  <div class="col-med-2">
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Horas Vendidas</mat-label>
-      <input matInput formControlName="horasve" [readonly]="readOnly">
-      <mat-error *ngIf="formulario.get('horasve')?.status == 'INVALID' && touchedOrDirty('horasve')">Campo Obrigatório
-        letras
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Descrição</mat-label>
-      <input matInput formControlName="descricao" oninput="this.value = this.value.toUpperCase()" [readonly]="readOnly">
-      <mat-error *ngIf="formulario.get('descricao')?.status == 'INVALID' && touchedOrDirty('descricao')">Descrição - No
-        mínimo 03 letras e no máximo 50 letras</mat-error>
-    </mat-form-field>
-  </div>
-  <div class="col-med-3">
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Horas Planejadas</mat-label>
-      <input matInput formControlName="horasplan" [readonly]="true">
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Horas Executadas</mat-label>
-      <input matInput formControlName="horasexec" [readonly]="true">
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-max">
-      <mat-label>Horas Diretoria</mat-label>
-      <input matInput formControlName="horasdir" [readonly]="true">
-    </mat-form-field>
-  </div>
-  <div class="button-container-right">
-    <button mat-raised-button color="primary" *ngIf="idAcao != 3" (click)=onSubmit()>{{acao}}</button>
-    <button mat-raised-button color="accent" (click)="onCancel()">{{getLabelCancel()}}</button>
+        <div class="col-med-2">
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Código</mat-label>
+            <input matInput formControlName="id">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Situação</mat-label>
+            <input matInput formControlName="status" [readonly]="readOnly">
+          </mat-form-field>
+        </div>
+        <div class="col-med-3">
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Data Proposta</mat-label>
+            <input matInput [matDatepicker]="propostaDatePicker" formControlName="dataprop" [readonly]="readOnly">
+            <mat-datepicker-toggle matSuffix [for]="propostaDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #propostaDatePicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Data Contrato</mat-label>
+            <input matInput [matDatepicker]="projetoDatePicker" formControlName="dataproj" [readonly]="readOnly">
+            <mat-datepicker-toggle matSuffix [for]="projetoDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #projetoDatePicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Data Encerramento</mat-label>
+            <input matInput [matDatepicker]="encerramentoDatePicker" formControlName="dataenc" [readonly]="readOnly">
+            <mat-datepicker-toggle matSuffix [for]="encerramentoDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #encerramentoDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-med-2">
+          <mat-form-field field appearance="outline" class="col-max"
+            *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']))">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="tipo">
+              <mat-option *ngFor="let tipo of tipo_contratos" [value]="tipo.id">
+                {{tipo.descricao}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field field appearance="outline" class="col-max"
+            *ngIf="( (idAcao == getAcoes()[ 'Consulta']) || (idAcao == getAcoes()[ 'Exclusao']) )">
+            <mat-label>Tipo</mat-label>
+            <input matInput formControlName="tipo_descricao" [readonly]="readOnly">
+          </mat-form-field>
+          <mat-form-field field appearance="outline" class="col-max"
+            *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']))">
+            <mat-label>Parceira</mat-label>
+            <mat-select formControlName="parceira">
+              <mat-option *ngFor="let parceira of parceiras" [value]="parceira.id">
+                {{parceira.descricao}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field field appearance="outline" class="col-max"
+            *ngIf="( (idAcao == getAcoes()[ 'Consulta']) || (idAcao == getAcoes()[ 'Exclusao']) )">
+            <mat-label>Parceira</mat-label>
+            <input matInput formControlName="parceira_descricao" [readonly]="readOnly">
+          </mat-form-field>
+        </div>
+        <div class="col-med-2">
+          <mat-form-field field appearance="outline" class="col-max"
+            *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']))">
+            <mat-label>Diretor</mat-label>
+            <mat-select formControlName="id_diretor">
+              <mat-option *ngFor="let diretor of diretores" [value]="diretor.id">
+                {{diretor.razao}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field field appearance="outline" class="col-max"
+            *ngIf="( (idAcao == getAcoes()[ 'Consulta']) || (idAcao == getAcoes()[ 'Exclusao']) )">
+            <mat-label>Diretor</mat-label>
+            <input matInput formControlName="diretor_razao" [readonly]="readOnly">
+          </mat-form-field>
+          <mat-form-field field appearance="outline" class="col-max"
+            *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']))">
+            <mat-label>Cliente</mat-label>
+            <mat-select formControlName="id_cliente">
+              <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">
+                {{cliente.fantasi}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field field appearance="outline" class="col-max"
+            *ngIf="( (idAcao == getAcoes()[ 'Consulta']) || (idAcao == getAcoes()[ 'Exclusao']) )">
+            <mat-label>Cliente</mat-label>
+            <input matInput formControlName="cliente_razao" [readonly]="readOnly">
+          </mat-form-field>
+        </div>
+        <div class="col-med-2">
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Horas Vendidas</mat-label>
+            <input matInput formControlName="horasve" [readonly]="readOnly">
+            <mat-error *ngIf="formulario.get('horasve')?.status == 'INVALID' && touchedOrDirty('horasve')">Campo
+              Obrigatório letras
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Descrição</mat-label>
+            <input matInput formControlName="descricao" oninput="this.value = this.value.toUpperCase()"
+              [readonly]="readOnly">
+            <mat-error *ngIf="formulario.get('descricao')?.status == 'INVALID' && touchedOrDirty('descricao')">Descrição
+              - No mínimo 03 letras e no máximo 50 letras</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-med-2">
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Objeto</mat-label>
+            <input matInput formControlName="objeto" [readonly]="readOnly">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Observação</mat-label>
+            <input matInput formControlName="observacao" [readonly]="readOnly">
+          </mat-form-field>
+        </div>
+        <div class="col-med-3">
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Horas Planejadas</mat-label>
+            <input matInput formControlName="horasplan" [readonly]="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Horas Executadas</mat-label>
+            <input matInput formControlName="horasexec" [readonly]="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Horas Diretoria</mat-label>
+            <input matInput formControlName="horasdir" [readonly]="true">
+          </mat-form-field>
+        </div>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+          Second
+        </ng-template>
+        <div class="col-med-2">
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Valor</mat-label>
+            <input matInput formControlName="valor" [readonly]="true">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Contrato</mat-label>
+            <input matInput formControlName="contrato" [readonly]="true">
+          </mat-form-field>
+        </div>
+        <div class="col-med-2">
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Data Assinatura</mat-label>
+            <input matInput [matDatepicker]="propostaDatePicker" formControlName="assinatura" [readonly]="readOnly">
+            <mat-datepicker-toggle matSuffix [for]="propostaDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #propostaDatePicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Data Reajuste</mat-label>
+            <input matInput [matDatepicker]="projetoDatePicker" formControlName="reajuste" [readonly]="readOnly">
+            <mat-datepicker-toggle matSuffix [for]="projetoDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #projetoDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </form>

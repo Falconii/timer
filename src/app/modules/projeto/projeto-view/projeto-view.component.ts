@@ -24,6 +24,8 @@ import { PeriodoDialogData } from 'src/app/shared/components/periodo-dialog/peri
 import { PeriodoDialogComponent } from 'src/app/shared/components/periodo-dialog/periodo-dialog.component';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { SituacaoProjetoPipe } from 'src/app/shared/pipes/situacao-projeto.pipe';
+import { ParceiraModel } from 'src/app/Models/parceira-model';
+import { TipoContratoModel } from 'src/app/Models/tipo-contrato-model';
 
 @Component({
   selector: 'app-projeto-view',
@@ -54,7 +56,8 @@ export class ProjetoViewComponent implements OnInit {
   inscricaoGetDiretor!: Subscription;
   inscricaoGetClientes!: Subscription;
 
-  durationInSeconds = 2;
+  parceiras: ParceiraModel[] = [];
+  tipo_contratos: TipoContratoModel[] = [];
 
   labelCadastro: string = '';
 
@@ -72,6 +75,10 @@ export class ProjetoViewComponent implements OnInit {
   ) {
     this.formulario = formBuilder.group({
       id: [{ value: '', disabled: true }],
+      tipo: [{ value: '' }],
+      tipo_descricao: [{ value: '' }],
+      parceira: [{ value: '' }],
+      parceira_descricao: [{ value: '' }],
       descricao: [
         { value: '' },
         [
@@ -91,9 +98,18 @@ export class ProjetoViewComponent implements OnInit {
       horasplan: [],
       horasexec: [],
       horasdir: [],
+      objeto: [],
+      observacao: [],
+      valor: [],
+      id_contrato: [],
+      assinatura: [],
+      reajuste: [],
       status: [],
     });
     this.projeto = new ProjetoModel();
+
+    this.parceiras = this.globalService.lsParceiras;
+    this.tipo_contratos = this.globalService.lsTpoContratos;
 
     this.inscricaoRota = route.params.subscribe((params: any) => {
       this.projeto.id_empresa = params.id_empresa;
@@ -178,6 +194,22 @@ export class ProjetoViewComponent implements OnInit {
   setValue() {
     this.formulario.setValue({
       id: this.projeto.id,
+      tipo: this.projeto.id_tipo,
+      tipo_descricao:
+        this.idAcao == CadastroAcoes.Consulta ||
+        this.idAcao == CadastroAcoes.Exclusao
+          ? this.tipo_contratos.find((t) => {
+              t.id == this.projeto.id_tipo;
+            })?.descricao
+          : '',
+      parceira: this.projeto.id_parceira,
+      parceira_descricao:
+        this.idAcao == CadastroAcoes.Consulta ||
+        this.idAcao == CadastroAcoes.Exclusao
+          ? this.parceiras.find((p) => {
+              p.id == this.projeto.id_parceira;
+            })?.descricao
+          : '',
       descricao: this.projeto.descricao,
       id_diretor: this.projeto.id_diretor,
       diretor_razao:
@@ -195,6 +227,12 @@ export class ProjetoViewComponent implements OnInit {
       dataproj: this.projeto.dataproj,
       dataenc: this.projeto.dataenc,
       horasve: this.projeto.horasve,
+      objeto: this.projeto.objeto,
+      observacao: this.projeto.obs,
+      valor: this.projeto.valor,
+      id_contrato: this.projeto.id_contrato,
+      assinatura: this.projeto.assinatura,
+      reajuste: this.projeto.reajuste,
       horasplan: horahexa(this.projeto.horasplan),
       horasexec: horahexa(this.projeto.horasexec),
       horasdir: horahexa(this.projeto.horasdir),
@@ -238,6 +276,8 @@ export class ProjetoViewComponent implements OnInit {
   }
 
   executaAcao() {
+    this.projeto.id_tipo = this.formulario.value.tipo;
+    this.projeto.id_parceira = this.formulario.value.parceira;
     this.projeto.descricao = this.formulario.value.descricao;
     this.projeto.id_diretor = this.formulario.value.id_diretor;
     this.projeto.id_cliente = this.formulario.value.id_cliente;
@@ -245,6 +285,12 @@ export class ProjetoViewComponent implements OnInit {
     this.projeto.dataproj = this.formulario.value.dataproj;
     this.projeto.dataenc = this.formulario.value.dataenc;
     this.projeto.horasve = this.formulario.value.horasve;
+    this.projeto.objeto = this.formulario.value.objeto;
+    this.projeto.obs = this.formulario.value.obs;
+    this.projeto.valor = this.formulario.value.valor;
+    this.projeto.id_contrato = this.formulario.value.id_contrato;
+    this.projeto.assinatura = this.formulario.value.assinatura;
+    this.projeto.reajuste = this.formulario.value.reajuste;
     this.projeto.user_insert = 1;
     this.projeto.user_update = 0;
     switch (+this.idAcao) {

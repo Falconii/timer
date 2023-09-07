@@ -9,6 +9,7 @@ export class CelulaDia {
   public id_projeto: number = 0;
   public id_exec: number = 0;
   public id_resp: number = 0;
+  public id_diretor: number = 0;
   /*
      0 -> normal
      1 -> feriado ou domingo

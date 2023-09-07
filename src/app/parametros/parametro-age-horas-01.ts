@@ -6,6 +6,7 @@ export class ParametroAgeHoras01 {
   public id_subconta: string = '';
   public id_resp: number = 0;
   public id_exec: number = 0;
+  public id_dir: number = 0;
   public mes: string = '';
   public ano: string = '';
   public orderby: string = '';

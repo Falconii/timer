@@ -31,7 +31,7 @@ export class CelApontamentosExecucaoComponent implements OnInit {
   ) {
     this.globslService.refreshLançamentos.subscribe((dia) => {
       this.cel = dia;
-
+      console.log('===> ', dia);
       if (this.cel.tipo == 3 || this.cel.semana == 0) {
         this.apontamentos = [];
       } else {
@@ -63,7 +63,9 @@ export class CelApontamentosExecucaoComponent implements OnInit {
     par.id_empresa = this.globslService.getIdEmpresa();
     par.id_resp = this.cel.id_resp;
     par.id_exec = this.cel.id_exec;
+    par.id_dir = this.cel.id_diretor;
     par.data = dt;
+    par.orderby = 'Executor';
     this.globslService.setSpinApontamentos(true);
     this.inscricaoExecutadas = this.aponExecucaoService
       .getApoExecucoes_01(par)
