@@ -442,8 +442,8 @@ export class GlobalService {
 
   loadTipoContratos() {
     this.lsTpoContratos = [
-      { id: '1', descricao: 'FIXO' },
-      { id: '2', descricao: 'TRABALHO ESPECIAL' },
+      { id: 1, descricao: 'FIXO' },
+      { id: 2, descricao: 'TRABALHO ESPECIAL' },
     ];
   }
 }

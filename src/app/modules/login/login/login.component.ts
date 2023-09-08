@@ -8,11 +8,12 @@ import { UsuariosService } from './../../../services/usuarios.service';
 import { UsuarioModel } from 'src/app/Models/usuario-model';
 import { GlobalService } from './../../../services/global.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Router } from '@angular/router';
 import { ProgressBarComponent } from 'src/app/shared/components/progress-bar/progress-bar.component';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
+import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
   formulario: FormGroup;
   usuario: UsuarioModel = new UsuarioModel();
   inscricaoUsuario!: Subscription;
+  hide: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,8 +35,11 @@ export class LoginComponent implements OnInit {
     private appSnackBar: AppSnackbar
   ) {
     this.formulario = this.formulario = formBuilder.group({
-      id: [{ value: '' }],
-      senha: [{ value: '' }],
+      id: [
+        { value: '' },
+        [Validators.required, Validators.min(1), Validators.max(900)],
+      ],
+      senha: [{ value: '' }, [ValidatorStringLen(1, 20, true)]],
     });
   }
 
@@ -86,9 +91,16 @@ export class LoginComponent implements OnInit {
   }
 
   onValidar() {
-    const id = this.formulario.value.id;
-    const senha = this.formulario.value.senha;
-    this.getUsuario(id, senha);
+    if (this.formulario.valid) {
+      const id = this.formulario.value.id;
+      const senha = this.formulario.value.senha;
+      this.getUsuario(id, senha);
+    } else {
+      this.appSnackBar.openSuccessSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
+    }
   }
 
   onCancelar() {
@@ -120,5 +132,14 @@ export class LoginComponent implements OnInit {
       .subscribe((result) => {
         console.log('result', result);
       });
+  }
+
+  touchedOrDirty(campo: string): boolean {
+    if (
+      this.formulario.get(campo)?.touched ||
+      this.formulario.get(campo)?.dirty
+    )
+      return true;
+    return false;
   }
 }

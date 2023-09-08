@@ -1,4 +1,4 @@
 export class TipoContratoModel {
-  public id: string = '';
-  public descricao = '';
+  public id: number = 0;
+  public descricao: string = '';
 }

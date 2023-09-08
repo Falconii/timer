@@ -26,6 +26,7 @@ import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { SituacaoProjetoPipe } from 'src/app/shared/pipes/situacao-projeto.pipe';
 import { ParceiraModel } from 'src/app/Models/parceira-model';
 import { TipoContratoModel } from 'src/app/Models/tipo-contrato-model';
+import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 
 @Component({
   selector: 'app-projeto-view',
@@ -94,12 +95,12 @@ export class ProjetoViewComponent implements OnInit {
       dataprop: [],
       dataproj: [],
       dataenc: [],
-      horasve: [],
+      horasve: [{ value: '' }, [Validators.required, Validators.min(1)]],
       horasplan: [],
       horasexec: [],
       horasdir: [],
-      objeto: [],
-      observacao: [],
+      objeto: [{ value: '' }, [ValidatorStringLen(0, 200, false)]],
+      observacao: [{ value: '' }, [ValidatorStringLen(0, 250, false)]],
       valor: [],
       id_contrato: [],
       assinatura: [],
@@ -192,24 +193,28 @@ export class ProjetoViewComponent implements OnInit {
   }
 
   setValue() {
+    let parc =
+      this.idAcao == CadastroAcoes.Consulta ||
+      this.idAcao == CadastroAcoes.Exclusao
+        ? this.parceiras.find((p) => {
+            p.id == this.projeto.id_parceira;
+          })?.descricao
+        : '';
+    if (parc == null) parc = '';
+    let tip =
+      this.idAcao == CadastroAcoes.Consulta ||
+      this.idAcao == CadastroAcoes.Exclusao
+        ? this.tipo_contratos.find((p) => {
+            p.id == this.projeto.id_tipo;
+          })?.descricao
+        : '';
+    if (tip == null) tip = '';
     this.formulario.setValue({
       id: this.projeto.id,
       tipo: this.projeto.id_tipo,
-      tipo_descricao:
-        this.idAcao == CadastroAcoes.Consulta ||
-        this.idAcao == CadastroAcoes.Exclusao
-          ? this.tipo_contratos.find((t) => {
-              t.id == this.projeto.id_tipo;
-            })?.descricao
-          : '',
+      tipo_descricao: tip,
       parceira: this.projeto.id_parceira,
-      parceira_descricao:
-        this.idAcao == CadastroAcoes.Consulta ||
-        this.idAcao == CadastroAcoes.Exclusao
-          ? this.parceiras.find((p) => {
-              p.id == this.projeto.id_parceira;
-            })?.descricao
-          : '',
+      parceira_descricao: parc,
       descricao: this.projeto.descricao,
       id_diretor: this.projeto.id_diretor,
       diretor_razao:
@@ -286,13 +291,11 @@ export class ProjetoViewComponent implements OnInit {
     this.projeto.dataenc = this.formulario.value.dataenc;
     this.projeto.horasve = this.formulario.value.horasve;
     this.projeto.objeto = this.formulario.value.objeto;
-    this.projeto.obs = this.formulario.value.obs;
+    this.projeto.obs = this.formulario.value.observacao;
     this.projeto.valor = this.formulario.value.valor;
     this.projeto.id_contrato = this.formulario.value.id_contrato;
     this.projeto.assinatura = this.formulario.value.assinatura;
     this.projeto.reajuste = this.formulario.value.reajuste;
-    this.projeto.user_insert = 1;
-    this.projeto.user_update = 0;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         this.projeto.user_insert = this.globalService.getUsuario().id;

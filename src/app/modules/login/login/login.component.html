@@ -6,13 +6,17 @@
       <mat-form-field appearance="outline" class=".col-max">
         <mat-label>ID DO USUÁRIO</mat-label>
         <input matInput formControlName="id" autofocus>
+        <mat-error *ngIf="formulario.get('id')?.status == 'INVALID' && touchedOrDirty('id')">Campo Obrigatório
+        </mat-error>
       </mat-form-field>
     </div>
     <div class="campos col-med-1">
       <mat-form-field appearance="outline" class=".col-max">
         <mat-label>Senha</mat-label>
-        <input matInput formControlName="senha" type="password">
-
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="senha" required>
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="formulario.get('senha')?.errors?.ValidatorStringLen && touchedOrDirty('senha')">
+          {{formulario.get('senha')?.errors?.message}}</mat-error>
       </mat-form-field>
     </div>
     <div class="campos col-med-2">
