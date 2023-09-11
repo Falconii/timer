@@ -193,22 +193,14 @@ export class ProjetoViewComponent implements OnInit {
   }
 
   setValue() {
-    let parc =
-      this.idAcao == CadastroAcoes.Consulta ||
-      this.idAcao == CadastroAcoes.Exclusao
-        ? this.parceiras.find((p) => {
-            p.id == this.projeto.id_parceira;
-          })?.descricao
-        : '';
-    if (parc == null) parc = '';
-    let tip =
-      this.idAcao == CadastroAcoes.Consulta ||
-      this.idAcao == CadastroAcoes.Exclusao
-        ? this.tipo_contratos.find((p) => {
-            p.id == this.projeto.id_tipo;
-          })?.descricao
-        : '';
-    if (tip == null) tip = '';
+    let parc = '';
+    this.parceiras.forEach((p) => {
+      if (p.id == this.projeto.id_parceira) parc = p.descricao;
+    });
+    let tip = '';
+    this.tipo_contratos.forEach((t) => {
+      if (t.id == this.projeto.id_tipo) tip = t.descricao;
+    });
     this.formulario.setValue({
       id: this.projeto.id,
       tipo: this.projeto.id_tipo,
@@ -440,5 +432,9 @@ export class ProjetoViewComponent implements OnInit {
 
   onDataPeriodo() {
     this.openJustficativaPeriodoDialog();
+  }
+
+  isDirAdm(): boolean {
+    return this.globalService.okDirAdm();
   }
 }

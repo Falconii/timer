@@ -137,6 +137,17 @@ export class GlobalService {
     return false;
   }
 
+  okDirAdm(): boolean {
+    if (
+      this.usuarioService.isDiretoria(this.usuario.grupo) ||
+      this.usuarioService.isAdm(this.usuario.grupo) ||
+      this.usuarioService.isTi(this.usuario.grupo)
+    )
+      return true;
+
+    return false;
+  }
+
   setSpin(value: boolean) {
     this.showSpin = value;
     this.showSpinEmitter.emit(this.showSpin);
@@ -197,7 +208,7 @@ export class GlobalService {
     //diretoria
     guard = new GuardiaoMestre();
     guard.path = 'projetos';
-    guard.grupos = [900, 901, 902, 906];
+    guard.grupos = [900, 901, 902, 904, 906];
     this.guadiaoMestre.push(guard);
 
     guard = new GuardiaoMestre();
