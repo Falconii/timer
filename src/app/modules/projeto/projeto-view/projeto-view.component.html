@@ -21,7 +21,7 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="onDataPeriodo()">
         <mat-icon>calendar_view_day</mat-icon>
-        <span>Perído Do Contrato</span>
+        <span>Período Do Contrato</span>
       </button>
     </mat-menu>
   </mat-toolbar>
@@ -182,6 +182,8 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
             <mat-form-field appearance="outline" class="col-max">
               <mat-label>Valor</mat-label>
               <input matInput formControlName="valor" [readonly]="readOnly">
+              <mat-error *ngIf="formulario.get('valor')?.errors?.ValidatorCurrency && touchedOrDirty('valor')">
+                {{formulario.get('valor')?.errors?.message}}</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" class="col-max">
               <mat-label>Contrato</mat-label>

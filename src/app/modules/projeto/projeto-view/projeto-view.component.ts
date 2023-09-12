@@ -27,11 +27,14 @@ import { SituacaoProjetoPipe } from 'src/app/shared/pipes/situacao-projeto.pipe'
 import { ParceiraModel } from 'src/app/Models/parceira-model';
 import { TipoContratoModel } from 'src/app/Models/tipo-contrato-model';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
+import { DecimalPipe } from '@angular/common';
+import { ValidatorCurrency } from 'src/app/shared/Validators/validator-currency';
 
 @Component({
   selector: 'app-projeto-view',
   templateUrl: './projeto-view.component.html',
   styleUrls: ['./projeto-view.component.css'],
+  providers: [DecimalPipe],
 })
 export class ProjetoViewComponent implements OnInit {
   formulario: FormGroup;
@@ -63,6 +66,7 @@ export class ProjetoViewComponent implements OnInit {
   labelCadastro: string = '';
 
   constructor(
+    private decimalPipe: DecimalPipe,
     private formBuilder: FormBuilder,
     private projetosService: ProjetosService,
     private usuariosService: UsuariosService,
@@ -101,7 +105,7 @@ export class ProjetoViewComponent implements OnInit {
       horasdir: [],
       objeto: [{ value: '' }, [ValidatorStringLen(0, 200, false)]],
       observacao: [{ value: '' }, [ValidatorStringLen(0, 250, false)]],
-      valor: [],
+      valor: [{ value: '' }, [ValidatorCurrency(true)]],
       id_contrato: [],
       assinatura: [],
       reajuste: [],
@@ -226,7 +230,7 @@ export class ProjetoViewComponent implements OnInit {
       horasve: this.projeto.horasve,
       objeto: this.projeto.objeto,
       observacao: this.projeto.obs,
-      valor: this.projeto.valor,
+      valor: this.decimalPipe.transform(this.projeto.valor, '1.2-2'),
       id_contrato: this.projeto.id_contrato,
       assinatura: this.projeto.assinatura,
       reajuste: this.projeto.reajuste,
@@ -273,6 +277,15 @@ export class ProjetoViewComponent implements OnInit {
   }
 
   executaAcao() {
+    let valor: string = this.formulario.value.valor.toString();
+    valor = valor.replace('.', '');
+    valor = valor.replace(',', '.');
+
+    if (isNaN(Number(valor))) {
+      alert('Valor Do Contrato Inválido!');
+      return;
+    }
+    const vlrContrato: number = Number(valor);
     this.projeto.id_tipo = this.formulario.value.tipo;
     this.projeto.id_parceira = this.formulario.value.parceira;
     this.projeto.descricao = this.formulario.value.descricao;
@@ -284,7 +297,7 @@ export class ProjetoViewComponent implements OnInit {
     this.projeto.horasve = this.formulario.value.horasve;
     this.projeto.objeto = this.formulario.value.objeto;
     this.projeto.obs = this.formulario.value.observacao;
-    this.projeto.valor = this.formulario.value.valor;
+    this.projeto.valor = vlrContrato;
     this.projeto.id_contrato = this.formulario.value.id_contrato;
     this.projeto.assinatura = this.formulario.value.assinatura;
     this.projeto.reajuste = this.formulario.value.reajuste;

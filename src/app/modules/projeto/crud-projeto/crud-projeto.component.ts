@@ -184,6 +184,8 @@ export class CrudProjetoComponent implements OnInit {
 
     par.pagina = this.controlePaginas.getPaginalAtual();
 
+    par.contador = 'N';
+
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.projetosServices
       .getProjetos_01(par)
@@ -223,7 +225,6 @@ export class CrudProjetoComponent implements OnInit {
 
     if (this.parametros.value.campo == 'Código') {
       let key = parseInt(this.parametros.value.filtro, 10);
-
       if (isNaN(key)) {
         par.id = 0;
       } else {
@@ -234,9 +235,15 @@ export class CrudProjetoComponent implements OnInit {
     if (this.parametros.value.campo == 'Descrição')
       par.descricao = this.parametros.value.filtro.toUpperCase();
 
+    if (this.parametros.value.campo == 'Fantasia')
+      par.cli_razao = this.parametros.value.filtro.toUpperCase();
+
     par.orderby = this.parametros.value.ordenacao;
 
     par.contador = 'S';
+
+    par.tamPagina = this.tamPagina;
+
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.projetosServices
       .getProjetos_01(par)

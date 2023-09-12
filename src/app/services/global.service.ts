@@ -300,6 +300,22 @@ export class GlobalService {
     this.guardiaoOpcoes.push(guard);
 
     guard = new GuardiaoOpcoes();
+    guard.path = 'usuario';
+    guard.usuario = 16;
+    guard.acoes = [CadastroAcoes.Consulta, CadastroAcoes.Inclusao];
+    this.guardiaoOpcoes.push(guard);
+
+    guard = new GuardiaoOpcoes();
+    guard.path = 'usuario';
+    guard.grupo = 904;
+    guard.acoes = [
+      CadastroAcoes.Consulta,
+      CadastroAcoes.Inclusao,
+      CadastroAcoes.Edicao,
+    ];
+    this.guardiaoOpcoes.push(guard);
+
+    guard = new GuardiaoOpcoes();
     guard.path = 'cliente';
     guard.usuario = 0;
     guard.acoes = [CadastroAcoes.Consulta];
@@ -307,7 +323,18 @@ export class GlobalService {
 
     guard = new GuardiaoOpcoes();
     guard.path = 'cliente';
-    guard.usuario = 99;
+    guard.usuario = 16;
+    guard.acoes = [
+      CadastroAcoes.Inclusao,
+      CadastroAcoes.Edicao,
+      CadastroAcoes.Exclusao,
+      CadastroAcoes.Consulta,
+    ];
+    this.guardiaoOpcoes.push(guard);
+
+    guard = new GuardiaoOpcoes();
+    guard.path = 'cliente';
+    guard.grupo = 904;
     guard.acoes = [
       CadastroAcoes.Inclusao,
       CadastroAcoes.Edicao,

@@ -5,7 +5,7 @@ import { MaterialModule } from './material/material.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-
+import { LOCALE_ID } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,9 +15,12 @@ import { NgxMaskModule } from 'ngx-mask';
 import { SharedModule } from './shared/shared.module';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { BrPaginatorIntl } from './shared/classes/br-PaginatorIntl';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe, registerLocaleData } from '@angular/common';
 import { BarAtividadesComponent } from './home/bar-atividades/bar-atividades.component';
 import { SituacaoProjetoPipe } from './shared/pipes/situacao-projeto.pipe';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, BarAtividadesComponent],
@@ -35,8 +38,10 @@ import { SituacaoProjetoPipe } from './shared/pipes/situacao-projeto.pipe';
   providers: [
     HttpClient,
     DatePipe,
+    DecimalPipe,
     SituacaoProjetoPipe,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    { provide: LOCALE_ID, useValue: 'pt' },
     DiganaoGuard,
     OpcoesGuard,
     GlobalService,
