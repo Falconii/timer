@@ -7,7 +7,7 @@ export class ProjetoModel {
   public dataproj: Date = new Date();
   public dataenc: Date = new Date();
   public descricao: string = '';
-  public horasve: number = 0;
+  public horasve: number = 1;
   public horasplan: number = 0;
   public horasexec: number = 0;
   public horasdir: number = 0;

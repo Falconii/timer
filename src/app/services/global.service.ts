@@ -484,4 +484,9 @@ export class GlobalService {
       { id: 2, descricao: 'TRABALHO ESPECIAL' },
     ];
   }
+
+  getTipoContrato(idx: number): string {
+    if (idx < 1 || idx > 2) return '';
+    return this.lsTpoContratos[idx - 1].descricao;
+  }
 }

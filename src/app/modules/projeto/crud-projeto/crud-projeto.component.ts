@@ -444,4 +444,8 @@ export class CrudProjetoComponent implements OnInit {
   getfirstName(name: string): string {
     return getFirstName(name);
   }
+
+  getTipo(idx: number): string {
+    return this.globalService.getTipoContrato(idx);
+  }
 }
