@@ -221,7 +221,7 @@ export class CrudExecucaoComponent implements OnInit {
 
     par.id_empresa = 1;
 
-    par.orderby = 'Descrição';
+    par.orderby = 'Fantasia';
 
     par.so_ativos = 'S';
 

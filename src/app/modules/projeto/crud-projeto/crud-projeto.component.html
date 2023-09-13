@@ -58,7 +58,9 @@
     </tr>
     <tr *cdkVirtualFor="let projeto of projetos ">
       <td>
-        <mat-icon [inline]="true" [CorStatusProj]="'P'" [nivel]="projeto.nivelplan">crop_square</mat-icon>
+        <mat-icon [inline] class="blue-icon" *ngIf="projeto.status >= '3'">check_box</mat-icon>
+        <mat-icon [inline]="true" [CorStatusProj]="'E'" [nivel]="projeto.nivelplan" *ngIf="projeto.status <= '2'">
+          crop_square</mat-icon>
       </td>
       <td>
         <div>
