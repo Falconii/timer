@@ -1,105 +1,111 @@
 <div class="div-barra">
-    <mat-toolbar>
-        <span class="example-spacer">Contratos: </span>
-        <app-navegator [controle]="controlePaginas" (changePage)="onChangePage()"></app-navegator>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="getProjetos()" matTooltip="Atualizar" matTooltipPosition="above">
+  <mat-toolbar>
+    <span class="example-spacer">Contratos: </span>
+    <app-navegator [controle]="controlePaginas" (changePage)="onChangePage()"></app-navegator>
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+      (click)="getProjetosContador()" matTooltip="Atualizar" matTooltipPosition="above">
       <mat-icon>rotate_right</mat-icon>
     </button>
-        <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above" (click)="onSaveConfig()" matTooltip="Salvar Parâmetros" matTooltipPosition="above">
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above"
+      (click)="onSaveConfig()" matTooltip="Salvar Parâmetros" matTooltipPosition="above">
       <mat-icon>brightness_high</mat-icon>
     </button>
-        <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above" (click)="onHome()" matTooltip="Retorno" matTooltipPosition="above">
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above"
+      (click)="onHome()" matTooltip="Retorno" matTooltipPosition="above">
       <mat-icon>home</mat-icon>
     </button>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon " (click)="escolha(getAcoes()[ 'Inclusao'])" matTooltip="Novo Contrato" matTooltipPosition="above">
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon "
+      (click)="escolha(getAcoes()[ 'Inclusao'])" matTooltip="Novo Contrato" matTooltipPosition="above">
       <mat-icon>add_circle_outline</mat-icon>
     </button>
-    </mat-toolbar>
+  </mat-toolbar>
 </div>
 <div class="parametros">
-    <form [formGroup]="parametros" autocomplete="off" class="col-med-4">
-        <mat-form-field field appearance="outline" class="col-max">
-            <mat-label>Ordenação</mat-label>
-            <mat-select formControlName="ordenacao" (selectionChange)="onChangeParametros()">
-                <mat-option *ngFor="let op of opcoesOrdenacao" [value]="op">
-                    {{op}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field field appearance="outline" class="col-max">
-            <mat-label>Pesquisar Por</mat-label>
-            <mat-select formControlName="campo" (selectionChange)="onChangeParametros()">
-                <mat-option *ngFor="let op of opcoesCampo" [value]="op">
-                    {{op}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="column-span-2">
-            <mat-label>Descrição</mat-label>
-            <input matInput formControlName="filtro" oninput="this.value = this.value.toUpperCase()">
-        </mat-form-field>
-    </form>
+  <form [formGroup]="parametros" autocomplete="off" class="col-med-4">
+    <mat-form-field field appearance="outline" class="col-max">
+      <mat-label>Ordenação</mat-label>
+      <mat-select formControlName="ordenacao" (selectionChange)="onChangeParametros()">
+        <mat-option *ngFor="let op of opcoesOrdenacao" [value]="op">
+          {{op}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field field appearance="outline" class="col-max">
+      <mat-label>Pesquisar Por</mat-label>
+      <mat-select formControlName="campo" (selectionChange)="onChangeParametros()">
+        <mat-option *ngFor="let op of opcoesCampo" [value]="op">
+          {{op}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="column-span-2">
+      <mat-label>Descrição</mat-label>
+      <input matInput formControlName="filtro" oninput="this.value = this.value.toUpperCase()">
+    </mat-form-field>
+  </form>
 </div>
 <cdk-virtual-scroll-viewport [itemSize]="50" class="content">
-    <table class="Browse-Scroll">
-        <tr class="coluna-cabec">
-            <th>SIT</th>
-            <th>Código</th>
-            <th>Tipo</th>
-            <th>Descrição/Cliente</th>
-            <th>Diretor</th>
-            <th>Proj./Enc.</th>
-            <th>Situacao</th>
-            <th>AÇÕES</th>
-        </tr>
-        <tr *cdkVirtualFor="let projeto of projetos ">
-            <td>
-                <mat-icon [inline]="true" [CorStatusProj]="'P'" [nivel]="projeto.nivelplan">crop_square</mat-icon>
-            </td>
-            <td>
-                <div>
-                    <mat-label class="Browse_Lanc_td">{{projeto.id}}</mat-label>
-                </div>
-            </td>
-            <td>
-                <div>
-                    <mat-label class="Browse_Lanc_td">{{getTipo(projeto.id_tipo)}}</mat-label>
-                </div>
-            </td>
-            <td>
-                <div>
-                    <mat-label class="Browse_Lanc_td">{{projeto.descricao}}</mat-label>
-                </div>
-                <div>
-                    <mat-label class="Browse_Lanc_td">{{projeto.cliente_razao}}</mat-label>
-                </div>
-            </td>
-            <td>
-                <div>
-                    <mat-label class="Browse_Lanc_td">{{getfirstName(projeto.diretor_razao)}}</mat-label>
-                </div>
-            </td>
-            <td>
-                <div>
-                    <mat-label class="Browse_Lanc_td">{{projeto.dataprop | date : 'dd/MM/yyyy'}}</mat-label>
-                </div>
-                <div>
-                    <mat-label class="Browse_Lanc_td">{{projeto.dataenc | date : 'dd/MM/yyyy'}}</mat-label>
-                </div>
-            </td>
-            <td>
-                <div>
-                    <mat-label class="Browse_Lanc_td">{{projeto.status | situacaoProjeto}}</mat-label>
-                </div>
-                <div>
-                    <mat-label class="Browse_Lanc_td">{{projeto.status_ex | situacaoPadrao}}</mat-label>
-                </div>
-            </td>
-            <td class="acoes">
-                <barra-acoes [BARRA_VERTICAL]="true" [EXCLUIR]="false" (changeOpcao)="escolha($event,projeto)"></barra-acoes>
-            </td>
-        </tr>
-    </table>
+  <table class="Browse-Scroll">
+    <tr class="coluna-cabec">
+      <th>SIT</th>
+      <th>Código</th>
+      <th>Tipo</th>
+      <th>Descrição/Cliente</th>
+      <th>Diretor</th>
+      <th>Proj./Enc.</th>
+      <th>Situacao</th>
+      <th>AÇÕES</th>
+    </tr>
+    <tr *cdkVirtualFor="let projeto of projetos ">
+      <td>
+        <mat-icon [inline]="true" [CorStatusProj]="'P'" [nivel]="projeto.nivelplan">crop_square</mat-icon>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{projeto.id}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{getTipo(projeto.id_tipo)}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{projeto.descricao}}</mat-label>
+        </div>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{projeto.cliente_razao}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{getfirstName(projeto.diretor_razao)}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{projeto.dataprop | date : 'dd/MM/yyyy'}}</mat-label>
+        </div>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{projeto.dataenc | date : 'dd/MM/yyyy'}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{projeto.status | situacaoProjeto}}</mat-label>
+        </div>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{projeto.status_ex | situacaoPadrao}}</mat-label>
+        </div>
+      </td>
+      <td class="acoes">
+        <barra-acoes [BARRA_VERTICAL]="projeto.status <= '2'" [ALTERAR]="projeto.status <= '2'" [EXCLUIR]="false"
+          (changeOpcao)="escolha($event,projeto)">
+        </barra-acoes>
+      </td>
+    </tr>
+  </table>
 </cdk-virtual-scroll-viewport>
 
 <!--

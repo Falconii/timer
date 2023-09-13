@@ -8,6 +8,7 @@ export class ParametroProjeto01 {
   public dataproj: string = '';
   public dataenc: string = '';
   public status: string = '';
+  public so_ativos: string = 'N';
   public status_pl: string = '';
   public status_ex: string = '';
   public pagina: number = 0;

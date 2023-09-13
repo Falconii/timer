@@ -223,6 +223,8 @@ export class CrudExecucaoComponent implements OnInit {
 
     par.orderby = 'Descrição';
 
+    par.so_ativos = 'S';
+
     this.globalService.setSpin(true);
     this.inscricaoGetContratos = this.projetosServices
       .getProjetos_01(par)
