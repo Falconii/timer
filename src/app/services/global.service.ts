@@ -296,13 +296,17 @@ export class GlobalService {
     guard = new GuardiaoOpcoes();
     guard.path = 'usuario';
     guard.usuario = 0;
-    guard.acoes = [CadastroAcoes.Consulta];
+    guard.acoes = [CadastroAcoes.None];
     this.guardiaoOpcoes.push(guard);
 
     guard = new GuardiaoOpcoes();
     guard.path = 'usuario';
     guard.usuario = 16;
-    guard.acoes = [CadastroAcoes.Consulta, CadastroAcoes.Inclusao];
+    guard.acoes = [
+      CadastroAcoes.Edicao,
+      CadastroAcoes.Consulta,
+      CadastroAcoes.Inclusao,
+    ];
     this.guardiaoOpcoes.push(guard);
 
     guard = new GuardiaoOpcoes();

@@ -19,6 +19,7 @@ import { DatePipe, DecimalPipe, registerLocaleData } from '@angular/common';
 import { BarAtividadesComponent } from './home/bar-atividades/bar-atividades.component';
 import { SituacaoProjetoPipe } from './shared/pipes/situacao-projeto.pipe';
 import localePt from '@angular/common/locales/pt';
+import { HoraSexagenalPipe } from './shared/pipes/hora-sexagenal.pipe';
 
 registerLocaleData(localePt);
 
@@ -39,6 +40,7 @@ registerLocaleData(localePt);
     HttpClient,
     DatePipe,
     DecimalPipe,
+    HoraSexagenalPipe,
     SituacaoProjetoPipe,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: LOCALE_ID, useValue: 'pt' },

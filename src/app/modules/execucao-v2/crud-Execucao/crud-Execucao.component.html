@@ -2,6 +2,10 @@
   <div class="div-barra">
     <mat-toolbar>
       <span class="example-spacer">{{getTitulo()}} Total de Horas {{totalHoras | horaSexagenal}}</span>
+      <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Facilitador"
+        matTooltipPosition="above" (click)="onFacilitador()" *ngIf="false">
+        <mat-icon>add_circle_outline</mat-icon>
+      </button>
       <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Novo Apontamento"
         matTooltipPosition="above" (click)="adicao(getAcoes()['Inclusao'])">
         <mat-icon>add_circle_outline</mat-icon>
@@ -87,7 +91,7 @@
             </mat-label>
             <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
           </div>
-          <div class="second">
+          <div class="second" *ngIf="lanca.encerramento=='S'">
             <mat-icon class="green-icon">check</mat-icon>
           </div>
         </div>

@@ -7,9 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CrudExecucaoComponent } from './crud-Execucao/crud-Execucao.component';
+import { FacilitadorComponent } from './facilitador/facilitador.component';
 
 @NgModule({
-  declarations: [CrudExecucaoComponent],
+  declarations: [CrudExecucaoComponent, FacilitadorComponent],
   imports: [
     CommonModule,
     ExecucaoV2RoutingModule,

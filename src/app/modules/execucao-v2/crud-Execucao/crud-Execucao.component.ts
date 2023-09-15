@@ -302,7 +302,7 @@ export class CrudExecucaoComponent implements OnInit {
     para.analitico = 'S';
     para.orderby = 'Código';
     this.globalService.setSpin(true);
-    this.inscricaoAponExecucao = this.motivoApoService
+    this.inscricaoMotivos = this.motivoApoService
       .getMotivoApos_01(para)
       .subscribe(
         (data: MotivoApoModel[]) => {
@@ -544,7 +544,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.apontamento.id_motivo = this.globalService.codigoMotivo;
     this.apontamento.produtivo = 'S';
     this.apontamento.obs = lanca.obs;
-    this.apontamento.encerramento = 'N';
+    this.apontamento.encerramento = lanca.encerramento;
     this.apontamento.user_insert = lanca.user_insert;
     this.apontamento.user_update = lanca.user_update;
     this.apontamento.resp_razao = lanca.resp_razao;
@@ -825,5 +825,9 @@ export class CrudExecucaoComponent implements OnInit {
 
   onChangeContrato2(event: any) {
     console.log(event);
+  }
+
+  onFacilitador() {
+    this.router.navigate(['execucao/facilitador']);
   }
 }
