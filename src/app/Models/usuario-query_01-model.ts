@@ -4,4 +4,5 @@ export class UsuarioQuery01Model {
   public razao: string = '';
   public grupo: string = '';
   public email: string = '';
+  public ativo: string = '';
 }

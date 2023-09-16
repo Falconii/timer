@@ -19,7 +19,12 @@ export class UsuarioModel {
   public senha: string = '';
   public pasta: string = '';
   public grupo: number = 0;
-  public gru_descricao: string = '';
+  public ativo: string = '';
+  public timer: string = '';
+  public ticket: string = '';
+  public horario_entrada: string = '';
+  public horario_saida: string = '';
   public user_insert: number = 0;
   public user_update: number = 0;
+  public gru_descricao: string = '';
 }

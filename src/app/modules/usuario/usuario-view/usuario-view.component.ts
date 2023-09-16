@@ -16,6 +16,8 @@ import { EstadoModel } from 'src/app/Models/estado-model';
 import { DropdownService } from 'src/app/shared/services/dropdown.service';
 import { GruUserModel } from 'src/app/Models/gru-user-model';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
+import { SimNaoPipe } from 'src/app/shared/pipes/sim-nao.pipe';
+import { SimNao } from 'src/app/shared/classes/sim-nao';
 
 @Component({
   selector: 'app-usuario-view',
@@ -49,6 +51,11 @@ export class UsuarioViewComponent implements OnInit {
 
   ufs: EstadoModel[] = [];
 
+  respostas: SimNao[] = [
+    { sigla: 'S', descricao: 'SIM' },
+    { sigla: 'N', descricao: 'NÃO' },
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
@@ -57,10 +64,12 @@ export class UsuarioViewComponent implements OnInit {
     private estadosSrv: DropdownService,
     private route: ActivatedRoute,
     private router: Router,
-    private appSnackBar: AppSnackbar
+    private appSnackBar: AppSnackbar,
+    private simNaoPipe: SimNaoPipe
   ) {
     this.formulario = formBuilder.group({
       id: [{ value: '', disabled: true }],
+      ativo: [{ value: '', disabled: true }],
       razao: [{ value: '' }, [ValidatorStringLen(3, 40, true)]],
       cadastr: [{ value: '' }, [ValidatorDate(true)]],
       cnpj_cpf: [{ value: '' }, [ValidatorCnpjCpf(false)]],
@@ -85,6 +94,16 @@ export class UsuarioViewComponent implements OnInit {
       tel1: [{ value: '' }, [ValidatorStringLen(0, 23, false)]],
       tel2: [{ value: '' }, [ValidatorStringLen(0, 23)]],
       email: [{ value: '' }, [Validators.required, Validators.email]],
+      id_x: [{ value: '', disabled: true }],
+      ativo_x: [{ value: '', disabled: true }],
+      razao_x: [{ value: '', disabled: true }],
+      cadastr_x: [{ value: '', disabled: true }],
+      timer: [{ value: '' }],
+      timer_: [{ value: '' }],
+      ticket: [{ value: '' }],
+      ticket_: [{ value: '' }],
+      horario_entrada: [{ value: '' }],
+      horario_saida: [{ value: '' }],
     });
     this.usuario = new UsuarioModel();
     this.grupos = [];
@@ -180,6 +199,7 @@ export class UsuarioViewComponent implements OnInit {
       .getUsuario(this.usuario.id_empresa, this.usuario.id)
       .subscribe(
         (data: UsuarioModel) => {
+          console.log(data);
           this.usuario = data;
           this.setValue();
         },
@@ -239,6 +259,7 @@ export class UsuarioViewComponent implements OnInit {
   setValue() {
     this.formulario.setValue({
       id: this.usuario.id,
+      ativo: this.simNaoPipe.transform(this.usuario.ativo),
       razao: this.usuario.razao,
       cadastr: this.usuario.cadastr,
       senha: this.usuario.senha,
@@ -264,6 +285,34 @@ export class UsuarioViewComponent implements OnInit {
       tel1: this.usuario.tel1,
       tel2: this.usuario.tel2,
       email: this.usuario.email,
+      id_x: this.usuario.id,
+      ativo_x: this.simNaoPipe.transform(this.usuario.ativo),
+      razao_x: this.usuario.razao,
+      cadastr_x: this.usuario.cadastr,
+      timer: this.usuario.timer,
+      timer_:
+        this.idAcao == CadastroAcoes.Consulta ||
+        this.idAcao == CadastroAcoes.Exclusao ||
+        this.idAcao == CadastroAcoes.Edicao
+          ? this.respostas[
+              this.respostas.findIndex(
+                (data) => data.sigla == this.usuario.timer
+              )
+            ].descricao
+          : '',
+      ticket: this.usuario.ticket,
+      ticket_:
+        this.idAcao == CadastroAcoes.Consulta ||
+        this.idAcao == CadastroAcoes.Exclusao ||
+        this.idAcao == CadastroAcoes.Edicao
+          ? this.respostas[
+              this.respostas.findIndex(
+                (data) => data.sigla == this.usuario.ticket
+              )
+            ].descricao
+          : '',
+      horario_entrada: this.usuario.horario_entrada,
+      horario_saida: this.usuario.horario_saida,
     });
   }
 
@@ -324,6 +373,11 @@ export class UsuarioViewComponent implements OnInit {
     this.usuario.senha = this.formulario.value.senha;
     this.usuario.pasta = this.formulario.value.pasta;
     this.usuario.grupo = this.formulario.value.grupo;
+    this.usuario.ativo = this.formulario.value.ativo;
+    this.usuario.timer = this.formulario.value.timer;
+    this.usuario.ticket = this.formulario.value.ticket;
+    this.usuario.horario_entrada = this.formulario.value.horario_entrada;
+    this.usuario.horario_saida = this.formulario.value.horario_saida;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         this.inscricaoAcao = this.usuariosService

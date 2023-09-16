@@ -57,6 +57,7 @@
   <table class="Browse-Scroll">
     <tr class="coluna-cabec">
       <th>Código</th>
+      <th>Ativo</th>
       <th>Razão</th>
       <th>Grupo</th>
       <th>E-Mail</th>
@@ -66,6 +67,11 @@
       <td>
         <div>
           <mat-label class="Browse_Lanc_td">{{usuario.id}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{usuario.ativo | simNao}}</mat-label>
         </div>
       </td>
       <td>

@@ -20,6 +20,7 @@ import { BarAtividadesComponent } from './home/bar-atividades/bar-atividades.com
 import { SituacaoProjetoPipe } from './shared/pipes/situacao-projeto.pipe';
 import localePt from '@angular/common/locales/pt';
 import { HoraSexagenalPipe } from './shared/pipes/hora-sexagenal.pipe';
+import { SimNaoPipe } from './shared/pipes/sim-nao.pipe';
 
 registerLocaleData(localePt);
 
@@ -42,6 +43,7 @@ registerLocaleData(localePt);
     DecimalPipe,
     HoraSexagenalPipe,
     SituacaoProjetoPipe,
+    SimNaoPipe,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: LOCALE_ID, useValue: 'pt' },
     DiganaoGuard,
