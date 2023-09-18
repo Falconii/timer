@@ -21,6 +21,8 @@ import { SituacaoProjetoPipe } from './shared/pipes/situacao-projeto.pipe';
 import localePt from '@angular/common/locales/pt';
 import { HoraSexagenalPipe } from './shared/pipes/hora-sexagenal.pipe';
 import { SimNaoPipe } from './shared/pipes/sim-nao.pipe';
+import { FeriadoTipoPipe } from './shared/pipes/feriado-tipo.pipe';
+import { FeriadoNivelPipe } from './shared/pipes/feriado-nivel.pipe';
 
 registerLocaleData(localePt);
 
@@ -43,6 +45,8 @@ registerLocaleData(localePt);
     DecimalPipe,
     HoraSexagenalPipe,
     SituacaoProjetoPipe,
+    FeriadoTipoPipe,
+    FeriadoNivelPipe,
     SimNaoPipe,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: LOCALE_ID, useValue: 'pt' },

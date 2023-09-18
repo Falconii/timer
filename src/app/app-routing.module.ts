@@ -85,6 +85,12 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
+    path: 'feriados',
+    loadChildren: () =>
+      import('./modules/feriado/feriado.module').then((m) => m.FeriadoModule),
+    canActivate: [DiganaoGuard],
+  },
+  {
     path: 'gerencial',
     loadChildren: () =>
       import('./modules/gerencial/gerencial.module').then(

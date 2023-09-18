@@ -12,7 +12,7 @@ export class ParametroModel {
       const retorno = JSON.parse(this.parametro);
       return retorno;
     } catch (error) {
-      const retorno = JSON.parse('{"mensagem":"erro"}');
+      const retorno = JSON.parse('{"mensagem":"error"}');
       return retorno;
     }
   }

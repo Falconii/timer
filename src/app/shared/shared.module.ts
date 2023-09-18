@@ -36,6 +36,8 @@ import { ParamCoordenadorComponent } from './components/param-coordenador/param-
 import { ParamDiretorComponent } from './components/param-diretor/param-diretor.component';
 import { BarraAcoesComponent } from './components/barra-acoes/barra-acoes.component';
 import { CnpjCpfPipe } from './pipes/cnpj-cpf.pipe';
+import { FeriadoTipoPipe } from './pipes/feriado-tipo.pipe';
+import { FeriadoNivelPipe } from './pipes/feriado-nivel.pipe';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,8 @@ import { CnpjCpfPipe } from './pipes/cnpj-cpf.pipe';
     SpinsComponent,
     SpinApontamentosComponent,
     CnpjCpfPipe,
+    FeriadoNivelPipe,
+    FeriadoTipoPipe,
     ProgressBarComponent,
     QuestionDialogComponent,
     JustificativaRespexecDialogComponent,
@@ -89,6 +93,8 @@ import { CnpjCpfPipe } from './pipes/cnpj-cpf.pipe';
     AtivoPipe,
     CnpjCpfPipe,
     SituacaoPadraoPipe,
+    FeriadoNivelPipe,
+    FeriadoTipoPipe,
     SharedNavegatorComponent,
     CelCalendarComponent,
     CelApontamentosComponent,

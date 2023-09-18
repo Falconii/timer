@@ -439,6 +439,9 @@ export function messageError(value: any): string {
       retorno += `${value.message} `;
     }
   }
+
+  if (retorno.length == 0) retorno = value;
+
   return retorno;
 }
 
@@ -469,6 +472,7 @@ export class SituacaoProjeto {
 }
 
 export function GetValueJsonNumber(obj: JSON, tag: string): number {
+  console.log(Object(obj));
   const retorno = Object(obj)[tag];
   return retorno;
 }

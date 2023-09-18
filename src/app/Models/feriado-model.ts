@@ -5,4 +5,6 @@ export class FeriadoModel {
   public data: string = '';
   public id_nivel: number = 0;
   public descricao: string = '';
+  public user_insert: number = 0;
+  public user_update: number = 0;
 }

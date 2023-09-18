@@ -205,6 +205,11 @@ export class GlobalService {
     guard.grupos = [900, 901, 904, 906];
     this.guadiaoMestre.push(guard);
 
+    guard = new GuardiaoMestre();
+    guard.path = 'feriados';
+    guard.grupos = [906];
+    this.guadiaoMestre.push(guard);
+
     //diretoria
     guard = new GuardiaoMestre();
     guard.path = 'projetos';
