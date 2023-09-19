@@ -102,8 +102,10 @@ export class UsuarioViewComponent implements OnInit {
       timer_: [{ value: '' }],
       ticket: [{ value: '' }],
       ticket_: [{ value: '' }],
-      horario_entrada: [{ value: '' }],
-      horario_saida: [{ value: '' }],
+      man_hora_entrada: [{ value: '' }],
+      man_hora_saida: [{ value: '' }],
+      tard_hora_entrada: [{ value: '' }],
+      tard_hora_saida: [{ value: '' }],
     });
     this.usuario = new UsuarioModel();
     this.grupos = [];
@@ -311,8 +313,10 @@ export class UsuarioViewComponent implements OnInit {
               )
             ].descricao
           : '',
-      horario_entrada: this.usuario.horario_entrada,
-      horario_saida: this.usuario.horario_saida,
+      man_hora_entrada: this.usuario.man_hora_entrada,
+      man_hora_saida: this.usuario.man_hora_saida,
+      tard_hora_entrada: this.usuario.tard_hora_entrada,
+      tard_hora_saida: this.usuario.tard_hora_saida,
     });
   }
 
@@ -376,10 +380,13 @@ export class UsuarioViewComponent implements OnInit {
     this.usuario.ativo = this.formulario.value.ativo;
     this.usuario.timer = this.formulario.value.timer;
     this.usuario.ticket = this.formulario.value.ticket;
-    this.usuario.horario_entrada = this.formulario.value.horario_entrada;
-    this.usuario.horario_saida = this.formulario.value.horario_saida;
+    this.usuario.man_hora_entrada = this.formulario.value.man_hora_entrada;
+    this.usuario.man_hora_saida = this.formulario.value.man_hora_saida;
+    this.usuario.tard_hora_entrada = this.formulario.value.tard_hora_entrada;
+    this.usuario.tard_hora_saida = this.formulario.value.tard_hora_saida;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
+        this.usuario.user_insert = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.usuariosService
           .UsuarioInsert(this.usuario)
           .subscribe(
@@ -395,6 +402,7 @@ export class UsuarioViewComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
+        this.usuario.user_update = this.globalService.getUsuario().id;
         this.inscricaoAcao = this.usuariosService
           .UsuarioUpdate(this.usuario)
           .subscribe(

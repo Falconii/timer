@@ -32,6 +32,12 @@ export function ValidatorCurrency(required: boolean = false): ValidatorFn {
         message = `Valor Inválido, Usar Apenas Vírgula Na Casa Decimal e Não Coloque Separador De Milhar`;
 
         valido = false;
+      } else {
+        if (Number(valor) == 0) {
+          message = `Valor Não Poderá Ser Zero!`;
+
+          valido = false;
+        }
       }
     }
 

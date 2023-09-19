@@ -129,30 +129,29 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
             <mat-form-field appearance="outline" class="col-max">
               <mat-label>Horas Vendidas</mat-label>
               <input matInput formControlName="horasve" [readonly]="readOnly">
-              <mat-error *ngIf="formulario.get('horasve')?.status == 'INVALID' && touchedOrDirty('horasve')">Valor
-                Mínimo 1 Hora
-              </mat-error>
+              <mat-error *ngIf="NoValidtouchedOrDirty('horasve')">Valor Mínimo 1 Hora</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" class="col-max">
               <mat-label>Descrição</mat-label>
               <input matInput formControlName="descricao" oninput="this.value = this.value.toUpperCase()"
                 [readonly]="readOnly">
-              <mat-error *ngIf="formulario.get('descricao')?.status == 'INVALID' && touchedOrDirty('descricao')">
-                Descrição - No mínimo 03 letras e no máximo 50 letras</mat-error>
+              <mat-error *ngIf="NoValidtouchedOrDirty('descricao')">Descrição - No mínimo 03 letras e no máximo 50
+                letras</mat-error>
             </mat-form-field>
           </div>
           <div class="col-med-2">
             <mat-form-field appearance="outline" class="col-max">
               <mat-label>Objeto</mat-label>
               <input matInput formControlName="objeto" [readonly]="readOnly">
-              <mat-error *ngIf="formulario.get('objeto')?.errors?.ValidatorStringLen && touchedOrDirty('objeto')">
+              <mat-error
+                *ngIf="formulario.get('objeto')?.errors?.ValidatorStringLen && NoValidtouchedOrDirty('objeto')">
                 {{formulario.get('objeto')?.errors?.message}}</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" class="col-max">
               <mat-label>Observação</mat-label>
               <input matInput formControlName="observacao" [readonly]="readOnly">
               <mat-error
-                *ngIf="formulario.get('observacao')?.errors?.ValidatorStringLen && touchedOrDirty('observacao')">
+                *ngIf="formulario.get('observacao')?.errors?.ValidatorStringLen && NoValidtouchedOrDirty('observacao')">
                 {{formulario.get('observacao')?.errors?.message}}</mat-error>
             </mat-form-field>
           </div>
@@ -182,7 +181,7 @@ https://www.thecodehubs.com/how-to-use-material-input-date-in-angular-app/
             <mat-form-field appearance="outline" class="col-max">
               <mat-label>Valor</mat-label>
               <input matInput formControlName="valor" [readonly]="readOnly">
-              <mat-error *ngIf="formulario.get('valor')?.errors?.ValidatorCurrency && touchedOrDirty('valor')">
+              <mat-error *ngIf="formulario.get('valor')?.errors?.ValidatorCurrency && NoValidtouchedOrDirty('valor')">
                 {{formulario.get('valor')?.errors?.message}}</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" class="col-max">

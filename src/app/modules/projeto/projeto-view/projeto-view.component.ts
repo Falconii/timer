@@ -144,9 +144,13 @@ export class ProjetoViewComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.formulario.valid) {
+    if (this.formulario.valid || this.idAcao == CadastroAcoes.Exclusao) {
       this.executaAcao();
     } else {
+      Object.keys(this.formulario.controls).forEach((campo) => {
+        const controle = this.formulario.get(campo);
+        controle?.markAsDirty();
+      });
       this.appSnackBar.openSuccessSnackBar(
         `Formulário Com Campos Inválidos.`,
         'OK'
@@ -359,10 +363,10 @@ export class ProjetoViewComponent implements OnInit {
     return CadastroAcoes;
   }
 
-  touchedOrDirty(campo: string): boolean {
+  NoValidtouchedOrDirty(campo: string): boolean {
     if (
-      this.formulario.get(campo)?.touched ||
-      this.formulario.get(campo)?.dirty
+      !this.formulario.get(campo)?.valid &&
+      (this.formulario.get(campo)?.touched || this.formulario.get(campo)?.dirty)
     )
       return true;
     return false;

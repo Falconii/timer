@@ -182,7 +182,7 @@
             <input matInput formControlName="cadastr_x">
           </mat-form-field>
         </div>
-        <div class="col-med-4">
+        <div class="col-med-2">
           <mat-form-field field appearance="outline" class="col-max col-max"
             *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']) && (idAcao != getAcoes()[ 'Atualizacao']))">
             <mat-label>Apontamentos Hora</mat-label>
@@ -211,13 +211,23 @@
             <mat-label>Ticket</mat-label>
             <input matInput formControlName="ticket_" [readonly]="readOnly">
           </mat-form-field>
+        </div>
+        <div class="col-med-4">
           <mat-form-field appearance="outline" class="col-max">
-            <mat-label>Entrada</mat-label>
-            <input matInput formControlName="horario_entrada" placeholder="HH:MM" mask="00:00" [readonly]="readOnly">
+            <mat-label>Manhã Entrada</mat-label>
+            <input matInput formControlName="man_hora_entrada" placeholder="HH:MM" mask="00:00" [readonly]="readOnly">
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-max">
-            <mat-label>Saída</mat-label>
-            <input matInput formControlName="horario_saida" placeholder="HH:MM" mask="00:00" [readonly]="readOnly">
+            <mat-label>Manhã Saida</mat-label>
+            <input matInput formControlName="man_hora_saida" placeholder="HH:MM" mask="00:00" [readonly]="readOnly">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Tarde Entrada</mat-label>
+            <input matInput formControlName="tard_hora_entrada" placeholder="HH:MM" mask="00:00" [readonly]="readOnly">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-max">
+            <mat-label>Tarde Saida</mat-label>
+            <input matInput formControlName="tard_hora_saida" placeholder="HH:MM" mask="00:00" [readonly]="readOnly">
           </mat-form-field>
         </div>
       </div>

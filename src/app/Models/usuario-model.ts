@@ -22,8 +22,10 @@ export class UsuarioModel {
   public ativo: string = '';
   public timer: string = '';
   public ticket: string = '';
-  public horario_entrada: string = '';
-  public horario_saida: string = '';
+  public man_hora_entrada: string = '07:45';
+  public man_hora_saida: string = '13:00';
+  public tard_hora_entrada: string = '13:00';
+  public tard_hora_saida: string = '17:48';
   public user_insert: number = 0;
   public user_update: number = 0;
   public gru_descricao: string = '';
