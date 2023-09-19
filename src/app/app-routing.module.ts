@@ -1,3 +1,4 @@
+import { HorasControlExecModule } from './modules/horas-control-exec/horas-control-exec.module';
 import { DiganaoGuard } from './guards/diganao.guard';
 import { HomeComponent } from './home/home.component';
 import { NgModule } from '@angular/core';
@@ -83,6 +84,14 @@ const routes: Routes = [
         (m) => m.DashboardModule
       ),
     canActivate: [DiganaoGuard],
+  },
+  {
+    path: 'horas-lista-01',
+    loadChildren: () =>
+      import('./modules/horas-control-exec/horas-control-exec.module').then(
+        (m) => m.HorasControlExecModule
+      ),
+    canActivate: [],
   },
   {
     path: 'feriados',

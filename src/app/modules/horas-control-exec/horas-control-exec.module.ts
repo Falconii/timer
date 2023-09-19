@@ -1,25 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FeriadoRoutingModule } from './feriado-routing.module';
-import { CrudFeriadoComponent } from './crud-feriado/crud-feriado.component';
-import { FeriadoViewComponent } from './feriado-view/feriado-view.component';
-import { MaterialModule } from 'src/app/material/material.module';
+import { HorasControlExecRoutingModule } from './horas-control-exec-routing.module';
+import { HorasLista01Component } from './horas-lista01/horas-lista01.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NgxMaskModule } from 'ngx-mask';
+import { MaterialModule } from 'src/app/material/material.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+
 @NgModule({
-  declarations: [CrudFeriadoComponent, FeriadoViewComponent],
+  declarations: [HorasLista01Component],
   imports: [
     CommonModule,
-    FeriadoRoutingModule,
+    HorasControlExecRoutingModule,
     MaterialModule,
-    FormsModule,
     ScrollingModule,
+    FormsModule,
     ReactiveFormsModule,
     SharedModule,
     NgxMaskModule.forChild(),
   ],
 })
-export class FeriadoModule {}
+export class HorasControlExecModule {}

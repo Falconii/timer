@@ -1,3 +1,4 @@
+import { Lista01Model } from './../Models/lista01-model';
 import { UsuarioModel } from 'src/app/Models/usuario-model';
 import { UsuarioQuery01Model } from './../Models/usuario-query_01-model';
 import { HttpClient } from '@angular/common/http';
@@ -5,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ParametroUsuario01 } from '../parametros/parametro-usuario01';
 import { environment } from 'src/environments/environment';
+import { ParametroLista01 } from '../parametros/parametro-lista01';
 
 @Injectable({
   providedIn: 'root',
@@ -55,6 +57,13 @@ export class UsuariosService {
   UsuarioDelete(id_empresa: number, id: number) {
     return this.http.delete<UsuarioModel>(
       `${this.apiURL}usuario/${id_empresa}/${id}`
+    );
+  }
+
+  UsarioHorasExec(param: ParametroLista01) {
+    return this.http.post<Lista01Model[]>(
+      `${this.apiURL}usariohorasexec/`,
+      param
     );
   }
 
