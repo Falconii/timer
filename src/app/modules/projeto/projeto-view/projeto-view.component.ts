@@ -80,9 +80,9 @@ export class ProjetoViewComponent implements OnInit {
   ) {
     this.formulario = formBuilder.group({
       id: [{ value: '', disabled: true }],
-      tipo: [{ value: '' }],
+      tipo: [{ value: 0 }, [Validators.required, Validators.min(1)]],
       tipo_descricao: [{ value: '' }],
-      parceira: [{ value: '' }],
+      parceira: [{ value: 0 }, [Validators.required, Validators.min(1)]],
       parceira_descricao: [{ value: '' }],
       descricao: [
         { value: '' },
@@ -92,9 +92,9 @@ export class ProjetoViewComponent implements OnInit {
           Validators.maxLength(50),
         ],
       ],
-      id_diretor: [],
+      id_diretor: [{ value: 0 }, [Validators.required, Validators.min(1)]],
       diretor_razao: [],
-      id_cliente: [],
+      id_cliente: [{ value: 0 }, [Validators.required, Validators.min(1)]],
       cliente_razao: [],
       dataprop: [],
       dataproj: [],
@@ -105,7 +105,7 @@ export class ProjetoViewComponent implements OnInit {
       horasdir: [],
       objeto: [{ value: '' }, [ValidatorStringLen(0, 200, false)]],
       observacao: [{ value: '' }, [ValidatorStringLen(0, 250, false)]],
-      valor: [{ value: '' }, [ValidatorCurrency(true)]],
+      valor: [{ value: '' }, [ValidatorCurrency(false, true)]],
       id_contrato: [],
       assinatura: [],
       reajuste: [],
@@ -147,14 +147,7 @@ export class ProjetoViewComponent implements OnInit {
     if (this.formulario.valid || this.idAcao == CadastroAcoes.Exclusao) {
       this.executaAcao();
     } else {
-      Object.keys(this.formulario.controls).forEach((campo) => {
-        const controle = this.formulario.get(campo);
-        controle?.markAsDirty();
-      });
-      this.appSnackBar.openSuccessSnackBar(
-        `Formulário Com Campos Inválidos.`,
-        'OK'
-      );
+      this.formulario.markAllAsTouched();
     }
   }
 
@@ -367,8 +360,9 @@ export class ProjetoViewComponent implements OnInit {
     if (
       !this.formulario.get(campo)?.valid &&
       (this.formulario.get(campo)?.touched || this.formulario.get(campo)?.dirty)
-    )
+    ) {
       return true;
+    }
     return false;
   }
 

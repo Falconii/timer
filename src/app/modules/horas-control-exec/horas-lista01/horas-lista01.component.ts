@@ -190,6 +190,7 @@ export class HorasLista01Component implements OnInit {
     this.auditor = this.parametro.value.auditores;
     this.getLista();
   }
+
   getLista() {
     const par = new ParametroLista01();
 

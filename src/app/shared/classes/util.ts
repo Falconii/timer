@@ -134,8 +134,6 @@ export function DiasUteisV2(
   Final: string,
   id_exec: number
 ): MoviData[] {
-  console.log('Inicial', Inicial, 'Final', Final);
-
   let retorno: MoviData[] = [];
 
   let x = 0;
@@ -164,8 +162,6 @@ export function DiasUteisV2(
 
   // Calculating the no. of days between two dates
   const diffInDays = Math.round(diffInTime / oneDay);
-
-  console.log('diffInDays', diffInDays);
 
   for (x = 1; x <= diffInDays + 1; x++) {
     const date: Date = new Date(Inicial + 'T00:00:00.000Z');
@@ -421,9 +417,6 @@ export function getFirstName(value: string): string {
 
 export function messageError(value: any): string {
   var retorno = '';
-
-  console.log(value);
-
   if (!(typeof value.error === 'undefined')) {
     retorno += `${value.error.message} `;
   } else {
@@ -472,7 +465,6 @@ export class SituacaoProjeto {
 }
 
 export function GetValueJsonNumber(obj: JSON, tag: string): number {
-  console.log(Object(obj));
   const retorno = Object(obj)[tag];
   return retorno;
 }

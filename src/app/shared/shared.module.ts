@@ -38,6 +38,7 @@ import { BarraAcoesComponent } from './components/barra-acoes/barra-acoes.compon
 import { CnpjCpfPipe } from './pipes/cnpj-cpf.pipe';
 import { FeriadoTipoPipe } from './pipes/feriado-tipo.pipe';
 import { FeriadoNivelPipe } from './pipes/feriado-nivel.pipe';
+import { FirstNamePipe } from './pipes/first-name.pipe';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { FeriadoNivelPipe } from './pipes/feriado-nivel.pipe';
     CnpjCpfPipe,
     FeriadoNivelPipe,
     FeriadoTipoPipe,
+    FirstNamePipe,
     ProgressBarComponent,
     QuestionDialogComponent,
     JustificativaRespexecDialogComponent,
@@ -95,6 +97,7 @@ import { FeriadoNivelPipe } from './pipes/feriado-nivel.pipe';
     SituacaoPadraoPipe,
     FeriadoNivelPipe,
     FeriadoTipoPipe,
+    FirstNamePipe,
     SharedNavegatorComponent,
     CelCalendarComponent,
     CelApontamentosComponent,

@@ -1,6 +1,9 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export function ValidatorCurrency(required: boolean = false): ValidatorFn {
+export function ValidatorCurrency(
+  required: boolean = false,
+  zero: boolean = false
+): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     let message = '';
 
@@ -33,9 +36,8 @@ export function ValidatorCurrency(required: boolean = false): ValidatorFn {
 
         valido = false;
       } else {
-        if (Number(valor) == 0) {
+        if (Number(valor) == 0 && !zero) {
           message = `Valor Não Poderá Ser Zero!`;
-
           valido = false;
         }
       }
