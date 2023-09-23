@@ -14,7 +14,7 @@
     <table class="Browse_Lanc">
       <tr class="coluna-cabec">
         <th>HORÁRIO</th>
-        <th>CLIENTE/ATIVIDADE</th>
+        <th>CLIENTE/DESCRIÇÃO/ATIVIDADE</th>
         <th>MOTIVO/OBS</th>
       </tr>
       <tr *ngFor="let lanca of apontamentos">
@@ -24,14 +24,10 @@
             </mat-label>
             <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
           </div>
-          <div>
-            <mat-label class="Browse_Lanc_td">Resp:{{getfirstName(lanca.resp_razao)}}</mat-label>
-          </div>
-          <div>
-            <mat-label class="Browse_Lanc_td">Exec:{{getfirstName(lanca.exec_razao)}}</mat-label>
-          </div>
-        </td>
         <td>
+          <div>
+            <mat-label class="Browse_Lanc_td">{{lanca.cli_razao}}</mat-label>
+          </div>
           <div>
             <mat-label class="Browse_Lanc_td">{{lanca.proj_descricao}}</mat-label>
           </div>

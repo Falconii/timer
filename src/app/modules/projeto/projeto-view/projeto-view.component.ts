@@ -148,6 +148,10 @@ export class ProjetoViewComponent implements OnInit {
       this.executaAcao();
     } else {
       this.formulario.markAllAsTouched();
+      this.appSnackBar.openSuccessSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
     }
   }
 

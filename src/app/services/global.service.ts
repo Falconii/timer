@@ -232,6 +232,11 @@ export class GlobalService {
     this.guadiaoMestre.push(guard);
 
     guard = new GuardiaoMestre();
+    guard.path = 'execucao3';
+    guard.grupos = [906];
+    this.guadiaoMestre.push(guard);
+
+    guard = new GuardiaoMestre();
     guard.path = 'agendatrabalhos';
     guard.grupos = [0];
     this.guadiaoMestre.push(guard);

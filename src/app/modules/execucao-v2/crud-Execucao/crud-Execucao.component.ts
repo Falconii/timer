@@ -254,12 +254,12 @@ export class CrudExecucaoComponent implements OnInit {
     para.orderby = 'projeto';
     if (op == 'G') {
       para.so_abertas_ex = 'S';
-      para.conta = '01';
+      para.conta = this.globalService.getUsuario().id == 16 ? '02' : '01';
       para.nivel = 2;
       para.tipo = 'S';
     } else {
       para.so_abertas_ex = 'S';
-      para.conta = '01';
+      para.conta = this.globalService.getUsuario().id == 16 ? '02' : '01';
       para.subconta = this.grupo.subconta.trim();
       para.subconta_nivel = 'S';
       para.nivel_filtro = this.grupo.nivel;
@@ -424,6 +424,8 @@ export class CrudExecucaoComponent implements OnInit {
       if (this.formulario.valid) {
         this.executaAcao();
       } else {
+        this.formulario.markAllAsTouched();
+        this.gravando = false;
         this.appSnackBar.openSuccessSnackBar(
           `Formulário Com Campos Inválidos.`,
           'OK'

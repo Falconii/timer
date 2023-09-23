@@ -116,6 +116,14 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
+    path: 'execucao3',
+    loadChildren: () =>
+      import('./modules/execucao-v3/execucao-v3.module').then(
+        (m) => m.ExecucaoV3Module
+      ),
+    canActivate: [DiganaoGuard],
+  },
+  {
     path: 'extratoaudi',
     loadChildren: () =>
       import('./modules/extrato-auditor/extrato-auditor.module').then(
