@@ -225,6 +225,8 @@ export class CrudExecucaoComponent implements OnInit {
 
     par.so_ativos = 'S';
 
+    par.tem_atividade = 'S';
+
     this.globalService.setSpin(true);
     this.inscricaoGetContratos = this.projetosServices
       .getProjetos_01(par)

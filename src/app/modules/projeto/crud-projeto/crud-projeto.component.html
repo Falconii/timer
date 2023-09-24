@@ -49,7 +49,7 @@
     <tr class="coluna-cabec">
       <th>SIT</th>
       <th>Código</th>
-      <th>Tipo</th>
+      <th>Tipo/Tem Atividade</th>
       <th>Descrição/Cliente</th>
       <th>Diretor</th>
       <th>Proj./Enc.</th>
@@ -70,6 +70,9 @@
       <td>
         <div>
           <mat-label class="Browse_Lanc_td">{{getTipo(projeto.id_tipo)}}</mat-label>
+        </div>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{projeto.tem_atividade}}</mat-label>
         </div>
       </td>
       <td>

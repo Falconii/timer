@@ -11,6 +11,7 @@ export class ParametroProjeto01 {
   public so_ativos: string = 'N';
   public status_pl: string = '';
   public status_ex: string = '';
+  public tem_atividade: string = '';
   public pagina: number = 0;
   public tamPagina: number = 50;
   public contador: string = 'N';

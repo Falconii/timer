@@ -30,4 +30,5 @@ export class ProjetoModel {
   public cliente_gru_econo: number = 0;
   public nivelplan: number = -1;
   public nivelexec: number = -1;
+  public tem_atividade: string = '';
 }
