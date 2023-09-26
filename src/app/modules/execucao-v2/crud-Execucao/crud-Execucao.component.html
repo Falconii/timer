@@ -55,6 +55,16 @@
         </mat-select>
       </mat-form-field>
     </div>
+    <div class="col-med-1">
+      <mat-form-field field appearance="outline" class="col-max">
+        <mat-label>Atividades</mat-label>
+        <mat-select formControlName="id_estrutura" (selectionChange)="onChangeEstruturas()">
+          <mat-option *ngFor="let estrutura of estruturas" [value]="estrutura.id">
+            {{estrutura.estru_descri.trim()}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div class="col-med-2">
       <mat-form-field field appearance="outline" class="col-max">
         <mat-label>Grupos</mat-label>

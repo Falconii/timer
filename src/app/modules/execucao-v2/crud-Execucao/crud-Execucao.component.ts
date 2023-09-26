@@ -49,6 +49,9 @@ import { ParametroMotivoApo01 } from 'src/app/parametros/parametro-motivo-apo01'
 import { ErrorIntervalo } from 'src/app/shared/classes/error-intervalo';
 import { ProjetoModel } from 'src/app/Models/projeto-model';
 import { ParametroProjeto01 } from 'src/app/parametros/parametro-projeto01';
+import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
+import { EstruturasService } from 'src/app/services/estruturas.service';
+import { EstruturaModel } from 'src/app/Models/estrutura-model';
 
 @Component({
   selector: 'app-crud-Execucao',
@@ -93,6 +96,9 @@ export class CrudExecucaoComponent implements OnInit {
   grupo: AtividadeQuery_01Model = new AtividadeQuery_01Model();
   grupos: AtividadeQuery_01Model[] = [];
 
+  estrutura: AtividadeQuery_01Model = new AtividadeQuery_01Model();
+  estruturas: AtividadeQuery_01Model[] = [];
+
   focusEntrada: boolean = false;
   focusCancelar: boolean = false;
 
@@ -110,7 +116,8 @@ export class CrudExecucaoComponent implements OnInit {
     private projetosServices: ProjetosService,
     private globalService: GlobalService,
     private router: Router,
-    private appSnackBar: AppSnackbar
+    private appSnackBar: AppSnackbar,
+    private estruturaService: EstruturasService
   ) {
     this.formulario = formBuilder.group({
       entrada: [{ value: '' }, [Validators.required]],
@@ -124,6 +131,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.parametro = formBuilder.group({
       usuario: [{ value: '' }],
       data: [{ value: '' }],
+      id_estrutura: [{ value: '' }, [Validators.required, Validators.min(1)]],
       id_contrato: [{ value: '' }, [Validators.required, Validators.min(1)]],
       id_grupo: [{ value: '' }, [Validators.required, Validators.min(1)]],
       id_atividade: [{ value: '' }, [Validators.required, Validators.min(1)]],
@@ -251,22 +259,28 @@ export class CrudExecucaoComponent implements OnInit {
 
   getAtividades(op: string) {
     let para = new ParametroAtividade01();
-    para.id_empresa = 1;
+    para.id_empresa = this.globalService.getIdEmpresa();
     para.id_projeto = this.contrato.id;
     para.orderby = 'projeto';
-    if (op == 'G') {
+    if (op == 'C') {
       para.so_abertas_ex = 'S';
-      para.conta = this.globalService.getUsuario().id == 16 ? '02' : '01';
-      para.nivel = 2;
-      para.tipo = 'S';
+      para.nivel = 1;
+      para.tipo = 'C';
     } else {
-      para.so_abertas_ex = 'S';
-      para.conta = this.globalService.getUsuario().id == 16 ? '02' : '01';
-      para.subconta = this.grupo.subconta.trim();
-      para.subconta_nivel = 'S';
-      para.nivel_filtro = this.grupo.nivel;
-      para.nivel = 3;
-      para.tipo = 'O';
+      if (op == 'G') {
+        para.so_abertas_ex = 'S';
+        para.conta = this.estrutura.conta;
+        para.nivel = 2;
+        para.tipo = 'S';
+      } else {
+        para.so_abertas_ex = 'S';
+        para.conta = this.grupo.conta;
+        para.subconta = this.grupo.subconta.trim();
+        para.subconta_nivel = 'S';
+        para.nivel_filtro = this.grupo.nivel;
+        para.nivel = 3;
+        para.tipo = 'O';
+      }
     }
     this.globalService.setSpin(true);
     this.inscricaoAtividades = this.atividadesService
@@ -275,24 +289,37 @@ export class CrudExecucaoComponent implements OnInit {
         (data: AtividadeQuery_01Model[]) => {
           this.globalService.setSpin(false);
           this.atividades = data;
-          if (op == 'G') {
-            this.grupos = data;
-            this.parametro.patchValue({ id_grupo: this.grupos[0].id });
-            this.onChangeGrupos();
+          if (op == 'C') {
+            this.estruturas = data;
+            this.parametro.patchValue({ id_estrutura: this.estruturas[0].id });
+            this.onChangeEstruturas();
+            this.getAtividades('G');
           } else {
-            this.atividades = data;
-            this.parametro.patchValue({ id_atividade: this.atividades[0].id });
-            this.atividade = this.atividades.filter(
-              (ativ) => ativ.id === this.parametro.value.id_atividade
-            )[0];
+            if (op == 'G') {
+              this.grupos = data;
+              this.parametro.patchValue({ id_grupo: this.grupos[0].id });
+              this.onChangeGrupos();
+            } else {
+              this.atividades = data;
+              this.parametro.patchValue({
+                id_atividade: this.atividades[0].id,
+              });
+              this.atividade = this.atividades.filter(
+                (ativ) => ativ.id === this.parametro.value.id_atividade
+              )[0];
+            }
           }
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          if (op == 'G') {
-            this.grupos = [];
+          if (op == 'C') {
+            this.estruturas = [];
           } else {
-            this.atividades = [];
+            if (op == 'G') {
+              this.grupos = [];
+            } else {
+              this.atividades = [];
+            }
           }
         }
       );
@@ -344,6 +371,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.parametro.setValue({
       usuario: this.usuario.razao,
       data: new Date(),
+      id_estrutura: 0,
       id_contrato: 0,
       id_grupo: 0,
       id_atividade: 0,
@@ -476,6 +504,7 @@ export class CrudExecucaoComponent implements OnInit {
     }
 
     if (!this.parametro.valid) {
+      this.parametro.markAllAsTouched();
       this.appSnackBar.openSuccessSnackBar(
         `Favor Preencher Os Parâmetros`,
         'OK'
@@ -492,10 +521,6 @@ export class CrudExecucaoComponent implements OnInit {
           `${DataYYYYMMDD(this.parametro.value.data)} ${lastTime}`
         )
       );
-      //this.intervalos = populaIntervalo2(
-      //  this.apontamentos,
-      //  this.apontamento.id
-      //);
       console.log('Intervalos Adicao ==>', this.intervalos);
       this.apontamento.id_empresa = this.usuario.id_empresa;
       this.apontamento.id = 0;
@@ -725,6 +750,21 @@ export class CrudExecucaoComponent implements OnInit {
     );
     if (idx >= 0) {
       this.contrato = this.contratos[idx];
+      this.estruturas = [];
+      this.grupos = [];
+      this.atividades = [];
+      this.getAtividades('C');
+    }
+  }
+
+  onChangeEstruturas() {
+    let idx: number = this.estruturas.findIndex(
+      (obj) => obj.id === this.parametro.value?.id_estrutura
+    );
+    if (idx >= 0) {
+      this.grupos = [];
+      this.atividades = [];
+      this.estrutura = this.estruturas[idx];
       this.getAtividades('G');
     }
   }
@@ -734,6 +774,7 @@ export class CrudExecucaoComponent implements OnInit {
       (obj) => obj.id === this.parametro.value?.id_grupo
     );
     if (idx >= 0) {
+      this.atividades = [];
       this.grupo = this.grupos[idx];
       this.getAtividades('');
     }
@@ -744,12 +785,12 @@ export class CrudExecucaoComponent implements OnInit {
       this.apontamento.inicial.substring(
         0,
         this.apontamento.final.indexOf(' ') + 1
-      ) + '07:45';
+      ) + this.globalService.getUsuario().man_hora_entrada;
     this.apontamento.final =
       this.apontamento.final.substring(
         0,
         this.apontamento.final.indexOf(' ') + 1
-      ) + '12:00';
+      ) + this.globalService.getUsuario().man_hora_saida;
     this.formulario.patchValue({
       entrada: this.apontamento.inicial.substring(
         this.apontamento.inicial.indexOf(' ') + 1,
@@ -763,17 +804,17 @@ export class CrudExecucaoComponent implements OnInit {
   }
   onTarde() {
     let lastTime = '';
-    let hoje: Date = new Date('10/01/2023');
+    let hoje: Date = new Date(this.apontamento.inicial);
     if (hoje.getDay() == 5) {
       lastTime = '16:33';
     } else {
-      lastTime = '17:48';
+      lastTime = this.globalService.getUsuario().tard_hora_saida;
     }
     this.apontamento.inicial =
       this.apontamento.inicial.substring(
         0,
         this.apontamento.inicial.indexOf(' ') + 1
-      ) + '13:00';
+      ) + this.globalService.getUsuario().tard_hora_entrada;
     this.apontamento.final =
       this.apontamento.final.substring(
         0,

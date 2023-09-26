@@ -116,7 +116,28 @@ export class CrudProjetoComponent implements OnInit {
         projeto?.id,
         'NULL',
       ]);
-    } else {
+    }
+    if (opcao == 98) {
+      let config = this.parametro.getParametro();
+      Object(config).new = false;
+      Object(config).id_retorno = projeto?.id;
+      Object(config).page = this.controlePaginas.getPaginalAtual();
+      Object(config).op_ordenacao = this.opcoesOrdenacao.findIndex(
+        (op) => this.parametros.value.ordenacao == op
+      );
+      Object(config).op_pesquisar = this.opcoesCampo.findIndex(
+        (op) => this.parametros.value.campo == op
+      );
+      Object(config).descricao = this.parametros.value.filtro;
+      this.parametro.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(this.parametro);
+      this.router.navigate([
+        'projetos/dashboardv1',
+        projeto?.id_empresa,
+        projeto?.id,
+      ]);
+    }
+    if (opcao < 98) {
       if (typeof projeto !== 'undefined') {
         let config = this.parametro.getParametro();
         Object(config).new = false;

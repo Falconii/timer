@@ -65,6 +65,12 @@ body {
     color: #0000CC;
 }
 
+.Browse_Lanc_td_rigth {
+    font-size: small;
+    color: #0000CC;
+    text-align: right;
+}
+
 .Browse_Lanc_td_medium {
     font-size: medium;
     color: #0000CC;
@@ -407,6 +413,7 @@ body {
 }
 
 .box-grafico {
+    width: 50%;
     border: 2px solid black;
     box-shadow: 10px 10px 5px 6px gray;
 }

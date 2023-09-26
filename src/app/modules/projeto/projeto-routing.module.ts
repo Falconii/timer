@@ -8,6 +8,7 @@ import { ManutAtividadeLoteComponent } from './manut-atividade-lote/manut-ativid
 import { HorasDiretoriaComponent } from './horas-diretoria/horas-diretoria.component';
 import { AnexarV2Component } from './anexar-v2/anexar-v2.component';
 import { OpcoesGuard } from 'src/app/guards/opcoes.guard';
+import { Dashboardv1Component } from './dashboardv1/dashboardv1.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'projetos', pathMatch: 'full' },
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: 'horasdiretoria/:id_empresa/:id_projeto',
     component: HorasDiretoriaComponent,
+  },
+  {
+    path: 'dashboardv1/:id_empresa/:id_projeto',
+    component: Dashboardv1Component,
   },
 ];
 

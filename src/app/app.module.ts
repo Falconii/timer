@@ -23,6 +23,7 @@ import { HoraSexagenalPipe } from './shared/pipes/hora-sexagenal.pipe';
 import { SimNaoPipe } from './shared/pipes/sim-nao.pipe';
 import { FeriadoTipoPipe } from './shared/pipes/feriado-tipo.pipe';
 import { FeriadoNivelPipe } from './shared/pipes/feriado-nivel.pipe';
+import { FirstNamePipe } from './shared/pipes/first-name.pipe';
 
 registerLocaleData(localePt);
 
@@ -48,6 +49,7 @@ registerLocaleData(localePt);
     FeriadoTipoPipe,
     FeriadoNivelPipe,
     SimNaoPipe,
+    FirstNamePipe,
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: LOCALE_ID, useValue: 'pt' },
     DiganaoGuard,

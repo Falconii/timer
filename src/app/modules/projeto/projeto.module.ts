@@ -16,6 +16,7 @@ import { ManutAtividadeLoteComponent } from './manut-atividade-lote/manut-ativid
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HorasDiretoriaDialogComponent } from './horas-diretoria/horas-diretoria-dialog/horas-diretoria-dialog.component';
 import { AnexarV2Component } from './anexar-v2/anexar-v2.component';
+import { Dashboardv1Component } from './dashboardv1/dashboardv1.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { AnexarV2Component } from './anexar-v2/anexar-v2.component';
     HorasDiretoriaDialogComponent,
     RespAudiDialogComponent,
     AnexarV2Component,
+    Dashboardv1Component,
   ],
   imports: [
     ScrollingModule,

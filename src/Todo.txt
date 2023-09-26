@@ -1,22 +1,22 @@
-01- Implantação do TimerSheet - rotinas de acompanhamento
+01-x Implantação do TimerSheet - rotinas de acompanhamento
     Notei que foi possível excluir um contrato mesmo com lançamentos de horas.
     Não consegui reproduzir o problema.
     Geração de relatório de análise horizontal do meses com base nos "caderno" da CPSA
 
-04- Implantação do TimerSheet - rotinas de acompanhamento
+04-x Implantação do TimerSheet - rotinas de acompanhamento
     Geração de relatório de análise horizontal do meses com base nos "caderno" da CPSA
     problemas com os arquivos
 
-06- Implantação do TimerSheet - rotinas de acompanhamento.
+06- XImplantação do TimerSheet - rotinas de acompanhamento.
     análise para criar função de download e upload dos contratos dos clientes.
 
-11- Alteração do cadastro de usuário. Inclusão de novos campos.
-    Implantação do TimerSheet - rotinas de acompanhamento.
+11-x Alteração do cadastro de usuário. Inclusão de novos campos.
+   X Implantação do TimerSheet - rotinas de acompanhamento.
 
-13- Verificação da rotina de validação de erros no cadastro de contratos.
+13-x Verificação da rotina de validação de erros no cadastro de contratos.
     Implantação do TimerSheet - rotinas de acompanhamento.
-
-15- Ajuste da rotina de validação de erros no cadastro de contratos.
+12-x Gravacao de videos para treinamento.
+15-x Ajuste da rotina de validação de erros no cadastro de contratos.
     análise para criar função de download e upload dos contratos dos clientes.
 
 18- Geração de relatório de análise horizontal do meses com base nos "caderno" da CPSA
@@ -27,8 +27,6 @@
 
 22- Relatorio Auditores e Horas Executadas. Draft
 22- Relatorio Auditores e Horas Executadas, no aplicativo
-22- Vericação do Bakcup Do Time
-    Implantação do TimerSheet - rotinas de acompanhamento.
 
 22- Problemas no subcliente do contrato 147
     Rotina de geração de relatorio do controle de tickets
@@ -44,7 +42,10 @@
 -Lançamento de horas quando dá erro, não libera o botão de gravação. Corrigido
 
 
-25/09- Análise para desenvolver rotina para importação de horas dos auditores.
+
+25/09 - Melhorei o filtro dos projetos. Excluir os projeto que não tem atividade anexada
+        Crei um campo na tela para escolher a atividade. Antes tinha uma hardcore chamando sempre a ativiade 01
+      - Análise para desenvolver rotina para importação de horas dos auditores.
        Gerar versão final do  relatório de análise horizontal do meses com base nos "caderno" da CPSA DRAF
        Desenvolvimento rotina final de controle de tickets. "BACK END" Geração de Movimentos
 
