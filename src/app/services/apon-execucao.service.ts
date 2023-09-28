@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApoExecucaoModel } from '../Models/apo-execucao-model';
 import { environment } from 'src/environments/environment';
+import { AponExecutorModel } from '../Models/apon-executor-model';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +50,16 @@ export class AponExecucaoService {
   ApoExecucaoDelete(id_empresa: number, id: number) {
     return this.http.delete<ApoExecucaoModel>(
       `${this.apiURL}aponexec/${id_empresa}/${id}`
+    );
+  }
+
+  AponExecByExecutor(
+    id_empresa: number,
+    id_usuario: number,
+    data_ref: string
+  ): Observable<AponExecutorModel[]> {
+    return this.http.get<AponExecutorModel[]>(
+      `${this.apiURL}getaponexecbyexecutor/${id_empresa}/${id_usuario}/${data_ref}`
     );
   }
 }

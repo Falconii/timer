@@ -1,11 +1,7 @@
-import { ApiBrasilService } from './services/api-brasil.service';
-import { UsuarioModel } from './Models/usuario-model';
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from './services/global.service';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { Subscription } from 'rxjs';
-import { BrasilApiModel } from './Models/brasil-api-model';
 
 @Component({
   selector: 'app-root',

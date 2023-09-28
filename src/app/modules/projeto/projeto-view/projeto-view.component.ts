@@ -13,7 +13,7 @@ import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import { Subscription, Subscriber } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { horahexa } from 'src/app/shared/classes/util';
+import { horahexa, messageError } from 'src/app/shared/classes/util';
 import {
   MatDialog,
   MAT_DIALOG_DATA,
@@ -29,6 +29,7 @@ import { TipoContratoModel } from 'src/app/Models/tipo-contrato-model';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 import { DecimalPipe } from '@angular/common';
 import { ValidatorCurrency } from 'src/app/shared/Validators/validator-currency';
+import { ValidatorDate } from 'src/app/shared/Validators/validator-date';
 
 @Component({
   selector: 'app-projeto-view',
@@ -96,7 +97,7 @@ export class ProjetoViewComponent implements OnInit {
       diretor_razao: [],
       id_cliente: [{ value: 0 }, [Validators.required, Validators.min(1)]],
       cliente_razao: [],
-      dataprop: [],
+      dataprop: [{ value: '' }, [ValidatorDate(true)]],
       dataproj: [],
       dataenc: [],
       horasve: [{ value: '' }, [Validators.required, Validators.min(1)]],
@@ -186,11 +187,12 @@ export class ProjetoViewComponent implements OnInit {
       .subscribe(
         (data: ProjetoModel) => {
           this.projeto = data;
+          console.log('RETORNO ==>', data);
           this.setValue();
         },
         (error: any) => {
           this.appSnackBar.openFailureSnackBar(
-            `Pesquisa No Cadastro De Projetos ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+            `Pesquisa No Cadastro De Projetos ${messageError(error)}`,
             'OK'
           );
         }

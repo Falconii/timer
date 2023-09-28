@@ -5,7 +5,9 @@ import { ParametroProjeto01 } from '../parametros/parametro-projeto01';
 import { ProjetosService } from '../services/projetos.service';
 import { ProjetoModel } from '../Models/projeto-model';
 import { AppSnackbar } from '../shared/classes/app-snackbar';
-import { getFirstName } from '../shared/classes/util';
+import { getFirstName, messageError } from '../shared/classes/util';
+import { AponExecucaoService } from '../services/apon-execucao.service';
+import { AponExecutorModel } from '../Models/apon-executor-model';
 
 declare var google: any;
 
@@ -16,6 +18,7 @@ declare var google: any;
 })
 export class HomeComponent implements OnInit {
   inscricaoGetContratos!: Subscription;
+  inscricaoAponExecucao!: Subscription;
   lsProjetos: ProjetoModel[] = [];
   displayedColumns: string[] = [
     'situacao',
@@ -26,24 +29,64 @@ export class HomeComponent implements OnInit {
     'acao',
   ];
 
+  showDash: boolean = false;
+
+  lsResumoApontamentosExec: AponExecutorModel[] = [];
+
   constructor(
     public globalService: GlobalService,
     private projetosServices: ProjetosService,
+    private aponExecucaoService: AponExecucaoService,
     private appSnackBar: AppSnackbar
   ) {
     //google.charts.load('current', { packages: ['corechart'] });
   }
 
   ngOnInit(): void {
-    //this.getProjetos();
+    this.Atualizar();
   }
 
   ngOnDestroy(): void {
     this.inscricaoGetContratos?.unsubscribe();
+    this.inscricaoAponExecucao?.unsubscribe();
   }
 
   getUsuario(): boolean {
     return this.globalService.logado;
+  }
+
+  getAponExecByExecutor() {
+    this.globalService.setSpin(true);
+    this.inscricaoAponExecucao = this.aponExecucaoService
+      .AponExecByExecutor(
+        this.globalService.id_empresa,
+        this.globalService.getUsuario().id,
+        '09_2023'
+      )
+      .subscribe(
+        (data: AponExecutorModel[]) => {
+          this.globalService.setSpin(false);
+          this.lsResumoApontamentosExec = data;
+          const final: AponExecutorModel = new AponExecutorModel();
+          final.data = 'TOTAL';
+          let totalFinal: number = 0;
+          this.lsResumoApontamentosExec.forEach(
+            (obj) => (totalFinal += Number(obj.total))
+          );
+          final.total = totalFinal;
+          this.lsResumoApontamentosExec.push(final);
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.lsResumoApontamentosExec = [];
+          if (error.error.message != 'Nehuma Informação Para Esta Consulta.') {
+            this.appSnackBar.openFailureSnackBar(
+              `Pesquisa Nos Apontamentos ${messageError(error)}`,
+              'OK'
+            );
+          }
+        }
+      );
   }
 
   /*
@@ -100,7 +143,27 @@ export class HomeComponent implements OnInit {
 
   Atualizar() {
     if (this.globalService.logado) {
-      // this.buidChartContratosAtivos(this.lsProjetos);
+      switch (this.globalService.usuario.grupo) {
+        case 900:
+          this.showDash = true;
+          break;
+        case 901:
+          this.showDash = true;
+          break;
+        case 902:
+          this.showDash = true;
+          break;
+        case 906:
+          this.showDash = true;
+          break;
+        default:
+          this.showDash = false;
+      }
+    } else {
+      this.showDash = false;
+    }
+    if (this.showDash) {
+      this.getAponExecByExecutor();
     }
   }
 

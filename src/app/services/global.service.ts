@@ -51,7 +51,7 @@ export class GlobalService {
   setLogado(value: boolean) {
     this.shomMenuEmitter.emit(value);
     this.logado = value;
-    this.router.navigate(['/']);
+    this.router.navigate(['home']);
   }
 
   setRefreshLançamentos(value: CelulaDia) {

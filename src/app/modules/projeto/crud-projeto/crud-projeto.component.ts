@@ -78,11 +78,10 @@ export class CrudProjetoComponent implements OnInit {
         const par = this.globalService.estadoFind('projetos');
       }
     });
-    this.loadParametros();
   }
 
   ngOnInit(): void {
-    this.getProjetosContador();
+    this.loadParametros();
   }
 
   ngOnDestroy() {
@@ -378,6 +377,7 @@ export class CrudProjetoComponent implements OnInit {
         this.globalService.estadoDelete(par);
         this.setValues();
       }
+      this.getProjetosContador();
     } else {
       this.getParametro();
     }
@@ -422,10 +422,12 @@ export class CrudProjetoComponent implements OnInit {
             'pesquisar'
           );
           this.setValues();
+          this.getProjetosContador();
         },
         (error: any) => {
           this.globalService.setSpin(false);
           this.setValues();
+          this.getProjetosContador();
         }
       );
   }

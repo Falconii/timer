@@ -1,3 +1,39 @@
+<div *ngIf="showDash">
+  <div class="div-barra">
+    <mat-toolbar>
+      <span class="example-spacer">DASHBOARD DO USUÁRIO</span>
+      <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Atualizar"
+        matTooltipPosition="above" class="button" (click)="Atualizar()">
+        <mat-icon>rotate_right</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+</div>
+<div class="box">
+  <div *ngIf="lsResumoApontamentosExec.length > 0">
+    Horas Executadas
+    <table class="Browse_Lanc">
+      <tr class="coluna-cabec">
+        <th>DATA</th>
+        <th>HORAS</th>
+      </tr>
+      <tr *ngFor="let resumo of lsResumoApontamentosExec">
+        <td>
+          <div>
+            <mat-label class="Browse_Lanc_td">{{resumo.data}}</mat-label>
+          </div>
+        </td>
+        <td>
+          <div>
+            <mat-label class="Browse_Lanc_td">{{resumo.total | horaSexagenal}}</mat-label>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<!--
+
 <div *ngIf="false">
   <div class="div-barra">
     <mat-toolbar>
@@ -77,3 +113,4 @@
     </div>
     <app-bar-atividades></app-bar-atividades>
   </div>
+-->

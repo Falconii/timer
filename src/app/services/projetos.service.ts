@@ -29,7 +29,8 @@ export class ProjetosService {
     );
   }
 
-  ProjetoInsert(projeto: any) {
+  ProjetoInsert(projeto: ProjetoModel) {
+    console.log(projeto);
     return this.http.post<ProjetoModel>(`${this.apiURL}projeto/`, projeto);
   }
 

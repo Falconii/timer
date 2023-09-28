@@ -110,6 +110,7 @@ export class LoginComponent implements OnInit {
   onSair() {
     this.globalService.setLogado(false);
     this.globalService.setUsuario(new UsuarioModel());
+    this.router.navigate(['/']);
   }
 
   onEsqueceu(): void {

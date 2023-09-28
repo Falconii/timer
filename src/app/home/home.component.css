@@ -1,0 +1,9 @@
+tr:nth-child(even) {
+    background-color: #f2f2AA;
+}
+
+.box {
+    width: 25%;
+    border: 2px solid black;
+    box-shadow: 10px 10px 5px 6px gray;
+}

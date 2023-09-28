@@ -1,11 +1,13 @@
+import { DataDDMMYYYY } from '../shared/classes/util';
+
 export class ProjetoModel {
   public id_empresa: number = 0;
   public id: number = 0;
   public id_cliente: number = 0;
   public id_diretor: number = 0;
-  public dataprop: Date = new Date();
-  public dataproj: Date = new Date();
-  public dataenc: Date = new Date();
+  public dataprop: string = DataDDMMYYYY(new Date());
+  public dataproj: string = DataDDMMYYYY(new Date());
+  public dataenc: string = DataDDMMYYYY(new Date());
   public descricao: string = '';
   public horasve: number = 1;
   public horasplan: number = 0;
@@ -17,12 +19,12 @@ export class ProjetoModel {
   public id_tipo: number = 1;
   public objeto: string = '';
   public obs: string = '';
-  public reajuste: Date = new Date();
+  public reajuste: string = DataDDMMYYYY(new Date());
   public valor: number = 0;
   public id_cond_pgto: number = 0;
   public id_contrato: number = 0;
   public id_parceira: number = 2;
-  public assinatura: Date = new Date();
+  public assinatura: string = DataDDMMYYYY(new Date());
   public user_insert: number = 0;
   public user_update: number = 0;
   public diretor_razao: string = '';

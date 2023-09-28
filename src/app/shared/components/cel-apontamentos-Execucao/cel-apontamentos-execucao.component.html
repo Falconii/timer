@@ -24,9 +24,17 @@
             </mat-label>
             <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
           </div>
+
+          <div>
+            <mat-label class="Browse_Lanc_td">Resp:{{lanca.resp_razao | firstName}}</mat-label>
+          </div>
+          <div>
+            <mat-label class="Browse_Lanc_td">Resp:{{lanca.exec_razao | firstName}}</mat-label>
+          </div>
+
         <td>
           <div>
-            <mat-label class="Browse_Lanc_td">{{lanca.cli_razao}}</mat-label>
+            <mat-label class="Browse_Lanc_td">Contr:({{lanca.id_projeto}}) {{lanca.cli_razao}}</mat-label>
           </div>
           <div>
             <mat-label class="Browse_Lanc_td">{{lanca.proj_descricao}}</mat-label>

@@ -933,9 +933,9 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     const data: PeriodoDialogData = new PeriodoDialogData();
     data.titulo = `ALTERAÇÃO DO PERÍODO`;
     data.titulo_data1 = 'Data Inicial';
-    data.dataInicial = this.atividade.inicial;
+    data.dataInicial = '01/01/2023'; //this.atividade.inicial;
     data.titulo_data2 = 'Data Final';
-    data.dataFinal = this.atividade.final;
+    data.dataFinal = '01/01/2023'; //this.atividade.final;
     data.justificativa = '';
     data.dataHota = new Date();
     data.usuarioNome = this.globalService.getNomeusuarioLogado();
