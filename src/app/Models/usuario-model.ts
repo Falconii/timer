@@ -19,9 +19,9 @@ export class UsuarioModel {
   public senha: string = '';
   public pasta: string = '';
   public grupo: number = 0;
-  public ativo: string = '';
-  public timer: string = '';
-  public ticket: string = '';
+  public ativo: string = 'S';
+  public timer: string = 'S';
+  public ticket: string = 'S';
   public man_hora_entrada: string = '07:45';
   public man_hora_saida: string = '13:00';
   public tard_hora_entrada: string = '13:00';

@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
       .AponExecByExecutor(
         this.globalService.id_empresa,
         this.globalService.getUsuario().id,
-        '09_2023'
+        '10_2023'
       )
       .subscribe(
         (data: AponExecutorModel[]) => {

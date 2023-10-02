@@ -377,7 +377,7 @@ export class UsuarioViewComponent implements OnInit {
     this.usuario.senha = this.formulario.value.senha;
     this.usuario.pasta = this.formulario.value.pasta;
     this.usuario.grupo = this.formulario.value.grupo;
-    this.usuario.ativo = this.formulario.value.ativo;
+    //this.usuario.ativo = this.formulario.value.ativo;
     this.usuario.timer = this.formulario.value.timer;
     this.usuario.ticket = this.formulario.value.ticket;
     this.usuario.man_hora_entrada = this.formulario.value.man_hora_entrada;
@@ -387,6 +387,7 @@ export class UsuarioViewComponent implements OnInit {
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         this.usuario.user_insert = this.globalService.getUsuario().id;
+        console.log('usuario =>', this.usuario);
         this.inscricaoAcao = this.usuariosService
           .UsuarioInsert(this.usuario)
           .subscribe(

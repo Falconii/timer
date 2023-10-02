@@ -52,7 +52,7 @@
       <th>Tipo/Tem Atividade</th>
       <th>Descrição/Cliente</th>
       <th>Diretor</th>
-      <th>Proj./Enc.</th>
+      <th>DT Cont./DT Enc.</th>
       <th>Situacao</th>
       <th>AÇÕES</th>
     </tr>
@@ -85,15 +85,15 @@
       </td>
       <td>
         <div>
-          <mat-label class="Browse_Lanc_td">{{getfirstName(projeto.diretor_razao)}}</mat-label>
+          <mat-label class="Browse_Lanc_td">{{projeto.diretor_razao | firstName}}</mat-label>
         </div>
       </td>
       <td>
         <div>
-          <mat-label class="Browse_Lanc_td">{{projeto.dataprop | date : 'dd/MM/yyyy'}}</mat-label>
+          <mat-label class="Browse_Lanc_td">{{projeto.dataproj}}</mat-label>
         </div>
         <div>
-          <mat-label class="Browse_Lanc_td">{{projeto.dataenc | date : 'dd/MM/yyyy'}}</mat-label>
+          <mat-label class="Browse_Lanc_td">{{projeto.dataenc }}</mat-label>
         </div>
       </td>
       <td>
