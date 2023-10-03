@@ -187,7 +187,6 @@ export class ProjetoViewComponent implements OnInit {
       .subscribe(
         (data: ProjetoModel) => {
           this.projeto = data;
-          console.log('RETORNO ==>', data);
           this.setValue();
         },
         (error: any) => {

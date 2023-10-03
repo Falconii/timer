@@ -335,7 +335,7 @@ export class ClienteViewComponent implements OnInit {
             (error: any) => {
               this.globalService.setSpin(false);
               this.appSnackBar.openFailureSnackBar(
-                `Erro Na INclusão ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+                `Erro Na INclusão ${messageError(error)}`,
                 'OK'
               );
             }
