@@ -321,6 +321,12 @@ export class GlobalService {
 
     guard = new GuardiaoOpcoes();
     guard.path = 'usuario';
+    guard.usuario = 9;
+    guard.acoes = [CadastroAcoes.Consulta, CadastroAcoes.Inclusao];
+    this.guardiaoOpcoes.push(guard);
+
+    guard = new GuardiaoOpcoes();
+    guard.path = 'usuario';
     guard.grupo = 904;
     guard.acoes = [
       CadastroAcoes.Consulta,
