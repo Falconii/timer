@@ -18,6 +18,7 @@ import { HorasDiretoriaDialogComponent } from './horas-diretoria/horas-diretoria
 import { AnexarV2Component } from './anexar-v2/anexar-v2.component';
 import { Dashboardv1Component } from './dashboardv1/dashboardv1.component';
 import { FinanceiroComponent } from './financeiro/financeiro.component';
+import { TreeAtividadesComponent } from './tree-atividades/tree-atividades.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { FinanceiroComponent } from './financeiro/financeiro.component';
     AnexarV2Component,
     Dashboardv1Component,
     FinanceiroComponent,
+    TreeAtividadesComponent,
   ],
   imports: [
     ScrollingModule,
