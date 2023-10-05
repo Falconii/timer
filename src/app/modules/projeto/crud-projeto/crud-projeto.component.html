@@ -105,7 +105,7 @@
         </div>
       </td>
       <td class="acoes">
-        <barra-acoes [BARRA_VERTICAL]="projeto.status <= '2'" [BARRA_FINANCEIRO]="false"
+        <barra-acoes [BARRA_VERTICAL]="projeto.status <= '2'" [BARRA_FINANCEIRO]="true"
           [ALTERAR]="projeto.status <= '2'" [EXCLUIR]="false" [BARRA_DASHBOARDV1]="projeto.horasexec > 0"
           (changeOpcao)="escolha($event,projeto)">
         </barra-acoes>

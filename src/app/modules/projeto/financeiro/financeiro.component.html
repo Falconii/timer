@@ -1,19 +1,40 @@
 <div class="div-barra">
   <mat-toolbar>
-    <span class="example-spacer">Contrato:</span>
+    <span class="example-spacer">Contrato:{{id_empresa}}-{{id_projeto}} {{projeto.cliente_razao}} Valor:
+      {{projeto.valor}}</span>
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Página Inicial"
+      matTooltipPosition="above" (click)="onHome()">
+      <mat-icon>home</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above"
+      (click)="escolha(99)" matTooltip="Gerador De Parcelas" matTooltipPosition="above">
+      <mat-icon>brightness_high</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with share icon "
+      (click)="escolha(getAcoes()[ 'Inclusao']) " [matTooltip]="getTexto().incluir" matTooltipPosition="above">
+      <mat-icon>add_circle_outline</mat-icon>
+    </button>
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Retorno"
       matTooltipPosition="above" (click)="onRetorno()">
       <mat-icon>arrow_back</mat-icon>
     </button>
   </mat-toolbar>
 </div>
-<div class="box">
+<div class="box" *ngIf="idAcao == 99">
   <form [formGroup]="gerador" autocomplete="off" class="padding">
-    <h3 class="alinha_centro">GERADOR DE PARCELAR</h3>
-    <div class="col-med-4">
+    <h3 class="alinha_centro">GERADOR DE PARCELAS</h3>
+    <div class="col-med-5">
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>VLR TOTAL</mat-label>
         <input matInput formControlName="vlr_total">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Nº Parcelas</mat-label>
+        <mat-select formControlName="parcelas">
+          <mat-option *ngFor="let parcela of parcelas" [value]="parcela">
+            {{parcela}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Dia Do Mês</mat-label>
@@ -52,12 +73,11 @@
     </div>
     <div class="button-container-right">
       <button mat-raised-button color="primary">Gravar</button>
-      <button mat-raised-button color="accent">Cancelar</button>
+      <button mat-raised-button color="accent" (click)="onPosicaoInicial()">Cancelar</button>
     </div>
   </form>
 </div>
-
-<div class="box">
+<div class="box" *ngIf="idAcao == 98">
   <form [formGroup]="cadastro" autocomplete="off" class="padding">
     <h3 class="alinha_centro">TÍTULO FINANCEIRO</h3>
     <div class="col-med-3">
@@ -86,8 +106,7 @@
     </div>
   </form>
 </div>
-<div class="rodape"></div>
-<div class="col-max box" *ngIf="titulos.length > 0">
+<div class="col-max box" *ngIf="titulos.length > 0 && idAcao == 97">
   <h3 class="alinha_centro">PARCELAS</h3>
   <table class="Browse_Lanc">
     <tr class="coluna-cabec">

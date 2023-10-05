@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ProjetoModel } from 'src/app/Models/projeto-model';
 import { ParametroTituloProjeto01 } from 'src/app/parametros/parametro-titulo-projeto01';
 import { GlobalService } from 'src/app/services/global.service';
 import { ProjetosService } from 'src/app/services/projetos.service';
@@ -12,6 +13,7 @@ import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import {
   DataDDMMYYYY,
   DataYYYYMMDD,
+  MensagensBotoes,
   messageError,
 } from 'src/app/shared/classes/util';
 
@@ -26,6 +28,7 @@ export class FinanceiroComponent implements OnInit {
 
   inscricaoGetTitulo!: Subscription;
   inscricaoGetTitulos!: Subscription;
+  inscricaoGetProjeto!: Subscription;
   inscricaoCrud!: Subscription;
   inscricaoRota!: Subscription;
 
@@ -44,6 +47,8 @@ export class FinanceiroComponent implements OnInit {
   id_empresa: number = 0;
 
   id_projeto: number = 0;
+
+  projeto: ProjetoModel = new ProjetoModel();
 
   dias_mes = [
     { id: -1, desc: 'Primeiro Dia' },
@@ -89,6 +94,11 @@ export class FinanceiroComponent implements OnInit {
     { id: 2, desc: 'NÃO' },
   ];
 
+  parcelas = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24,
+  ];
+
   constructor(
     private formBuilder: FormBuilder,
     private globalService: GlobalService,
@@ -98,8 +108,15 @@ export class FinanceiroComponent implements OnInit {
     private router: Router,
     private projetosService: ProjetosService
   ) {
+    this.inscricaoRota = route.params.subscribe((params: any) => {
+      this.id_empresa = params.id_empresa;
+      this.id_projeto = params.id_projeto;
+    });
+    this.idAcao = 97;
+    this.setAcao(97);
     this.gerador = formBuilder.group({
       vlr_total: [{ value: 0 }],
+      parcelas: [{ value: 0 }],
       dia_mes: [{ value: 0 }],
       tipo_arredondamento: [{ value: 0 }],
       pula_fds: [{ value: 0 }],
@@ -114,17 +131,11 @@ export class FinanceiroComponent implements OnInit {
       valor: [{ value: '' }],
       obs: [{ value: '' }],
     });
-
     this.setValueCadastro();
-
-    this.inscricaoRota = route.params.subscribe((params: any) => {
-      this.id_empresa = params.id_empresa;
-      this.id_projeto = params.id_projeto;
-    });
   }
 
   ngOnInit(): void {
-    this.getTitulos();
+    this.getProjeto();
     /*
     console.log('lixo', DataDDMM(new Date('06/10/2023')));
     this.titulo.id_empresa = 1;
@@ -143,11 +154,13 @@ export class FinanceiroComponent implements OnInit {
     this.inscricaoGetTitulos?.unsubscribe();
     this.inscricaoCrud?.unsubscribe();
     this.inscricaoRota?.unsubscribe();
+    this.inscricaoGetProjeto?.unsubscribe();
   }
 
   setValueGerador() {
     this.gerador.setValue({
-      vlr_total: 100,
+      vlr_total: this.projeto.valor,
+      parcelas: 1,
       dia_mes: -1,
       tipo_arredondamento: 1,
       pula_fds: 1,
@@ -165,6 +178,23 @@ export class FinanceiroComponent implements OnInit {
     });
   }
 
+  getProjeto() {
+    this.inscricaoGetProjeto = this.projetosService
+      .getProjeto(this.id_empresa, this.id_projeto)
+      .subscribe(
+        (data: ProjetoModel) => {
+          this.projeto = data;
+          this.getTitulos();
+        },
+        (error: any) => {
+          this.projeto = new ProjetoModel();
+          this.appSnackBar.openFailureSnackBar(
+            `Pesquisa No Cadastro De Projetos ${messageError(error)}`,
+            'OK'
+          );
+        }
+      );
+  }
   getTitulos() {
     let para = new ParametroTituloProjeto01();
     para.id_empresa = this.globalService.getIdEmpresa();
@@ -193,8 +223,17 @@ export class FinanceiroComponent implements OnInit {
       );
   }
 
+  getAcoes() {
+    return CadastroAcoes;
+  }
+
   escolha(opcao: number, titulo?: TituloProjetoModel) {
     if (typeof titulo !== 'undefined') {
+    }
+    if (opcao == 99) {
+      this.idAcao = opcao;
+      this.setAcao(this.idAcao);
+      this.setValueGerador();
     }
   }
 
@@ -272,31 +311,55 @@ export class FinanceiroComponent implements OnInit {
   }
 
   setAcao(op: number) {
-    switch (+op) {
-      case CadastroAcoes.Inclusao:
+    if (op > 90) {
+      //Gerador
+      if (op == 99) {
+        this.acao = 'Gerar';
+        this.labelCadastro = 'Projetos - Gerador De Parcelas';
+      }
+      if (op == 98) {
         this.acao = 'Gravar';
-        this.labelCadastro = 'Projetos - Inclusão.';
-        this.readOnly = false;
-        break;
-      case CadastroAcoes.Edicao:
-        this.acao = 'Gravar';
-        this.labelCadastro = 'Projetos - Alteração.';
-        this.readOnly = false;
-        break;
-      case CadastroAcoes.Consulta:
-        this.acao = 'Voltar';
-        this.labelCadastro = 'Projetos - Consulta.';
-        this.readOnly = true;
-        break;
-      case CadastroAcoes.Exclusao:
-        this.acao = 'Excluir';
-        this.labelCadastro = 'Projetos - Exclusão.';
-        this.readOnly = true;
-        break;
-      default:
-        break;
+        this.labelCadastro = 'Projetos - Cadastro De Parcelas';
+      }
+    } else {
+      switch (+op) {
+        case CadastroAcoes.Inclusao:
+          this.acao = 'Gravar';
+          this.labelCadastro = 'Projetos - Inclusão.';
+          this.readOnly = false;
+          break;
+        case CadastroAcoes.Edicao:
+          this.acao = 'Gravar';
+          this.labelCadastro = 'Projetos - Alteração.';
+          this.readOnly = false;
+          break;
+        case CadastroAcoes.Consulta:
+          this.acao = 'Voltar';
+          this.labelCadastro = 'Projetos - Consulta.';
+          this.readOnly = true;
+          break;
+        case CadastroAcoes.Exclusao:
+          this.acao = 'Excluir';
+          this.labelCadastro = 'Projetos - Exclusão.';
+          this.readOnly = true;
+          break;
+        default:
+          break;
+      }
     }
   }
 
+  getTexto() {
+    return MensagensBotoes;
+  }
+
   onRetorno() {}
+
+  onHome() {
+    this.router.navigate(['']);
+  }
+  onPosicaoInicial() {
+    this.idAcao = 97;
+    this.setAcao(97);
+  }
 }
