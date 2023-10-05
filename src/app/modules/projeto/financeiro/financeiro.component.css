@@ -1,0 +1,17 @@
+tr:nth-child(even) {
+    background-color: #f2f2AA;
+}
+
+.acoes {
+    color: darkred;
+    width: 100px;
+}
+
+.rodape {
+    width: 100%;
+    height: 25px;
+}
+
+.padding {
+    padding: 5px;
+}

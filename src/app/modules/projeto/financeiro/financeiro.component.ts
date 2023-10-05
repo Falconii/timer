@@ -1,8 +1,12 @@
+import { TituloProjetoModel } from './../../../Models/titulo-projetoModel';
 import { TituloProjetoService } from './../../../services/titulo-projeto.service';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TituloProjetoModel } from 'src/app/Models/titulo-projetoModel';
+import { ParametroTituloProjeto01 } from 'src/app/parametros/parametro-titulo-projeto01';
 import { GlobalService } from 'src/app/services/global.service';
+import { ProjetosService } from 'src/app/services/projetos.service';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import {
@@ -17,9 +21,13 @@ import {
   styleUrls: ['./financeiro.component.css'],
 })
 export class FinanceiroComponent implements OnInit {
+  gerador: FormGroup;
+  cadastro: FormGroup;
+
   inscricaoGetTitulo!: Subscription;
   inscricaoGetTitulos!: Subscription;
   inscricaoCrud!: Subscription;
+  inscricaoRota!: Subscription;
 
   titulo: TituloProjetoModel = new TituloProjetoModel();
 
@@ -33,13 +41,90 @@ export class FinanceiroComponent implements OnInit {
 
   labelCadastro: string = '';
 
+  id_empresa: number = 0;
+
+  id_projeto: number = 0;
+
+  dias_mes = [
+    { id: -1, desc: 'Primeiro Dia' },
+    { id: 0, desc: 'Último Dia' },
+    { id: 1, desc: 'Dia 01' },
+    { id: 1, desc: 'Dia 02' },
+    { id: 1, desc: 'Dia 03' },
+    { id: 1, desc: 'Dia 04' },
+    { id: 1, desc: 'Dia 05' },
+    { id: 1, desc: 'Dia 06' },
+    { id: 1, desc: 'Dia 07' },
+    { id: 1, desc: 'Dia 08' },
+    { id: 1, desc: 'Dia 09' },
+    { id: 1, desc: 'Dia 10' },
+    { id: 1, desc: 'Dia 11' },
+    { id: 1, desc: 'Dia 12' },
+    { id: 1, desc: 'Dia 13' },
+    { id: 1, desc: 'Dia 14' },
+    { id: 1, desc: 'Dia 15' },
+    { id: 1, desc: 'Dia 16' },
+    { id: 1, desc: 'Dia 17' },
+    { id: 1, desc: 'Dia 18' },
+    { id: 1, desc: 'Dia 19' },
+    { id: 1, desc: 'Dia 20' },
+    { id: 1, desc: 'Dia 21' },
+    { id: 1, desc: 'Dia 22' },
+    { id: 1, desc: 'Dia 23' },
+    { id: 1, desc: 'Dia 24' },
+    { id: 1, desc: 'Dia 25' },
+    { id: 1, desc: 'Dia 26' },
+    { id: 1, desc: 'Dia 27' },
+    { id: 1, desc: 'Dia 28' },
+  ];
+
+  arredondamento = [
+    { id: 1, desc: '1ª PARC.' },
+    { id: 2, desc: '2ª PARC.' },
+    { id: 3, desc: 'NÃO USAR' },
+  ];
+
+  pula_fds = [
+    { id: 1, desc: 'SIM' },
+    { id: 2, desc: 'NÃO' },
+  ];
+
   constructor(
+    private formBuilder: FormBuilder,
     private globalService: GlobalService,
     private tituloProjetoService: TituloProjetoService,
-    public appSnackBar: AppSnackbar
-  ) {}
+    public appSnackBar: AppSnackbar,
+    private route: ActivatedRoute,
+    private router: Router,
+    private projetosService: ProjetosService
+  ) {
+    this.gerador = formBuilder.group({
+      vlr_total: [{ value: 0 }],
+      dia_mes: [{ value: 0 }],
+      tipo_arredondamento: [{ value: 0 }],
+      pula_fds: [{ value: 0 }],
+      vlr_parcela: [{ value: 0 }],
+      vlr_arredondamento: [{ value: 0 }],
+    });
+    this.setValueGerador();
+
+    this.cadastro = formBuilder.group({
+      data_vencto: [{ value: '' }],
+      data_pagto: [{ value: '' }],
+      valor: [{ value: '' }],
+      obs: [{ value: '' }],
+    });
+
+    this.setValueCadastro();
+
+    this.inscricaoRota = route.params.subscribe((params: any) => {
+      this.id_empresa = params.id_empresa;
+      this.id_projeto = params.id_projeto;
+    });
+  }
 
   ngOnInit(): void {
+    this.getTitulos();
     /*
     console.log('lixo', DataDDMM(new Date('06/10/2023')));
     this.titulo.id_empresa = 1;
@@ -57,6 +142,60 @@ export class FinanceiroComponent implements OnInit {
     this.inscricaoGetTitulo?.unsubscribe();
     this.inscricaoGetTitulos?.unsubscribe();
     this.inscricaoCrud?.unsubscribe();
+    this.inscricaoRota?.unsubscribe();
+  }
+
+  setValueGerador() {
+    this.gerador.setValue({
+      vlr_total: 100,
+      dia_mes: -1,
+      tipo_arredondamento: 1,
+      pula_fds: 1,
+      vlr_parcela: 0,
+      vlr_arredondamento: 0,
+    });
+  }
+
+  setValueCadastro() {
+    this.cadastro.setValue({
+      data_vencto: this.titulo.data_vencto,
+      data_pagto: this.titulo.data_pagto,
+      valor: this.titulo.valor,
+      obs: this.titulo.obs,
+    });
+  }
+
+  getTitulos() {
+    let para = new ParametroTituloProjeto01();
+    para.id_empresa = this.globalService.getIdEmpresa();
+    para.id_projeto = this.id_projeto;
+    para.orderby = 'Projeto';
+    this.globalService.setSpin(true);
+    this.inscricaoGetTitulos = this.tituloProjetoService
+      .getTitulosProjeto_01(para)
+      .subscribe(
+        (data: TituloProjetoModel[]) => {
+          this.globalService.setSpin(false);
+          this.titulos = data;
+          console.log(this.titulos);
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.titulos = [];
+          console.log(error);
+          if (error.error.message != 'Nehuma Informação Para Esta Consulta.') {
+            this.appSnackBar.openFailureSnackBar(
+              `Pesquisa Nos Titulos ${messageError(error)}`,
+              'OK'
+            );
+          }
+        }
+      );
+  }
+
+  escolha(opcao: number, titulo?: TituloProjetoModel) {
+    if (typeof titulo !== 'undefined') {
+    }
   }
 
   executaAcao() {
@@ -158,4 +297,6 @@ export class FinanceiroComponent implements OnInit {
         break;
     }
   }
+
+  onRetorno() {}
 }

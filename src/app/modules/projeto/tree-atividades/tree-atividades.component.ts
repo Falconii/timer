@@ -15,6 +15,7 @@ import { AtividadeQuery_01Model } from 'src/app/Models/atividade-query_01-model'
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { messageError } from 'src/app/shared/classes/util';
 import { DynamicDatabase } from './Dynamic-Database';
+import { DynamicDataSource } from './Dynamic-Data-Source';
 
 @Component({
   selector: 'app-tree-atividades',
@@ -32,6 +33,12 @@ export class TreeAtividadesComponent {
 
   dynamicDatabase!: DynamicDatabase;
 
+  treeControl: FlatTreeControl<DynamicFlatNodeV2>;
+
+  //dataSource: DynamicDataSource;
+
+  database!: DynamicDatabase;
+
   constructor(
     private atividadesService: AtividadesService,
     private globalService: GlobalService,
@@ -41,9 +48,10 @@ export class TreeAtividadesComponent {
       this.getLevel,
       this.isExpandable
     );
-    this.dataSource = new DynamicDataSource(this.treeControl, database);
 
-    this.dataSource.data = database.initialData();
+    //this.dataSource = new DynamicDataSource(this.treeControl, database);
+
+    //this.dataSource.data = database.initialData();
   }
 
   ngOnInit(): void {
@@ -74,15 +82,9 @@ export class TreeAtividadesComponent {
       );
   }
 
-  /*
-  treeControl: FlatTreeControl<DynamicFlatNode>;
+  getLevel = (node: DynamicFlatNodeV2) => node.level;
 
-  dataSource: DynamicDataSource;
+  isExpandable = (node: DynamicFlatNodeV2) => node.expandable;
 
-  getLevel = (node: DynamicFlatNode) => node.level;
-
-  isExpandable = (node: DynamicFlatNode) => node.expandable;
-
-  hasChild = (_: number, _nodeData: DynamicFlatNode) => _nodeData.expandable;
-  */
+  hasChild = (_: number, _nodeData: DynamicFlatNodeV2) => _nodeData.expandable;
 }

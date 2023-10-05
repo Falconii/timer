@@ -21,7 +21,7 @@ export class TituloProjetoService {
     params: ParametroTituloProjeto01
   ): Observable<TituloProjetoModel[]> {
     return this.http.post<TituloProjetoModel[]>(
-      `${this.apiURL}titulos_projeto`,
+      `${this.apiURL}titulosprojeto`,
       params
     );
   }

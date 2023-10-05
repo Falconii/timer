@@ -1,1 +1,130 @@
-<p>financeiro works!</p>
+<div class="div-barra">
+  <mat-toolbar>
+    <span class="example-spacer">Contrato:</span>
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Retorno"
+      matTooltipPosition="above" (click)="onRetorno()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </mat-toolbar>
+</div>
+<div class="box">
+  <form [formGroup]="gerador" autocomplete="off" class="padding">
+    <h3 class="alinha_centro">GERADOR DE PARCELAR</h3>
+    <div class="col-med-4">
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>VLR TOTAL</mat-label>
+        <input matInput formControlName="vlr_total">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Dia Do Mês</mat-label>
+        <mat-select formControlName="dia_mes">
+          <mat-option *ngFor="let dia of dias_mes" [value]="dia.id">
+            {{dia.desc}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Tipo De Arredondamento</mat-label>
+        <mat-select formControlName="tipo_arredondamento">
+          <mat-option *ngFor="let tipo of arredondamento" [value]="tipo.id">
+            {{tipo.desc}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Pula Final De Semana</mat-label>
+        <mat-select formControlName="pula_fds">
+          <mat-option *ngFor="let pula of pula_fds" [value]="pula.id">
+            {{pula.desc}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-med-2">
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>VLR PARCELA</mat-label>
+        <input matInput formControlName="vlr_parcela">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>VLR ARREDONDAMENTO</mat-label>
+        <input matInput formControlName="vlr_arredondamento">
+      </mat-form-field>
+    </div>
+    <div class="button-container-right">
+      <button mat-raised-button color="primary">Gravar</button>
+      <button mat-raised-button color="accent">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<div class="box">
+  <form [formGroup]="cadastro" autocomplete="off" class="padding">
+    <h3 class="alinha_centro">TÍTULO FINANCEIRO</h3>
+    <div class="col-med-3">
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Data Vencto</mat-label>
+        <input matInput formControlName="data_venc" mask="00/00/0000" placeholder="dd/mm/aaaa">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Valor</mat-label>
+        <input matInput formControlName="valor">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Data Pagto</mat-label>
+        <input matInput formControlName="data_pagto" mask="00/00/0000" placeholder="dd/mm/aaaa">
+      </mat-form-field>
+    </div>
+    <div class="col-med-1">
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Observação</mat-label>
+        <input matInput formControlName="obs">
+      </mat-form-field>
+    </div>
+    <div class="button-container-right">
+      <button mat-raised-button color="primary">Gravar</button>
+      <button mat-raised-button color="accent">Cancelar</button>
+    </div>
+  </form>
+</div>
+<div class="rodape"></div>
+<div class="col-max box" *ngIf="titulos.length > 0">
+  <h3 class="alinha_centro">PARCELAS</h3>
+  <table class="Browse_Lanc">
+    <tr class="coluna-cabec">
+      <th>VENC.</th>
+      <th>PAGTO</th>
+      <th>VALOR</th>
+      <th>OBSERVAÇÃO</th>
+      <th>AÇÃO</th>
+    </tr>
+    <tr *ngFor="let titulo of titulos">
+      <td>
+        <div class="alinha_centro">
+          <mat-label class="Browse_Lanc_td">{{titulo.data_vencto}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div class="alinha_centro">
+          <mat-label class="Browse_Lanc_td">{{titulo.data_pagto}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div class="alinha_direita">
+          <mat-label class="Browse_Lanc_td">{{titulo.valor}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{titulo.obs}}</mat-label>
+        </div>
+      </td>
+      <td class="acoes">
+        <barra-acoes (changeOpcao)="escolha($event,titulo)">
+        </barra-acoes>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="rodape">
+
+</div>

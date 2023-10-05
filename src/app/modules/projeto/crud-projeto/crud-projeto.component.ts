@@ -136,7 +136,14 @@ export class CrudProjetoComponent implements OnInit {
         projeto?.id,
       ]);
     }
-    if (opcao < 98) {
+    if (opcao == 97) {
+      this.router.navigate([
+        'projetos/financeiro',
+        projeto?.id_empresa,
+        projeto?.id,
+      ]);
+    }
+    if (opcao < 97) {
       if (typeof projeto !== 'undefined') {
         let config = this.parametro.getParametro();
         Object(config).new = false;

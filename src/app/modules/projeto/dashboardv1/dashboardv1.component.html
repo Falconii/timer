@@ -12,8 +12,8 @@
   <div id="chart_div" class="col-max">
 
   </div>
-  <div class="col-max" *ngIf="executores.length > 0">
-    Executores:
+  <div class="col-max box" *ngIf="executores.length > 0">
+    <h3 class="alinha_centro">EXECUTORES</h3>
     <table class="Browse_Lanc">
       <tr class="coluna-cabec">
         <th>CÓDIGO</th>
@@ -52,7 +52,8 @@
     </div>
   </div>
 </div>
-<div *ngIf="getApontatamentos().length > 0">
+<div class="box " *ngIf="getApontatamentos().length > 0">
+  <h3 class="alinha_centro">APONTAMENTOS</h3>
   <table class="Browse_Lanc">
     <tr class="coluna-cabec">
       <th>HORÁRIO</th>
@@ -100,4 +101,7 @@
       </td>
     </tr>
   </table>
+</div>
+<div class="rodape">
+
 </div>

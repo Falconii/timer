@@ -9,6 +9,7 @@ import { HorasDiretoriaComponent } from './horas-diretoria/horas-diretoria.compo
 import { AnexarV2Component } from './anexar-v2/anexar-v2.component';
 import { OpcoesGuard } from 'src/app/guards/opcoes.guard';
 import { Dashboardv1Component } from './dashboardv1/dashboardv1.component';
+import { FinanceiroComponent } from './financeiro/financeiro.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'projetos', pathMatch: 'full' },
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: 'dashboardv1/:id_empresa/:id_projeto',
     component: Dashboardv1Component,
+  },
+  {
+    path: 'financeiro/:id_empresa/:id_projeto',
+    component: FinanceiroComponent,
   },
 ];
 

@@ -11,7 +11,7 @@
 </div>
 <div class="box">
   <div *ngIf="lsResumoApontamentosExec.length > 0">
-    Horas Executadas
+    <h5 class="alinha_centro">HORAS EXECUTADAS</h5>
     <table class="Browse_Lanc">
       <tr class="coluna-cabec">
         <th>DATA</th>
@@ -24,7 +24,7 @@
           </div>
         </td>
         <td>
-          <div>
+          <div class="alinha_direita">
             <mat-label class="Browse_Lanc_td">{{resumo.total | horaSexagenal}}</mat-label>
           </div>
         </td>
