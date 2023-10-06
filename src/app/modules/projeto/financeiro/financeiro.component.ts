@@ -16,6 +16,7 @@ import {
   MensagensBotoes,
   messageError,
 } from 'src/app/shared/classes/util';
+import { Gerador } from './gerador';
 
 @Component({
   selector: 'app-financeiro',
@@ -54,33 +55,33 @@ export class FinanceiroComponent implements OnInit {
     { id: -1, desc: 'Primeiro Dia' },
     { id: 0, desc: 'Último Dia' },
     { id: 1, desc: 'Dia 01' },
-    { id: 1, desc: 'Dia 02' },
-    { id: 1, desc: 'Dia 03' },
-    { id: 1, desc: 'Dia 04' },
-    { id: 1, desc: 'Dia 05' },
-    { id: 1, desc: 'Dia 06' },
-    { id: 1, desc: 'Dia 07' },
-    { id: 1, desc: 'Dia 08' },
-    { id: 1, desc: 'Dia 09' },
-    { id: 1, desc: 'Dia 10' },
-    { id: 1, desc: 'Dia 11' },
-    { id: 1, desc: 'Dia 12' },
-    { id: 1, desc: 'Dia 13' },
-    { id: 1, desc: 'Dia 14' },
-    { id: 1, desc: 'Dia 15' },
-    { id: 1, desc: 'Dia 16' },
-    { id: 1, desc: 'Dia 17' },
-    { id: 1, desc: 'Dia 18' },
-    { id: 1, desc: 'Dia 19' },
-    { id: 1, desc: 'Dia 20' },
-    { id: 1, desc: 'Dia 21' },
-    { id: 1, desc: 'Dia 22' },
-    { id: 1, desc: 'Dia 23' },
-    { id: 1, desc: 'Dia 24' },
-    { id: 1, desc: 'Dia 25' },
-    { id: 1, desc: 'Dia 26' },
-    { id: 1, desc: 'Dia 27' },
-    { id: 1, desc: 'Dia 28' },
+    { id: 2, desc: 'Dia 02' },
+    { id: 3, desc: 'Dia 03' },
+    { id: 4, desc: 'Dia 04' },
+    { id: 5, desc: 'Dia 05' },
+    { id: 6, desc: 'Dia 06' },
+    { id: 7, desc: 'Dia 07' },
+    { id: 8, desc: 'Dia 08' },
+    { id: 9, desc: 'Dia 09' },
+    { id: 10, desc: 'Dia 10' },
+    { id: 11, desc: 'Dia 11' },
+    { id: 12, desc: 'Dia 12' },
+    { id: 13, desc: 'Dia 13' },
+    { id: 14, desc: 'Dia 14' },
+    { id: 15, desc: 'Dia 15' },
+    { id: 16, desc: 'Dia 16' },
+    { id: 17, desc: 'Dia 17' },
+    { id: 18, desc: 'Dia 18' },
+    { id: 19, desc: 'Dia 19' },
+    { id: 20, desc: 'Dia 20' },
+    { id: 21, desc: 'Dia 21' },
+    { id: 22, desc: 'Dia 22' },
+    { id: 23, desc: 'Dia 23' },
+    { id: 24, desc: 'Dia 24' },
+    { id: 25, desc: 'Dia 25' },
+    { id: 26, desc: 'Dia 26' },
+    { id: 27, desc: 'Dia 27' },
+    { id: 28, desc: 'Dia 28' },
   ];
 
   arredondamento = [
@@ -99,6 +100,8 @@ export class FinanceiroComponent implements OnInit {
     22, 23, 24,
   ];
 
+  geradorParcelas: Gerador = new Gerador();
+
   constructor(
     private formBuilder: FormBuilder,
     private globalService: GlobalService,
@@ -115,8 +118,9 @@ export class FinanceiroComponent implements OnInit {
     this.idAcao = 97;
     this.setAcao(97);
     this.gerador = formBuilder.group({
+      data_ref: [{ value: 0 }],
       vlr_total: [{ value: 0 }],
-      parcelas: [{ value: 0 }],
+      nro_parcelas: [{ value: 0 }],
       dia_mes: [{ value: 0 }],
       tipo_arredondamento: [{ value: 0 }],
       pula_fds: [{ value: 0 }],
@@ -131,22 +135,10 @@ export class FinanceiroComponent implements OnInit {
       valor: [{ value: '' }],
       obs: [{ value: '' }],
     });
-    this.setValueCadastro();
   }
 
   ngOnInit(): void {
     this.getProjeto();
-    /*
-    console.log('lixo', DataDDMM(new Date('06/10/2023')));
-    this.titulo.id_empresa = 1;
-    this.titulo.id_projeto = 100;
-    this.titulo.user_insert = this.globalService.getUsuario().id;
-    this.titulo.data_vencto = DataDDMMYYYY(new Date());
-    this.titulo.data_pagto = DataDDMMYYYY(new Date());
-    this.titulo.obs = 'TESTE';
-    this.idAcao = CadastroAcoes.Inclusao;
-    this.executaAcao();
-    */
   }
 
   ngOnDestroy(): void {
@@ -159,8 +151,9 @@ export class FinanceiroComponent implements OnInit {
 
   setValueGerador() {
     this.gerador.setValue({
+      data_ref: this.projeto.dataproj,
       vlr_total: this.projeto.valor,
-      parcelas: 1,
+      nro_parcelas: 1,
       dia_mes: -1,
       tipo_arredondamento: 1,
       pula_fds: 1,
@@ -229,6 +222,10 @@ export class FinanceiroComponent implements OnInit {
 
   escolha(opcao: number, titulo?: TituloProjetoModel) {
     if (typeof titulo !== 'undefined') {
+      this.titulo = titulo;
+      this.setValueCadastro();
+      this.idAcao = opcao;
+      this.setAcao(opcao);
     }
     if (opcao == 99) {
       this.idAcao = opcao;
@@ -238,31 +235,18 @@ export class FinanceiroComponent implements OnInit {
   }
 
   executaAcao() {
-    /*
-    this.projeto.id_tipo = this.formulario.value.tipo;
-    this.projeto.id_parceira = this.formulario.value.parceira;
-    this.projeto.descricao = this.formulario.value.descricao;
-    this.projeto.id_diretor = this.formulario.value.id_diretor;
-    this.projeto.id_cliente = this.formulario.value.id_cliente;
-    this.projeto.dataprop = this.formulario.value.dataprop;
-    this.projeto.dataproj = this.formulario.value.dataproj;
-    this.projeto.dataenc = this.formulario.value.dataenc;
-    this.projeto.horasve = this.formulario.value.horasve;
-    this.projeto.objeto = this.formulario.value.objeto;
-    this.projeto.obs = this.formulario.value.observacao;
-    this.projeto.valor = vlrContrato;
-    this.projeto.id_contrato = this.formulario.value.id_contrato;
-    this.projeto.assinatura = this.formulario.value.assinatura;
-    this.projeto.reajuste = this.formulario.value.reajuste;
-    */
+    this.titulo.data_pagto = this.cadastro.value.data_pagto;
+    this.titulo.data_vencto = this.cadastro.value.data_vencto;
+    this.titulo.valor = this.cadastro.value.valor;
+    this.titulo.obs = this.cadastro.value.obs;
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         this.titulo.user_insert = this.globalService.getUsuario().id;
         this.inscricaoCrud = this.tituloProjetoService
           .TituloProjetoInsert(this.titulo)
           .subscribe(
-            async (data: TituloProjetoModel) => {
-              console.log('Retorno Titulo: ', data);
+            (data: TituloProjetoModel) => {
+              this.titulo = data;
             },
             (error: any) => {
               this.appSnackBar.openFailureSnackBar(
@@ -273,37 +257,39 @@ export class FinanceiroComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Edicao:
-        /*
-        this.projeto.user_update = this.globalService.getUsuario().id;
-        this.inscricaoAcao = this.projetosService
-          .ProjetoUpdate(this.projeto)
+        this.titulo.user_update = this.globalService.getUsuario().id;
+        this.inscricaoCrud = this.tituloProjetoService
+          .TituloProjetoUpdate(this.titulo)
           .subscribe(
             async (data: any) => {
-              this.onRetorno();
+              this.onPosicaoInicial();
             },
             (error: any) => {
               this.appSnackBar.openFailureSnackBar(
-                `Erro Na Alteração ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+                `Erro Na Alteração ${messageError(error)}`,
                 'OK'
               );
             }
-          );*/
+          );
         break;
       case CadastroAcoes.Exclusao:
-        /*
-        this.inscricaoAcao = this.projetosService
-          .ProjetoDelete(this.projeto.id_empresa, this.projeto.id)
+        this.inscricaoCrud = this.tituloProjetoService
+          .TituloProjetoDelete(
+            this.titulo.id_empresa,
+            this.titulo.id_projeto,
+            this.titulo.data_vencto
+          )
           .subscribe(
             async (data: any) => {
-              this.onRetorno();
+              this.onPosicaoInicial();
             },
             (error: any) => {
               this.appSnackBar.openFailureSnackBar(
-                `Erro Na Exclusao ${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
+                `Erro Na Alteração ${messageError(error)}`,
                 'OK'
               );
             }
-          );*/
+          );
         break;
       default:
         break;
@@ -315,32 +301,32 @@ export class FinanceiroComponent implements OnInit {
       //Gerador
       if (op == 99) {
         this.acao = 'Gerar';
-        this.labelCadastro = 'Projetos - Gerador De Parcelas';
+        this.labelCadastro = 'Títulos -  Gerador De Parcelas';
       }
       if (op == 98) {
         this.acao = 'Gravar';
-        this.labelCadastro = 'Projetos - Cadastro De Parcelas';
+        this.labelCadastro = 'Títulos -  Cadastro De Parcelas';
       }
     } else {
       switch (+op) {
         case CadastroAcoes.Inclusao:
           this.acao = 'Gravar';
-          this.labelCadastro = 'Projetos - Inclusão.';
+          this.labelCadastro = 'Títulos -  Inclusão.';
           this.readOnly = false;
           break;
         case CadastroAcoes.Edicao:
           this.acao = 'Gravar';
-          this.labelCadastro = 'Projetos - Alteração.';
+          this.labelCadastro = 'Títulos -  Alteração.';
           this.readOnly = false;
           break;
         case CadastroAcoes.Consulta:
           this.acao = 'Voltar';
-          this.labelCadastro = 'Projetos - Consulta.';
+          this.labelCadastro = 'Títulos -  Consulta.';
           this.readOnly = true;
           break;
         case CadastroAcoes.Exclusao:
           this.acao = 'Excluir';
-          this.labelCadastro = 'Projetos - Exclusão.';
+          this.labelCadastro = 'Títulos -  Exclusão.';
           this.readOnly = true;
           break;
         default:
@@ -361,5 +347,140 @@ export class FinanceiroComponent implements OnInit {
   onPosicaoInicial() {
     this.idAcao = 97;
     this.setAcao(97);
+  }
+
+  onGerarParcelas() {
+    this.geracaoDeParcelas();
+    this.titulo = this.titulos[0];
+    this.idAcao = CadastroAcoes.Inclusao;
+    this.executaAcao();
+  }
+
+  geracaoDeParcelas() {
+    this.calculo();
+    this.gerador.patchValue({
+      vlr_parcela: this.geradorParcelas.vlr_parcela,
+      vlr_arredondamento: this.geradorParcelas.vlr_arredondamento,
+    });
+    this.loadParcelas();
+  }
+
+  loadGerador() {
+    const day: number = this.gerador.value.dia_mes;
+    const tipo: number = this.gerador.value.tipo_arredondamento;
+    this.geradorParcelas.vlr_total = this.gerador.value.vlr_total;
+    this.geradorParcelas.nro_parcelas = this.gerador.value.nro_parcelas;
+    this.geradorParcelas.day = day > 0 ? day : 0;
+    this.geradorParcelas.first_day = day == -1 ? true : false;
+    this.geradorParcelas.last_day = day == 0 ? true : false;
+    this.geradorParcelas.vlr_parcela = this.gerador.value.vlr_parcela;
+    this.geradorParcelas.tipo_arredondamento = tipo;
+    this.geradorParcelas.skip_weekend =
+      this.gerador.value.pula_fds == 1 ? true : false;
+  }
+
+  calculo() {
+    this.loadGerador();
+    if (this.geradorParcelas.tipo_arredondamento < 3) {
+      this.geradorParcelas.vlr_parcela = Math.trunc(
+        this.geradorParcelas.vlr_total / this.geradorParcelas.nro_parcelas
+      );
+      this.geradorParcelas.vlr_parcela = Number(
+        this.geradorParcelas.vlr_parcela.toFixed(2)
+      );
+      this.geradorParcelas.vlr_arredondamento =
+        this.geradorParcelas.vlr_total % this.geradorParcelas.nro_parcelas;
+      this.geradorParcelas.vlr_arredondamento = Number(
+        this.geradorParcelas.vlr_arredondamento.toFixed(2)
+      );
+    } else {
+      this.geradorParcelas.vlr_parcela =
+        this.geradorParcelas.vlr_total / this.geradorParcelas.nro_parcelas;
+      this.geradorParcelas.vlr_parcela = Number(
+        this.geradorParcelas.vlr_parcela.toFixed(2)
+      );
+
+      this.geradorParcelas.vlr_arredondamento = 0;
+    }
+  }
+
+  loadParcelas() {
+    const ref = this.gerador.value.data_ref.split('/');
+    let dia: number = this.geradorParcelas.day;
+    let mes: number = Number(ref[1]) - 1;
+    let ano: number = Number(ref[2]);
+    this.titulos = [];
+    if (this.geradorParcelas.first_day) {
+      dia = 1;
+    }
+    if (this.geradorParcelas.last_day) {
+      dia = new Date(ano, mes + 1, 0).getDate();
+    }
+    let data_trab: Date = new Date(ano, mes, dia);
+    for (let x = 1; x <= this.geradorParcelas.nro_parcelas; x++) {
+      let titulo: TituloProjetoModel = new TituloProjetoModel();
+      let data_lanca: Date = data_trab;
+      if (this.geradorParcelas.skip_weekend) {
+        if (data_lanca.getDay() == 0) {
+          data_lanca.setDate(data_lanca.getDate() + 1);
+        }
+        if (data_lanca.getDay() == 6) {
+          data_lanca.setDate(data_lanca.getDate() + 2);
+        }
+      }
+      titulo.id_empresa = this.id_empresa;
+      titulo.id_projeto = this.id_projeto;
+      titulo.user_insert = this.globalService.getUsuario().id;
+
+      titulo.data_vencto = DataDDMMYYYY(data_lanca);
+      titulo.data_pagto = '';
+      titulo.valor = this.geradorParcelas.vlr_parcela;
+      if (this.geradorParcelas.tipo_arredondamento == 1) {
+        if (x == 1) {
+          titulo.valor =
+            this.geradorParcelas.vlr_parcela +
+            this.geradorParcelas.vlr_arredondamento;
+        }
+      }
+      if (this.geradorParcelas.tipo_arredondamento == 2) {
+        if (x == this.geradorParcelas.nro_parcelas) {
+          titulo.valor =
+            this.geradorParcelas.vlr_parcela +
+            this.geradorParcelas.vlr_arredondamento;
+        }
+      }
+      titulo.obs = 'TESTE';
+      this.titulos.push(titulo);
+      if (mes < 11) {
+        mes++;
+      } else {
+        mes = 0;
+        ano++;
+      }
+      if (this.geradorParcelas.last_day) {
+        dia = new Date(ano, mes + 1, 0).getDate();
+      }
+      data_trab = new Date(ano, mes, dia);
+    }
+  }
+
+  onSubmit() {
+    if (this.cadastro.valid || this.idAcao == CadastroAcoes.Exclusao) {
+      this.executaAcao();
+    } else {
+      this.cadastro.markAllAsTouched();
+      this.appSnackBar.openSuccessSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
+    }
+  }
+
+  getLabelCancel() {
+    if (this.idAcao == CadastroAcoes.Consulta) {
+      return 'Voltar';
+    } else {
+      return 'Cancelar';
+    }
   }
 }

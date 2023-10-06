@@ -6,4 +6,6 @@ export class Gerador {
   public last_day: boolean = false;
   public skip_weekend: boolean = false;
   public day: number = 0;
+  public tipo_arredondamento: number = 0;
+  public vlr_arredondamento: number = 0;
 }

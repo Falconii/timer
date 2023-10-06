@@ -23,14 +23,18 @@
 <div class="box" *ngIf="idAcao == 99">
   <form [formGroup]="gerador" autocomplete="off" class="padding">
     <h3 class="alinha_centro">GERADOR DE PARCELAS</h3>
-    <div class="col-med-5">
+    <div class="col-med-4">
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Data De Referência</mat-label>
+        <input matInput formControlName="data_ref" mask="00/00/0000" placeholder="dd/mm/aaaa">
+      </mat-form-field>
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>VLR TOTAL</mat-label>
         <input matInput formControlName="vlr_total">
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Nº Parcelas</mat-label>
-        <mat-select formControlName="parcelas">
+        <mat-select formControlName="nro_parcelas">
           <mat-option *ngFor="let parcela of parcelas" [value]="parcela">
             {{parcela}}
           </mat-option>
@@ -44,6 +48,8 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+    </div>
+    <div class="col-med-2">
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Tipo De Arredondamento</mat-label>
         <mat-select formControlName="tipo_arredondamento">
@@ -72,18 +78,18 @@
       </mat-form-field>
     </div>
     <div class="button-container-right">
-      <button mat-raised-button color="primary">Gravar</button>
+      <button mat-raised-button color="primary" (click)="onGerarParcelas()">Gravar</button>
       <button mat-raised-button color="accent" (click)="onPosicaoInicial()">Cancelar</button>
     </div>
   </form>
 </div>
-<div class="box" *ngIf="idAcao == 98">
+<div class="box" *ngIf="idAcao <= 90">
   <form [formGroup]="cadastro" autocomplete="off" class="padding">
     <h3 class="alinha_centro">TÍTULO FINANCEIRO</h3>
     <div class="col-med-3">
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Data Vencto</mat-label>
-        <input matInput formControlName="data_venc" mask="00/00/0000" placeholder="dd/mm/aaaa">
+        <input matInput formControlName="data_vencto" mask="00/00/0000" placeholder="dd/mm/aaaa">
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Valor</mat-label>
@@ -101,8 +107,8 @@
       </mat-form-field>
     </div>
     <div class="button-container-right">
-      <button mat-raised-button color="primary">Gravar</button>
-      <button mat-raised-button color="accent">Cancelar</button>
+      <button mat-raised-button color="primary" *ngIf="idAcao != 3" (click)=onSubmit()>{{acao}}</button>
+      <button mat-raised-button color="accent" (click)="onPosicaoInicial()">{{getLabelCancel()}}</button>
     </div>
   </form>
 </div>
@@ -129,7 +135,7 @@
       </td>
       <td>
         <div class="alinha_direita">
-          <mat-label class="Browse_Lanc_td">{{titulo.valor}}</mat-label>
+          <mat-label class="Browse_Lanc_td">{{titulo.valor | number:'1.2':'pt'}}</mat-label>
         </div>
       </td>
       <td>
@@ -138,11 +144,14 @@
         </div>
       </td>
       <td class="acoes">
-        <barra-acoes (changeOpcao)="escolha($event,titulo)">
+        <barra-acoes [CONSULTAR]="false" (changeOpcao)="escolha($event,titulo)">
         </barra-acoes>
       </td>
     </tr>
   </table>
+</div>
+<div class="col-max" *ngIf="titulos.length == 0 && idAcao == 97">
+  <h5>Nenhum Título Cadastrado!</h5>
 </div>
 <div class="rodape">
 
