@@ -32,7 +32,7 @@ export class TituloProjetoService {
     data_vencto: string
   ) {
     return this.http.get<TituloProjetoModel>(
-      `${this.apiURL}titulo_projeto/${id_empresa}/${id_empresa}/${id_projeto}/${data_vencto}`
+      `${this.apiURL}titulo_projeto/${id_empresa}/${id_projeto}/${data_vencto}`
     );
   }
 
@@ -56,8 +56,9 @@ export class TituloProjetoService {
     id_projeto: number,
     data_vencto: string
   ) {
+    console.log(data_vencto);
     return this.http.delete<TituloProjetoModel>(
-      `${this.apiURL}titulo_projeto/${id_empresa}/${id_empresa}/${id_empresa}/${id_projeto}/${data_vencto}`
+      `${this.apiURL}titulo_projeto/${id_empresa}/${id_projeto}/${data_vencto}`
     );
   }
 }

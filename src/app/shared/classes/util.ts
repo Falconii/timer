@@ -417,22 +417,25 @@ export function getFirstName(value: string): string {
 
 export function messageError(value: any): string {
   var retorno = '';
-  if (!(typeof value.error === 'undefined')) {
-    retorno += `${value.error.message} `;
+  if (value.name == 'HttpErrorResponse' && value.tabela === 'undefined') {
+    retorno += ` ${value.message}\n${value.url} `;
   } else {
-    if (!(typeof value.tabela === 'undefined')) {
-      retorno += `${value.tabela} `;
-    }
+    if (!(typeof value.error === 'undefined')) {
+      retorno += `${value.error.message} `;
+    } else {
+      if (!(typeof value.tabela === 'undefined')) {
+        retorno += `${value.tabela} `;
+      }
 
-    if (!(typeof value.erro === 'undefined')) {
-      retorno += `${value.erro} `;
-    }
+      if (!(typeof value.erro === 'undefined')) {
+        retorno += `${value.erro} `;
+      }
 
-    if (!(typeof value.message === 'undefined')) {
-      retorno += `${value.message} `;
+      if (!(typeof value.message === 'undefined')) {
+        retorno += `${value.message} `;
+      }
     }
   }
-
   if (retorno.length == 0) retorno = value;
 
   return retorno;

@@ -9,6 +9,11 @@ export function ValidatorDate(required: boolean = false): ValidatorFn {
 
     const value = control.value;
 
+    if (value == null) {
+      if (required) return { ValidatorDate: true, message: 'Data Obrigatória' };
+      return null;
+    }
+
     if (required && value.length == 0) {
       return { ValidatorDate: true, message: 'Data Obrigatória' };
     }

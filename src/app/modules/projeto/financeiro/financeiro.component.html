@@ -11,7 +11,8 @@
       <mat-icon>brightness_high</mat-icon>
     </button>
     <button mat-icon-button aria-label="Example icon-button with share icon "
-      (click)="escolha(getAcoes()[ 'Inclusao']) " [matTooltip]="getTexto().incluir" matTooltipPosition="above">
+      (click)="escolha(getAcoes()[ 'Inclusao']) " [matTooltip]="getTexto().incluir" matTooltipPosition="above"
+      (click)="escolha(getAcoes().Inclusao)">
       <mat-icon>add_circle_outline</mat-icon>
     </button>
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Retorno"
@@ -70,15 +71,15 @@
     <div class="col-med-2">
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>VLR PARCELA</mat-label>
-        <input matInput formControlName="vlr_parcela">
+        <input matInput formControlName="vlr_parcela" [readonly]="readOnly">
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>VLR ARREDONDAMENTO</mat-label>
-        <input matInput formControlName="vlr_arredondamento">
+        <input matInput formControlName="vlr_arredondamento" [readonly]="readOnly">
       </mat-form-field>
     </div>
     <div class="button-container-right">
-      <button mat-raised-button color="primary" (click)="onGerarParcelas()">Gravar</button>
+      <button mat-raised-button color="primary" (click)="onGerarParcelas()">Processar</button>
       <button mat-raised-button color="accent" (click)="onPosicaoInicial()">Cancelar</button>
     </div>
   </form>
@@ -89,21 +90,28 @@
     <div class="col-med-3">
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Data Vencto</mat-label>
-        <input matInput formControlName="data_vencto" mask="00/00/0000" placeholder="dd/mm/aaaa">
+        <input matInput formControlName="data_vencto" mask="00/00/0000" placeholder="dd/mm/aaaa" [readonly]="readOnly">
+        <mat-error *ngIf="cadastro.get('data_vencto')?.errors?.ValidatorDate && NoValidtouchedOrDirtyCd('data_vencto')">
+          {{cadastro.get('data_vencto')?.errors?.message}}</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Valor</mat-label>
-        <input matInput formControlName="valor">
+        <input matInput formControlName="valor" [readonly]="readOnly">
+        <mat-error *ngIf="NoValidtouchedOrDirtyCd('valor')">Valor Obrigatório!</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Data Pagto</mat-label>
-        <input matInput formControlName="data_pagto" mask="00/00/0000" placeholder="dd/mm/aaaa">
+        <input matInput formControlName="data_pagto" mask="00/00/0000" placeholder="dd/mm/aaaa" [readonly]="readOnly">
+        <mat-error *ngIf="cadastro.get('data_pagto')?.errors?.ValidatorDate && NoValidtouchedOrDirtyCd('data_pagto')">
+          {{cadastro.get('data_pagto')?.errors?.message}}</mat-error>
       </mat-form-field>
     </div>
     <div class="col-med-1">
       <mat-form-field appearance="outline" class="col-max">
         <mat-label>Observação</mat-label>
-        <input matInput formControlName="obs">
+        <input matInput formControlName="obs" oninput="this.value = this.value.toUpperCase()" [readonly]="readOnly">
+        <mat-error *ngIf="NoValidtouchedOrDirtyCd('obs')">Observação - Tamanho Máximo 100 letras
+        </mat-error>
       </mat-form-field>
     </div>
     <div class="button-container-right">

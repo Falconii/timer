@@ -1,7 +1,7 @@
 import { TituloProjetoModel } from './../../../Models/titulo-projetoModel';
 import { TituloProjetoService } from './../../../services/titulo-projeto.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ProjetoModel } from 'src/app/Models/projeto-model';
@@ -17,6 +17,9 @@ import {
   messageError,
 } from 'src/app/shared/classes/util';
 import { Gerador } from './gerador';
+import { DecimalPipe } from '@angular/common';
+import { ValidatorDate } from 'src/app/shared/Validators/validator-date';
+import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 
 @Component({
   selector: 'app-financeiro',
@@ -109,7 +112,8 @@ export class FinanceiroComponent implements OnInit {
     public appSnackBar: AppSnackbar,
     private route: ActivatedRoute,
     private router: Router,
-    private projetosService: ProjetosService
+    private projetosService: ProjetosService,
+    private decimalPipe: DecimalPipe
   ) {
     this.inscricaoRota = route.params.subscribe((params: any) => {
       this.id_empresa = params.id_empresa;
@@ -130,10 +134,10 @@ export class FinanceiroComponent implements OnInit {
     this.setValueGerador();
 
     this.cadastro = formBuilder.group({
-      data_vencto: [{ value: '' }],
-      data_pagto: [{ value: '' }],
-      valor: [{ value: '' }],
-      obs: [{ value: '' }],
+      data_vencto: [{ value: '' }, [ValidatorDate(true)]],
+      data_pagto: [{ value: '' }, [ValidatorDate(false)]],
+      valor: [{ value: '' }, [Validators.required, Validators.min(0.01)]],
+      obs: [{ value: '' }, [ValidatorStringLen(0, 100, false)]],
     });
   }
 
@@ -166,7 +170,7 @@ export class FinanceiroComponent implements OnInit {
     this.cadastro.setValue({
       data_vencto: this.titulo.data_vencto,
       data_pagto: this.titulo.data_pagto,
-      valor: this.titulo.valor,
+      valor: this.decimalPipe.transform(this.titulo.valor, '1.2-2'),
       obs: this.titulo.obs,
     });
   }
@@ -200,12 +204,12 @@ export class FinanceiroComponent implements OnInit {
         (data: TituloProjetoModel[]) => {
           this.globalService.setSpin(false);
           this.titulos = data;
-          console.log(this.titulos);
+          this.onPosicaoInicial();
         },
         (error: any) => {
           this.globalService.setSpin(false);
           this.titulos = [];
-          console.log(error);
+          this.onPosicaoInicial();
           if (error.error.message != 'Nehuma Informação Para Esta Consulta.') {
             this.appSnackBar.openFailureSnackBar(
               `Pesquisa Nos Titulos ${messageError(error)}`,
@@ -227,6 +231,14 @@ export class FinanceiroComponent implements OnInit {
       this.idAcao = opcao;
       this.setAcao(opcao);
     }
+    if (opcao == CadastroAcoes.Inclusao) {
+      this.titulo = new TituloProjetoModel();
+      this.titulo.id_empresa = this.globalService.id_empresa;
+      this.titulo.id_projeto = this.projeto.id;
+      this.setValueCadastro();
+      this.idAcao = opcao;
+      this.setAcao(opcao);
+    }
     if (opcao == 99) {
       this.idAcao = opcao;
       this.setAcao(this.idAcao);
@@ -235,22 +247,29 @@ export class FinanceiroComponent implements OnInit {
   }
 
   executaAcao() {
+    let valor: string = this.cadastro.value.valor.toString();
+    valor = valor.replace('.', '');
+    valor = valor.replace(',', '.');
     this.titulo.data_pagto = this.cadastro.value.data_pagto;
     this.titulo.data_vencto = this.cadastro.value.data_vencto;
-    this.titulo.valor = this.cadastro.value.valor;
+    if (this.titulo.data_pagto == null) this.titulo.data_pagto = '';
+    this.titulo.valor = Number(valor);
     this.titulo.obs = this.cadastro.value.obs;
+    this.globalService.setSpin(true);
     switch (+this.idAcao) {
       case CadastroAcoes.Inclusao:
         this.titulo.user_insert = this.globalService.getUsuario().id;
         this.inscricaoCrud = this.tituloProjetoService
           .TituloProjetoInsert(this.titulo)
           .subscribe(
-            (data: TituloProjetoModel) => {
-              this.titulo = data;
+            async (data: TituloProjetoModel) => {
+              this.globalService.setSpin(false);
+              this.getTitulos();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.appSnackBar.openFailureSnackBar(
-                `Erro Na INclusão ${messageError(error)}`,
+                `Erro Na Inclusão ${messageError(error)}`,
                 'OK'
               );
             }
@@ -262,9 +281,11 @@ export class FinanceiroComponent implements OnInit {
           .TituloProjetoUpdate(this.titulo)
           .subscribe(
             async (data: any) => {
-              this.onPosicaoInicial();
+              this.globalService.setSpin(false);
+              this.getTitulos();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
               this.appSnackBar.openFailureSnackBar(
                 `Erro Na Alteração ${messageError(error)}`,
                 'OK'
@@ -273,25 +294,30 @@ export class FinanceiroComponent implements OnInit {
           );
         break;
       case CadastroAcoes.Exclusao:
+        const searchRegExp = /\//g;
         this.inscricaoCrud = this.tituloProjetoService
           .TituloProjetoDelete(
             this.titulo.id_empresa,
             this.titulo.id_projeto,
-            this.titulo.data_vencto
+            this.titulo.data_vencto.replace(searchRegExp, '_')
           )
           .subscribe(
             async (data: any) => {
-              this.onPosicaoInicial();
+              this.globalService.setSpin(false);
+              this.getTitulos();
             },
             (error: any) => {
+              this.globalService.setSpin(false);
+              console.log(error);
               this.appSnackBar.openFailureSnackBar(
-                `Erro Na Alteração ${messageError(error)}`,
+                `Erro Na Exclusão ${messageError(error)}`,
                 'OK'
               );
             }
           );
         break;
       default:
+        this.globalService.setSpin(false);
         break;
     }
   }
@@ -351,9 +377,6 @@ export class FinanceiroComponent implements OnInit {
 
   onGerarParcelas() {
     this.geracaoDeParcelas();
-    this.titulo = this.titulos[0];
-    this.idAcao = CadastroAcoes.Inclusao;
-    this.executaAcao();
   }
 
   geracaoDeParcelas() {
@@ -363,6 +386,7 @@ export class FinanceiroComponent implements OnInit {
       vlr_arredondamento: this.geradorParcelas.vlr_arredondamento,
     });
     this.loadParcelas();
+    this.onPosicaoInicial();
   }
 
   loadGerador() {
@@ -449,7 +473,7 @@ export class FinanceiroComponent implements OnInit {
             this.geradorParcelas.vlr_arredondamento;
         }
       }
-      titulo.obs = 'TESTE';
+      titulo.obs = '';
       this.titulos.push(titulo);
       if (mes < 11) {
         mes++;
@@ -482,5 +506,15 @@ export class FinanceiroComponent implements OnInit {
     } else {
       return 'Cancelar';
     }
+  }
+
+  NoValidtouchedOrDirtyCd(campo: string): boolean {
+    if (
+      !this.cadastro.get(campo)?.valid &&
+      (this.cadastro.get(campo)?.touched || this.cadastro.get(campo)?.dirty)
+    ) {
+      return true;
+    }
+    return false;
   }
 }
