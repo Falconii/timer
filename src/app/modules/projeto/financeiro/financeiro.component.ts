@@ -122,8 +122,8 @@ export class FinanceiroComponent implements OnInit {
     this.idAcao = 97;
     this.setAcao(97);
     this.gerador = formBuilder.group({
-      data_ref: [{ value: 0 }],
-      vlr_total: [{ value: 0 }],
+      data_ref: [{ value: 0 }, [ValidatorDate(true)]],
+      vlr_total: [{ value: 0 }, [Validators.required, Validators.min(0.01)]],
       nro_parcelas: [{ value: 0 }],
       dia_mes: [{ value: 0 }],
       tipo_arredondamento: [{ value: 0 }],
@@ -236,6 +236,7 @@ export class FinanceiroComponent implements OnInit {
       this.titulo.id_empresa = this.globalService.id_empresa;
       this.titulo.id_projeto = this.projeto.id;
       this.setValueCadastro();
+      this.cadastro.markAsUntouched();
       this.idAcao = opcao;
       this.setAcao(opcao);
     }
@@ -374,25 +375,76 @@ export class FinanceiroComponent implements OnInit {
     this.idAcao = 97;
     this.setAcao(97);
   }
-
   onGerarParcelas() {
-    this.geracaoDeParcelas();
+    if (this.gerador.valid) {
+      this.geracaoDeParcelas();
+    } else {
+      this.gerador.markAllAsTouched();
+      this.appSnackBar.openSuccessSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
+    }
+  }
+
+  onGravarParcelas() {
+    if (this.gerador.valid) {
+      this.saveParcelas();
+    } else {
+      this.gerador.markAllAsTouched();
+      this.appSnackBar.openSuccessSnackBar(
+        `Formulário Com Campos Inválidos.`,
+        'OK'
+      );
+    }
+  }
+
+  saveParcelas() {
+    this.globalService.setSpin(false);
+    this.inscricaoCrud = this.tituloProjetoService
+      .tituloProjetoSaveAll(this.titulos)
+      .subscribe(
+        async (data: any) => {
+          this.globalService.setSpin(false);
+          this.appSnackBar.openSuccessSnackBar(
+            `${messageError(data.message)}`,
+            'OK'
+          );
+          this.getTitulos();
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.appSnackBar.openFailureSnackBar(
+            `Erro Na Inclusão ${messageError(error)}`,
+            'OK'
+          );
+        }
+      );
   }
 
   geracaoDeParcelas() {
+    this.titulos = [];
     this.calculo();
     this.gerador.patchValue({
-      vlr_parcela: this.geradorParcelas.vlr_parcela,
-      vlr_arredondamento: this.geradorParcelas.vlr_arredondamento,
+      vlr_parcela: this.decimalPipe.transform(
+        this.geradorParcelas.vlr_parcela,
+        '1.2-2'
+      ),
+      vlr_arredondamento: this.decimalPipe.transform(
+        this.geradorParcelas.vlr_arredondamento,
+        '1.2-2'
+      ),
     });
     this.loadParcelas();
-    this.onPosicaoInicial();
   }
 
   loadGerador() {
+    let valor: string = this.gerador.value.vlr_total.toString();
+    valor = valor.replace('.', '');
+    valor = valor.replace(',', '.');
     const day: number = this.gerador.value.dia_mes;
     const tipo: number = this.gerador.value.tipo_arredondamento;
-    this.geradorParcelas.vlr_total = this.gerador.value.vlr_total;
+    this.geradorParcelas.vlr_total = Number(valor);
     this.geradorParcelas.nro_parcelas = this.gerador.value.nro_parcelas;
     this.geradorParcelas.day = day > 0 ? day : 0;
     this.geradorParcelas.first_day = day == -1 ? true : false;
@@ -512,6 +564,16 @@ export class FinanceiroComponent implements OnInit {
     if (
       !this.cadastro.get(campo)?.valid &&
       (this.cadastro.get(campo)?.touched || this.cadastro.get(campo)?.dirty)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  NoValidtouchedOrDirtyGe(campo: string): boolean {
+    if (
+      !this.gerador.get(campo)?.valid &&
+      (this.gerador.get(campo)?.touched || this.gerador.get(campo)?.dirty)
     ) {
       return true;
     }

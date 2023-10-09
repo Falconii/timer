@@ -37,7 +37,6 @@ export class TituloProjetoService {
   }
 
   TituloProjetoInsert(titulo: TituloProjetoModel) {
-    console.log(titulo);
     return this.http.post<TituloProjetoModel>(
       `${this.apiURL}titulo_projeto/`,
       titulo
@@ -56,9 +55,15 @@ export class TituloProjetoService {
     id_projeto: number,
     data_vencto: string
   ) {
-    console.log(data_vencto);
     return this.http.delete<TituloProjetoModel>(
       `${this.apiURL}titulo_projeto/${id_empresa}/${id_projeto}/${data_vencto}`
+    );
+  }
+
+  tituloProjetoSaveAll(titulos: TituloProjetoModel[]) {
+    return this.http.post<TituloProjetoModel>(
+      `${this.apiURL}titulo_projeto_save_all/`,
+      titulos
     );
   }
 }
