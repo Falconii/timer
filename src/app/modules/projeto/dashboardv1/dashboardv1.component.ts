@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ApoExecucaoModel01 } from 'src/app/Models/apo-execucao-model01';
@@ -158,6 +158,7 @@ export class Dashboardv1Component implements OnInit {
   }
 
   onRetorno() {
+    //this.onTestePDF();
     const par = this.globalService.estadoFind('projeto');
     if (par != null) {
       let config = par.getParametro();

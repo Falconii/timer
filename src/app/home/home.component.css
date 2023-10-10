@@ -2,6 +2,10 @@ tr:nth-child(even) {
     background-color: #f2f2AA;
 }
 
+tr:hover {
+    background-color: rgb(202, 169, 157);
+}
+
 .box {
     width: 25%;
     border: 2px solid black;
