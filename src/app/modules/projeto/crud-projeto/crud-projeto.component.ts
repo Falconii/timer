@@ -56,6 +56,8 @@ export class CrudProjetoComponent implements OnInit {
 
   parametro: ParametroModel = new ParametroModel();
 
+  autorizado: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private projetosServices: ProjetosService,
@@ -78,6 +80,7 @@ export class CrudProjetoComponent implements OnInit {
         const par = this.globalService.estadoFind('projetos');
       }
     });
+    this.autorizado = this.globalService.okDirAdm();
   }
 
   ngOnInit(): void {
@@ -137,6 +140,19 @@ export class CrudProjetoComponent implements OnInit {
       ]);
     }
     if (opcao == 97) {
+      let config = this.parametro.getParametro();
+      Object(config).new = false;
+      Object(config).id_retorno = projeto?.id;
+      Object(config).page = this.controlePaginas.getPaginalAtual();
+      Object(config).op_ordenacao = this.opcoesOrdenacao.findIndex(
+        (op) => this.parametros.value.ordenacao == op
+      );
+      Object(config).op_pesquisar = this.opcoesCampo.findIndex(
+        (op) => this.parametros.value.campo == op
+      );
+      Object(config).descricao = this.parametros.value.filtro;
+      this.parametro.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(this.parametro);
       this.router.navigate([
         'projetos/financeiro',
         projeto?.id_empresa,

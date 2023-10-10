@@ -105,6 +105,8 @@ export class FinanceiroComponent implements OnInit {
 
   geradorParcelas: Gerador = new Gerador();
 
+  totalParcelas: number = 0;
+
   constructor(
     private formBuilder: FormBuilder,
     private globalService: GlobalService,
@@ -156,7 +158,7 @@ export class FinanceiroComponent implements OnInit {
   setValueGerador() {
     this.gerador.setValue({
       data_ref: this.projeto.dataproj,
-      vlr_total: this.projeto.valor,
+      vlr_total: this.decimalPipe.transform(this.projeto.valor, '1.2-2'),
       nro_parcelas: 1,
       dia_mes: -1,
       tipo_arredondamento: 1,
@@ -204,6 +206,10 @@ export class FinanceiroComponent implements OnInit {
         (data: TituloProjetoModel[]) => {
           this.globalService.setSpin(false);
           this.titulos = data;
+          this.totalParcelas = 0;
+          this.titulos.forEach((titulo) => {
+            this.totalParcelas = this.totalParcelas + Number(titulo.valor);
+          });
           this.onPosicaoInicial();
         },
         (error: any) => {
@@ -366,7 +372,17 @@ export class FinanceiroComponent implements OnInit {
     return MensagensBotoes;
   }
 
-  onRetorno() {}
+  onRetorno() {
+    const par = this.globalService.estadoFind('projeto');
+    if (par != null) {
+      let config = par.getParametro();
+      Object(config).new = false;
+      Object(config).id_retorno = this.projeto.id;
+      par.parametro = JSON.stringify(config);
+      this.globalService.estadoSave(par);
+    }
+    this.router.navigate(['/projetos/projetos', 'SIM']);
+  }
 
   onHome() {
     this.router.navigate(['']);
@@ -400,17 +416,14 @@ export class FinanceiroComponent implements OnInit {
   }
 
   saveParcelas() {
-    this.globalService.setSpin(false);
+    this.globalService.setSpin(true);
     this.inscricaoCrud = this.tituloProjetoService
       .tituloProjetoSaveAll(this.titulos)
       .subscribe(
         async (data: any) => {
           this.globalService.setSpin(false);
-          this.appSnackBar.openSuccessSnackBar(
-            `${messageError(data.message)}`,
-            'OK'
-          );
-          this.getTitulos();
+          this.appSnackBar.openSuccessSnackBar(`${messageError(data)}`, 'OK');
+          setTimeout(() => this.getTitulos(), 1500);
         },
         (error: any) => {
           this.globalService.setSpin(false);
@@ -538,6 +551,10 @@ export class FinanceiroComponent implements OnInit {
       }
       data_trab = new Date(ano, mes, dia);
     }
+    this.totalParcelas = 0;
+    this.titulos.forEach(
+      (titulo) => (this.totalParcelas = this.totalParcelas + titulo.valor)
+    );
   }
 
   onSubmit() {

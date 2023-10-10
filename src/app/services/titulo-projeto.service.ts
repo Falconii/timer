@@ -61,7 +61,7 @@ export class TituloProjetoService {
   }
 
   tituloProjetoSaveAll(titulos: TituloProjetoModel[]) {
-    return this.http.post<TituloProjetoModel>(
+    return this.http.post<TituloProjetoModel[]>(
       `${this.apiURL}titulo_projeto_save_all/`,
       titulos
     );
