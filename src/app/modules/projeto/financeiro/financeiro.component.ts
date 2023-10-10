@@ -569,6 +569,11 @@ export class FinanceiroComponent implements OnInit {
     }
   }
 
+  onCancelGeracao() {
+    this.titulos = [];
+    this.onPosicaoInicial();
+  }
+
   getLabelCancel() {
     if (this.idAcao == CadastroAcoes.Consulta) {
       return 'Voltar';
