@@ -100,6 +100,11 @@ const routes: Routes = [
     canActivate: [DiganaoGuard],
   },
   {
+    path: 'pontes',
+    loadChildren: () =>
+      import('./modules/pontes/pontes.module').then((m) => m.PontesModule),
+  },
+  {
     path: 'gerencial',
     loadChildren: () =>
       import('./modules/gerencial/gerencial.module').then(

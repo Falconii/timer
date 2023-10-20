@@ -7,6 +7,9 @@ export class FeriadoNivelPipe implements PipeTransform {
   transform(value: number): string {
     let retorno = '';
     switch (value) {
+      case 0:
+        retorno = 'CUSTOMIZADO';
+        break;
       case 1:
         retorno = 'MUNICIPAL';
         break;

@@ -10,8 +10,40 @@
   </div>
 </div>
 <div class="box">
+  <div class="parametros-apontamentos">
+    <form [formGroup]="parametro" autocomplete="off">
+      <div>
+        <mat-form-field field appearance="outline">
+          <mat-label>Ano</mat-label>
+          <mat-select formControlName="ano" (selectionChange)="onParametrosChange()">
+            <mat-option *ngFor="let ano of anos" [value]="ano">
+              {{ano}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field field appearance="outline">
+          <mat-label>Mês</mat-label>
+          <mat-select formControlName="mes" (selectionChange)="onParametrosChange()">
+            <mat-option *ngFor="let mes of meses.meses" [value]="mes.nro">
+              {{mes.nome}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <!--
+  <div class="div-50px">
+    <mat-slider thumbLabel [displayWith]="formatLabel" tickInterval="1000" step="1" min="1" max="12" [value]="mes"
+      aria-label="units" (change)="updateSetting($event)">
+    </mat-slider>
+    <span>
+      {{mes_ext}} {{ano}}
+    </span>
+  </div>
+  -->
   <div *ngIf="lsResumoApontamentosExec.length > 0">
-    <h5 class="alinha_centro">HORAS EXECUTADAS</h5>
+    <div class="cabec-horas-apontadas">Horas Apontadas</div>
     <table class="Browse_Lanc">
       <tr class="coluna-cabec">
         <th>DATA</th>
@@ -31,7 +63,11 @@
       </tr>
     </table>
   </div>
+  <div *ngIf="lsResumoApontamentosExec.length == 0">
+    <div class="cabec-horas-apontadas">Nenhum Lançamento Encontrado!</div>
+  </div>
 </div>
+<div class="rodape"></div>
 <!--
 
 <div *ngIf="false">

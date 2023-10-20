@@ -1,0 +1,187 @@
+<div class="div-barra">
+  <mat-toolbar>
+    <span class="example-spacer">Ponte:</span>
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltip="Página Inicial"
+      matTooltipPosition="above" (click)="onHome()">
+      <mat-icon>home</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with share icon " matTooltipPosition="above"
+      (click)="escolha(99)" matTooltip="Inclusão De Pontes" matTooltipPosition="above" *ngIf="pontes.length == 0">
+      <mat-icon>add_comment</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with share icon "
+      (click)="escolha(getAcoes()[ 'Inclusao']) " [matTooltip]="getTexto().incluir" matTooltipPosition="above"
+      *ngIf="idAcao == 97" (click)="escolha(getAcoes().Inclusao)">
+      <mat-icon>add_circle_outline</mat-icon>
+    </button>
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" matTooltip="Retorno"
+      matTooltipPosition="above" (click)="onRetorno()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </mat-toolbar>
+</div>
+<div *ngIf="idAcao == 99">
+  <form [formGroup]="gerador" autocomplete="off">
+    <div class="box padding">
+      <h3 class="alinha_centro">GERADOR DE PONTES</h3>
+      <div class="col-med-3">
+        <mat-form-field appearance="outline" class="col-max">
+          <mat-label>Data De Referência</mat-label>
+          <input matInput formControlName="data_ref" mask="00/00/0000" placeholder="dd/mm/aaaa">
+          <mat-error *ngIf="cadastro.get('data_ref')?.errors?.ValidatorDate && NoValidtouchedOrDirtyGe('data_ref')">
+            {{cadastro.get('data_ref')?.errors?.message}}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="column-span-2">
+          <mat-label>Descrição</mat-label>
+          <input matInput formControlName="descricao" oninput="this.value = this.value.toUpperCase()"
+            [readonly]="readOnly">
+          <mat-error *ngIf="NoValidtouchedOrDirtyGe('descricao')">Observação - Tamanho Máximo 100 letras
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!--
+      <div *ngIf="lsUsuarios.length > 0">
+        <table class="Browse_Lanc">
+          <tr class="coluna-cabec">
+            <th>CONTA</th>
+            <th>DESCRIÇÃO</th>
+          </tr>
+          <tr *ngFor="let atividade of getVisiblesAuditores()">
+            <td class="coluna-descricao">
+              <div *ngIf="atividade.atividade.nivel == 1">
+                <button mat-icon-button aria-label="Example icon-button with share icon "
+                  (click)="expandeContrair(atividade)">
+                  <mat-icon>{{atividade.expandido ? "expand_less" : "expand_more"}}</mat-icon>
+                </button>
+                <mat-checkbox [checked]=atividade.checked (change)="setAllItens($event.checked,atividade.atividade)"
+                  color="accent" [disabled]="!atividade.vazia">
+                </mat-checkbox>
+              </div>
+              <div *ngIf="atividade.atividade.nivel > 1">
+                <mat-label class="labelData"></mat-label>
+              </div>
+            </td>
+            <td class="coluna-descricao">
+              <div *ngIf="atividade.atividade.nivel == 1">
+                <mat-label class="labelData">{{atividade.atividade.estru_descri}}</mat-label>
+              </div>
+              <div class="linha-status-projeto" *ngIf="atividade.atividade.nivel > 1">
+                <button mat-icon-button aria-label="Example icon-button with share icon "
+                  (click)="expandeContrair(atividade)" *ngIf="atividade.atividade.tipo !=  'O'">
+                  <mat-icon>{{atividade.expandido ? "expand_less" : "expand_more"}}</mat-icon>
+                </button>
+                <mat-checkbox [checked]=atividade.checked (change)="setAllItens($event.checked,atividade.atividade) "
+                  color="accent" [ngStyle]="setStyle(atividade.atividade)" [disabled]="!atividade.vazia">
+                </mat-checkbox>
+                <mat-label class="labelData">
+                  {{atividade.atividade.estru_descri}}
+                </mat-label>
+                <div class="coluna-descricao cor-blue" *ngIf="atividade.atividade.nivel == 1">
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      -->
+      <div class="button-container-right">
+        <button mat-raised-button color="primary" (click)="onGravarPontes()"
+          [disabled]="pontes.length <= 0">Gravar</button>
+        <button mat-raised-button color="primary" (click)="onGerarPontes()">Processar</button>
+        <button mat-raised-button color="accent" (click)="onCancelGeracao()">Cancelar</button>
+      </div>
+    </div>
+    <div class="rodape"></div>
+    <div class="col-max box padding" *ngIf="pontes.length > 0">
+      <table class="Browse-Scroll">
+        <tr class="coluna-cabec">
+          <th>Data</th>
+          <th>Descrição</th>
+          <th>Qtd Usuários</th>
+          <th>AÇÕES</th>
+        </tr>
+        <tr *cdkVirtualFor="let ponte of pontes ">
+          <td>
+            <div class="alinha_centro">
+              <mat-label class="Browse_Lanc_td">{{ponte.data}}</mat-label>
+            </div>
+          </td>
+          <td>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{ponte.descricao}}</mat-label>
+            </div>
+          </td>
+          <td>
+            <div class="alinha_direita">
+              <mat-label class="Browse_Lanc_td">{{ponte.total}}</mat-label>
+            </div>
+          </td>
+          <td class="acoes">
+            <barra-acoes [BARRA_ATIVIDADES]="false" [EXCLUIR]="false" (changeOpcao)="escolha($event,ponte)">
+            </barra-acoes>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</div>
+<div class="box" *ngIf="idAcao <= 90">
+  <form [formGroup]="cadastro" autocomplete="off" class="padding">
+    <h3 class="alinha_centro">PONTE</h3>
+    <div class="col-med-3">
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Data</mat-label>
+        <input matInput formControlName="data" mask="00/00/0000" placeholder="dd/mm/aaaa" [readonly]="readOnly">
+        <mat-error *ngIf="cadastro.get('data')?.errors?.ValidatorDate && NoValidtouchedOrDirtyCd('data')">
+          {{cadastro.get('data')?.errors?.message}}</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="column-span-2">
+        <mat-label>Descrição</mat-label>
+        <input matInput formControlName="descricao" oninput="this.value = this.value.toUpperCase()"
+          [readonly]="readOnly">
+        <mat-error *ngIf="NoValidtouchedOrDirtyCd('descricao')">Observação - Tamanho Máximo 100 letras
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="button-container-right">
+      <button mat-raised-button color="primary" *ngIf="idAcao != 3" (click)=onSubmit()>{{acao}}</button>
+      <button mat-raised-button color="accent" (click)="onPosicaoInicial()">{{getLabelCancel()}}</button>
+    </div>
+  </form>
+</div>
+<div class="col-max box" *ngIf="pontes.length > 0 && idAcao == 97">
+  <table class="Browse-Scroll">
+    <tr class="coluna-cabec">
+      <th>Data</th>
+      <th>Descrição</th>
+      <th>Qtd Usuários</th>
+      <th>AÇÕES</th>
+    </tr>
+    <tr *cdkVirtualFor="let ponte of pontes ">
+      <td>
+        <div class="alinha_centro">
+          <mat-label class="Browse_Lanc_td">{{ponte.data}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div>
+          <mat-label class="Browse_Lanc_td">{{ponte.descricao}}</mat-label>
+        </div>
+      </td>
+      <td>
+        <div class="alinha_direita">
+          <mat-label class="Browse_Lanc_td">{{ponte.total}}</mat-label>
+        </div>
+      </td>
+      <td class="acoes">
+        <barra-acoes [BARRA_ATIVIDADES]="false" [EXCLUIR]="false" (changeOpcao)="escolha($event,ponte)"></barra-acoes>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="col-max" *ngIf="pontes.length == 0 && idAcao == 97">
+  <h5>Nenhuma Ponte Cadastrado!</h5>
+</div>
+<div class="rodape">
+
+</div>

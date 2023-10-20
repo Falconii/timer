@@ -5,9 +5,16 @@ import { ParametroProjeto01 } from '../parametros/parametro-projeto01';
 import { ProjetosService } from '../services/projetos.service';
 import { ProjetoModel } from '../Models/projeto-model';
 import { AppSnackbar } from '../shared/classes/app-snackbar';
-import { getFirstName, messageError } from '../shared/classes/util';
+import {
+  adicionaZero,
+  getFirstName,
+  messageError,
+} from '../shared/classes/util';
 import { AponExecucaoService } from '../services/apon-execucao.service';
 import { AponExecutorModel } from '../Models/apon-executor-model';
+import { ListaMeses } from '../shared/classes/lista-meses';
+import { MatSliderChange } from '@angular/material/slider';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 declare var google: any;
 
@@ -17,8 +24,16 @@ declare var google: any;
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  parametro: FormGroup;
   inscricaoGetContratos!: Subscription;
   inscricaoAponExecucao!: Subscription;
+  anos: number[] = [2023, 2024, 2025, 2026, 2027];
+  hoje: Date = new Date();
+  ano: number = 0;
+  mes: number = 0;
+  mes_ext: string = '';
+  meses: ListaMeses = new ListaMeses();
+  chaveHoras: string = '';
   lsProjetos: ProjetoModel[] = [];
   displayedColumns: string[] = [
     'situacao',
@@ -37,12 +52,22 @@ export class HomeComponent implements OnInit {
     public globalService: GlobalService,
     private projetosServices: ProjetosService,
     private aponExecucaoService: AponExecucaoService,
-    private appSnackBar: AppSnackbar
+    private appSnackBar: AppSnackbar,
+    private formBuilder: FormBuilder
   ) {
     //google.charts.load('current', { packages: ['corechart'] });
+    this.ano = this.hoje.getFullYear();
+    this.mes = this.hoje.getMonth() + 1;
+    this.mes_ext = this.meses.meses[this.mes - 1].abrev;
+    this.chaveHoras = `${adicionaZero(this.mes)}_${this.ano}`;
+    this.parametro = formBuilder.group({
+      ano: [{ value: '' }],
+      mes: [{ value: '' }],
+    });
   }
 
   ngOnInit(): void {
+    this.setParametro();
     this.Atualizar();
   }
 
@@ -61,7 +86,7 @@ export class HomeComponent implements OnInit {
       .AponExecByExecutor(
         this.globalService.id_empresa,
         this.globalService.getUsuario().id,
-        '10_2023'
+        this.chaveHoras
       )
       .subscribe(
         (data: AponExecutorModel[]) => {
@@ -89,6 +114,12 @@ export class HomeComponent implements OnInit {
       );
   }
 
+  setParametro() {
+    this.parametro.setValue({
+      ano: this.hoje.getFullYear(),
+      mes: this.hoje.getMonth(),
+    });
+  }
   /*
   buidChartContratosAtivos(dados: ProjetoModel[]) {
     var func = (chart: any) => {
@@ -185,5 +216,25 @@ export class HomeComponent implements OnInit {
       if (projeto.nivelexec == 4) cor = { 'background-color': 'black' };
     }
     return cor;
+  }
+
+  formatLabel(value: number): string {
+    let meses: ListaMeses = new ListaMeses();
+    let retorno: string = meses.meses[value - 1].abrev;
+    return `${retorno}`;
+  }
+
+  onParametrosChange() {
+    this.ano = this.parametro.value.ano;
+    this.mes = this.parametro.value.mes + 1;
+    this.chaveHoras = `${adicionaZero(this.mes)}_${this.ano}`;
+    this.Atualizar();
+  }
+
+  updateSetting(event: any) {
+    this.mes = event.value;
+    this.mes_ext = this.meses.meses[this.mes - 1].abrev;
+    this.chaveHoras = `${adicionaZero(this.mes)}_${this.ano}`;
+    this.Atualizar();
   }
 }

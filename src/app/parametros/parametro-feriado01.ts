@@ -7,6 +7,7 @@ export class ParametroFeriado01 {
   public descricao: string = '';
   public pagina: number = 0;
   public tamPagina: number = 50;
+  public formato: string = '';
   public contador: string = 'N';
   public orderby: string = '';
   public sharp: Boolean = false;

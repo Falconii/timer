@@ -182,9 +182,9 @@ export function DiasUteisV2(
   return retorno;
 }
 
-function adicionaZero(numero: number) {
+export function adicionaZero(numero: number) {
   if (numero <= 9) return '0' + numero;
-  else return numero;
+  else return '' + numero;
 }
 
 export function formatarData(date: any): string {

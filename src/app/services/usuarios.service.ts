@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { ParametroUsuario01 } from '../parametros/parametro-usuario01';
 import { environment } from 'src/environments/environment';
 import { ParametroLista01 } from '../parametros/parametro-lista01';
+import { UsuarioQuery_03Model } from '../Models/usuario-query_03-model';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,14 @@ export class UsuariosService {
     );
   }
 
+  getusuarios_01_Ponte(
+    params: ParametroUsuario01
+  ): Observable<UsuarioQuery_03Model[]> {
+    return this.http.post<UsuarioQuery_03Model[]>(
+      `${this.apiURL}usuariosbyponte`,
+      params
+    );
+  }
   UsuarioInsert(usuario: UsuarioModel) {
     return this.http.post<UsuarioModel>(`${this.apiURL}usuario/`, usuario);
   }

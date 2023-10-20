@@ -5,6 +5,10 @@ export class ParametroUsuario01 {
   public razao: string = '';
   public cnpj_cpf: string = '';
   public grupo: number[] = [];
+  public timer: string = '';
+  public ticket: string = '';
+  public flag_ponte: string = '';
+  public data: string = '';
   public pagina: number = 0;
   public tamPagina: number = 50;
   public contador: string = 'N';

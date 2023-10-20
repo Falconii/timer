@@ -24,6 +24,7 @@ import { SimNaoPipe } from './shared/pipes/sim-nao.pipe';
 import { FeriadoTipoPipe } from './shared/pipes/feriado-tipo.pipe';
 import { FeriadoNivelPipe } from './shared/pipes/feriado-nivel.pipe';
 import { FirstNamePipe } from './shared/pipes/first-name.pipe';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 registerLocaleData(localePt);
 
@@ -35,6 +36,8 @@ registerLocaleData(localePt);
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     NgxMaskModule.forRoot({
       dropSpecialCharacters: false,
