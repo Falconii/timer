@@ -39,51 +39,34 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <!--
-      <div *ngIf="lsUsuarios.length > 0">
+      <div *ngIf="displayPontes.length > 0">
         <table class="Browse_Lanc">
-          <tr class="coluna-cabec">
-            <th>CONTA</th>
-            <th>DESCRIÇÃO</th>
-          </tr>
-          <tr *ngFor="let atividade of getVisiblesAuditores()">
-            <td class="coluna-descricao">
-              <div *ngIf="atividade.atividade.nivel == 1">
-                <button mat-icon-button aria-label="Example icon-button with share icon "
-                  (click)="expandeContrair(atividade)">
-                  <mat-icon>{{atividade.expandido ? "expand_less" : "expand_more"}}</mat-icon>
-                </button>
-                <mat-checkbox [checked]=atividade.checked (change)="setAllItens($event.checked,atividade.atividade)"
-                  color="accent" [disabled]="!atividade.vazia">
+          <tr *ngFor="let ponte of displayPontes">
+            <td class="acoes">
+              <div *ngIf="ponte.vazia">
+                <mat-checkbox [checked]=ponte.checked (change)="setAllItens($event.checked)" color="accent">
+                  <mat-label class="Browse_Lanc_td">TODOS</mat-label>
                 </mat-checkbox>
-              </div>
-              <div *ngIf="atividade.atividade.nivel > 1">
-                <mat-label class="labelData"></mat-label>
               </div>
             </td>
-            <td class="coluna-descricao">
-              <div *ngIf="atividade.atividade.nivel == 1">
-                <mat-label class="labelData">{{atividade.atividade.estru_descri}}</mat-label>
-              </div>
-              <div class="linha-status-projeto" *ngIf="atividade.atividade.nivel > 1">
-                <button mat-icon-button aria-label="Example icon-button with share icon "
-                  (click)="expandeContrair(atividade)" *ngIf="atividade.atividade.tipo !=  'O'">
-                  <mat-icon>{{atividade.expandido ? "expand_less" : "expand_more"}}</mat-icon>
-                </button>
-                <mat-checkbox [checked]=atividade.checked (change)="setAllItens($event.checked,atividade.atividade) "
-                  color="accent" [ngStyle]="setStyle(atividade.atividade)" [disabled]="!atividade.vazia">
+            <td>
+              <div *ngIf="!ponte.vazia">
+                <mat-checkbox [checked]=ponte.checked color="accent" (change)="setItens($event.checked,ponte)"
+                  [disabled]="!(ponte.ponte.data.trim() == '')">
+                  <mat-label class="Browse_Lanc_td">
+                    {{ponte.ponte.razao}}
+                  </mat-label>
                 </mat-checkbox>
-                <mat-label class="labelData">
-                  {{atividade.atividade.estru_descri}}
-                </mat-label>
-                <div class="coluna-descricao cor-blue" *ngIf="atividade.atividade.nivel == 1">
-                </div>
+              </div>
+            </td>
+            <td>
+              <div *ngIf="!ponte.vazia">
+                <mat-label class="Browse_Lanc_td">{{ponte.ponte.descricao}}</mat-label>
               </div>
             </td>
           </tr>
         </table>
       </div>
-      -->
       <div class="button-container-right">
         <button mat-raised-button color="primary" (click)="onGravarPontes()"
           [disabled]="pontes.length <= 0">Gravar</button>

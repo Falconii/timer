@@ -19,7 +19,7 @@ import { MensagensBotoes, messageError } from 'src/app/shared/classes/util';
 import { UsersChoices } from '../../estrutura/crud-estrutura-sem-controle/crud-estrutura-sem-controle.component';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { UsuarioQuery_03Model } from 'src/app/Models/usuario-query_03-model';
-import { DisplayFontes } from 'src/app/shared/classes/DisplayFontes';
+import { DisplayPontes } from 'src/app/shared/classes/DisplayPontes';
 
 @Component({
   selector: 'app-ponte-view',
@@ -52,9 +52,7 @@ export class PonteViewComponent implements OnInit {
 
   id_projeto: number = 0;
 
-  lsUsuarios: UsuarioQuery_03Model[] = [];
-
-  displayPontes: DisplayFontes[] = [];
+  displayPontes: DisplayPontes[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -85,9 +83,7 @@ export class PonteViewComponent implements OnInit {
     this.setValueCadastro();
   }
 
-  ngOnInit(): void {
-    this.getAuditores();
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.inscricaoCrud?.unsubscribe();
@@ -132,7 +128,7 @@ export class PonteViewComponent implements OnInit {
 
     par.timer = 'S';
 
-    par.data = '08/09/2023';
+    par.data = this.gerador.value.data_ref;
 
     par.orderby = 'Razão';
 
@@ -143,7 +139,8 @@ export class PonteViewComponent implements OnInit {
       .subscribe(
         (data: UsuarioQuery_03Model[]) => {
           this.globalService.setSpin(false);
-          this.lsUsuarios = data;
+          this.loadDisplayItens(data);
+          console.log(this.displayPontes);
         },
         (error: any) => {
           this.globalService.setSpin(false);
@@ -314,7 +311,10 @@ export class PonteViewComponent implements OnInit {
     this.router.navigate(['']);
   }
   onPosicaoInicial() {}
-  onGerarPontes() {}
+
+  onGerarPontes() {
+    this.getAuditores();
+  }
 
   onGravarPontes() {
     if (this.gerador.valid) {
@@ -397,31 +397,36 @@ export class PonteViewComponent implements OnInit {
     return false;
   }
 
-  getVisiblesAuditores(): DisplayFontes[] {
-    return this.displayPontes.filter((disp) =>
-      disp.ponte == null ? true : disp.show
-    );
+  loadDisplayItens(data: UsuarioQuery_03Model[]): void {
+    this.displayPontes = [];
+    //adiciona todos
+    const disp: DisplayPontes = new DisplayPontes();
+    disp.checked = false;
+    disp.vazia = true;
+    disp.ponte = new UsuarioQuery_03Model();
+    this.displayPontes.push(disp);
+    data.forEach((obj) => {
+      const disp: DisplayPontes = new DisplayPontes();
+      disp.checked = false;
+      disp.vazia = false;
+      disp.ponte = obj;
+      this.displayPontes.push(disp);
+    });
   }
 
-  expandeContrair(ponte: DisplayFontes) {
-    ponte.expandido = !ponte.expandido;
-    /*
-    this.ponte.forEach((obj) => {
-      if (
-        (atividade.atividade.nivel == 1 &&
-          obj.atividade.subconta.substring(0, 2) ==
-            atividade.atividade.subconta.substring(0, 2)) ||
-        (obj.atividade.conta == atividade.atividade.conta &&
-          obj.atividade.subconta.trim() == atividade.atividade.subconta.trim())
-      ) {
-        obj.expandido = atividade.expandido;
-        this.setSubConta(
-          obj.atividade.subconta.trim(),
-          obj.expandido,
-          obj.atividade.nivel
-        );
-      }
+  setAllItens(value: boolean): void {
+    this.displayPontes.forEach((obj) => {
+      if (obj.vazia) obj.checked = false;
+      obj.checked = value;
     });
-    */
+  }
+
+  setItens(value: boolean, ponte: DisplayPontes): void {
+    let check: boolean = true;
+    ponte.checked = value;
+    this.displayPontes.forEach((obj) => {
+      if (!obj.vazia) check = !obj.checked ? false : check;
+    });
+    this.displayPontes[0].checked = check;
   }
 }
