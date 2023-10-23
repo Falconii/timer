@@ -1,3 +1,4 @@
+import { DisplayPontes } from './../../../shared/classes/DisplayPontes';
 import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -19,7 +20,8 @@ import { MensagensBotoes, messageError } from 'src/app/shared/classes/util';
 import { UsersChoices } from '../../estrutura/crud-estrutura-sem-controle/crud-estrutura-sem-controle.component';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { UsuarioQuery_03Model } from 'src/app/Models/usuario-query_03-model';
-import { DisplayPontes } from 'src/app/shared/classes/DisplayPontes';
+import { ParametroFeriado01 } from 'src/app/parametros/parametro-feriado01';
+import { FeriadosService } from 'src/app/services/feriados.service';
 
 @Component({
   selector: 'app-ponte-view',
@@ -32,13 +34,18 @@ export class PonteViewComponent implements OnInit {
 
   inscricaoGetPontes!: Subscription;
   inscricaoGetPonte!: Subscription;
+  inscricaoGetFeriados!: Subscription;
   inscricaoCrud!: Subscription;
   inscricaoRota!: Subscription;
   inscricaoAuditor!: Subscription;
 
-  ponte: FeriadoModel = new FeriadoModel();
+  feriado: FeriadoModel = new FeriadoModel();
+
+  feriados: FeriadoModel[] = [];
 
   pontes: FeriadoPonteModel[] = [];
+
+  displayPontes: DisplayPontes[] = [];
 
   acao: string = 'Sem Definição';
 
@@ -52,12 +59,13 @@ export class PonteViewComponent implements OnInit {
 
   id_projeto: number = 0;
 
-  displayPontes: DisplayPontes[] = [];
+  data: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private globalService: GlobalService,
     private usuariosService: UsuariosService,
+    private feriadoService: FeriadosService,
     public appSnackBar: AppSnackbar,
     private route: ActivatedRoute,
     private router: Router,
@@ -65,7 +73,7 @@ export class PonteViewComponent implements OnInit {
   ) {
     this.inscricaoRota = route.params.subscribe((params: any) => {
       this.id_empresa = params.id_empresa;
-      this.id_projeto = params.id_projeto;
+      this.data = params.data;
       this.idAcao = params.acao;
     });
     this.setAcao(this.idAcao);
@@ -74,37 +82,75 @@ export class PonteViewComponent implements OnInit {
       descricao: [{ value: '' }, [ValidatorStringLen(0, 50, false)]],
     });
     this.setValueGerador();
-
     this.cadastro = formBuilder.group({
       data: [{ value: '' }, [ValidatorDate(true)]],
       descricao: [{ value: '' }, [ValidatorStringLen(0, 50, false)]],
     });
-
     this.setValueCadastro();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getFeriados();
+  }
 
   ngOnDestroy(): void {
     this.inscricaoCrud?.unsubscribe();
     this.inscricaoRota?.unsubscribe();
     this.inscricaoGetPontes?.unsubscribe();
     this.inscricaoGetPonte?.unsubscribe();
+    this.inscricaoGetFeriados?.unsubscribe();
     this.inscricaoAuditor?.unsubscribe();
   }
 
   setValueGerador() {
     this.gerador.setValue({
-      data_ref: this.ponte.data,
-      descricao: this.ponte.descricao,
+      data_ref: this.feriado.data,
+      descricao: this.feriado.descricao,
     });
   }
 
   setValueCadastro() {
     this.cadastro.setValue({
-      data: this.ponte.data,
-      descricao: this.ponte.descricao,
+      data: '',
+      descricao: '',
     });
+  }
+
+  getFeriados() {
+    let par = new ParametroFeriado01();
+
+    par.id_empresa = 1;
+
+    par.id_tipo = 2; //só ponte
+
+    par.data = this.data;
+
+    par.orderby = 'Data';
+
+    par.contador = 'N';
+
+    par.tamPagina = 0;
+
+    par.pagina = 0;
+
+    this.globalService.setSpin(true);
+
+    this.inscricaoGetFeriados = this.feriadoService
+      .getFeriados_01(par)
+      .subscribe(
+        (data: FeriadoModel[]) => {
+          this.globalService.setSpin(false);
+          this.feriados = data;
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.feriados = [];
+          this.appSnackBar.openFailureSnackBar(
+            `Pesquisa Nas Pontes ${messageError(error)}`,
+            'OK'
+          );
+        }
+      );
   }
 
   getAuditores() {
@@ -156,18 +202,18 @@ export class PonteViewComponent implements OnInit {
     return CadastroAcoes;
   }
 
-  escolha(opcao: number, ponte?: FeriadoModel) {
-    if (typeof ponte !== 'undefined') {
-      this.ponte = ponte;
+  escolha(opcao: number, feriado?: FeriadoModel) {
+    if (typeof feriado !== 'undefined') {
+      this.feriado = feriado;
       this.setValueCadastro();
       this.idAcao = opcao;
       this.setAcao(opcao);
     }
     if (opcao == CadastroAcoes.Inclusao) {
-      this.ponte = new FeriadoModel();
-      this.ponte.id_empresa = this.globalService.id_empresa;
-      this.ponte.id_tipo = 2;
-      this.ponte.id_nivel = 0;
+      this.feriado = new FeriadoModel();
+      this.feriado.id_empresa = this.globalService.id_empresa;
+      this.feriado.id_tipo = 2;
+      this.feriado.id_nivel = 0;
       this.setValueCadastro();
       this.cadastro.markAsUntouched();
       this.idAcao = opcao;
@@ -263,34 +309,34 @@ export class PonteViewComponent implements OnInit {
   setAcao(op: number) {
     if (op > 90) {
       //Gerador
-      if (op == 99) {
+      if (op == 97) {
         this.acao = 'Gerar';
-        this.labelCadastro = 'Títulos -  Gerador De Parcelas';
+        this.labelCadastro = 'Pontes';
       }
       if (op == 98) {
         this.acao = 'Gravar';
-        this.labelCadastro = 'Títulos -  Cadastro De Parcelas';
+        this.labelCadastro = 'Títulos -  Cadastro De Pontes';
       }
     } else {
       switch (+op) {
         case CadastroAcoes.Inclusao:
           this.acao = 'Gravar';
-          this.labelCadastro = 'Títulos -  Inclusão.';
+          this.labelCadastro = 'Pontes -  Inclusão.';
           this.readOnly = false;
           break;
         case CadastroAcoes.Edicao:
           this.acao = 'Gravar';
-          this.labelCadastro = 'Títulos -  Alteração.';
+          this.labelCadastro = 'Pontes -  Alteração.';
           this.readOnly = false;
           break;
         case CadastroAcoes.Consulta:
           this.acao = 'Voltar';
-          this.labelCadastro = 'Títulos -  Consulta.';
+          this.labelCadastro = 'Pontes -  Consulta.';
           this.readOnly = true;
           break;
         case CadastroAcoes.Exclusao:
           this.acao = 'Excluir';
-          this.labelCadastro = 'Títulos -  Exclusão.';
+          this.labelCadastro = 'Pontes -  Exclusão.';
           this.readOnly = true;
           break;
         default:
@@ -310,7 +356,10 @@ export class PonteViewComponent implements OnInit {
   onHome() {
     this.router.navigate(['']);
   }
-  onPosicaoInicial() {}
+  onPosicaoInicial() {
+    this.idAcao = 97;
+    this.setAcao(this.idAcao);
+  }
 
   onGerarPontes() {
     this.getAuditores();
@@ -416,8 +465,13 @@ export class PonteViewComponent implements OnInit {
 
   setAllItens(value: boolean): void {
     this.displayPontes.forEach((obj) => {
-      if (obj.vazia) obj.checked = false;
-      obj.checked = value;
+      if (obj.vazia) {
+        obj.checked = value;
+      } else {
+        if (obj.ponte.flag_ponte == 'N') {
+          obj.checked = value;
+        }
+      }
     });
   }
 
@@ -425,8 +479,13 @@ export class PonteViewComponent implements OnInit {
     let check: boolean = true;
     ponte.checked = value;
     this.displayPontes.forEach((obj) => {
-      if (!obj.vazia) check = !obj.checked ? false : check;
+      if (!obj.vazia && obj.ponte.flag_ponte == 'N')
+        check = !obj.checked ? false : check;
     });
     this.displayPontes[0].checked = check;
+  }
+
+  getVisiblesAtividades(): DisplayPontes[] {
+    return this.displayPontes.filter((disp) => (!disp.vazia ? true : false));
   }
 }

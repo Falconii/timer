@@ -1,6 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FeriadoModel } from 'src/app/Models/feriado-model';
@@ -23,6 +25,8 @@ import {
   MensagensBotoes,
   messageError,
 } from 'src/app/shared/classes/util';
+import { QuestionDialogData } from 'src/app/shared/components/question-dialog/Question-Dialog-Data';
+import { QuestionDialogComponent } from 'src/app/shared/components/question-dialog/question-dialog.component';
 
 @Component({
   selector: 'app-crud-ponte',
@@ -60,7 +64,9 @@ export class CrudPonteComponent implements OnInit {
     private route: ActivatedRoute,
     private appSnackBar: AppSnackbar,
     private globalService: GlobalService,
-    private parametrosService: ParametrosService
+    private parametrosService: ParametrosService,
+    private datePipe: DatePipe,
+    public questionDialog: MatDialog
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -88,20 +94,24 @@ export class CrudPonteComponent implements OnInit {
     this.inscricaoRota?.unsubscribe();
   }
 
-  escolha(opcao: number, feriado?: FeriadoModel) {
+  escolha(opcao: number, feriado?: FeriadoPonteModel) {
     if (typeof feriado !== 'undefined') {
+      if (opcao == this.getAcoes().Exclusao) {
+        this.onDelete(feriado);
+        return;
+      }
       this.router.navigate([
         '/pontes/ponte',
         feriado.id_empresa,
         feriado.data,
-        opcao,
+        97,
       ]);
     } else {
       this.router.navigate([
         '/pontes/ponte',
         this.globalService.id_empresa,
         '',
-        opcao,
+        97,
       ]);
     }
   }
@@ -405,6 +415,26 @@ export class CrudPonteComponent implements OnInit {
     }
   }
 
+  onDelete(ponte: FeriadoPonteModel) {
+    const data: QuestionDialogData = new QuestionDialogData();
+    data.mensagem01 = 'Confirma A Exclusão Da Ponte';
+    data.mensagem02 = `${ponte.data} ${ponte.descricao}`;
+    const dialogConfig = new MatDialogConfig();
+
+    // The user can't close the dialog by clicking outside its body
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'question-dialog';
+    dialogConfig.width = '600px';
+    dialogConfig.data = data;
+    const modalDialog = this.questionDialog
+      .open(QuestionDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: QuestionDialogData) => {
+        if (data.resposta === 'S') {
+          //this.Copia(estrutura);
+        }
+      });
+  }
   onRefresh() {
     if (this.parametros.valid) {
       this.getFeriadosContador();

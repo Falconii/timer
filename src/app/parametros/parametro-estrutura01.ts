@@ -15,5 +15,6 @@ export class ParametroEstrutura01 {
   public projeto_in: string = '';
   public projeto_off: string = '';
   public id_projeto: number = 0;
+  public especiais: string = 'N';
   public status: number = 1;
 }

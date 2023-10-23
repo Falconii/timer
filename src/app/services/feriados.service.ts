@@ -18,9 +18,15 @@ export class FeriadosService {
     return this.http.get<FeriadoModel[]>(`${this.apiURL}feriados`);
   }
 
-  getFeriado(codigo: string): Observable<FeriadoModel> {
-    let url: string = `${this.apiURL}estruturas/feriados?datafer=` + codigo;
-    return this.http.get<FeriadoModel>(url);
+  getFeriado(
+    id_empresa: number,
+    id_usuario: number,
+    id_tipo: number,
+    data: string
+  ): Observable<FeriadoModel> {
+    return this.http.get<FeriadoModel>(
+      `${this.apiURL}feriado/${id_empresa}/${id_usuario}/${id_tipo}/${data}`
+    );
   }
 
   getFeriados_01(params: ParametroFeriado01): Observable<FeriadoModel[]> {
@@ -33,7 +39,23 @@ export class FeriadosService {
       params
     );
   }
+
   FeriadoInsert(feriado: FeriadoModel) {
     return this.http.post<FeriadoModel>(`${this.apiURL}feriado/`, feriado);
+  }
+
+  FeriadoUpdate(feriado: FeriadoModel) {
+    return this.http.put<FeriadoModel>(`${this.apiURL}feriado/`, feriado);
+  }
+
+  FeriadoDelete(
+    id_empresa: number,
+    id_usuario: number,
+    id_tipo: number,
+    data: string
+  ): Observable<FeriadoModel> {
+    return this.http.delete<any>(
+      `${this.apiURL}feriado/${id_empresa}/${id_usuario}/${id_tipo}/${data}`
+    );
   }
 }
