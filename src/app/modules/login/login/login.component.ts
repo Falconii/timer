@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
             this.globalService.setUsuario(this.usuario);
             this.globalService.setLogado(true);
           } else {
-            this.appSnackBar.openFailureSnackBar(
+            this.appSnackBar.openWarningnackBar(
               `Usuário Ou Senha Incorretos`,
               'OK'
             );

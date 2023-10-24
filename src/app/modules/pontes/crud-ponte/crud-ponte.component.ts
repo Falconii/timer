@@ -38,6 +38,7 @@ export class CrudPonteComponent implements OnInit {
   inscricaoGetAll!: Subscription;
   inscricaoParametro!: Subscription;
   inscricaoRota!: Subscription;
+  inscricaoCrud!: Subscription;
 
   feriados: FeriadoPonteModel[] = [];
 
@@ -65,7 +66,6 @@ export class CrudPonteComponent implements OnInit {
     private appSnackBar: AppSnackbar,
     private globalService: GlobalService,
     private parametrosService: ParametrosService,
-    private datePipe: DatePipe,
     public questionDialog: MatDialog
   ) {
     this.parametros = formBuilder.group({
@@ -92,6 +92,7 @@ export class CrudPonteComponent implements OnInit {
     this.inscricaoGetAll?.unsubscribe();
     this.inscricaoParametro?.unsubscribe();
     this.inscricaoRota?.unsubscribe();
+    this.inscricaoCrud?.unsubscribe();
   }
 
   escolha(opcao: number, feriado?: FeriadoPonteModel) {
@@ -168,7 +169,7 @@ export class CrudPonteComponent implements OnInit {
         this.retorno = false;
         this.globalService.setSpin(false);
         this.feriados = [];
-        this.appSnackBar.openFailureSnackBar(
+        this.appSnackBar.openWarningnackBar(
           `Pesquisa Nos Feriados ${messageError(error)}`,
           'OK'
         );
@@ -219,12 +220,32 @@ export class CrudPonteComponent implements OnInit {
       (error: any) => {
         this.globalService.setSpin(false);
         this.controlePaginas = new ControlePaginas(this.tamPagina, 0);
-        this.appSnackBar.openFailureSnackBar(
+        this.appSnackBar.openWarningnackBar(
           `Pesquisa Em Pontes ${messageError(error)}`,
           'OK'
         );
       }
     );
+  }
+
+  deletePonte(ponte: FeriadoPonteModel) {
+    const searchRegExp = /\//g;
+    this.globalService.setSpin(true);
+    this.inscricaoCrud = this.feriadoService
+      .PonteDelete(ponte.id_empresa, ponte.data.replace(searchRegExp, '_'))
+      .subscribe(
+        (data: any) => {
+          this.globalService.setSpin(false);
+          this.getFeriadosContador();
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.appSnackBar.openWarningnackBar(
+            `Falha Na Exclusão ${messageError(error)}`,
+            'OK'
+          );
+        }
+      );
   }
 
   getParametro() {
@@ -291,7 +312,7 @@ export class CrudPonteComponent implements OnInit {
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.appSnackBar.openFailureSnackBar(
+          this.appSnackBar.openWarningnackBar(
             `Gravação Dos Parametros ${messageError(error)}`,
             'OK'
           );
@@ -431,7 +452,7 @@ export class CrudPonteComponent implements OnInit {
       .beforeClosed()
       .subscribe((data: QuestionDialogData) => {
         if (data.resposta === 'S') {
-          //this.Copia(estrutura);
+          this.deletePonte(ponte);
         }
       });
   }

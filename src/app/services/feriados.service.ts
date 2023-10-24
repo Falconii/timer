@@ -44,6 +44,10 @@ export class FeriadosService {
     return this.http.post<FeriadoModel>(`${this.apiURL}feriado/`, feriado);
   }
 
+  FeriadoAllPontes(pontes: FeriadoModel[]) {
+    return this.http.post<any>(`${this.apiURL}allpontes/`, pontes);
+  }
+
   FeriadoUpdate(feriado: FeriadoModel) {
     return this.http.put<FeriadoModel>(`${this.apiURL}feriado/`, feriado);
   }
@@ -57,5 +61,9 @@ export class FeriadosService {
     return this.http.delete<any>(
       `${this.apiURL}feriado/${id_empresa}/${id_usuario}/${id_tipo}/${data}`
     );
+  }
+
+  PonteDelete(id_empresa: number, data: string): Observable<FeriadoModel> {
+    return this.http.delete<any>(`${this.apiURL}ponte/${id_empresa}/${data}`);
   }
 }

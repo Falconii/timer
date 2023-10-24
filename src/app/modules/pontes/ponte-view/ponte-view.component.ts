@@ -1,7 +1,7 @@
 import { DisplayPontes } from './../../../shared/classes/DisplayPontes';
 import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EstruturaUsuarioModel } from 'src/app/Models/estrutura-usuario-model';
@@ -16,12 +16,19 @@ import { ValidatorDate } from 'src/app/shared/Validators/validator-date';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
-import { MensagensBotoes, messageError } from 'src/app/shared/classes/util';
+import {
+  MensagensBotoes,
+  getFirstName,
+  messageError,
+} from 'src/app/shared/classes/util';
 import { UsersChoices } from '../../estrutura/crud-estrutura-sem-controle/crud-estrutura-sem-controle.component';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
 import { UsuarioQuery_03Model } from 'src/app/Models/usuario-query_03-model';
 import { ParametroFeriado01 } from 'src/app/parametros/parametro-feriado01';
 import { FeriadosService } from 'src/app/services/feriados.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { QuestionDialogData } from 'src/app/shared/components/question-dialog/Question-Dialog-Data';
+import { QuestionDialogComponent } from 'src/app/shared/components/question-dialog/question-dialog.component';
 
 @Component({
   selector: 'app-ponte-view',
@@ -38,6 +45,7 @@ export class PonteViewComponent implements OnInit {
   inscricaoCrud!: Subscription;
   inscricaoRota!: Subscription;
   inscricaoAuditor!: Subscription;
+  inscricaoFeriadoCrud!: Subscription;
 
   feriado: FeriadoModel = new FeriadoModel();
 
@@ -61,6 +69,12 @@ export class PonteViewComponent implements OnInit {
 
   data: string = '';
 
+  auditor: number = 0;
+
+  auditores: UsuarioQuery01Model[] = [];
+
+  allPontes: FeriadoModel[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private globalService: GlobalService,
@@ -69,7 +83,7 @@ export class PonteViewComponent implements OnInit {
     public appSnackBar: AppSnackbar,
     private route: ActivatedRoute,
     private router: Router,
-    private decimalPipe: DecimalPipe
+    public questionDialog: MatDialog
   ) {
     this.inscricaoRota = route.params.subscribe((params: any) => {
       this.id_empresa = params.id_empresa;
@@ -79,12 +93,14 @@ export class PonteViewComponent implements OnInit {
     this.setAcao(this.idAcao);
     this.gerador = formBuilder.group({
       data_ref: [{ value: 0 }, [ValidatorDate(true)]],
-      descricao: [{ value: '' }, [ValidatorStringLen(0, 50, false)]],
+      descricao: [{ value: '' }, [ValidatorStringLen(3, 50, true)]],
     });
     this.setValueGerador();
     this.cadastro = formBuilder.group({
       data: [{ value: '' }, [ValidatorDate(true)]],
-      descricao: [{ value: '' }, [ValidatorStringLen(0, 50, false)]],
+      descricao: [{ value: '' }, [ValidatorStringLen(3, 50, true)]],
+      id_usuario: [{ value: '' }, [Validators.required, Validators.min(1)]],
+      auditor_razao: [{ value: '' }],
     });
     this.setValueCadastro();
   }
@@ -100,6 +116,7 @@ export class PonteViewComponent implements OnInit {
     this.inscricaoGetPonte?.unsubscribe();
     this.inscricaoGetFeriados?.unsubscribe();
     this.inscricaoAuditor?.unsubscribe();
+    this.inscricaoFeriadoCrud?.unsubscribe();
   }
 
   setValueGerador() {
@@ -113,6 +130,8 @@ export class PonteViewComponent implements OnInit {
     this.cadastro.setValue({
       data: '',
       descricao: '',
+      id_usuario: this.globalService.usuario.id,
+      auditor_razao: '',
     });
   }
 
@@ -145,7 +164,7 @@ export class PonteViewComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.feriados = [];
-          this.appSnackBar.openFailureSnackBar(
+          this.appSnackBar.openWarningnackBar(
             `Pesquisa Nas Pontes ${messageError(error)}`,
             'OK'
           );
@@ -153,7 +172,7 @@ export class PonteViewComponent implements OnInit {
       );
   }
 
-  getAuditores() {
+  getAuditoresPontes() {
     const par = new ParametroUsuario01();
 
     const coorde = this.usuariosService.getGruposCoordenador();
@@ -190,7 +209,7 @@ export class PonteViewComponent implements OnInit {
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.appSnackBar.openFailureSnackBar(
+          this.appSnackBar.openWarningnackBar(
             `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
             'OK'
           );
@@ -198,12 +217,76 @@ export class PonteViewComponent implements OnInit {
       );
   }
 
+  getAuditores() {
+    const par = new ParametroUsuario01();
+
+    const coorde = this.usuariosService.getGruposCoordenador();
+
+    const audi = this.usuariosService.getGruposAuditor();
+
+    par.id_empresa = this.globalService.id_empresa;
+
+    par.id = this.globalService.getUsuario().id;
+
+    par.orderby = 'Razão';
+
+    this.globalService.setSpin(true);
+    this.inscricaoAuditor = this.usuariosService.getusuarios_01(par).subscribe(
+      (data: UsuarioQuery01Model[]) => {
+        this.globalService.setSpin(false);
+        this.auditor = this.globalService.getUsuario().id;
+        this.auditores = data;
+        this.auditores.forEach((auditor) => {
+          auditor.razao = getFirstName(auditor.razao);
+        });
+      },
+      (error: any) => {
+        this.globalService.setSpin(false);
+        this.auditor = 0;
+        this.appSnackBar.openWarningnackBar(
+          `Tabela De Usuários: ${messageError(error)}`,
+          'OK'
+        );
+      }
+    );
+  }
+
   getAcoes() {
     return CadastroAcoes;
   }
 
+  deleteFeriado(feriado: FeriadoModel) {
+    const searchRegExp = /\//g;
+    this.globalService.setSpin(true);
+
+    this.inscricaoFeriadoCrud = this.feriadoService
+      .FeriadoDelete(
+        feriado.id_empresa,
+        feriado.id_usuario,
+        feriado.id_tipo,
+        feriado.data.replace(searchRegExp, '_')
+      )
+      .subscribe(
+        (data: any) => {
+          this.globalService.setSpin(false);
+          this.feriados = [];
+          this.getFeriados();
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.appSnackBar.openWarningnackBar(
+            `Falha Na Exclusão ${messageError(error)}`,
+            'OK'
+          );
+        }
+      );
+  }
   escolha(opcao: number, feriado?: FeriadoModel) {
     if (typeof feriado !== 'undefined') {
+      if ((opcao = this.getAcoes().Exclusao)) {
+        this.onDelete(feriado);
+        return;
+      }
       this.feriado = feriado;
       this.setValueCadastro();
       this.idAcao = opcao;
@@ -220,6 +303,7 @@ export class PonteViewComponent implements OnInit {
       this.setAcao(opcao);
     }
     if (opcao == 99) {
+      this.gerador.markAsUntouched();
       this.idAcao = opcao;
       this.setAcao(this.idAcao);
       this.setValueGerador();
@@ -362,41 +446,59 @@ export class PonteViewComponent implements OnInit {
   }
 
   onGerarPontes() {
-    this.getAuditores();
-  }
-
-  onGravarPontes() {
     if (this.gerador.valid) {
-      this.saveParcelas();
+      this.getAuditoresPontes();
     } else {
       this.gerador.markAllAsTouched();
-      this.appSnackBar.openSuccessSnackBar(
+      this.appSnackBar.openWarningnackBar(
         `Formulário Com Campos Inválidos.`,
         'OK'
       );
     }
   }
 
-  saveParcelas() {
-    /*
+  onGravarPontes() {
+    this.allPontes = [];
+    this.displayPontes.forEach((ponte) => {
+      if (!ponte.vazia && ponte.checked && ponte.ponte.flag_ponte == 'N') {
+        const reg: FeriadoModel = new FeriadoModel();
+        reg.id_empresa = this.globalService.id_empresa;
+        reg.id_usuario = ponte.ponte.id;
+        reg.data = this.gerador.value.data_ref;
+        reg.descricao = this.gerador.value.descricao;
+        reg.id_nivel = 0;
+        reg.id_tipo = 2;
+        reg.user_insert = this.globalService.usuario.id;
+        this.allPontes.push(reg);
+      }
+    });
+    if (this.allPontes.length > 0) {
+      this.savePontes();
+    } else {
+      this.appSnackBar.openWarningnackBar('Nenhuma Ponte Para Incluir!', 'OK');
+    }
+  }
+
+  savePontes() {
     this.globalService.setSpin(true);
-    this.inscricaoCrud = this.tituloProjetoService
-      .tituloProjetoSaveAll(this.titulos)
+    this.inscricaoCrud = this.feriadoService
+      .FeriadoAllPontes(this.allPontes)
       .subscribe(
         async (data: any) => {
           this.globalService.setSpin(false);
           this.appSnackBar.openSuccessSnackBar(`${messageError(data)}`, 'OK');
-          setTimeout(() => this.getTitulos(), 1500);
+          this.allPontes = [];
+          this.displayPontes = [];
+          this.onPosicaoInicial();
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.appSnackBar.openFailureSnackBar(
+          this.appSnackBar.openWarningnackBar(
             `Erro Na Inclusão ${messageError(error)}`,
             'OK'
           );
         }
       );
-      */
   }
 
   loadPontes() {}
@@ -485,7 +587,41 @@ export class PonteViewComponent implements OnInit {
     this.displayPontes[0].checked = check;
   }
 
-  getVisiblesAtividades(): DisplayPontes[] {
+  getVisiblesPontes(): DisplayPontes[] {
     return this.displayPontes.filter((disp) => (!disp.vazia ? true : false));
+  }
+
+  onDelete(feriado: FeriadoModel) {
+    const data: QuestionDialogData = new QuestionDialogData();
+    data.mensagem01 = 'Confirma A Exclusão Da Ponte';
+    data.mensagem02 = `${feriado.data} ${feriado.descricao}`;
+    const dialogConfig = new MatDialogConfig();
+
+    // The user can't close the dialog by clicking outside its body
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'question-dialog';
+    dialogConfig.width = '600px';
+    dialogConfig.data = data;
+    const modalDialog = this.questionDialog
+      .open(QuestionDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: QuestionDialogData) => {
+        if (data.resposta === 'S') {
+          this.deleteFeriado(feriado);
+        } else {
+          this.onPosicaoInicial();
+        }
+      });
+  }
+
+  hasAuditores(): boolean {
+    let retorno = false;
+    if (!this.gerador.valid) return retorno;
+    if (this.displayPontes.length == 0) return retorno;
+    if (this.displayPontes[0].checked) return true;
+    this.displayPontes.forEach((usu) => {
+      retorno = usu.checked ? true : retorno;
+    });
+    return retorno;
   }
 }

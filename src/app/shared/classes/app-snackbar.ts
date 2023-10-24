@@ -23,6 +23,7 @@ export class AppSnackbar {
   }
   openWarningnackBar(message: string, action: string) {
     this.matSnackBar.open(message, action, {
+      duration: 3000,
       panelClass: ['yellow-snackbar'],
     });
   }

@@ -122,6 +122,7 @@ export class ClienteViewComponent implements OnInit {
     if (this.formulario.valid) {
       this.executaAcao();
     } else {
+      this.formulario.markAllAsTouched();
       this.appSnackBar.openSuccessSnackBar(
         `Formulário Com Campos Inválidos.`,
         'OK'
