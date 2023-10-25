@@ -39,6 +39,8 @@ import { CnpjCpfPipe } from './pipes/cnpj-cpf.pipe';
 import { FeriadoTipoPipe } from './pipes/feriado-tipo.pipe';
 import { FeriadoNivelPipe } from './pipes/feriado-nivel.pipe';
 import { FirstNamePipe } from './pipes/first-name.pipe';
+import { ApoExecDialogComponent } from './components/apo-exec-dialog/apo-exec-dialog.component';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -79,8 +81,15 @@ import { FirstNamePipe } from './pipes/first-name.pipe';
     ParamCoordenadorComponent,
     ParamDiretorComponent,
     BarraAcoesComponent,
+    ApoExecDialogComponent,
   ],
-  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxMaskModule.forChild(),
+  ],
   exports: [
     FormDebugComponent,
     HoraSexagenalPipe,

@@ -116,8 +116,7 @@ export class CrudExecucaoComponent implements OnInit {
     private projetosServices: ProjetosService,
     private globalService: GlobalService,
     private router: Router,
-    private appSnackBar: AppSnackbar,
-    private estruturaService: EstruturasService
+    private appSnackBar: AppSnackbar
   ) {
     this.formulario = formBuilder.group({
       entrada: [{ value: '' }, [Validators.required]],

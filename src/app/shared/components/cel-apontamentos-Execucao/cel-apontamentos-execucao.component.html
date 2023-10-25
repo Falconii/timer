@@ -16,6 +16,7 @@
         <th>HORÁRIO</th>
         <th>CLIENTE/DESCRIÇÃO/ATIVIDADE</th>
         <th>MOTIVO/OBS</th>
+        <th class="acoes" *ngIf="Unico">ACOES</th>
       </tr>
       <tr *ngFor="let lanca of apontamentos">
         <td>
@@ -49,6 +50,20 @@
           </div>
           <div>
             <mat-label class="Browse_Lanc_td">{{lanca.obs}}</mat-label>
+          </div>
+        </td>
+        <td class="acoes" *ngIf="Unico">
+          <div>
+            <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+              matTooltip="Alterar Apontamento" matTooltipPosition="above"
+              (click)="onGoLancamento(getAcoes().Edicao,lanca)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+              matTooltip="Excluir Apontamento" matTooltipPosition="above"
+              (click)="onGoLancamento(getAcoes().Exclusao,lanca)">
+              <mat-icon>delete</mat-icon>
+            </button>
           </div>
         </td>
       </tr>

@@ -25,7 +25,6 @@ import { FeriadoTipoPipe } from './shared/pipes/feriado-tipo.pipe';
 import { FeriadoNivelPipe } from './shared/pipes/feriado-nivel.pipe';
 import { FirstNamePipe } from './shared/pipes/first-name.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 registerLocaleData(localePt);
 
 @NgModule({

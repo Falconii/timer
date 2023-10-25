@@ -11,6 +11,10 @@ import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ParametroAgendaPlanejamento01 } from 'src/app/parametros/parametro-agenda-planejamento01';
 import { getFirstName } from '../../classes/util';
+import { ApoExecData } from '../apo-exec-dialog/apo-exec-data';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ApoExecDialogComponent } from '../apo-exec-dialog/apo-exec-dialog.component';
+import { CadastroAcoes } from '../../classes/cadastro-acoes';
 
 @Component({
   selector: 'app-cel-apontamentos-execucao',
@@ -19,6 +23,7 @@ import { getFirstName } from '../../classes/util';
   providers: [DatePipe],
 })
 export class CelApontamentosExecucaoComponent implements OnInit {
+  @Input('UNICO') Unico: boolean = false;
   cel: CelulaDia = new CelulaDia();
   apontamentos: ApoExecucaoModel01[] = [];
 
@@ -27,11 +32,11 @@ export class CelApontamentosExecucaoComponent implements OnInit {
   constructor(
     private datePipe: DatePipe,
     private aponExecucaoService: AponExecucaoService,
-    private globslService: GlobalService
+    private globslService: GlobalService,
+    private apoExecDialogComponent: MatDialog
   ) {
     this.globslService.refreshLançamentos.subscribe((dia) => {
       this.cel = dia;
-      console.log('===> ', dia);
       if (this.cel.tipo == 3 || this.cel.semana == 0) {
         this.apontamentos = [];
       } else {
@@ -83,5 +88,33 @@ export class CelApontamentosExecucaoComponent implements OnInit {
 
   getfirstName(name: string): string {
     return getFirstName(name);
+  }
+
+  onGoLancamento(opcao: number, lancamento: ApoExecucaoModel01) {
+    this.openApoExecDialog(opcao, lancamento);
+  }
+
+  getAcoes() {
+    return CadastroAcoes;
+  }
+
+  openApoExecDialog(opcao: number, lancamento: ApoExecucaoModel01): void {
+    const data: ApoExecData = new ApoExecData();
+
+    data.apontamento = lancamento;
+    data.opcao = opcao;
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'apontamento';
+    dialogConfig.width = '900px';
+    dialogConfig.data = data;
+    const modalDialog = this.apoExecDialogComponent
+      .open(ApoExecDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: ApoExecData) => {
+        this.getExecutados();
+      });
   }
 }

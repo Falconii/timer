@@ -14,5 +14,7 @@ export class SpinsComponent implements OnInit {
       this.showSpin = ativar;
     });
   }
-  ngOnInit() {}
+  ngOnInit() {
+    this.showSpin = false;
+  }
 }
