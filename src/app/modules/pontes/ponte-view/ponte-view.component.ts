@@ -37,7 +37,6 @@ import { QuestionDialogComponent } from 'src/app/shared/components/question-dial
 })
 export class PonteViewComponent implements OnInit {
   gerador: FormGroup;
-  cadastro: FormGroup;
 
   inscricaoGetPontes!: Subscription;
   inscricaoGetPonte!: Subscription;
@@ -90,24 +89,17 @@ export class PonteViewComponent implements OnInit {
       this.data = params.data;
       this.idAcao = params.acao;
     });
-    this.setAcao(this.idAcao);
     this.gerador = formBuilder.group({
       data_ref: [{ value: 0 }, [ValidatorDate(true)]],
       descricao: [{ value: '' }, [ValidatorStringLen(3, 50, true)]],
     });
+
     this.setValueGerador();
-    this.cadastro = formBuilder.group({
-      data: [{ value: '' }, [ValidatorDate(true)]],
-      descricao: [{ value: '' }, [ValidatorStringLen(3, 50, true)]],
-      id_usuario: [{ value: '' }, [Validators.required, Validators.min(1)]],
-      auditor_razao: [{ value: '' }],
-    });
-    this.setValueCadastro();
+
+    this.setAcao(this.idAcao);
   }
 
-  ngOnInit(): void {
-    this.getFeriados();
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.inscricaoCrud?.unsubscribe();
@@ -123,15 +115,6 @@ export class PonteViewComponent implements OnInit {
     this.gerador.setValue({
       data_ref: this.feriado.data,
       descricao: this.feriado.descricao,
-    });
-  }
-
-  setValueCadastro() {
-    this.cadastro.setValue({
-      data: '',
-      descricao: '',
-      id_usuario: this.globalService.usuario.id,
-      auditor_razao: '',
     });
   }
 
@@ -160,6 +143,12 @@ export class PonteViewComponent implements OnInit {
         (data: FeriadoModel[]) => {
           this.globalService.setSpin(false);
           this.feriados = data;
+          if (this.idAcao == 98) {
+            this.feriado.data = this.feriados[0].data;
+            this.feriado.descricao = this.feriados[0].descricao;
+            this.setValueGerador();
+            this.getAuditoresPontes();
+          }
         },
         (error: any) => {
           this.globalService.setSpin(false);
@@ -287,145 +276,33 @@ export class PonteViewComponent implements OnInit {
         this.onDelete(feriado);
         return;
       }
-      this.feriado = feriado;
-      this.setValueCadastro();
-      this.idAcao = opcao;
-      this.setAcao(opcao);
     }
-    if (opcao == CadastroAcoes.Inclusao) {
-      this.feriado = new FeriadoModel();
-      this.feriado.id_empresa = this.globalService.id_empresa;
-      this.feriado.id_tipo = 2;
-      this.feriado.id_nivel = 0;
-      this.setValueCadastro();
-      this.cadastro.markAsUntouched();
-      this.idAcao = opcao;
-      this.setAcao(opcao);
-    }
-    if (opcao == 99) {
-      this.gerador.markAsUntouched();
-      this.idAcao = opcao;
-      this.setAcao(this.idAcao);
-      this.setValueGerador();
-    }
-  }
-
-  executaAcao() {
-    /*
-    let valor: string = this.cadastro.value.valor.toString();
-    valor = valor.replace('.', '');
-    valor = valor.replace(',', '.');
-    this.titulo.data_pagto = this.cadastro.value.data_pagto;
-    this.titulo.data_vencto = this.cadastro.value.data_vencto;
-    if (this.titulo.data_pagto == null) this.titulo.data_pagto = '';
-    this.titulo.valor = Number(valor);
-    this.titulo.obs = this.cadastro.value.obs;
-    this.globalService.setSpin(true);
-    switch (+this.idAcao) {
-      case CadastroAcoes.Inclusao:
-        this.titulo.user_insert = this.globalService.getUsuario().id;
-        this.inscricaoCrud = this.tituloProjetoService
-          .TituloProjetoInsert(this.titulo)
-          .subscribe(
-            async (data: TituloProjetoModel) => {
-              this.globalService.setSpin(false);
-              this.getTitulos();
-            },
-            (error: any) => {
-              this.globalService.setSpin(false);
-              this.appSnackBar.openFailureSnackBar(
-                `Erro Na Inclusão ${messageError(error)}`,
-                'OK'
-              );
-            }
-          );
-        break;
-      case CadastroAcoes.Edicao:
-        this.titulo.user_update = this.globalService.getUsuario().id;
-        this.inscricaoCrud = this.tituloProjetoService
-          .TituloProjetoUpdate(this.titulo)
-          .subscribe(
-            async (data: any) => {
-              this.globalService.setSpin(false);
-              this.getTitulos();
-            },
-            (error: any) => {
-              this.globalService.setSpin(false);
-              this.appSnackBar.openFailureSnackBar(
-                `Erro Na Alteração ${messageError(error)}`,
-                'OK'
-              );
-            }
-          );
-        break;
-      case CadastroAcoes.Exclusao:
-        const searchRegExp = /\//g;
-        this.inscricaoCrud = this.tituloProjetoService
-          .TituloProjetoDelete(
-            this.titulo.id_empresa,
-            this.titulo.id_projeto,
-            this.titulo.data_vencto.replace(searchRegExp, '_')
-          )
-          .subscribe(
-            async (data: any) => {
-              this.globalService.setSpin(false);
-              this.getTitulos();
-            },
-            (error: any) => {
-              this.globalService.setSpin(false);
-              console.log(error);
-              this.appSnackBar.openFailureSnackBar(
-                `Erro Na Exclusão ${messageError(error)}`,
-                'OK'
-              );
-            }
-          );
-
-        break;
-
-      default:
-        this.globalService.setSpin(false);
-        break;
-    }
-    */
   }
 
   setAcao(op: number) {
-    if (op > 90) {
-      //Gerador
-      if (op == 97) {
-        this.acao = 'Gerar';
-        this.labelCadastro = 'Pontes';
-      }
-      if (op == 98) {
+    switch (+op) {
+      case 99:
         this.acao = 'Gravar';
-        this.labelCadastro = 'Títulos -  Cadastro De Pontes';
-      }
-    } else {
-      switch (+op) {
-        case CadastroAcoes.Inclusao:
-          this.acao = 'Gravar';
-          this.labelCadastro = 'Pontes -  Inclusão.';
-          this.readOnly = false;
-          break;
-        case CadastroAcoes.Edicao:
-          this.acao = 'Gravar';
-          this.labelCadastro = 'Pontes -  Alteração.';
-          this.readOnly = false;
-          break;
-        case CadastroAcoes.Consulta:
-          this.acao = 'Voltar';
-          this.labelCadastro = 'Pontes -  Consulta.';
-          this.readOnly = true;
-          break;
-        case CadastroAcoes.Exclusao:
-          this.acao = 'Excluir';
-          this.labelCadastro = 'Pontes -  Exclusão.';
-          this.readOnly = true;
-          break;
-        default:
-          break;
-      }
+        this.labelCadastro = 'Inclusão.';
+        this.posicaoIncluirAlterarPonte();
+        break;
+      case 98:
+        this.acao = 'Gravar';
+        this.labelCadastro = 'Alteração.';
+        this.posicaoIncluirAlterarPonte();
+        break;
+      case 97:
+        this.acao = 'Voltar';
+        this.labelCadastro = 'Pontes -  Consulta.';
+        this.posicaoVisualizarExcluirFeriados();
+        break;
+      case 96:
+        this.acao = 'Excluir';
+        this.labelCadastro = 'Pontes -  Exclusão.';
+        this.posicaoVisualizarExcluirFeriados();
+        break;
+      default:
+        break;
     }
   }
 
@@ -441,8 +318,7 @@ export class PonteViewComponent implements OnInit {
     this.router.navigate(['']);
   }
   onPosicaoInicial() {
-    this.idAcao = 97;
-    this.setAcao(this.idAcao);
+    this.onRetorno();
   }
 
   onGerarPontes() {
@@ -489,7 +365,7 @@ export class PonteViewComponent implements OnInit {
           this.appSnackBar.openSuccessSnackBar(`${messageError(data)}`, 'OK');
           this.allPontes = [];
           this.displayPontes = [];
-          this.onPosicaoInicial();
+          this.onRetorno();
         },
         (error: any) => {
           this.globalService.setSpin(false);
@@ -503,18 +379,6 @@ export class PonteViewComponent implements OnInit {
 
   loadPontes() {}
 
-  onSubmit() {
-    if (this.cadastro.valid || this.idAcao == CadastroAcoes.Exclusao) {
-      this.executaAcao();
-    } else {
-      this.cadastro.markAllAsTouched();
-      this.appSnackBar.openSuccessSnackBar(
-        `Formulário Com Campos Inválidos.`,
-        'OK'
-      );
-    }
-  }
-
   onCancelGeracao() {
     this.pontes = [];
     this.onPosicaoInicial();
@@ -526,16 +390,6 @@ export class PonteViewComponent implements OnInit {
     } else {
       return 'Cancelar';
     }
-  }
-
-  NoValidtouchedOrDirtyCd(campo: string): boolean {
-    if (
-      !this.cadastro.get(campo)?.valid &&
-      (this.cadastro.get(campo)?.touched || this.cadastro.get(campo)?.dirty)
-    ) {
-      return true;
-    }
-    return false;
   }
 
   NoValidtouchedOrDirtyGe(campo: string): boolean {
@@ -623,5 +477,19 @@ export class PonteViewComponent implements OnInit {
       retorno = usu.checked ? true : retorno;
     });
     return retorno;
+  }
+
+  //97 e 96
+  posicaoVisualizarExcluirFeriados() {
+    this.getFeriados();
+  }
+
+  //99 e 98
+  posicaoIncluirAlterarPonte() {
+    if (this.idAcao == 98) {
+      this.getFeriados();
+    } else {
+      this.feriados = [];
+    }
   }
 }

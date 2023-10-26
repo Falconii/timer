@@ -1,10 +1,10 @@
-.icon-size {
-    font-size: 20px;
-}
-
 .barras2 {
     width: inherit;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 33% 33% 33%
+    grid-template-columns: 20% 20% 20% 20%
+}
+
+mat-icon {
+    font-size: 20px;
 }

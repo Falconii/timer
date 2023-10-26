@@ -8,5 +8,6 @@ export enum CadastroAcoes {
   Copy_Estrutura = 7,
   Sub_Conta = 8,
   Visualizar_Estrtura = 9,
+  EdicaoMultipla = 10,
   None = 99,
 }

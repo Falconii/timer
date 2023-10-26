@@ -96,6 +96,9 @@ export class CrudPonteComponent implements OnInit {
   }
 
   escolha(opcao: number, feriado?: FeriadoPonteModel) {
+    if (opcao == 10) opcao = 98;
+    if (opcao == this.getAcoes().Consulta) opcao = 97;
+    if (opcao == this.getAcoes().Edicao) opcao = 96;
     if (typeof feriado !== 'undefined') {
       if (opcao == this.getAcoes().Exclusao) {
         this.onDelete(feriado);
@@ -105,14 +108,14 @@ export class CrudPonteComponent implements OnInit {
         '/pontes/ponte',
         feriado.id_empresa,
         feriado.data,
-        97,
+        opcao,
       ]);
     } else {
       this.router.navigate([
         '/pontes/ponte',
         this.globalService.id_empresa,
         '',
-        97,
+        99,
       ]);
     }
   }
