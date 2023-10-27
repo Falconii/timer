@@ -58,8 +58,6 @@ export class PonteViewComponent implements OnInit {
 
   idAcao: number = CadastroAcoes.Inclusao;
 
-  readOnly: boolean = true;
-
   labelCadastro: string = '';
 
   id_empresa: number = 0;
@@ -121,7 +119,7 @@ export class PonteViewComponent implements OnInit {
   getFeriados() {
     let par = new ParametroFeriado01();
 
-    par.id_empresa = 1;
+    par.id_empresa = this.globalService.getIdEmpresa();
 
     par.id_tipo = 2; //só ponte
 
@@ -149,14 +147,24 @@ export class PonteViewComponent implements OnInit {
             this.setValueGerador();
             this.getAuditoresPontes();
           }
+          if (this.idAcao == 99) {
+            this.appSnackBar.openWarningnackBar(
+              `Ponte Já Cadastrada. Usar Alteração!`,
+              'OK'
+            );
+          }
         },
         (error: any) => {
           this.globalService.setSpin(false);
-          this.feriados = [];
-          this.appSnackBar.openWarningnackBar(
-            `Pesquisa Nas Pontes ${messageError(error)}`,
-            'OK'
-          );
+          if (error.error.message !== 'Nehuma Informação Para Esta Consulta.') {
+            this.feriados = [];
+            this.appSnackBar.openWarningnackBar(
+              `Pesquisa Nas Pontes ${messageError(error)}`,
+              'OK'
+            );
+          } else {
+            this.getAuditoresPontes();
+          }
         }
       );
   }
@@ -194,7 +202,6 @@ export class PonteViewComponent implements OnInit {
         (data: UsuarioQuery_03Model[]) => {
           this.globalService.setSpin(false);
           this.loadDisplayItens(data);
-          console.log(this.displayPontes);
         },
         (error: any) => {
           this.globalService.setSpin(false);
@@ -323,7 +330,9 @@ export class PonteViewComponent implements OnInit {
 
   onGerarPontes() {
     if (this.gerador.valid) {
-      this.getAuditoresPontes();
+      this.data = this.gerador.value.data_ref;
+      this.getFeriados();
+      //this.getAuditoresPontes();
     } else {
       this.gerador.markAllAsTouched();
       this.appSnackBar.openWarningnackBar(
@@ -414,18 +423,35 @@ export class PonteViewComponent implements OnInit {
       const disp: DisplayPontes = new DisplayPontes();
       disp.checked = false;
       disp.vazia = false;
+      disp.acao = CadastroAcoes.None;
       disp.ponte = obj;
       this.displayPontes.push(disp);
     });
   }
 
   setAllItens(value: boolean): void {
-    this.displayPontes.forEach((obj) => {
-      if (obj.vazia) {
-        obj.checked = value;
-      } else {
-        if (obj.ponte.flag_ponte == 'N') {
-          obj.checked = value;
+    this.displayPontes.forEach((ponte) => {
+      ponte.checked = value;
+      if (this.idAcao == 98) {
+        if (ponte.ponte.flag_ponte == 'S' && ponte.checked) {
+          ponte.acao = CadastroAcoes.Exclusao;
+        }
+        if (ponte.ponte.flag_ponte == 'N' && ponte.checked) {
+          ponte.acao = CadastroAcoes.Inclusao;
+        }
+        if (!ponte.checked) {
+          ponte.acao = CadastroAcoes.None;
+        }
+      }
+      if (this.idAcao == 99) {
+        if (ponte.ponte.flag_ponte == 'S' && ponte.checked) {
+          ponte.acao = CadastroAcoes.Exclusao;
+        }
+        if (ponte.ponte.flag_ponte == 'N' && ponte.checked) {
+          ponte.acao = CadastroAcoes.Inclusao;
+        }
+        if (!ponte.checked) {
+          ponte.acao = CadastroAcoes.None;
         }
       }
     });
@@ -434,9 +460,30 @@ export class PonteViewComponent implements OnInit {
   setItens(value: boolean, ponte: DisplayPontes): void {
     let check: boolean = true;
     ponte.checked = value;
+    if (this.idAcao == 98) {
+      if (ponte.ponte.flag_ponte == 'S' && ponte.checked) {
+        ponte.acao = CadastroAcoes.Exclusao;
+      }
+      if (ponte.ponte.flag_ponte == 'N' && ponte.checked) {
+        ponte.acao = CadastroAcoes.Inclusao;
+      }
+      if (!ponte.checked) {
+        ponte.acao = CadastroAcoes.None;
+      }
+    }
+    if (this.idAcao == 99) {
+      if (ponte.ponte.flag_ponte == 'S' && ponte.checked) {
+        ponte.acao = CadastroAcoes.Exclusao;
+      }
+      if (ponte.ponte.flag_ponte == 'N' && ponte.checked) {
+        ponte.acao = CadastroAcoes.Inclusao;
+      }
+      if (!ponte.checked) {
+        ponte.acao = CadastroAcoes.None;
+      }
+    }
     this.displayPontes.forEach((obj) => {
-      if (!obj.vazia && obj.ponte.flag_ponte == 'N')
-        check = !obj.checked ? false : check;
+      if (!obj.vazia) check = !obj.checked ? false : check;
     });
     this.displayPontes[0].checked = check;
   }
@@ -471,6 +518,7 @@ export class PonteViewComponent implements OnInit {
   hasAuditores(): boolean {
     let retorno = false;
     if (!this.gerador.valid) return retorno;
+    if (this.gerador.valid && this.idAcao == 98) return true;
     if (this.displayPontes.length == 0) return retorno;
     if (this.displayPontes[0].checked) return true;
     this.displayPontes.forEach((usu) => {

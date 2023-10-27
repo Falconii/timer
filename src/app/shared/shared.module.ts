@@ -41,6 +41,7 @@ import { FeriadoNivelPipe } from './pipes/feriado-nivel.pipe';
 import { FirstNamePipe } from './pipes/first-name.pipe';
 import { ApoExecDialogComponent } from './components/apo-exec-dialog/apo-exec-dialog.component';
 import { NgxMaskModule } from 'ngx-mask';
+import { CadastroAcoesPipe } from './pipes/cadastro-acoes.pipe';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { NgxMaskModule } from 'ngx-mask';
     CelApontamentosComponent,
     CelApontamentosExecucaoComponent,
     AtivoPipe,
+    CadastroAcoesPipe,
     SpinsComponent,
     SpinApontamentosComponent,
     CnpjCpfPipe,
@@ -107,6 +109,7 @@ import { NgxMaskModule } from 'ngx-mask';
     FeriadoNivelPipe,
     FeriadoTipoPipe,
     FirstNamePipe,
+    CadastroAcoesPipe,
     SharedNavegatorComponent,
     CelCalendarComponent,
     CelApontamentosComponent,

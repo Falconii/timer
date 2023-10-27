@@ -14,11 +14,12 @@
 <div *ngIf="idAcao == 99 || idAcao == 98">
   <form [formGroup]="gerador" autocomplete="off">
     <div class="box padding">
-      <h3 class="alinha_centro">{{labelCadastro}}</h3>
+      <h3 class="alinha_centro">{{labelCadastro}} {{idAcao}}</h3>
       <div class="col-med-3">
         <mat-form-field appearance="outline" class="col-max">
           <mat-label>Data De Referência</mat-label>
-          <input matInput formControlName="data_ref" mask="00/00/0000" placeholder="dd/mm/aaaa">
+          <input matInput formControlName="data_ref" mask="00/00/0000" placeholder="dd/mm/aaaa"
+            [readonly]="idAcao != 99">
           <mat-error *ngIf="gerador.get('data_ref')?.errors?.ValidatorDate && NoValidtouchedOrDirtyGe('data_ref')">
             {{gerador.get('data_ref')?.errors?.message}}</mat-error>
         </mat-form-field>
@@ -47,14 +48,18 @@
                 <mat-label class="Browse_Lanc_td">Pontes</mat-label>
               </div>
             </th>
+            <th class="acoes">
+              <div>
+                <mat-label class="Browse_Lanc_td">Ação</mat-label>
+              </div>
+            </th>
           </tr>
           <tr *ngFor="let ponte of getVisiblesPontes()">
             <td>
             </td>
             <td>
               <div *ngIf="!ponte.vazia">
-                <mat-checkbox [checked]=ponte.checked color="accent" (change)="setItens($event.checked,ponte)"
-                  [disabled]="!(ponte.ponte.flag_ponte == 'N')">
+                <mat-checkbox [checked]=ponte.checked color="accent" (change)="setItens($event.checked,ponte)">
                   <mat-label class="Browse_Lanc_td">
                     {{ponte.ponte.razao}}
                   </mat-label>
@@ -64,6 +69,11 @@
             <td>
               <div *ngIf="!ponte.vazia">
                 <mat-label class="Browse_Lanc_td">{{ponte.ponte.descricao}}</mat-label>
+              </div>
+            </td>
+            <td>
+              <div>
+                <mat-label class="Browse_Lanc_td">{{ponte.acao | cadastroAcoesPipe}}</mat-label>
               </div>
             </td>
           </tr>
