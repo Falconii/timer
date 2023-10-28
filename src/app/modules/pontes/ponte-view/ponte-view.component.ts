@@ -29,6 +29,7 @@ import { FeriadosService } from 'src/app/services/feriados.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { QuestionDialogData } from 'src/app/shared/components/question-dialog/Question-Dialog-Data';
 import { QuestionDialogComponent } from 'src/app/shared/components/question-dialog/question-dialog.component';
+import { ParametroAlterPonte } from 'src/app/parametros/parametro-alter-ponte';
 
 @Component({
   selector: 'app-ponte-view',
@@ -71,6 +72,10 @@ export class PonteViewComponent implements OnInit {
   auditores: UsuarioQuery01Model[] = [];
 
   allPontes: FeriadoModel[] = [];
+
+  allAlterPontes: ParametroAlterPonte[] = [];
+
+  readOnly: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -141,6 +146,7 @@ export class PonteViewComponent implements OnInit {
         (data: FeriadoModel[]) => {
           this.globalService.setSpin(false);
           this.feriados = data;
+          this.feriado = data[0];
           if (this.idAcao == 98) {
             this.feriado.data = this.feriados[0].data;
             this.feriado.descricao = this.feriados[0].descricao;
@@ -158,6 +164,7 @@ export class PonteViewComponent implements OnInit {
           this.globalService.setSpin(false);
           if (error.error.message !== 'Nehuma Informação Para Esta Consulta.') {
             this.feriados = [];
+            this.feriado = new FeriadoModel();
             this.appSnackBar.openWarningnackBar(
               `Pesquisa Nas Pontes ${messageError(error)}`,
               'OK'
@@ -290,22 +297,26 @@ export class PonteViewComponent implements OnInit {
     switch (+op) {
       case 99:
         this.acao = 'Gravar';
-        this.labelCadastro = 'Inclusão.';
+        this.labelCadastro = 'INCLUSÃO';
+        this.readOnly = false;
         this.posicaoIncluirAlterarPonte();
         break;
       case 98:
-        this.acao = 'Gravar';
-        this.labelCadastro = 'Alteração.';
+        this.acao = 'Atualizar';
+        this.labelCadastro = 'ALTERAÇÃO';
+        this.readOnly = true;
         this.posicaoIncluirAlterarPonte();
         break;
       case 97:
         this.acao = 'Voltar';
-        this.labelCadastro = 'Pontes -  Consulta.';
+        this.labelCadastro = 'CONSULTA';
+        this.readOnly = true;
         this.posicaoVisualizarExcluirFeriados();
         break;
       case 96:
         this.acao = 'Excluir';
-        this.labelCadastro = 'Pontes -  Exclusão.';
+        this.labelCadastro = 'EXCLUSÃO';
+        this.readOnly = true;
         this.posicaoVisualizarExcluirFeriados();
         break;
       default:
@@ -343,24 +354,65 @@ export class PonteViewComponent implements OnInit {
   }
 
   onGravarPontes() {
-    this.allPontes = [];
-    this.displayPontes.forEach((ponte) => {
-      if (!ponte.vazia && ponte.checked && ponte.ponte.flag_ponte == 'N') {
-        const reg: FeriadoModel = new FeriadoModel();
-        reg.id_empresa = this.globalService.id_empresa;
-        reg.id_usuario = ponte.ponte.id;
-        reg.data = this.gerador.value.data_ref;
-        reg.descricao = this.gerador.value.descricao;
-        reg.id_nivel = 0;
-        reg.id_tipo = 2;
-        reg.user_insert = this.globalService.usuario.id;
-        this.allPontes.push(reg);
+    if (this.idAcao == 99) {
+      this.allPontes = [];
+      this.displayPontes.forEach((ponte) => {
+        if (!ponte.vazia && ponte.checked && ponte.ponte.flag_ponte == 'N') {
+          const reg: FeriadoModel = new FeriadoModel();
+          reg.id_empresa = this.globalService.id_empresa;
+          reg.id_usuario = ponte.ponte.id;
+          reg.data = this.gerador.value.data_ref;
+          reg.descricao = this.gerador.value.descricao;
+          reg.id_nivel = 0;
+          reg.id_tipo = 2;
+          reg.user_insert = this.globalService.usuario.id;
+          this.allPontes.push(reg);
+        }
+      });
+      if (this.allPontes.length > 0) {
+        this.savePontes();
+      } else {
+        this.appSnackBar.openWarningnackBar(
+          'Nenhuma Ponte Para Incluir!',
+          'OK'
+        );
       }
-    });
-    if (this.allPontes.length > 0) {
-      this.savePontes();
     } else {
-      this.appSnackBar.openWarningnackBar('Nenhuma Ponte Para Incluir!', 'OK');
+      //98 allAlterPontes
+      this.allAlterPontes = [];
+      this.displayPontes.forEach((ponte) => {
+        if (!ponte.vazia && ponte.checked) {
+          const alter: ParametroAlterPonte = new ParametroAlterPonte();
+          const reg: FeriadoModel = new FeriadoModel();
+          alter.acao = ponte.acao;
+          if (ponte.acao == CadastroAcoes.Inclusao) {
+            reg.id_empresa = this.globalService.id_empresa;
+            reg.id_usuario = ponte.ponte.id;
+            reg.data = this.gerador.value.data_ref;
+            reg.descricao = this.gerador.value.descricao;
+            reg.id_nivel = 0;
+            reg.id_tipo = 2;
+            reg.user_insert = this.globalService.usuario.id;
+            alter.feriado = reg;
+          }
+          if (ponte.acao == CadastroAcoes.Exclusao) {
+            reg.id_empresa = this.globalService.id_empresa;
+            reg.id_usuario = ponte.ponte.id;
+            reg.data = this.gerador.value.data_ref;
+            reg.descricao = this.gerador.value.descricao;
+            reg.id_nivel = 0;
+            reg.id_tipo = 2;
+            reg.user_update = this.globalService.usuario.id;
+            alter.feriado = reg;
+          }
+          this.allAlterPontes.push(alter);
+        }
+      });
+      if (this.allAlterPontes.length > 0) {
+        this.alterPontes();
+      } else {
+        this.appSnackBar.openWarningnackBar('Nada Para Ser Alterado', 'OK');
+      }
     }
   }
 
@@ -379,7 +431,29 @@ export class PonteViewComponent implements OnInit {
         (error: any) => {
           this.globalService.setSpin(false);
           this.appSnackBar.openWarningnackBar(
-            `Erro Na Inclusão ${messageError(error)}`,
+            `Erro Na Inclusão De Pontes ${messageError(error)}`,
+            'OK'
+          );
+        }
+      );
+  }
+
+  alterPontes() {
+    this.globalService.setSpin(true);
+    this.inscricaoCrud = this.feriadoService
+      .FeriadoAlterPontes(this.allAlterPontes)
+      .subscribe(
+        async (data: any) => {
+          this.globalService.setSpin(false);
+          this.appSnackBar.openSuccessSnackBar(`${messageError(data)}`, 'OK');
+          this.allPontes = [];
+          this.displayPontes = [];
+          this.onRetorno();
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.appSnackBar.openWarningnackBar(
+            `Erro Na Alteracao De Pontes ${messageError(error)}`,
             'OK'
           );
         }

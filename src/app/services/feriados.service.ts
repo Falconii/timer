@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { FeriadoModel } from '../Models/feriado-model';
 import { ParametroFeriado01 } from '../parametros/parametro-feriado01';
 import { FeriadoPonteModel } from '../Models/feriado-ponte-model';
+import { ParametroAlterPonte } from '../parametros/parametro-alter-ponte';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +51,10 @@ export class FeriadosService {
 
   FeriadoUpdate(feriado: FeriadoModel) {
     return this.http.put<FeriadoModel>(`${this.apiURL}feriado/`, feriado);
+  }
+
+  FeriadoAlterPontes(params: ParametroAlterPonte[]) {
+    return this.http.post<any>(`${this.apiURL}alterpontes/`, params);
   }
 
   FeriadoDelete(
