@@ -27,6 +27,8 @@ import {
 } from 'src/app/shared/classes/util';
 import { QuestionDialogData } from 'src/app/shared/components/question-dialog/Question-Dialog-Data';
 import { QuestionDialogComponent } from 'src/app/shared/components/question-dialog/question-dialog.component';
+import { ViewDialogData } from '../alter-descricao-dialog/view-dialog-data';
+import { AlterDescricaoDialogComponent } from '../alter-descricao-dialog/alter-descricao-dialog.component';
 
 @Component({
   selector: 'app-crud-ponte',
@@ -66,7 +68,8 @@ export class CrudPonteComponent implements OnInit {
     private appSnackBar: AppSnackbar,
     private globalService: GlobalService,
     private parametrosService: ParametrosService,
-    public questionDialog: MatDialog
+    public questionDialog: MatDialog,
+    public alterDialog: MatDialog
   ) {
     this.parametros = formBuilder.group({
       ordenacao: [null],
@@ -98,10 +101,13 @@ export class CrudPonteComponent implements OnInit {
   escolha(opcao: number, feriado?: FeriadoPonteModel) {
     if (opcao == 10) opcao = 98;
     if (opcao == this.getAcoes().Consulta) opcao = 97;
-    if (opcao == this.getAcoes().Edicao) opcao = 96;
     if (typeof feriado !== 'undefined') {
       if (opcao == this.getAcoes().Exclusao) {
         this.onDelete(feriado);
+        return;
+      }
+      if (opcao == this.getAcoes().Edicao) {
+        this.onUpdate(feriado);
         return;
       }
       this.router.navigate([
@@ -454,11 +460,32 @@ export class CrudPonteComponent implements OnInit {
       .open(QuestionDialogComponent, dialogConfig)
       .beforeClosed()
       .subscribe((data: QuestionDialogData) => {
-        if (data.resposta === 'S') {
+        if (typeof data !== 'undefined' && data.resposta === 'S') {
           this.deletePonte(ponte);
         }
       });
   }
+
+  onUpdate(ponte: FeriadoPonteModel) {
+    const data: ViewDialogData = new ViewDialogData();
+    data.texto = 'Alteração Da Descrição';
+    data.descricao = ponte.descricao;
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'descri-dialog';
+    dialogConfig.width = '600px';
+    dialogConfig.data = data;
+    const modalDialog = this.questionDialog
+      .open(AlterDescricaoDialogComponent, dialogConfig)
+      .beforeClosed()
+      .subscribe((data: ViewDialogData) => {
+        if (typeof data !== 'undefined' && data.processar) {
+          //this.deletePonte(ponte);
+        }
+      });
+  }
+
   onRefresh() {
     if (this.parametros.valid) {
       this.getFeriadosContador();

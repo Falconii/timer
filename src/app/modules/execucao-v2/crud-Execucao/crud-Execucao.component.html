@@ -120,6 +120,9 @@
           <mat-label class="Browse_Lanc_td">{{lanca.proj_descricao}}</mat-label>
         </div>
         <div>
+          <mat-label class="Browse_Lanc_td">{{lanca.conta_descricao}}/{{lanca.grupo_descricao}}</mat-label>
+        </div>
+        <div>
           <mat-label class="Browse_Lanc_td">{{lanca.estru_descricao}}</mat-label>
         </div>
       </td>
@@ -172,10 +175,6 @@
         <mat-label>Saída</mat-label>
         <input matInput formControlName="saida" placeholder="HH:MM" mask="00:00" [readonly]="readOnly">
       </mat-form-field>
-      <mat-form-field appearance="outline" class="col-max column-span-2">
-        <mat-label>Atividade</mat-label>
-        <input matInput formControlName="atividade" readonly="true" tabindex="-1">
-      </mat-form-field>
       <div class="col-max">
         <mat-checkbox class="encerramento" formControlName="encerra" [disableRipple]="false">Encerrar Atividade
         </mat-checkbox>
@@ -183,8 +182,20 @@
     </div>
     <div class="col-med-1">
       <mat-form-field appearance="outline" class="col-max">
-        <mat-label>Cliente</mat-label>
-        <input matInput formControlName="cliente" readonly="true" tabindex="-1">
+        <mat-label>Grupo</mat-label>
+        <input matInput formControlName="grupo" readonly="true">
+      </mat-form-field>
+    </div>
+    <div class="col-med-1">
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Atividade</mat-label>
+        <input matInput formControlName="atividade" readonly="true">
+      </mat-form-field>
+    </div>
+    <div class="col-med-1">
+      <mat-form-field appearance="outline" class="col-max">
+        <mat-label>Contrato</mat-label>
+        <input matInput formControlName="cliente" readonly="true">
       </mat-form-field>
     </div>
     <div class="col-med-1">

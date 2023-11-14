@@ -12,6 +12,7 @@ export class ParametroProjeto01 {
   public status_pl: string = '';
   public status_ex: string = '';
   public tem_atividade: string = '';
+  public controle: string = 'N';
   public pagina: number = 0;
   public tamPagina: number = 50;
   public contador: string = 'N';

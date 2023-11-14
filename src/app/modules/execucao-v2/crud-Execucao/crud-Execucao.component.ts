@@ -121,6 +121,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.formulario = formBuilder.group({
       entrada: [{ value: '' }, [Validators.required]],
       saida: [{ value: '' }, [Validators.required]],
+      grupo: [{ value: '' }, [Validators.required]],
       atividade: [{ value: '' }, [Validators.required]],
       cliente: [{ value: '' }, [Validators.required]],
       id_motivo: [{ value: '' }, [Validators.required]],
@@ -290,9 +291,9 @@ export class CrudExecucaoComponent implements OnInit {
           this.atividades = data;
           if (op == 'C') {
             this.estruturas = data;
+            console.log('CONTAS:', data);
             this.parametro.patchValue({ id_estrutura: this.estruturas[0].id });
             this.onChangeEstruturas();
-            this.getAtividades('G');
           } else {
             if (op == 'G') {
               this.grupos = data;
@@ -358,8 +359,9 @@ export class CrudExecucaoComponent implements OnInit {
         this.apontamento.final.indexOf(' ') + 1,
         16
       ),
+      grupo: `${this.apontamento.conta_descricao}/${this.apontamento.grupo_descricao}`,
       atividade: this.apontamento.estru_descricao,
-      cliente: this.apontamento.cli_razao,
+      cliente: `${this.apontamento.cli_razao}(${this.apontamento.id_projeto}) ${this.apontamento.proj_descricao} `,
       id_motivo: this.apontamento.id_motivo,
       encerra: this.apontamento.encerramento == 'S' ? true : false,
       obs: this.apontamento.obs,
@@ -489,7 +491,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.gravando = false;
     let lastTime: string = '';
     if (this.apontamentos.length == 0) {
-      lastTime = '07:45:00';
+      lastTime = this.globalService.getUsuario().man_hora_entrada;
     } else {
       lastTime = this.apontamentos[
         this.apontamentos.length - 1
@@ -497,8 +499,8 @@ export class CrudExecucaoComponent implements OnInit {
         this.apontamentos[this.apontamentos.length - 1].final.indexOf(' ') + 1,
         16
       );
-      if (lastTime === '12:00') {
-        lastTime = '13:00';
+      if (lastTime === this.globalService.getUsuario().man_hora_saida) {
+        lastTime = this.globalService.getUsuario().tard_hora_entrada;
       }
     }
 
@@ -528,6 +530,7 @@ export class CrudExecucaoComponent implements OnInit {
       this.apontamento.id_subconta = this.atividade.subconta;
       this.apontamento.id_conta_versao = this.atividade.versao;
       this.apontamento.id_subcliente = this.atividade.id_subcliente;
+      this.apontamento.proj_descricao = this.atividade.proj_descri;
       this.apontamento.cli_razao = this.atividade.subcliente_razao;
       this.apontamento.id_resp = this.atividade.id_resp;
       this.apontamento.id_exec = this.usuario.id;
@@ -546,6 +549,8 @@ export class CrudExecucaoComponent implements OnInit {
       this.apontamento.user_update = 0;
       this.apontamento.resp_razao = this.atividade.resp_razao;
       this.apontamento.exec_razao = this.atividade.exec_razao;
+      this.apontamento.conta_descricao = this.estrutura.estru_descri;
+      this.apontamento.grupo_descricao = this.grupo.estru_descri;
       this.apontamento.estru_descricao = this.atividade.estru_descri;
       this.idAcao = opcao;
       this.setAcao(this.idAcao);
@@ -577,6 +582,8 @@ export class CrudExecucaoComponent implements OnInit {
     this.apontamento.user_update = lanca.user_update;
     this.apontamento.resp_razao = lanca.resp_razao;
     this.apontamento.exec_razao = lanca.exec_razao;
+    this.apontamento.conta_descricao = lanca.conta_descricao;
+    this.apontamento.grupo_descricao = lanca.grupo_descricao;
     this.apontamento.estru_descricao = lanca.estru_descricao;
     this.idAcao = opcao;
     this.setAcao(this.idAcao);

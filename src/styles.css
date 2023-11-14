@@ -502,3 +502,8 @@ body {
     border: 2px solid black;
     box-shadow: 10px 10px 5px 6px gray;
 }
+
+.acoes {
+    color: darkred;
+    width: 100px;
+}

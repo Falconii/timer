@@ -8,9 +8,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { NgxMaskModule } from 'ngx-mask';
 import { CrudPonteComponent } from './crud-ponte/crud-ponte.component';
 import { PonteViewComponent } from './ponte-view/ponte-view.component';
+import { AlterDescricaoDialogComponent } from './alter-descricao-dialog/alter-descricao-dialog.component';
 
 @NgModule({
-  declarations: [CrudPonteComponent, PonteViewComponent],
+  declarations: [CrudPonteComponent, PonteViewComponent, AlterDescricaoDialogComponent],
   imports: [
     CommonModule,
     PontesRoutingModule,

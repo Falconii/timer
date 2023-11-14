@@ -24,12 +24,3 @@ tr:nth-child(even) {
 tr:hover {
     background-color: rgb(202, 169, 157);
 }
-
-.acoes {
-    color: darkred;
-    width: 100px;
-}
-
-.go-up {
-    margin-top: -10px;
-}

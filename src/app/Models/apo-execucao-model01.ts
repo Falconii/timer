@@ -17,6 +17,8 @@ export class ApoExecucaoModel01 {
   public encerramento: string = '';
   public user_insert: number = 0;
   public user_update: number = 0;
+  public conta_descricao: string = '';
+  public grupo_descricao: string = '';
   public estru_descricao: string = '';
   public resp_razao: string = '';
   public exec_razao: string = '';
