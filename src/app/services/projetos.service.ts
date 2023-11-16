@@ -6,6 +6,8 @@ import { ProjetoModel } from '../Models/projeto-model';
 import { environment } from 'src/environments/environment';
 import { AgeHorasModel } from '../Models/age-horas-model';
 import { ParametroAgeHoras01 } from '../parametros/parametro-age-horas-01';
+import { ParametroLastprojects } from '../parametros/parametro-lastprojects';
+import { ProjetoLastModel } from '../Models/projeto-last-model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +23,15 @@ export class ProjetosService {
 
   getProjetos_01(params: ParametroProjeto01): Observable<ProjetoModel[]> {
     return this.http.post<ProjetoModel[]>(`${this.apiURL}projetos`, params);
+  }
+
+  getLastProjects(
+    params: ParametroLastprojects
+  ): Observable<ProjetoLastModel[]> {
+    return this.http.post<ProjetoLastModel[]>(
+      `${this.apiURL}lastprojects`,
+      params
+    );
   }
 
   getProjeto(id_empresa: number, id: number) {

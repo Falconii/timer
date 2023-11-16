@@ -17,9 +17,17 @@ import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-l
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import {
+  DataYYYYMMDD,
+  DifHoras,
   MensagensBotoes,
+  ddmmaaaatoaaaammdd,
   getFirstName,
+  getHora,
+  getMinuto,
   messageError,
+  minutostostohorasexagenal,
+  setDBtoAngularGMT,
+  setHorario,
 } from 'src/app/shared/classes/util';
 import { UsersChoices } from '../../estrutura/crud-estrutura-sem-controle/crud-estrutura-sem-controle.component';
 import { UsuarioQuery01Model } from 'src/app/Models/usuario-query_01-model';
@@ -30,6 +38,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { QuestionDialogData } from 'src/app/shared/components/question-dialog/Question-Dialog-Data';
 import { QuestionDialogComponent } from 'src/app/shared/components/question-dialog/question-dialog.component';
 import { ParametroAlterPonte } from 'src/app/parametros/parametro-alter-ponte';
+import { ApoExecucaoModel } from 'src/app/Models/apo-execucao-model';
 
 @Component({
   selector: 'app-ponte-view',
@@ -343,7 +352,6 @@ export class PonteViewComponent implements OnInit {
     if (this.gerador.valid) {
       this.data = this.gerador.value.data_ref;
       this.getFeriados();
-      //this.getAuditoresPontes();
     } else {
       this.gerador.markAllAsTouched();
       this.appSnackBar.openWarningnackBar(
@@ -366,6 +374,82 @@ export class PonteViewComponent implements OnInit {
           reg.id_nivel = 0;
           reg.id_tipo = 2;
           reg.user_insert = this.globalService.usuario.id;
+          reg.lancamento01 = new ApoExecucaoModel();
+
+          reg.lancamento01.inicial = setDBtoAngularGMT(
+            `${DataYYYYMMDD(new Date(ddmmaaaatoaaaammdd(reg.data)))} ${
+              this.globalService.getUsuario().man_hora_entrada
+            }`
+          );
+
+          console.log('reg.lancamento01.inicial', reg.lancamento01.inicial);
+
+          reg.lancamento01.final = setDBtoAngularGMT(
+            `${DataYYYYMMDD(new Date(ddmmaaaatoaaaammdd(reg.data)))} ${
+              this.globalService.getUsuario().man_hora_saida
+            }`
+          );
+
+          console.log('reg.lancamento01.final', reg.lancamento01.final);
+
+          reg.lancamento01.horasapon = minutostostohorasexagenal(
+            DifHoras(reg.lancamento01.inicial, reg.lancamento01.final)
+          );
+
+          reg.lancamento01.id_empresa = this.globalService.getIdEmpresa();
+          reg.lancamento01.id = 0;
+          reg.lancamento01.id_projeto = 900000;
+          reg.lancamento01.id_conta = '90';
+          reg.lancamento01.id_subconta = '900101';
+          reg.lancamento01.id_conta_versao = '0101';
+          reg.lancamento01.id_subcliente = 50;
+          reg.lancamento01.id_resp = 13;
+          reg.lancamento01.id_exec = this.globalService.getUsuario().id;
+          reg.lancamento01.id_motivo = '998002';
+          reg.lancamento01.produtivo = 'S';
+          reg.lancamento01.obs = 'GERADO AUTOMATICAMENTE';
+          reg.lancamento01.encerramento = 'N';
+          reg.lancamento01.user_insert = this.globalService.getUsuario().id;
+          reg.lancamento01.user_update = 0;
+
+          reg.lancamento02 = new ApoExecucaoModel();
+
+          reg.lancamento02.inicial = setDBtoAngularGMT(
+            `${DataYYYYMMDD(new Date(ddmmaaaatoaaaammdd(reg.data)))} ${
+              this.globalService.getUsuario().tard_hora_entrada
+            }`
+          );
+
+          console.log('reg.lancamento02.inicial', reg.lancamento02.inicial);
+
+          reg.lancamento02.final = setDBtoAngularGMT(
+            `${DataYYYYMMDD(new Date(ddmmaaaatoaaaammdd(reg.data)))} ${
+              this.globalService.getUsuario().tard_hora_saida
+            }`
+          );
+
+          console.log('reg.lancamento02.final', reg.lancamento02.final);
+
+          reg.lancamento02.horasapon = minutostostohorasexagenal(
+            DifHoras(reg.lancamento02.inicial, reg.lancamento02.final)
+          );
+
+          reg.lancamento02.id_empresa = this.globalService.getIdEmpresa();
+          reg.lancamento02.id = 0;
+          reg.lancamento02.id_projeto = 900000;
+          reg.lancamento02.id_conta = '90';
+          reg.lancamento02.id_subconta = '900101';
+          reg.lancamento02.id_conta_versao = '0101';
+          reg.lancamento02.id_subcliente = 50;
+          reg.lancamento02.id_resp = 13;
+          reg.lancamento02.id_exec = this.globalService.getUsuario().id;
+          reg.lancamento02.id_motivo = '998002';
+          reg.lancamento02.produtivo = 'S';
+          reg.lancamento02.obs = 'GERADO AUTOMATICAMENTE';
+          reg.lancamento02.encerramento = 'N';
+          reg.lancamento02.user_insert = this.globalService.getUsuario().id;
+          reg.lancamento02.user_update = 0;
+
           this.allPontes.push(reg);
         }
       });

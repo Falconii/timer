@@ -49,8 +49,10 @@
       <mat-form-field field appearance="outline" class="col-max">
         <mat-label>Contratos</mat-label>
         <mat-select formControlName="id_contrato" (selectionChange)="onChangeContrato()">
-          <mat-option *ngFor="let contrato of contratos" [value]="contrato.id">
-            {{contrato.cliente_razao.trim()}} ({{contrato.id}}) {{contrato.descricao}}
+          <mat-option *ngFor="let contrato of contratos ; index as i" [value]="contrato.id">
+            <div CorUltimosProjetos [last]="last" [index]="i">{{contrato.cliente_razao.trim()}} ({{contrato.id}})
+              {{contrato.descricao}}
+            </div>
           </mat-option>
         </mat-select>
       </mat-form-field>

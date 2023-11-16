@@ -42,6 +42,7 @@ import { FirstNamePipe } from './pipes/first-name.pipe';
 import { ApoExecDialogComponent } from './components/apo-exec-dialog/apo-exec-dialog.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { CadastroAcoesPipe } from './pipes/cadastro-acoes.pipe';
+import { CorUltimosProjetosDirective } from './diretivas/cor-ultimos-projetos.directive';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { CadastroAcoesPipe } from './pipes/cadastro-acoes.pipe';
     ShowClienteDialogComponent,
     SetfocusDirective,
     BarraParametrosv01Component,
+    CorUltimosProjetosDirective,
     CorStatusProjDirective,
     BarraParametrosv02Component,
     ParamAuditorComponent,
@@ -130,6 +132,7 @@ import { CadastroAcoesPipe } from './pipes/cadastro-acoes.pipe';
     ParamCoordenadorComponent,
     ParamDiretorComponent,
     CorStatusProjDirective,
+    CorUltimosProjetosDirective,
     BarraAcoesComponent,
   ],
 })

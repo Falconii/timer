@@ -1,3 +1,4 @@
+import { ProdutosModel } from './../../../Models/produto-model';
 import { ProjetosService } from 'src/app/services/projetos.service';
 import { AponExecucaoService } from 'src/app/services/apon-execucao.service';
 import { AponPlanejamentoService } from 'src/app/services/apon-planejamento.service';
@@ -52,6 +53,9 @@ import { ParametroProjeto01 } from 'src/app/parametros/parametro-projeto01';
 import { ParametroEstrutura01 } from 'src/app/parametros/parametro-estrutura01';
 import { EstruturasService } from 'src/app/services/estruturas.service';
 import { EstruturaModel } from 'src/app/Models/estrutura-model';
+import { ParametroLastprojects } from 'src/app/parametros/parametro-lastprojects';
+import { ProjetoLastModel } from 'src/app/Models/projeto-last-model';
+import { LastRecursivo } from 'src/app/shared/classes/last-recursivo';
 
 @Component({
   selector: 'app-crud-Execucao',
@@ -91,8 +95,10 @@ export class CrudExecucaoComponent implements OnInit {
 
   contrato: ProjetoModel = new ProjetoModel();
   contratos: ProjetoModel[] = [];
-  contratosFiltrados: ProjetoModel[] = [];
-
+  tempoContratos: ProjetoModel[] = [];
+  lastContratosFiltrados: ProjetoLastModel[] = [];
+  lastContratos: ProjetoLastModel[] = [];
+  last: number = 0;
   grupo: AtividadeQuery_01Model = new AtividadeQuery_01Model();
   grupos: AtividadeQuery_01Model[] = [];
 
@@ -206,7 +212,6 @@ export class CrudExecucaoComponent implements OnInit {
           this.apontamentos = data;
           this.totalHoras = 0;
           this.apontamentos.forEach((lan) => {
-            console.log(lan.horasapon);
             this.totalHoras = this.totalHoras + Number(lan.horasapon);
           });
         },
@@ -220,6 +225,81 @@ export class CrudExecucaoComponent implements OnInit {
               'OK'
             );
           }
+        }
+      );
+  }
+
+  getLastProjects() {
+    let par = new ParametroLastprojects();
+
+    par.id_empresa = this.globalService.getIdEmpresa();
+
+    par.id_exec = this.globalService.getUsuario().id;
+
+    par.orderby = '';
+
+    par.so_ativos = 'S';
+
+    par.tem_atividade = 'S';
+
+    par.nro_retorno = 20;
+
+    this.globalService.setSpin(true);
+    this.inscricaoGetContratos = this.projetosServices
+      .getLastProjects(par)
+      .subscribe(
+        (data: ProjetoLastModel[]) => {
+          this.lastContratos = data;
+          this.lastContratosFiltrados = [];
+          this.lastContratos.forEach((contrato) => {
+            const idx: number = this.lastContratosFiltrados.findIndex(
+              (filtro) =>
+                filtro.id_empresa == contrato.id_empresa &&
+                filtro.id_projeto == contrato.id_projeto
+            );
+            if (idx < 0) {
+              this.lastContratosFiltrados.push(contrato);
+            }
+          });
+
+          this.last = this.lastContratosFiltrados.length;
+
+          this.lastContratosFiltrados = this.lastContratosFiltrados.sort(
+            (a, b) => {
+              if (a.cli_fantasia < b.cli_fantasia) {
+                return 1;
+              }
+              if (a.cli_fantasia > b.cli_fantasia) {
+                return -1;
+              }
+              return 0;
+            }
+          );
+
+          this.lastContratosFiltrados.forEach((filtro) => {
+            const projeto = this.tempoContratos.find(
+              (contr) =>
+                contr.id_empresa == filtro.id_empresa &&
+                contr.id == filtro.id_projeto
+            );
+            if (projeto !== null)
+              this.tempoContratos.splice(0, 0, projeto as ProjetoModel);
+          });
+          this.contratos = this.tempoContratos;
+          this.parametro.patchValue({ id_contrato: this.contratos[0].id });
+          this.tempoContratos = [];
+          this.lastContratosFiltrados = [];
+          this.lastContratos = [];
+          this.globalService.setSpin(false);
+          this.onChangeContrato();
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.appSnackBar.openSuccessSnackBar(
+            `Pesquisa Último Contratos ${messageError(error)}`,
+            'OK'
+          );
+          this.lastContratos = [];
         }
       );
   }
@@ -241,10 +321,8 @@ export class CrudExecucaoComponent implements OnInit {
       .subscribe(
         (data: ProjetoModel[]) => {
           this.globalService.setSpin(false);
-          this.contratos = data;
-          this.contratosFiltrados = data;
-          this.parametro.patchValue({ id_contrato: this.contratos[0].id });
-          this.onChangeContrato();
+          this.tempoContratos = data;
+          this.getLastProjects();
         },
         (error: any) => {
           this.globalService.setSpin(false);
@@ -253,6 +331,7 @@ export class CrudExecucaoComponent implements OnInit {
             'OK'
           );
           this.contratos = [];
+          this.tempoContratos = [];
         }
       );
   }
@@ -291,7 +370,6 @@ export class CrudExecucaoComponent implements OnInit {
           this.atividades = data;
           if (op == 'C') {
             this.estruturas = data;
-            console.log('CONTAS:', data);
             this.parametro.patchValue({ id_estrutura: this.estruturas[0].id });
             this.onChangeEstruturas();
           } else {
@@ -869,9 +947,10 @@ export class CrudExecucaoComponent implements OnInit {
 
   /* Rotinas para autocomplete */
   filtroContratos(value: string) {
-    this.contratosFiltrados = this.contratos.filter((ct) => {
-      return ct.descricao.indexOf(value) > -1;
-    });
+    //this.contratosFiltrados = this.contratos.filter((ct) => {
+    //  return ct.descricao.indexOf(value) > -1;
+    // }
+    // );
   }
 
   onChangeContrato2(event: any) {
