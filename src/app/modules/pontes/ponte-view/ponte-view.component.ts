@@ -374,27 +374,30 @@ export class PonteViewComponent implements OnInit {
           reg.id_nivel = 0;
           reg.id_tipo = 2;
           reg.user_insert = this.globalService.usuario.id;
+
           reg.lancamento01 = new ApoExecucaoModel();
 
-          reg.lancamento01.inicial = setDBtoAngularGMT(
-            `${DataYYYYMMDD(new Date(ddmmaaaatoaaaammdd(reg.data)))} ${
-              this.globalService.getUsuario().man_hora_entrada
-            }`
-          );
+          reg.lancamento01.inicial = `${ddmmaaaatoaaaammdd(
+            reg.data
+          )}T${this.globalService
+            .getUsuario()
+            .man_hora_entrada.trim()} GMT-0300`;
 
-          console.log('reg.lancamento01.inicial', reg.lancamento01.inicial);
+          reg.lancamento01.final = `${ddmmaaaatoaaaammdd(
+            reg.data
+          )}T${this.globalService.getUsuario().man_hora_saida.trim()} GMT-0300`;
 
-          reg.lancamento01.final = setDBtoAngularGMT(
-            `${DataYYYYMMDD(new Date(ddmmaaaatoaaaammdd(reg.data)))} ${
-              this.globalService.getUsuario().man_hora_saida
-            }`
-          );
-
-          console.log('reg.lancamento01.final', reg.lancamento01.final);
-
-          reg.lancamento01.horasapon = minutostostohorasexagenal(
-            DifHoras(reg.lancamento01.inicial, reg.lancamento01.final)
-          );
+          reg.lancamento01.horasapon =
+            minutostostohorasexagenal(
+              DifHoras(
+                `${ddmmaaaatoaaaammdd(reg.data)}T${this.globalService
+                  .getUsuario()
+                  .man_hora_entrada.trim()}`,
+                `${ddmmaaaatoaaaammdd(reg.data)}T${this.globalService
+                  .getUsuario()
+                  .man_hora_saida.trim()}`
+              )
+            ) * -1;
 
           reg.lancamento01.id_empresa = this.globalService.getIdEmpresa();
           reg.lancamento01.id = 0;
@@ -404,7 +407,7 @@ export class PonteViewComponent implements OnInit {
           reg.lancamento01.id_conta_versao = '0101';
           reg.lancamento01.id_subcliente = 50;
           reg.lancamento01.id_resp = 13;
-          reg.lancamento01.id_exec = this.globalService.getUsuario().id;
+          reg.lancamento01.id_exec = ponte.ponte.id;
           reg.lancamento01.id_motivo = '998002';
           reg.lancamento01.produtivo = 'S';
           reg.lancamento01.obs = 'GERADO AUTOMATICAMENTE';
@@ -414,25 +417,29 @@ export class PonteViewComponent implements OnInit {
 
           reg.lancamento02 = new ApoExecucaoModel();
 
-          reg.lancamento02.inicial = setDBtoAngularGMT(
-            `${DataYYYYMMDD(new Date(ddmmaaaatoaaaammdd(reg.data)))} ${
-              this.globalService.getUsuario().tard_hora_entrada
-            }`
-          );
+          reg.lancamento02.inicial = `${ddmmaaaatoaaaammdd(
+            reg.data
+          )}T${this.globalService
+            .getUsuario()
+            .tard_hora_entrada.trim()} GMT-0300`;
 
-          console.log('reg.lancamento02.inicial', reg.lancamento02.inicial);
+          reg.lancamento02.final = `${ddmmaaaatoaaaammdd(
+            reg.data
+          )}T${this.globalService
+            .getUsuario()
+            .tard_hora_saida.trim()} GMT-0300`;
 
-          reg.lancamento02.final = setDBtoAngularGMT(
-            `${DataYYYYMMDD(new Date(ddmmaaaatoaaaammdd(reg.data)))} ${
-              this.globalService.getUsuario().tard_hora_saida
-            }`
-          );
-
-          console.log('reg.lancamento02.final', reg.lancamento02.final);
-
-          reg.lancamento02.horasapon = minutostostohorasexagenal(
-            DifHoras(reg.lancamento02.inicial, reg.lancamento02.final)
-          );
+          reg.lancamento02.horasapon =
+            minutostostohorasexagenal(
+              DifHoras(
+                `${ddmmaaaatoaaaammdd(reg.data)}T${this.globalService
+                  .getUsuario()
+                  .tard_hora_entrada.trim()}`,
+                `${ddmmaaaatoaaaammdd(reg.data)}T${this.globalService
+                  .getUsuario()
+                  .tard_hora_saida.trim()}`
+              )
+            ) * -1;
 
           reg.lancamento02.id_empresa = this.globalService.getIdEmpresa();
           reg.lancamento02.id = 0;
@@ -442,7 +449,7 @@ export class PonteViewComponent implements OnInit {
           reg.lancamento02.id_conta_versao = '0101';
           reg.lancamento02.id_subcliente = 50;
           reg.lancamento02.id_resp = 13;
-          reg.lancamento02.id_exec = this.globalService.getUsuario().id;
+          reg.lancamento02.id_exec = ponte.ponte.id;
           reg.lancamento02.id_motivo = '998002';
           reg.lancamento02.produtivo = 'S';
           reg.lancamento02.obs = 'GERADO AUTOMATICAMENTE';
@@ -462,7 +469,7 @@ export class PonteViewComponent implements OnInit {
         );
       }
     } else {
-      //98 allAlterPontes
+      //98 AlterPontes
       this.allAlterPontes = [];
       this.displayPontes.forEach((ponte) => {
         if (!ponte.vazia && ponte.checked) {
@@ -487,6 +494,90 @@ export class PonteViewComponent implements OnInit {
             reg.id_nivel = 0;
             reg.id_tipo = 2;
             reg.user_update = this.globalService.usuario.id;
+            reg.lancamento01 = new ApoExecucaoModel();
+
+            reg.lancamento01.inicial = `${ddmmaaaatoaaaammdd(
+              reg.data
+            )}T${this.globalService
+              .getUsuario()
+              .man_hora_entrada.trim()} GMT-0300`;
+
+            reg.lancamento01.final = `${ddmmaaaatoaaaammdd(
+              reg.data
+            )}T${this.globalService
+              .getUsuario()
+              .man_hora_saida.trim()} GMT-0300`;
+
+            reg.lancamento01.horasapon =
+              minutostostohorasexagenal(
+                DifHoras(
+                  `${ddmmaaaatoaaaammdd(reg.data)}T${this.globalService
+                    .getUsuario()
+                    .man_hora_entrada.trim()}`,
+                  `${ddmmaaaatoaaaammdd(reg.data)}T${this.globalService
+                    .getUsuario()
+                    .man_hora_saida.trim()}`
+                )
+              ) * -1;
+
+            reg.lancamento01.id_empresa = this.globalService.getIdEmpresa();
+            reg.lancamento01.id = 0;
+            reg.lancamento01.id_projeto = 900000;
+            reg.lancamento01.id_conta = '90';
+            reg.lancamento01.id_subconta = '900101';
+            reg.lancamento01.id_conta_versao = '0101';
+            reg.lancamento01.id_subcliente = 50;
+            reg.lancamento01.id_resp = 13;
+            reg.lancamento01.id_exec = ponte.ponte.id;
+            reg.lancamento01.id_motivo = '998002';
+            reg.lancamento01.produtivo = 'S';
+            reg.lancamento01.obs = 'GERADO AUTOMATICAMENTE';
+            reg.lancamento01.encerramento = 'N';
+            reg.lancamento01.user_insert = this.globalService.getUsuario().id;
+            reg.lancamento01.user_update = 0;
+
+            reg.lancamento02 = new ApoExecucaoModel();
+
+            reg.lancamento02.inicial = `${ddmmaaaatoaaaammdd(
+              reg.data
+            )}T${this.globalService
+              .getUsuario()
+              .tard_hora_entrada.trim()} GMT-0300`;
+
+            reg.lancamento02.final = `${ddmmaaaatoaaaammdd(
+              reg.data
+            )}T${this.globalService
+              .getUsuario()
+              .tard_hora_saida.trim()} GMT-0300`;
+
+            reg.lancamento02.horasapon =
+              minutostostohorasexagenal(
+                DifHoras(
+                  `${ddmmaaaatoaaaammdd(reg.data)}T${this.globalService
+                    .getUsuario()
+                    .tard_hora_entrada.trim()}`,
+                  `${ddmmaaaatoaaaammdd(reg.data)}T${this.globalService
+                    .getUsuario()
+                    .tard_hora_saida.trim()}`
+                )
+              ) * -1;
+
+            reg.lancamento02.id_empresa = this.globalService.getIdEmpresa();
+            reg.lancamento02.id = 0;
+            reg.lancamento02.id_projeto = 900000;
+            reg.lancamento02.id_conta = '90';
+            reg.lancamento02.id_subconta = '900101';
+            reg.lancamento02.id_conta_versao = '0101';
+            reg.lancamento02.id_subcliente = 50;
+            reg.lancamento02.id_resp = 13;
+            reg.lancamento02.id_exec = ponte.ponte.id;
+            reg.lancamento02.id_motivo = '998002';
+            reg.lancamento02.produtivo = 'S';
+            reg.lancamento02.obs = 'GERADO AUTOMATICAMENTE';
+            reg.lancamento02.encerramento = 'N';
+            reg.lancamento02.user_insert = this.globalService.getUsuario().id;
+            reg.lancamento02.user_update = 0;
+
             alter.feriado = reg;
           }
           this.allAlterPontes.push(alter);
@@ -507,7 +598,6 @@ export class PonteViewComponent implements OnInit {
       .subscribe(
         async (data: any) => {
           this.globalService.setSpin(false);
-          this.appSnackBar.openSuccessSnackBar(`${messageError(data)}`, 'OK');
           this.allPontes = [];
           this.displayPontes = [];
           this.onRetorno();

@@ -202,6 +202,7 @@ export class CrudExecucaoComponent implements OnInit {
     para.id_exec = this.globalService.getUsuario().id;
     para.id_projeto = 0;
     para.data = DataYYYYMMDD(this.parametro.value.data);
+    para.controle = '';
     para.orderby = 'Executor';
     this.globalService.setSpin(true);
     this.inscricaoAponExecucao = this.aponExecucaoService
@@ -275,15 +276,15 @@ export class CrudExecucaoComponent implements OnInit {
               return 0;
             }
           );
-
           this.lastContratosFiltrados.forEach((filtro) => {
             const projeto = this.tempoContratos.find(
               (contr) =>
                 contr.id_empresa == filtro.id_empresa &&
                 contr.id == filtro.id_projeto
             );
-            if (projeto !== null)
+            if (projeto !== null && typeof projeto !== 'undefined') {
               this.tempoContratos.splice(0, 0, projeto as ProjetoModel);
+            }
           });
           this.contratos = this.tempoContratos;
           this.parametro.patchValue({ id_contrato: this.contratos[0].id });
@@ -600,7 +601,6 @@ export class CrudExecucaoComponent implements OnInit {
           `${DataYYYYMMDD(this.parametro.value.data)} ${lastTime}`
         )
       );
-      console.log('Intervalos Adicao ==>', this.intervalos);
       this.apontamento.id_empresa = this.usuario.id_empresa;
       this.apontamento.id = 0;
       this.apontamento.id_projeto = this.atividade.id_projeto;
@@ -717,7 +717,6 @@ export class CrudExecucaoComponent implements OnInit {
             },
             (error: any) => {
               this.gravando = false;
-              console.log('Error', error.error);
               this.appSnackBar.openFailureSnackBar(
                 `${error.error.tabela} - ${error.error.erro} - ${error.error.message}`,
                 'OK'
@@ -813,18 +812,10 @@ export class CrudExecucaoComponent implements OnInit {
   }
 
   onCancelarAtividades() {
-    console.log(
-      'Cancelada consulta',
-      this.retornoAtividades?.getId_Atividade()
-    );
     this.onShowAtividades();
   }
 
   onOkAtividades() {
-    console.log(
-      'Confirmada Consulta',
-      this.retornoAtividades?.getId_Atividade()
-    );
     this.onShowAtividades();
   }
 
