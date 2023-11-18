@@ -23,13 +23,14 @@ import { UsuariosService } from 'src/app/services/usuarios.service';
 import { AtividadesService } from 'src/app/services/atividades.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { MotivoApoService } from 'src/app/services/motivo-apo.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import {
   aaaammddddmmaaaa,
   DataYYYYMMDD,
   DataYYYYMMDDTHHMMSSZ,
+  ddmmaaaatoaaaammdd,
   DifHoras,
   getFirstName,
   getHora,
@@ -73,6 +74,7 @@ export class CrudExecucaoComponent implements OnInit {
   inscricaoMotivos!: Subscription;
   inscricaoCoordenador!: Subscription;
   inscricaoGetContratos!: Subscription;
+  inscricaoRota!: Subscription;
   idAcao: number = 0;
   acao: string = '';
   labelCadastro: string = '';
@@ -112,6 +114,8 @@ export class CrudExecucaoComponent implements OnInit {
 
   totalHoras: number = 0;
 
+  parData: string = '';
+
   constructor(
     formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
@@ -122,6 +126,7 @@ export class CrudExecucaoComponent implements OnInit {
     private projetosServices: ProjetosService,
     private globalService: GlobalService,
     private router: Router,
+    private route: ActivatedRoute,
     private appSnackBar: AppSnackbar
   ) {
     this.formulario = formBuilder.group({
@@ -141,6 +146,13 @@ export class CrudExecucaoComponent implements OnInit {
       id_contrato: [{ value: '' }, [Validators.required, Validators.min(1)]],
       id_grupo: [{ value: '' }, [Validators.required, Validators.min(1)]],
       id_atividade: [{ value: '' }, [Validators.required, Validators.min(1)]],
+    });
+    this.inscricaoRota = route.params.subscribe((params: any) => {
+      if (typeof params.data == 'undefined') {
+        this.parData = '';
+      } else {
+        this.parData = params.data;
+      }
     });
     //this.parametro.get('opcoes')?.valueChanges.subscribe((value) => {
     //  this.filtroContratos(value);
@@ -167,6 +179,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.inscricaoMotivos?.unsubscribe();
     this.inscricaoCoordenador?.unsubscribe();
     this.inscricaoGetContratos?.unsubscribe();
+    this.inscricaoRota?.unsubscribe();
   }
 
   getUsuario() {
@@ -450,7 +463,10 @@ export class CrudExecucaoComponent implements OnInit {
   setParametro() {
     this.parametro.setValue({
       usuario: this.usuario.razao,
-      data: new Date(),
+      data:
+        this.parData == ''
+          ? new Date()
+          : new Date(`${ddmmaaaatoaaaammdd(this.parData)}T00:00:00`),
       id_estrutura: 0,
       id_contrato: 0,
       id_grupo: 0,

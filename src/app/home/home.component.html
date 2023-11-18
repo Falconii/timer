@@ -49,6 +49,7 @@
       <tr class="coluna-cabec">
         <th>DATA</th>
         <th>HORAS</th>
+        <th>AÇÃO</th>
       </tr>
       <tr *ngFor="let resumo of lsResumoApontamentosExec">
         <td>
@@ -56,9 +57,19 @@
             <mat-label class="Browse_Lanc_td">{{resumo.data}}</mat-label>
           </div>
         </td>
+
         <td>
           <div class="alinha_direita">
             <mat-label class="Browse_Lanc_td">{{resumo.total | horaSexagenal}}</mat-label>
+          </div>
+        </td>
+
+        <td class="acoes">
+          <div *ngIf="resumo.data != 'TOTAL'" class="alinha_centro minimo_size">
+            <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+              matTooltip="Alterações" matTooltipPosition="above" (click)="onLancamentos(resumo)">
+              <mat-icon class="acoes-medium">edit</mat-icon>
+            </button>
           </div>
         </td>
       </tr>

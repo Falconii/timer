@@ -8,6 +8,7 @@ import { FacilitadorComponent } from './facilitador/facilitador.component';
 const routes: Routes = [
   { path: '', redirectTo: 'execucoesv2', pathMatch: 'full' },
   { path: 'execucoesv2', component: CrudExecucaoComponent },
+  { path: 'execucoesv2/:data', component: CrudExecucaoComponent },
   { path: 'facilitador', component: FacilitadorComponent },
 ];
 

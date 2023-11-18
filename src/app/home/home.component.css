@@ -40,3 +40,12 @@ mat-slider {
     height: 50px;
     margin-right: 8px;
 }
+
+.acoes {
+    color: darkred;
+    width: 90px;
+}
+
+.minimo_size {
+    height: fit-content;
+}

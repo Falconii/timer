@@ -115,6 +115,7 @@ export class CelApontamentosExecucaoComponent implements OnInit {
       .beforeClosed()
       .subscribe((data: ApoExecData) => {
         this.getExecutados();
+        this.globslService.setRefreshCabec(this.cel);
       });
   }
 }

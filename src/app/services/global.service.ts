@@ -28,6 +28,7 @@ export class GlobalService {
 
   shomMenuEmitter = new EventEmitter<boolean>();
   refreshLançamentos = new EventEmitter<CelulaDia>();
+  refreshCabec = new EventEmitter<CelulaDia>();
   showSpinEmitter = new EventEmitter<boolean>();
   showSpinApontamentosEmitter = new EventEmitter<boolean>();
 
@@ -56,6 +57,10 @@ export class GlobalService {
 
   setRefreshLançamentos(value: CelulaDia) {
     this.refreshLançamentos.emit(value);
+  }
+
+  setRefreshCabec(value: CelulaDia) {
+    this.refreshCabec.emit(value);
   }
 
   getLogado(): boolean {

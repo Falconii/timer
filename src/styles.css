@@ -507,3 +507,9 @@ body {
     color: darkred;
     width: 100px;
 }
+
+.acoes-medium {
+    font-size: medium;
+    color: #0000CC;
+    align-items: center;
+}

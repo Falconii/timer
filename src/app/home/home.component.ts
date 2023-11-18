@@ -15,6 +15,7 @@ import { AponExecutorModel } from '../Models/apon-executor-model';
 import { ListaMeses } from '../shared/classes/lista-meses';
 import { MatSliderChange } from '@angular/material/slider';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare var google: any;
 
@@ -53,7 +54,8 @@ export class HomeComponent implements OnInit {
     private projetosServices: ProjetosService,
     private aponExecucaoService: AponExecucaoService,
     private appSnackBar: AppSnackbar,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
     //google.charts.load('current', { packages: ['corechart'] });
     this.ano = this.hoje.getFullYear();
@@ -236,5 +238,9 @@ export class HomeComponent implements OnInit {
     this.mes_ext = this.meses.meses[this.mes - 1].abrev;
     this.chaveHoras = `${adicionaZero(this.mes)}_${this.ano}`;
     this.Atualizar();
+  }
+
+  onLancamentos(resumo: AponExecutorModel) {
+    this.router.navigate(['execucao/execucoesv2', resumo.data]);
   }
 }

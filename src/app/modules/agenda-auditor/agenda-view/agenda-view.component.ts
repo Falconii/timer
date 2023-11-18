@@ -47,6 +47,9 @@ export class AgendaViewComponent implements OnInit {
     private router: Router,
     private appSnackBar: AppSnackbar
   ) {
+    this.globalService.refreshCabec.subscribe((dia) => {
+      this.getAgenda();
+    });
     this.parametro = formBuilder.group({
       auditores: [{ value: '' }],
       ano: [{ value: '' }],
@@ -62,8 +65,6 @@ export class AgendaViewComponent implements OnInit {
     this.inscricaoAuditor?.unsubscribe();
     this.inscricaoAgenda?.unsubscribe();
   }
-
-  ngAfterViewChecked(): void {}
 
   onSubmit() {
     this.auditor = this.parametro.value.auditores;
@@ -256,8 +257,6 @@ export class AgendaViewComponent implements OnInit {
       }
       this.linhas.push(car);
     }
-
-    console.log('Linha:', this.linhas);
   }
 
   onDay(evento: CelulaDia) {
