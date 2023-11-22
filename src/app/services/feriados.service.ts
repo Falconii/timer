@@ -57,6 +57,10 @@ export class FeriadosService {
     return this.http.post<any>(`${this.apiURL}alterpontes/`, params);
   }
 
+  FeriadoAlterPonteDescricao(params: FeriadoPonteModel) {
+    return this.http.put<any>(`${this.apiURL}alterpontedescricao/`, params);
+  }
+
   FeriadoDelete(
     id_empresa: number,
     id_usuario: number,

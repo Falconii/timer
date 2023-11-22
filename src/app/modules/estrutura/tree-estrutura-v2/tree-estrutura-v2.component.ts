@@ -164,6 +164,9 @@ export class TreeEstruturaV2Component implements OnInit {
     par.versao = this.versao;
 
     par.orderby = 'SubConta';
+
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
+
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.estruturaService
       .getEstruturas(par)

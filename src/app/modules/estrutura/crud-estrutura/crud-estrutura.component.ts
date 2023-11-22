@@ -100,6 +100,8 @@ export class CrudEstruturaComponent implements OnInit {
 
     par.status = this.status;
 
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
+
     par.orderby = this.parametros.value.ordenacao;
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.estruturaService

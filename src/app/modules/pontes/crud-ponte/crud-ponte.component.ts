@@ -257,6 +257,25 @@ export class CrudPonteComponent implements OnInit {
       );
   }
 
+  updatePonte(ponte: FeriadoPonteModel) {
+    this.globalService.setSpin(true);
+    this.inscricaoCrud = this.feriadoService
+      .FeriadoAlterPonteDescricao(ponte)
+      .subscribe(
+        (data: any) => {
+          this.globalService.setSpin(false);
+          this.getFeriadosContador();
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.appSnackBar.openWarningnackBar(
+            `Falha Na Atualizacao ${messageError(error)}`,
+            'OK'
+          );
+        }
+      );
+  }
+
   getParametro() {
     this.globalService.setSpin(true);
     let par = new ParametroParametro01();
@@ -481,7 +500,8 @@ export class CrudPonteComponent implements OnInit {
       .beforeClosed()
       .subscribe((data: ViewDialogData) => {
         if (typeof data !== 'undefined' && data.processar) {
-          //this.deletePonte(ponte);
+          ponte.descricao = data.descricao;
+          this.updatePonte(ponte);
         }
       });
   }

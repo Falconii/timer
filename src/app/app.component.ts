@@ -67,4 +67,8 @@ export class AppComponent {
   setOpcao(value: string): void {
     this.opcao = value;
   }
+
+  getUsuarioId(): number {
+    return this.globalService.getUsuario().id;
+  }
 }

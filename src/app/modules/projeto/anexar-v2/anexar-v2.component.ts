@@ -102,6 +102,8 @@ export class AnexarV2Component implements OnInit {
 
     par.id_exec = this.id_exec;
 
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
+
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.atividadesService
       .getAtividades_02(par)

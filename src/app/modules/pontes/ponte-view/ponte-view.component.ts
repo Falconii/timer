@@ -86,6 +86,8 @@ export class PonteViewComponent implements OnInit {
 
   readOnly: boolean = true;
 
+  gravando: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private globalService: GlobalService,
@@ -484,16 +486,7 @@ export class PonteViewComponent implements OnInit {
             reg.id_nivel = 0;
             reg.id_tipo = 2;
             reg.user_insert = this.globalService.usuario.id;
-            alter.feriado = reg;
-          }
-          if (ponte.acao == CadastroAcoes.Exclusao) {
-            reg.id_empresa = this.globalService.id_empresa;
-            reg.id_usuario = ponte.ponte.id;
-            reg.data = this.gerador.value.data_ref;
-            reg.descricao = this.gerador.value.descricao;
-            reg.id_nivel = 0;
-            reg.id_tipo = 2;
-            reg.user_update = this.globalService.usuario.id;
+
             reg.lancamento01 = new ApoExecucaoModel();
 
             reg.lancamento01.inicial = `${ddmmaaaatoaaaammdd(
@@ -577,6 +570,16 @@ export class PonteViewComponent implements OnInit {
             reg.lancamento02.encerramento = 'N';
             reg.lancamento02.user_insert = this.globalService.getUsuario().id;
             reg.lancamento02.user_update = 0;
+            alter.feriado = reg;
+          }
+          if (ponte.acao == CadastroAcoes.Exclusao) {
+            reg.id_empresa = this.globalService.id_empresa;
+            reg.id_usuario = ponte.ponte.id;
+            reg.data = this.gerador.value.data_ref;
+            reg.descricao = this.gerador.value.descricao;
+            reg.id_nivel = 0;
+            reg.id_tipo = 2;
+            reg.user_update = this.globalService.usuario.id;
 
             alter.feriado = reg;
           }
@@ -592,18 +595,24 @@ export class PonteViewComponent implements OnInit {
   }
 
   savePontes() {
+    this.gravando = true;
     this.globalService.setSpin(true);
     this.inscricaoCrud = this.feriadoService
       .FeriadoAllPontes(this.allPontes)
       .subscribe(
         async (data: any) => {
           this.globalService.setSpin(false);
+          this.setAcao(this.idAcao);
           this.allPontes = [];
           this.displayPontes = [];
+          this.gravando = false;
+          this.setAcao(this.idAcao);
           this.onRetorno();
         },
         (error: any) => {
+          this.gravando = false;
           this.globalService.setSpin(false);
+          this.setAcao(this.idAcao);
           this.appSnackBar.openWarningnackBar(
             `Erro Na Inclusão De Pontes ${messageError(error)}`,
             'OK'
@@ -614,11 +623,14 @@ export class PonteViewComponent implements OnInit {
 
   alterPontes() {
     this.globalService.setSpin(true);
+    this.gravando = true;
     this.inscricaoCrud = this.feriadoService
       .FeriadoAlterPontes(this.allAlterPontes)
       .subscribe(
         async (data: any) => {
           this.globalService.setSpin(false);
+          this.gravando = false;
+          this.setAcao(this.idAcao);
           this.appSnackBar.openSuccessSnackBar(`${messageError(data)}`, 'OK');
           this.allPontes = [];
           this.displayPontes = [];
@@ -626,6 +638,8 @@ export class PonteViewComponent implements OnInit {
         },
         (error: any) => {
           this.globalService.setSpin(false);
+          this.gravando = false;
+          this.setAcao(this.idAcao);
           this.appSnackBar.openWarningnackBar(
             `Erro Na Alteracao De Pontes ${messageError(error)}`,
             'OK'
@@ -765,6 +779,10 @@ export class PonteViewComponent implements OnInit {
 
   hasAuditores(): boolean {
     let retorno = false;
+    if (this.gravando) {
+      this.acao = 'Processando!';
+      return false;
+    }
     if (!this.gerador.valid) return retorno;
     if (this.gerador.valid && this.idAcao == 98) return true;
     if (this.displayPontes.length == 0) return retorno;
@@ -772,6 +790,13 @@ export class PonteViewComponent implements OnInit {
     this.displayPontes.forEach((usu) => {
       retorno = usu.checked ? true : retorno;
     });
+    return retorno;
+  }
+
+  showAuditores(): boolean {
+    let retorno = false;
+    if (!this.gerador.valid) return retorno;
+    if (this.displayPontes.length == 0) return true;
     return retorno;
   }
 

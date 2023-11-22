@@ -422,6 +422,7 @@ export class CrudExecucaoComponent implements OnInit {
     para.id_empresa = 1;
     para.analitico = 'S';
     para.orderby = 'Código';
+    if (this.globalService.getUsuario().id == 16) para.controle = '';
     this.globalService.setSpin(true);
     this.inscricaoMotivos = this.motivoApoService
       .getMotivoApos_01(para)

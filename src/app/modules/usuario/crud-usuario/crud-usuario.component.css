@@ -3,14 +3,6 @@
     overflow: auto;
 }
 
-.Browse-Scroll {
-    border-collapse: collapse;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    height: inherit;
-}
-
 td {
     font-size: small;
     color: blue;

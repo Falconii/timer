@@ -23,7 +23,7 @@
       </mat-form-field>
       <mat-form-field field appearance="outline" class="col-max">
         <mat-label>Ano</mat-label>
-        <mat-select formControlName="ano">
+        <mat-select formControlName="ano" (selectionChange)="onChangeParametros()">
           <mat-option *ngFor="let ano of anos" [value]="ano">
             {{ano}}
           </mat-option>
@@ -31,7 +31,7 @@
       </mat-form-field>
       <mat-form-field field appearance="outline" class="col-max">
         <mat-label>Mês</mat-label>
-        <mat-select formControlName="mes">
+        <mat-select formControlName="mes" (selectionChange)="onChangeParametros()">
           <mat-option *ngFor="let mes of meses.meses" [value]="mes.nro">
             {{mes.nome}}
           </mat-option>

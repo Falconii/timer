@@ -55,8 +55,8 @@ export class AgendaViewComponent implements OnInit {
       ano: [{ value: '' }],
       mes: [{ value: '' }],
     });
-    this.getAuditores();
     this.setParametro();
+    this.getAuditores();
   }
 
   ngOnInit(): void {}
@@ -104,6 +104,7 @@ export class AgendaViewComponent implements OnInit {
           auditor.razao = getFirstName(auditor.razao);
         });
         this.parametro.patchValue({ auditores: par.id });
+        this.onSubmit();
       },
       (error: any) => {
         this.globalService.setSpin(false);
@@ -269,5 +270,9 @@ export class AgendaViewComponent implements OnInit {
   adicionaZero(numero: any): string {
     if (numero <= 9) return '0' + numero;
     else return '' + numero;
+  }
+
+  onChangeParametros() {
+    this.onSubmit();
   }
 }

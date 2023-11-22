@@ -1,3 +1,4 @@
+import { TicketModule } from './modules/ticket/ticket.module';
 import { HorasControlExecModule } from './modules/horas-control-exec/horas-control-exec.module';
 import { DiganaoGuard } from './guards/diganao.guard';
 import { HomeComponent } from './home/home.component';
@@ -190,6 +191,19 @@ const routes: Routes = [
       ),
     canActivate: [],
   },
+  {
+    path: 'tickets',
+    loadChildren: () =>
+      import('./modules/ticket/ticket.module').then((m) => m.TicketModule),
+    canActivate: [],
+  },
+  {
+    path: 'tickets-liberacao',
+    loadChildren: () =>
+      import('./modules/ticket/ticket.module').then((m) => m.TicketModule),
+    canActivate: [],
+  },
+
   {
     path: '**',
     redirectTo: 'home',

@@ -353,6 +353,8 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
     par.id_projeto = this.id_projeto;
 
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
+
     par.orderby = 'projeto';
 
     this.globalService.setSpin(true);
@@ -576,6 +578,8 @@ export class CrudAtividadeProjetoComponent implements OnInit {
 
     par.orderby = 'Conta';
 
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
+
     this.globalService.setSpin(true);
     this.inscricaoGetEstruturasOff = this.estruturasService
       .getEstruturas(par)
@@ -603,6 +607,8 @@ export class CrudAtividadeProjetoComponent implements OnInit {
     par.id_projeto = this.id_projeto;
 
     par.orderby = 'Conta';
+
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
 
     this.globalService.setSpin(true);
     this.inscricaoGetEstruturasIn = this.estruturasService

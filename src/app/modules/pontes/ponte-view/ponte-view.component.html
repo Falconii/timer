@@ -83,8 +83,9 @@
       <div class="button-container-right">
         <button mat-raised-button color="primary" (click)="onGravarPontes()"
           [disabled]="!hasAuditores()">{{acao}}</button>
-        <button mat-raised-button color="primary" (click)="onGerarPontes()" *ngIf="idAcao == 99">Auditores</button>
-        <button mat-raised-button color="accent" (click)="onCancelGeracao()">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="onGerarPontes()" *ngIf="idAcao == 99"
+          [disabled]="!showAuditores()">Auditores</button>
+        <button mat-raised-button color="accent" (click)="onCancelGeracao()" [disabled]="!gravando">Cancelar</button>
       </div>
     </div>
     <div class="rodape"></div>

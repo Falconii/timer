@@ -229,6 +229,8 @@ export class CrudProjetoComponent implements OnInit {
 
     par.contador = 'N';
 
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
+
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.projetosServices
       .getProjetos_01(par)
@@ -286,6 +288,8 @@ export class CrudProjetoComponent implements OnInit {
     par.contador = 'S';
 
     par.tamPagina = this.tamPagina;
+
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
 
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.projetosServices

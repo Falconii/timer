@@ -11,6 +11,7 @@ import { SimNao } from 'src/app/shared/classes/sim-nao';
 import { ValidatorStringLen } from 'src/app/shared/Validators/validator-string-len';
 import { HistoricoSubconta } from 'src/app/shared/classes/historico-subconta';
 import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-crud-subestrutura',
@@ -81,7 +82,8 @@ export class CrudSubestruturaComponent implements OnInit {
     private subContasService: EstruturasService,
     private route: ActivatedRoute,
     private router: Router,
-    private appSnackBar: AppSnackbar
+    private appSnackBar: AppSnackbar,
+    private globalService: GlobalService
   ) {
     this.formulario = this.formBuilder.group({
       conta: [{ value: '' }],
@@ -159,6 +161,8 @@ export class CrudSubestruturaComponent implements OnInit {
     par.orderby = '';
 
     par.subcontas = true;
+
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
 
     this.inscricaoGetFiltro = this.subContasService
       .getEstruturas(par)
