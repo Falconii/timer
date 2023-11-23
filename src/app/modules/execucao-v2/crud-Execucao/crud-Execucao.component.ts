@@ -69,6 +69,7 @@ export class CrudExecucaoComponent implements OnInit {
   inscricaoAcao!: Subscription;
   inscricaoUsuario!: Subscription;
   inscricaoApontamento!: Subscription;
+  inscricaoBancoHoras!: Subscription;
   inscricaoAponExecucao!: Subscription;
   inscricaoAtividades!: Subscription;
   inscricaoMotivos!: Subscription;
@@ -81,6 +82,7 @@ export class CrudExecucaoComponent implements OnInit {
   id_empresa: number = 0;
   apontamentos: ApoExecucaoModel01[] = [];
   apontamento: ApoExecucaoModel = new ApoExecucaoModel();
+  apontamentosBanco: ApoExecucaoModel01[] = [];
   agendamentos: ApoPlanejamentoQuery_01Model[] = [];
   atividades: AtividadeQuery_01Model[] = [];
   atividade: AtividadeQuery_01Model = new AtividadeQuery_01Model();
@@ -113,6 +115,8 @@ export class CrudExecucaoComponent implements OnInit {
   gravando: boolean = false;
 
   totalHoras: number = 0;
+
+  totalHorasBanco: number = 0;
 
   parData: string = '';
 
@@ -167,6 +171,7 @@ export class CrudExecucaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getApontamentosExecucao();
+    this.getApontamentosBancoHoras();
   }
 
   ngOnDestroy(): void {
@@ -180,6 +185,7 @@ export class CrudExecucaoComponent implements OnInit {
     this.inscricaoCoordenador?.unsubscribe();
     this.inscricaoGetContratos?.unsubscribe();
     this.inscricaoRota?.unsubscribe();
+    this.inscricaoBancoHoras?.unsubscribe();
   }
 
   getUsuario() {
@@ -215,7 +221,7 @@ export class CrudExecucaoComponent implements OnInit {
     para.id_exec = this.globalService.getUsuario().id;
     para.id_projeto = 0;
     para.data = DataYYYYMMDD(this.parametro.value.data);
-    para.controle = '';
+    para.controle = 'N';
     para.orderby = 'Executor';
     this.globalService.setSpin(true);
     this.inscricaoAponExecucao = this.aponExecucaoService
@@ -233,6 +239,40 @@ export class CrudExecucaoComponent implements OnInit {
           this.globalService.setSpin(false);
           this.apontamentos = [];
           this.totalHoras = 0;
+          if (error.error.message != 'Nehuma Informação Para Esta Consulta.') {
+            this.appSnackBar.openFailureSnackBar(
+              `Pesquisa Nos Apontamentos ${messageError(error)}`,
+              'OK'
+            );
+          }
+        }
+      );
+  }
+
+  getApontamentosBancoHoras() {
+    let para = new ParametroAponExecucao01();
+    para.id_empresa = this.globalService.getIdEmpresa();
+    para.id_exec = this.globalService.getUsuario().id;
+    para.id_projeto = 0;
+    para.data = DataYYYYMMDD(this.parametro.value.data);
+    para.controle = 'S';
+    para.orderby = 'Executor';
+    this.globalService.setSpin(true);
+    this.inscricaoBancoHoras = this.aponExecucaoService
+      .getApoExecucoes_01(para)
+      .subscribe(
+        (data: ApoExecucaoModel01[]) => {
+          this.globalService.setSpin(false);
+          this.apontamentosBanco = data;
+          this.totalHorasBanco = 0;
+          this.apontamentosBanco.forEach((lan) => {
+            this.totalHorasBanco = this.totalHorasBanco + Number(lan.horasapon);
+          });
+        },
+        (error: any) => {
+          this.globalService.setSpin(false);
+          this.apontamentosBanco = [];
+          this.totalHorasBanco = 0;
           if (error.error.message != 'Nehuma Informação Para Esta Consulta.') {
             this.appSnackBar.openFailureSnackBar(
               `Pesquisa Nos Apontamentos ${messageError(error)}`,
@@ -669,7 +709,10 @@ export class CrudExecucaoComponent implements OnInit {
     this.apontamento.inicial = lanca.inicial;
     this.apontamento.final = lanca.final;
     this.apontamento.horasapon = 0;
-    this.apontamento.id_motivo = this.globalService.codigoMotivo;
+    this.apontamento.id_motivo =
+      opcao == CadastroAcoes.Inclusao
+        ? this.globalService.codigoMotivo
+        : lanca.id_motivo;
     this.apontamento.produtivo = 'S';
     this.apontamento.obs = lanca.obs;
     this.apontamento.encerramento = lanca.encerramento;
@@ -765,6 +808,7 @@ export class CrudExecucaoComponent implements OnInit {
   onCancel() {
     if (this.idAcao != this.getAcoes().Consulta) {
       this.getApontamentosExecucao();
+      this.getApontamentosBancoHoras();
     }
     this.idAcao = 99;
     this.setAcao(99);
@@ -798,6 +842,7 @@ export class CrudExecucaoComponent implements OnInit {
 
   onChangeData() {
     this.getApontamentosExecucao();
+    this.getApontamentosBancoHoras();
   }
 
   onParametrosChange() {

@@ -15,6 +15,7 @@ export class ApoExecucaoModel {
   public obs: string = '';
   public horasapon: number = 0;
   public encerramento: string = 'N';
+  public nlanc:number = 0;
   public user_insert: number = 0;
   public user_update: number = 0;
   public conta_descricao: string = '';

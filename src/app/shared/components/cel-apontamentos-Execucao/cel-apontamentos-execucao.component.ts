@@ -26,8 +26,14 @@ export class CelApontamentosExecucaoComponent implements OnInit {
   @Input('UNICO') Unico: boolean = false;
   cel: CelulaDia = new CelulaDia();
   apontamentos: ApoExecucaoModel01[] = [];
+  apontamentosBanco: ApoExecucaoModel01[] = [];
 
   inscricaoExecutadas!: Subscription;
+  inscricaoBancoHoras!: Subscription;
+
+  totalHoras: number = 0;
+
+  totalHorasBanco: number = 0;
 
   constructor(
     private datePipe: DatePipe,
@@ -41,6 +47,7 @@ export class CelApontamentosExecucaoComponent implements OnInit {
         this.apontamentos = [];
       } else {
         this.getExecutados();
+        this.getApontamentosBancoHoras();
       }
     });
   }
@@ -49,6 +56,7 @@ export class CelApontamentosExecucaoComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.inscricaoExecutadas?.unsubscribe();
+    this.inscricaoBancoHoras?.unsubscribe();
   }
 
   showDadosProjetoApontamento(lanca: ApoExecucaoModel): string {
@@ -71,6 +79,7 @@ export class CelApontamentosExecucaoComponent implements OnInit {
     par.id_dir = this.cel.id_diretor;
     par.data = dt;
     par.orderby = 'Executor';
+    par.controle = 'N';
     this.globslService.setSpinApontamentos(true);
     this.inscricaoExecutadas = this.aponExecucaoService
       .getApoExecucoes_01(par)
@@ -78,10 +87,47 @@ export class CelApontamentosExecucaoComponent implements OnInit {
         (data: ApoExecucaoModel01[]) => {
           this.globslService.setSpinApontamentos(false);
           this.apontamentos = data;
+          this.totalHoras = 0;
+          this.apontamentos.forEach((lan) => {
+            this.totalHoras = this.totalHoras + Number(lan.horasapon);
+          });
         },
         (error: any) => {
           this.globslService.setSpinApontamentos(false);
           this.apontamentos = [];
+        }
+      );
+  }
+
+  getApontamentosBancoHoras() {
+    const par = new ParametroAponExecucao01();
+    let dt = this.datePipe.transform(this.cel.data, 'yyyy-MM-dd');
+    if (!dt) {
+      dt = '';
+    }
+    par.id_empresa = this.globslService.getIdEmpresa();
+    par.id_resp = this.cel.id_resp;
+    par.id_exec = this.cel.id_exec;
+    par.id_dir = this.cel.id_diretor;
+    par.data = dt;
+    par.orderby = 'Executor';
+    par.controle = 'S';
+    this.globslService.setSpinApontamentos(true);
+    this.inscricaoExecutadas = this.aponExecucaoService
+      .getApoExecucoes_01(par)
+      .subscribe(
+        (data: ApoExecucaoModel01[]) => {
+          this.globslService.setSpinApontamentos(false);
+          this.apontamentosBanco = data;
+          this.totalHorasBanco = 0;
+          this.apontamentosBanco.forEach((lan) => {
+            this.totalHorasBanco = this.totalHorasBanco + Number(lan.horasapon);
+          });
+        },
+        (error: any) => {
+          this.globslService.setSpinApontamentos(false);
+          this.apontamentosBanco = [];
+          this.totalHorasBanco = 0;
         }
       );
   }

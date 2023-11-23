@@ -91,6 +91,7 @@ export class Dashboardv1Component implements OnInit {
     para.id_projeto = this.projeto.id;
     para.data = '';
     para.orderby = 'Executor';
+    if (this.id_projeto == 900000) para.controle = '';
     this.globalService.setSpin(true);
     this.inscricaoAponExecucao = this.aponExecucaoService
       .getApoExecucoes_01(para)

@@ -40,14 +40,10 @@
         </mat-form-field>
       </div>
       <div class="col-med-1">
-        <mat-form-field field appearance="outline" class="col-max"
-          *ngIf="( (idAcao != getAcoes()[ 'Consulta']) && (idAcao != getAcoes()[ 'Exclusao']))">
-          <mat-label>Motivo</mat-label>
-          <mat-select formControlName="id_motivo">
-            <mat-option *ngFor="let motivo of motivos" [value]="motivo.codigo">
-              {{motivo.motivo}}
-            </mat-option>
-          </mat-select>
+        <mat-form-field appearance="outline" class="col-max">
+          <mat-label>Motivo Apontamento</mat-label>
+          <input matInput formControlName="motivo" oninput="this.value = this.value.toUpperCase()"
+            [readonly]="readOnly">
         </mat-form-field>
       </div>
       <div class="col-med-1">

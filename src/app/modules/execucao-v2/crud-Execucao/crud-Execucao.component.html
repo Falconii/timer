@@ -87,70 +87,135 @@
     </div>
   </form>
 </div>
-<div class="box" *ngIf="idAcao == 99 && !showAtividades">
-  <table class="Browse_Lanc">
-    <tr class="coluna-cabec">
-      <th>HORÁRIO</th>
-      <th>CLIENTE/DESCRIÇÃO/ATIVIDADE</th>
-      <th>MOTIVO/OBS</th>
-      <th>AÇÕES</th>
-    </tr>
-    <tr *ngFor="let lanca of apontamentos">
-      <td>
-        <div class="wrapper">
-          <div class="first">
-            <mat-label class="Browse_Lanc_td">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}
-            </mat-label>
-            <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
-          </div>
-          <div class="second" *ngIf="lanca.encerramento=='S'">
-            <mat-icon class="green-icon">check</mat-icon>
-          </div>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">Resp:{{lanca.resp_razao | firstName}}</mat-label>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">Exec:{{lanca.exec_razao | firstName}}</mat-label>
-        </div>
-      </td>
-      <td>
-        <div>
-          <mat-label class="Browse_Lanc_td">Contr:({{lanca.id_projeto}}) {{lanca.cli_razao}}</mat-label>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.proj_descricao}}</mat-label>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.conta_descricao}}/{{lanca.grupo_descricao}}</mat-label>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.estru_descricao}}</mat-label>
-        </div>
-      </td>
-      <td>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.motivo_descricao}}</mat-label>
-        </div>
-        <div>
-          <mat-label class="Browse_Lanc_td">{{lanca.obs}}</mat-label>
-        </div>
-      </td>
-      <td class="acoes">
-        <div>
-          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
-            matTooltip="Alterar Apontamento" matTooltipPosition="above" (click)="outras(getAcoes()['Edicao'],lanca)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
-            matTooltip="Excluir Apontamento" matTooltipPosition="above" (click)="outras(getAcoes()['Exclusao'],lanca)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </td>
-    </tr>
-  </table>
-</div>
+<mat-tab-group>
+  <mat-tab *ngIf="idAcao == 99 && !showAtividades">
+    <ng-template mat-tab-label>
+      <h3>Lançamentos Produtivos ({{totalHoras | horaSexagenal}})</h3>
+    </ng-template>
+    <div class="moldura" *ngIf="apontamentos.length > 0">
+      <table class="Browse_Lanc">
+        <tr class="coluna-cabec">
+          <th>HORÁRIO</th>
+          <th>CLIENTE/DESCRIÇÃO/ATIVIDADE</th>
+          <th>MOTIVO/OBS</th>
+          <th>AÇÕES</th>
+        </tr>
+        <tr *ngFor="let lanca of apontamentos">
+          <td>
+            <div class="wrapper">
+              <div class="first">
+                <mat-label class="Browse_Lanc_td">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}
+                </mat-label>
+                <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
+              </div>
+              <div class="second" *ngIf="lanca.encerramento=='S'">
+                <mat-icon class="green-icon">check</mat-icon>
+              </div>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">Resp:{{lanca.resp_razao | firstName}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">Exec:{{lanca.exec_razao | firstName}}</mat-label>
+            </div>
+          </td>
+          <td>
+            <div>
+              <mat-label class="Browse_Lanc_td">Contr:({{lanca.id_projeto}}) {{lanca.cli_razao}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.proj_descricao}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.conta_descricao}}/{{lanca.grupo_descricao}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.estru_descricao}}</mat-label>
+            </div>
+          </td>
+          <td>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.motivo_descricao}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.obs}}</mat-label>
+            </div>
+          </td>
+          <td class="acoes">
+            <div>
+              <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+                matTooltip="Alterar Apontamento" matTooltipPosition="above"
+                (click)="outras(getAcoes()['Edicao'],lanca)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+                matTooltip="Excluir Apontamento" matTooltipPosition="above"
+                (click)="outras(getAcoes()['Exclusao'],lanca)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </mat-tab>
+  <mat-tab *ngIf="idAcao == 99 && !showAtividades">
+    <ng-template mat-tab-label>
+      <h3>Lançamentos Banco e Férias ({{totalHorasBanco | horaSexagenal}})</h3>
+    </ng-template>
+    <div class="modura" *ngIf="apontamentosBanco.length > 0">
+      <table class="Browse_Lanc">
+        <tr class="coluna-cabec">
+          <th>HORÁRIO</th>
+          <th>CLIENTE/DESCRIÇÃO/ATIVIDADE</th>
+          <th>MOTIVO/OBS</th>
+        </tr>
+        <tr *ngFor="let lanca of apontamentosBanco">
+          <td>
+            <div class="wrapper">
+              <div class="first">
+                <mat-label class="Browse_Lanc_td">{{lanca.inicial | date : 'HH:mm'}} as {{lanca.final | date : 'HH:mm'}}
+                </mat-label>
+                <mat-label class="Browse_Lanc_td">{{lanca.horasapon | horaSexagenal}}</mat-label>
+              </div>
+              <div class="second" *ngIf="lanca.encerramento=='S'">
+                <mat-icon class="green-icon">check</mat-icon>
+              </div>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">Resp:{{lanca.resp_razao | firstName}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">Exec:{{lanca.exec_razao | firstName}}</mat-label>
+            </div>
+          </td>
+          <td>
+            <div>
+              <mat-label class="Browse_Lanc_td">Contr:({{lanca.id_projeto}}) {{lanca.cli_razao}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.proj_descricao}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.conta_descricao}}/{{lanca.grupo_descricao}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.estru_descricao}}</mat-label>
+            </div>
+          </td>
+          <td>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.motivo_descricao}}</mat-label>
+            </div>
+            <div>
+              <mat-label class="Browse_Lanc_td">{{lanca.obs}}</mat-label>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </mat-tab>
+</mat-tab-group>
 <div class="rodape"></div>
 <div *ngIf="idAcao !== 99">
   <div class="div-barra">

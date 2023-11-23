@@ -52,17 +52,16 @@ export class ApoExecDialogComponent implements OnInit {
       saida: [{ value: '' }, [Validators.required]],
       atividade: [{ value: '' }, [Validators.required]],
       cliente: [{ value: '' }, [Validators.required]],
-      id_motivo: [{ value: '' }, [Validators.required]],
+      motivo: [{ value: '' }, [Validators.required]],
       encerra: [{ value: '' }, [Validators.required]],
       obs: [{ value: '' }, [Validators.required, Validators.maxLength(150)]],
     });
   }
 
   ngOnInit(): void {
-    this.setValue();
+    this.getMotivos();
     this.idAcao = this.data.opcao;
     this.setAcao(this.idAcao);
-    this.getMotivos();
   }
 
   ngOnDestroy(): void {
@@ -198,6 +197,11 @@ export class ApoExecDialogComponent implements OnInit {
   }
 
   setValue() {
+    let motivo: string = '';
+    const motivos = this.motivos.filter(
+      (data) => data.codigo == this.data.apontamento.id_motivo
+    );
+    if (motivos.length > 0) motivo = motivos[0].motivo;
     this.formulario.setValue({
       entrada: this.data.apontamento.inicial.substring(
         this.data.apontamento.inicial.indexOf(' ') + 1,
@@ -209,7 +213,7 @@ export class ApoExecDialogComponent implements OnInit {
       ),
       atividade: this.data.apontamento.estru_descricao,
       cliente: this.data.apontamento.cli_razao,
-      id_motivo: this.data.apontamento.id_motivo,
+      motivo: motivo,
       encerra: this.data.apontamento.encerramento == 'S' ? true : false,
       obs: this.data.apontamento.obs,
     });
@@ -219,6 +223,7 @@ export class ApoExecDialogComponent implements OnInit {
     para.id_empresa = 1;
     para.analitico = 'S';
     para.orderby = 'Código';
+    para.controle = '';
     this.globalService.setSpin(true);
     this.inscricaoMotivos = this.motivoApoService
       .getMotivoApos_01(para)

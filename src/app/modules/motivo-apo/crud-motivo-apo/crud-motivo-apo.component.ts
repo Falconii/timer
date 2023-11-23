@@ -162,6 +162,8 @@ export class CrudMotivoApoComponent implements OnInit {
 
     par.tamPagina = this.tamPagina;
 
+    if (this.globalService.getUsuario().id == 16) par.controle = '';
+
     this.globalService.setSpin(true);
     this.inscricaoGetFiltro = this.motivoApoService
       .getMotivoApos_01(par)
