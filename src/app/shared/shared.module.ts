@@ -43,6 +43,7 @@ import { ApoExecDialogComponent } from './components/apo-exec-dialog/apo-exec-di
 import { NgxMaskModule } from 'ngx-mask';
 import { CadastroAcoesPipe } from './pipes/cadastro-acoes.pipe';
 import { CorUltimosProjetosDirective } from './diretivas/cor-ultimos-projetos.directive';
+import { SaldoComponent } from './components/saldo/saldo.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { CorUltimosProjetosDirective } from './diretivas/cor-ultimos-projetos.di
     ParamDiretorComponent,
     BarraAcoesComponent,
     ApoExecDialogComponent,
+    SaldoComponent,
   ],
   imports: [
     CommonModule,
@@ -134,6 +136,7 @@ import { CorUltimosProjetosDirective } from './diretivas/cor-ultimos-projetos.di
     CorStatusProjDirective,
     CorUltimosProjetosDirective,
     BarraAcoesComponent,
+    SaldoComponent,
   ],
 })
 export class SharedModule {}

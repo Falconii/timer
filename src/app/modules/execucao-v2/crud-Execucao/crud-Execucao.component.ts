@@ -28,6 +28,7 @@ import { AppSnackbar } from 'src/app/shared/classes/app-snackbar';
 import { CadastroAcoes } from 'src/app/shared/classes/cadastro-acoes';
 import {
   aaaammddddmmaaaa,
+  DataDDMMYYYY,
   DataYYYYMMDD,
   DataYYYYMMDDTHHMMSSZ,
   ddmmaaaatoaaaammdd,
@@ -119,6 +120,8 @@ export class CrudExecucaoComponent implements OnInit {
   totalHorasBanco: number = 0;
 
   parData: string = '';
+
+  loaded: boolean = false;
 
   constructor(
     formBuilder: FormBuilder,
@@ -439,6 +442,7 @@ export class CrudExecucaoComponent implements OnInit {
               this.atividade = this.atividades.filter(
                 (ativ) => ativ.id === this.parametro.value.id_atividade
               )[0];
+              this.loaded = true;
             }
           }
         },
@@ -555,10 +559,6 @@ export class CrudExecucaoComponent implements OnInit {
         this.labelCadastro = '';
         break;
     }
-  }
-
-  onRetorno() {
-    this.router.navigate(['/']);
   }
 
   setFiltro() {
@@ -1010,7 +1010,15 @@ export class CrudExecucaoComponent implements OnInit {
     console.log(event);
   }
 
-  onFacilitador() {
-    this.router.navigate(['execucao/facilitador']);
+  onRetorno() {
+    this.router.navigate(['/']);
+  }
+
+  onLancaMulti() {
+    console.log('Chamando componente!', this.parametro.value.data);
+    this.router.navigate([
+      '/execucao/execucoesv2multi',
+      DataDDMMYYYY(this.parametro.value.data),
+    ]);
   }
 }

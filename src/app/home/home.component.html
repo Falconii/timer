@@ -33,15 +33,15 @@
     </form>
   </div>
   <!--
-  <div class="div-50px">
-    <mat-slider thumbLabel [displayWith]="formatLabel" tickInterval="1000" step="1" min="1" max="12" [value]="mes"
-      aria-label="units" (change)="updateSetting($event)">
-    </mat-slider>
-    <span>
-      {{mes_ext}} {{ano}}
-    </span>
-  </div>
-  -->
+        <div class="div-50px">
+          <mat-slider thumbLabel [displayWith]="formatLabel" tickInterval="1000" step="1" min="1" max="12" [value]="mes"
+            aria-label="units" (change)="updateSetting($event)">
+          </mat-slider>
+          <span>
+            {{mes_ext}} {{ano}}
+          </span>
+        </div>
+        -->
   <div *ngIf="lsResumoApontamentosExec.length > 0">
     <div class="cabec-horas-apontadas">Horas Apontadas</div>
 
@@ -79,7 +79,9 @@
     <div class="cabec-horas-apontadas">Nenhum Lançamento Encontrado!</div>
   </div>
 </div>
+<app-saldo></app-saldo>
 <div class="rodape"></div>
+
 <!--
 
 <div *ngIf="false">
